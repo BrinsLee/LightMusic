@@ -62,6 +62,9 @@ dependencies {
     implementation 'com.airbnb.android:lottie:2.7.0'
 //
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
+//穿山甲广告
+    implementation(name: 'open_ad_sdk', ext: 'aar')
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -137,5 +140,8 @@ andResGuard {
 }
 
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
     mavenCentral()
 }

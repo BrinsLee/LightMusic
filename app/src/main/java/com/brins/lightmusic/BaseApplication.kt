@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.brins.lightmusic.manager.AppManager
+import com.brins.lightmusic.manager.TTAdManagerHolder
 
 open class BaseApplication : Application(){
 
@@ -17,6 +18,11 @@ open class BaseApplication : Application(){
             }
             return sInstance!!
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        TTAdManagerHolder.init(this)
     }
 
     @Synchronized private fun setApplication(baseApplication: BaseApplication){
