@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.manager.PermissionManager
 import com.brins.lightmusic.model.LocalMusic
@@ -24,15 +25,11 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
         return R.layout.fragment_localmusic
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAdapter = LocalMusicAdapter(context!!, null)
         recyclerView.adapter = mAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
         requestpermission()
         val PERMISSIONS = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         permissionManager.checkPermissions(0,PERMISSIONS[0])
@@ -64,7 +61,7 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
     }
 
     override fun onLocalMusicLoaded(songs: MutableList<LocalMusic>) {
-        mAdapter.data = songs
+        mAdapter.setData(songs)
         mAdapter.notifyDataSetChanged()
     }
 

@@ -95,8 +95,9 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
     }
 
     public void clear() {
-        if (mData != null)
+        if (mData != null) {
             mData.clear();
+        }
     }
 
     public OnItemClickListener getItemClickListener() {

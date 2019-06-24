@@ -64,8 +64,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginRight="30dp"
-                recyclerView:layoutManager="@string/mp.list.layoutManager.linear">
+                android:layout_marginRight="30dp">
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.core.widget.NestedScrollView>

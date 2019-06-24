@@ -94,7 +94,8 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
         val songs = ArrayList<LocalMusic>()
         val flow : Flowable<ArrayList<LocalMusic>> = Flowable.create(
             {
-                if (cursor == null){
+                Log.d(TAG,"${cursor?.moveToNext()}")
+                if (!cursor!!.moveToNext()){
                     it.onNext(songs)
                 }else{
                     do {
