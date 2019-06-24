@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FontTextView">
+        <attr name="font_type" format="enum">
+            <enum name="DIN-Bold" value="1" />
+            <enum name="DIN-Medium" value="2" />
+            <enum name="DIN-Regular" value="3" />
+            <enum name="LilyScriptOne-Regular" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CardViewPager">
+        <attr name="card_padding" />
+        <attr name="card_margin" />
+        <attr name="card_scale_rate" />
+        <attr name="card_max_offset" />
+        <attr name="card_loop" />
+    </declare-styleable>
+
+    <declare-styleable name="pile">
+        <attr name="interval" format="dimension" />
+        <attr name="sizeRatio" format="float" />
+        <attr name="scaleStep" format="float" />
+        <attr name="displayCount" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundConstraintLayout">
+        <attr name="round_corner" format="dimension" />
+    </declare-styleable>
+</resources>

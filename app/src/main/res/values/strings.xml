@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Light Music</string>
+    <string name="sign_up">Sign up</string>
+
+    <string name="song_list">歌单简介</string>
+
+    <string name="music_summary">总共有 %d 首歌</string>
 </resources>
