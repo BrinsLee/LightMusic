@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="common_margin_10">10dp</dimen>
+    <dimen name="common_margin_30">30dp</dimen>
+    <dimen name="common_margin_50">50dp</dimen>
+    <dimen name="common_margin_80">80dp</dimen>
+    <dimen name="common_margin_100">100dp</dimen>
+
+    <dimen name="fragment_quick_control_radius">20dp</dimen>
+    <dimen name="fragment_quick_control_height">65dp</dimen>
+    <dimen name="fagment_quick_control_cover">45dp</dimen>
+
+    <dimen name="icon_play_control">40dp</dimen>
+</resources>

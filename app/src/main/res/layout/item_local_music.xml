@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-        <!--<com.brins.lightsong.model.BaseLottieAnimationview
+        <com.brins.lightmusic.ui.customview.BaseLottieAnimationview
             app:lottie_fileName="lottie/play_item/music_items.json"
             app:lottie_loop="true"
             android:visibility="gone"
@@ -43,6 +43,6 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="30dp"
             android:layout_height="50dp"
-            android:layout_margin="5dp"/>-->
+            android:layout_margin="5dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.brins.lightmusic.R
+import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.reactivestreams.Subscription
+
 
 abstract class BaseActivity : AppCompatActivity() {
 
     protected var TAG = this.javaClass.simpleName
+    protected var fragment : QuickControlFragment? = null
     protected var mBindDestroyDisposable: CompositeDisposable? = null
     protected val STATU_BAR = 20
 /*
@@ -36,6 +40,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected open fun onCreateAfterBinding(savedInstanceState: Bundle?) {
+        bindUntilDestroy(subscribeEvents())
     }
 
     protected open fun onCreateBeforeBinding(savedInstanceState: Bundle?) {}
@@ -47,10 +52,32 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun bindUntilDestroy(disposable: Disposable) {
+    protected open fun showBottomBar(show : Boolean){
+        val ft = supportFragmentManager.beginTransaction()
+        if (show) {
+            if (fragment == null) {
+                fragment = QuickControlFragment.newInstance()
+                ft.add(R.id.bottom_container, fragment!!).commitAllowingStateLoss()
+            } else {
+                ft.show(fragment!!).commitAllowingStateLoss()
+            }
+        } else {
+            if (fragment != null)
+                ft.hide(fragment!!).commitAllowingStateLoss()
+        }
+    }
+
+    fun bindUntilDestroy(disposable: Disposable?) {
+        if (disposable == null){
+            return
+        }
         if (mBindDestroyDisposable == null) {
             mBindDestroyDisposable = CompositeDisposable()
         }
         mBindDestroyDisposable!!.add(disposable)
+    }
+
+    protected fun subscribeEvents(): Disposable? {
+        return null
     }
 }

@@ -1,0 +1,42 @@
+package com.brins.lightmusic.ui.fragment.quickcontrol
+
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
+import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.player.PlayBackService
+import com.brins.lightmusic.player.PlayMode
+import com.brins.lightmusic.ui.base.BasePresenter
+import com.brins.lightmusic.ui.base.BaseView
+
+interface MusicPlayerContract {
+
+    interface View : BaseView<Presenter> {
+
+        fun handleError(error: Throwable)
+
+        fun onPlaybackServiceBound(service: PlayBackService)
+
+        fun onPlaybackServiceUnbound()
+
+        fun onSongSetAsFavorite(@NonNull song: Music)
+
+        fun onSongUpdated(@Nullable song: Music)
+
+        fun updatePlayMode(playMode: PlayMode)
+
+        fun updatePlayToggle(play: Boolean)
+
+        fun updateFavoriteToggle(favorite: Boolean)
+    }
+
+    interface Presenter : BasePresenter {
+
+        fun retrieveLastPlayMode()
+
+        fun setSongAsFavorite(song: Music, favorite: Boolean)
+
+        fun bindPlaybackService()
+
+        fun unbindPlaybackService()
+    }
+}

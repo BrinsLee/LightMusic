@@ -1,13 +1,94 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment">
+<com.brins.lightmusic.ui.customview.RoundConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:round_corner="@dimen/fragment_quick_control_radius"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fragment_quick_control_height"
+        android:background="@drawable/bg_fragment_quick_control"
+        tools:context="com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+            android:id="@+id/ivPlaybarCover"
+            android:layout_width="@dimen/fagment_quick_control_cover"
+            android:layout_height="@dimen/fagment_quick_control_cover"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_cover"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/common_margin_10"/>
+
     <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
+            android:id="@+id/tvPlaybarTitle"
+            style="@style/AppTheme.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintStart_toEndOf="@id/ivPlaybarCover"
+            android:layout_marginStart="@dimen/common_margin_10"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/common_margin_10"
+            android:text="无音乐"
+            android:textSize="16sp"/>
 
-</FrameLayout>
+    <TextView
+            android:id="@+id/tvPlaybarArtist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:text="喜剧之王"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaybarTitle"
+            app:layout_constraintStart_toEndOf="@id/ivPlaybarCover"
+    android:layout_marginStart="@dimen/common_margin_10"/>
+
+    <ImageView
+            android:id="@+id/ivPlayOrPause"
+            android:layout_width="@dimen/icon_play_control"
+            android:layout_height="@dimen/icon_play_control"
+            android:contentDescription="@null"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:clickable="true"
+            android:src="@drawable/ic_playmusic"
+            app:layout_constraintEnd_toStartOf="@id/ivPlaybarNext"
+            android:layout_marginEnd="@dimen/common_margin_10"/>
+
+    <ImageView
+            android:id="@+id/ivPlaybarPre"
+            android:layout_width="@dimen/icon_play_control"
+            android:layout_height="@dimen/icon_play_control"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_premusic"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivPlayOrPause"
+            android:layout_marginEnd="@dimen/common_margin_10"/>
+
+    <ImageView
+            android:id="@+id/ivPlaybarNext"
+            android:layout_width="@dimen/icon_play_control"
+            android:layout_height="@dimen/icon_play_control"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_nextmusic"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/ivPlaybarPlaylist"
+    android:layout_marginEnd="@dimen/common_margin_10"/>
+
+    <ImageView
+            android:id="@+id/ivPlaybarPlaylist"
+            android:layout_width="@dimen/icon_play_control"
+            android:layout_height="@dimen/icon_play_control"
+            android:contentDescription="@null"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_playlist"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/common_margin_10"
+    />
+</com.brins.lightmusic.ui.customview.RoundConstraintLayout>

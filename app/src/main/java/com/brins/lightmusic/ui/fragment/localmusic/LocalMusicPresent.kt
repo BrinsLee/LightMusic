@@ -17,20 +17,16 @@ import com.brins.lightmusic.model.LocalMusic
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
 import java.util.ArrayList
 
 
 class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContract.Presenter
     , LoaderManager.LoaderCallbacks<Cursor>{
 
+    val mSubscriptions : CompositeDisposable = CompositeDisposable()
     private val TAG = "LocalMusicPresenter"
     private val URL_LOAD_LOCAL_MUSIC = 0
     private val MEDIA_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -63,6 +59,7 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
 
     override fun unsubscribe() {
         mView = null
+        mSubscriptions.clear()
     }
 
     private fun getCursor(): Cursor? {
@@ -106,13 +103,14 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
                 it.onNext(songs)
             }, BackpressureStrategy.BUFFER
         )
-        flow.observeOn(AndroidSchedulers.mainThread())
+        val disposable =  flow.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({
                 mView!!.onLocalMusicLoaded(it)
             }, {
                 Log.e(TAG ,it.message)
             })
+        mSubscriptions.add(disposable)
 
     }
 

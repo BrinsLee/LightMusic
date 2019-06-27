@@ -52,12 +52,7 @@
                 android:layout_alignParentBottom="true"
                 android:id="@+id/bottom_container"
                 android:layout_width="match_parent"
-                android:layout_height="57dp"/>
-        <!--        <include
-                    android:id="@+id/playbar"
-                    layout="@layout/include_play_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="bottom" />-->
+                android:layout_height="wrap_content"
+        />
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

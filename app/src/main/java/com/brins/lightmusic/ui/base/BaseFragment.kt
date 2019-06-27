@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 abstract class BaseFragment : Fragment() {
 
     val TAG = javaClass.simpleName
+    protected var mBindDestroyDisposable: CompositeDisposable? = null
+
     /*实现懒加载*/
     protected var mIsViewBinding: Boolean = false
     protected var mIsVisibleToUser: Boolean = false
@@ -27,8 +30,23 @@ abstract class BaseFragment : Fragment() {
     private fun checkLoad() {
         if (!mHadLoaded && mIsViewBinding && mIsVisibleToUser) {
             onLazyLoad()
+            bindUntilDestroy(subscribeEvents())
             mHadLoaded = true
         }
+    }
+
+    open fun subscribeEvents(): Disposable? {
+        return null
+    }
+
+    private fun bindUntilDestroy(disposable: Disposable?) {
+        if (disposable == null){
+            return
+        }
+        if (mBindDestroyDisposable == null) {
+            mBindDestroyDisposable = CompositeDisposable()
+        }
+        mBindDestroyDisposable!!.add(disposable)
     }
 
     open fun onLazyLoad() {}
@@ -45,12 +63,15 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayoutResID(), container, false)
+        val view =  inflater.inflate(getLayoutResID(), container, false)
+        onCreateViewAfterBinding(view)
+        return view
     }
 
-    fun bindUntilDestroy(disposable: Disposable) {
-        if (activity is BaseActivity) {
-            (activity as BaseActivity).bindUntilDestroy(disposable)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (mBindDestroyDisposable != null){
+            mBindDestroyDisposable!!.clear()
         }
     }
 

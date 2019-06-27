@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.localmusic
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import com.brins.lightmusic.R
