@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import com.brins.lightmusic.manager.AppManager
 import com.brins.lightmusic.manager.TTAdManagerHolder
+import io.reactivex.plugins.RxJavaPlugins
 
 open class BaseApplication : Application(){
 
@@ -23,6 +24,9 @@ open class BaseApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         TTAdManagerHolder.init(this)
+        RxJavaPlugins.setErrorHandler {
+            //异常处理
+        }
     }
 
     @Synchronized private fun setApplication(baseApplication: BaseApplication){
