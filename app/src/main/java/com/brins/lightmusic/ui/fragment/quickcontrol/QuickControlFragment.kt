@@ -87,6 +87,9 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
                 if (mPlayer == null) return
                 mPlayer!!.playNext()
             }
+            R.id.playBarLayout -> {
+
+            }
         }
     }
 

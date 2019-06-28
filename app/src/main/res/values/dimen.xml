@@ -4,6 +4,7 @@
     <dimen name="common_margin_10">10dp</dimen>
     <dimen name="common_margin_30">30dp</dimen>
     <dimen name="common_margin_50">50dp</dimen>
+    <dimen name="common_margin_60">60dp</dimen>
     <dimen name="common_margin_80">80dp</dimen>
     <dimen name="common_margin_100">100dp</dimen>
 
