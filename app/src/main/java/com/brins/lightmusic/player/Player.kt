@@ -102,19 +102,46 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         isPaused = false
         val hasLast = mPlayList.hasLast()
         if (hasLast) {
-            val last = mPlayList.last()
+            val song = mPlayList.last()
             play()
+            notifyPlayLast(song)
             return true
         }
         return false
     }
 
+    private fun notifyPlayLast(song: Music) {
+        for (callback in mCallbacks) {
+            callback.onSwitchLast(song)
+        }
+    }
+
     override fun playNext(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        isPaused = false
+        val hasNext = mPlayList.hasNext(false)
+        if (hasNext){
+            val song = mPlayList.next()
+            play()
+            notifyPlayNext(song)
+            return true
+        }
+        return false
+    }
+
+    private fun notifyPlayNext(song: Music) {
+        for (callback in mCallbacks) {
+            callback.onSwitchNext(song)
+        }
     }
 
     override fun pause(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (mPlayer.isPlaying) {
+            mPlayer.pause()
+            isPaused = true
+            notifyPlayStatusChanged(false)
+            return true
+        }
+        return false
     }
 
     override fun isPlaying(): Boolean {
@@ -156,7 +183,27 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var next : Music? = null
+        if (mPlayList.getPlayMode() === PlayMode.LIST && mPlayList.getPlayingIndex() === mPlayList.getNumOfSongs() - 1) run {
+            // In the end of the list
+            // Do nothing, just deliver the callback
+        }else if (mPlayList.getPlayMode() === PlayMode.SINGLE){
+            next = mPlayList.getCurrentSong()
+            play()
+        }else{
+            val hasNext = mPlayList.hasNext(true)
+            if (hasNext) {
+                next = mPlayList.next()
+                play()
+            }
+        }
+        notifyComplete(next)
+    }
+
+    private fun notifyComplete(next: Music?) {
+        for (callback in mCallbacks) {
+            callback.onComplete(next)
+        }
     }
 
 }

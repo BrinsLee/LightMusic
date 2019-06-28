@@ -96,6 +96,10 @@ class PlayList() : Parcelable {
         return songs
     }
 
+    fun getPlayMode() : PlayMode{
+        return playMode!!
+    }
+
     fun getItemCount(): Int {
         return songs.size
     }
@@ -209,5 +213,9 @@ class PlayList() : Parcelable {
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    fun getPlayingIndex(): Int {
+        return playingIndex
     }
 }

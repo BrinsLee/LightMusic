@@ -46,7 +46,7 @@ interface IPlayback {
 
         fun onSwitchNext(@Nullable next: Music)
 
-        fun onComplete(@Nullable next: Music)
+        fun onComplete(@Nullable next: Music?)
 
         fun onPlayStatusChanged(isPlaying: Boolean)
     }

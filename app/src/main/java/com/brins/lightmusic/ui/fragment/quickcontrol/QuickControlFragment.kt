@@ -13,11 +13,11 @@ import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.base.BaseFragment
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
-import kotlinx.android.synthetic.main.item_local_music.*
 
-class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlayback.Callback , View.OnClickListener{
+class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
 
     private var mPlayer: IPlayback? = null
+    lateinit var playList: PlayList
     private lateinit var mPresenter: MusicPlayerContract.Presenter
     override fun getLayoutResID(): Int {
         return R.layout.fragment_quick_control
@@ -50,13 +50,20 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlaybac
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        MusicPlayerPresenter(activity!!,this).subscribe()
+        MusicPlayerPresenter(activity!!, this).subscribe()
+        setListener()
+    }
+
+    private fun setListener() {
+        ivPlayOrPause.setOnClickListener(this)
+        ivPlaybarPre.setOnClickListener(this)
+        ivPlaybarNext.setOnClickListener(this)
     }
 
     override fun onStart() {
         super.onStart()
-        if(mPlayer != null){
-            ivPlayOrPause.setImageResource(if (mPlayer!!.isPlaying())R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+        if (mPlayer != null) {
+            ivPlayOrPause.setImageResource(if (mPlayer!!.isPlaying()) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
         }
     }
 
@@ -68,20 +75,30 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlaybac
     // Click Events
     override fun onClick(v: View) {
 
-        when(v.id){
-            R.id.ivPlayOrPause -> {onPlayPauseToggle()}
+        when (v.id) {
+            R.id.ivPlayOrPause -> {
+                onPlayPauseToggle()
+            }
+            R.id.ivPlaybarPre -> {
+                if (mPlayer == null) return
+                mPlayer!!.playLast()
+            }
+            R.id.ivPlaybarNext -> {
+                if (mPlayer == null) return
+                mPlayer!!.playNext()
+            }
         }
     }
 
 
-    fun onPlayPauseToggle(){
-        if (mPlayer == null){
+    fun onPlayPauseToggle() {
+        if (mPlayer == null || !::playList.isInitialized) {
             return
         }
-        if (mPlayer!!.isPlaying()){
+        if (mPlayer!!.isPlaying()) {
             mPlayer!!.pause()
             ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
-        }else{
+        } else {
             mPlayer!!.play()
             ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
         }
@@ -89,7 +106,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlaybac
 
     private fun onPlayMusic(playListEvent: PlayListEvent) {
 
-        val playList: PlayList = playListEvent.playlist
+        playList = playListEvent.playlist
         val index = playListEvent.playIndex
         playSong(playList, index)
     }
@@ -109,19 +126,24 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlaybac
 
     // Player Callbacks
     override fun onSwitchLast(last: Music) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        onSongUpdated(last)
     }
 
     override fun onSwitchNext(next: Music) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        onSongUpdated(next)
     }
 
-    override fun onComplete(next: Music) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onComplete(next: Music?) {
+        onSongUpdated(next)
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
         updatePlayToggle(isPlaying)
+        if (isPlaying) {
+            ivPlaybarCover.resumeRotateAnimation()
+        } else {
+            ivPlaybarCover.pauseRotateAnimation()
+        }
     }
 
 
@@ -160,7 +182,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlaybac
     }
 
     override fun onSongUpdated(song: Music?) {
-        if (song == null){
+        if (song == null) {
             ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
             return
         }

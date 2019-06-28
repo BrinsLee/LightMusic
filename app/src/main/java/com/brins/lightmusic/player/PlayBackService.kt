@@ -123,11 +123,9 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     override fun onSwitchNext(next: Music) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onComplete(next: Music) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onComplete(next: Music?) {
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
