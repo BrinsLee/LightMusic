@@ -88,6 +88,14 @@ class PlayList() : Parcelable {
         this.playMode = playMode
     }
 
+    fun setPlayingIndex(playingIndex : Int){
+        this.playingIndex = playingIndex
+    }
+
+    fun getSongs(): MutableList<Music> {
+        return songs
+    }
+
     fun getItemCount(): Int {
         return songs.size
     }
@@ -144,6 +152,10 @@ class PlayList() : Parcelable {
         return if (playingIndex != NO_POSITION) {
             songs[playingIndex]
         } else null
+    }
+
+    fun getNumOfSongs() : Int{
+        return numOfSongs
     }
 
     fun hasLast(): Boolean {

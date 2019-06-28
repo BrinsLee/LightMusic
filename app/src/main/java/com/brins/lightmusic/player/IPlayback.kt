@@ -26,7 +26,7 @@ interface IPlayback {
 
     fun getProgress(): Int
 
-    fun getPlayingSong(): Music
+    fun getPlayingSong(): Music?
 
     fun seekTo(progress: Int): Boolean
 

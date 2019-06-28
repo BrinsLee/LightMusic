@@ -80,15 +80,33 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun play(list: PlayList, startIndex: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        if (list == null || startIndex < 0 || startIndex >= list.getNumOfSongs()){
+            return false
+        }
+        isPaused = false
+        list.setPlayingIndex(startIndex)
+        setPlayList(list)
+        return play()
     }
 
     override fun play(song: Music): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        isPaused = false
+        mPlayList.getSongs().clear()
+        mPlayList.getSongs().add(song)
+        return play()
     }
 
     override fun playLast(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        isPaused = false
+        val hasLast = mPlayList.hasLast()
+        if (hasLast) {
+            val last = mPlayList.last()
+            play()
+            return true
+        }
+        return false
     }
 
     override fun playNext(): Boolean {
@@ -100,15 +118,15 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun isPlaying(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.isPlaying
     }
 
     override fun getProgress(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.currentPosition
     }
 
-    override fun getPlayingSong(): Music {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getPlayingSong(): Music? {
+        return mPlayList.getCurrentSong()
     }
 
     override fun seekTo(progress: Int): Boolean {
@@ -116,23 +134,25 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun setPlayMode(playMode: PlayMode) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayList.setPlayMode(playMode)
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mCallbacks.add(callback)
     }
 
     override fun unregisterCallback(callback: IPlayback.Callback) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mCallbacks.remove(callback)
     }
 
     override fun removeCallbacks() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mCallbacks.clear()
     }
 
     override fun releasePlayer() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayer.reset()
+        mPlayer.release()
+        sInstance = null
     }
 
     override fun onCompletion(mp: MediaPlayer?) {

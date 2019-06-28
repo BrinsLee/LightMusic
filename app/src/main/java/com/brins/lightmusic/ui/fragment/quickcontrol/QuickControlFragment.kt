@@ -55,6 +55,11 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View , IPlaybac
             })
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        MusicPlayerPresenter(activity!!,this).subscribe()
+    }
+
     private fun onPlayMusic(playListEvent: PlayListEvent) {
 
         val playList: PlayList = playListEvent.playlist

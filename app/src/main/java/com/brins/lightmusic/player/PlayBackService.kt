@@ -7,9 +7,9 @@ import android.os.IBinder
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.PlayList
 
-class PlayBackService : Service() , IPlayback , IPlayback.Callback {
+class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 
-    companion object{
+    companion object {
         @JvmStatic
         private val ACTION_PLAY_TOGGLE = "com.brins.lightmusic.ACTION.PLAY_TOGGLE"
         private val ACTION_PLAY_LAST = "com.brins.lightmusic.ACTION.PLAY_LAST"
@@ -18,7 +18,7 @@ class PlayBackService : Service() , IPlayback , IPlayback.Callback {
         private val NOTIFICATION_ID = 1
     }
 
-    private var mPlayer: Player? = null
+    private val mPlayer: Player by lazy { Player.getInstance() }
     private val mBinder = LocalBinder()
 
     override fun onBind(intent: Intent): IBinder {
@@ -32,8 +32,7 @@ class PlayBackService : Service() , IPlayback , IPlayback.Callback {
 
     override fun onCreate() {
         super.onCreate()
-        mPlayer = Player.getInstance()
-        mPlayer!!.registerCallback(this)
+        mPlayer.registerCallback(this)
     }
 
     override fun stopService(name: Intent): Boolean {
@@ -49,76 +48,78 @@ class PlayBackService : Service() , IPlayback , IPlayback.Callback {
 
     //IPlayback
     override fun setPlayList(list: PlayList) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayer.setPlayList(list)
     }
 
     override fun play(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.play()
     }
 
     override fun play(list: PlayList): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.play(list)
     }
 
     override fun play(list: PlayList, startIndex: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.play(list, startIndex)
     }
 
     override fun play(song: Music): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.play(song)
     }
 
     override fun playLast(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.playLast()
     }
 
     override fun playNext(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.playNext()
     }
 
     override fun pause(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.pause()
     }
 
     override fun isPlaying(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.isPlaying()
     }
 
     override fun getProgress(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.getProgress()
     }
 
-    override fun getPlayingSong(): Music {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getPlayingSong(): Music? {
+        return mPlayer.getPlayingSong()
     }
 
     override fun seekTo(progress: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer.seekTo(progress)
     }
 
     override fun setPlayMode(playMode: PlayMode) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        mPlayer.setPlayMode(playMode)
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        mPlayer.registerCallback(callback)
     }
 
     override fun unregisterCallback(callback: IPlayback.Callback) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayer.unregisterCallback(callback)
     }
 
     override fun removeCallbacks() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayer.removeCallbacks()
     }
 
     override fun releasePlayer() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayer.releasePlayer()
+        super.onDestroy()
     }
 
     //Callback
     override fun onSwitchLast(last: Music) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onSwitchNext(next: Music) {

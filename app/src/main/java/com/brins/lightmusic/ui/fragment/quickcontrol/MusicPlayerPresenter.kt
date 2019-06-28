@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.quickcontrol
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.brins.lightmusic.model.Music
@@ -11,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 class MusicPlayerPresenter(var context: Context, var mView: MusicPlayerContract.View) : MusicPlayerContract.Presenter{
 
     val mSubscriptions : CompositeDisposable = CompositeDisposable()
+    private var mIsServiceBound: Boolean = false
     private var mPlaybackService: PlayBackService? = null
     val mConnection : ServiceConnection = object : ServiceConnection{
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -21,7 +23,11 @@ class MusicPlayerPresenter(var context: Context, var mView: MusicPlayerContract.
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mPlaybackService = (service as PlayBackService.LocalBinder).service
             mView.onPlaybackServiceBound(mPlaybackService!!)
-            mView.onSongUpdated(mPlaybackService!!.getPlayingSong())
+            if (mPlaybackService!!.getPlayingSong() == null){
+                return
+            }else{
+                mView.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
+            }
         }
 
     }
@@ -30,26 +36,32 @@ class MusicPlayerPresenter(var context: Context, var mView: MusicPlayerContract.
         mView.setPresenter(this)
     }
     override fun retrieveLastPlayMode() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun setSongAsFavorite(song: Music, favorite: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun bindPlaybackService() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        context.bindService(Intent(context, PlayBackService::class.java),mConnection , Context.BIND_AUTO_CREATE)
+        mIsServiceBound = true
     }
 
     override fun unbindPlaybackService() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        if (mIsServiceBound){
+            context.unbindService(mConnection)
+            mIsServiceBound = false
+        }
     }
 
     override fun subscribe() {
         bindPlaybackService()
         retrieveLastPlayMode()
-        if (mPlaybackService != null && mPlaybackService!!.isPlaying()) {
-            mView.onSongUpdated(mPlaybackService!!.getPlayingSong())
+        if (mPlaybackService != null && mPlaybackService!!.isPlaying() && mPlaybackService!!.getPlayingSong() != null) {
+            mView.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
         } else {
         }
     }
