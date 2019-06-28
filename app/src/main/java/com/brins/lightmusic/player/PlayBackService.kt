@@ -131,6 +131,6 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 }

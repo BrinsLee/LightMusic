@@ -18,9 +18,9 @@ interface MusicPlayerContract {
 
         fun onPlaybackServiceUnbound()
 
-        fun onSongSetAsFavorite(@NonNull song: Music)
+        fun onSongSetAsFavorite(@NonNull song: Music?)
 
-        fun onSongUpdated(@Nullable song: Music)
+        fun onSongUpdated(@Nullable song: Music?)
 
         fun updatePlayMode(playMode: PlayMode)
 
@@ -30,13 +30,22 @@ interface MusicPlayerContract {
     }
 
     interface Presenter : BasePresenter {
-
+        /**
+         * 检索上次播放模式
+         */
         fun retrieveLastPlayMode()
-
+        /** 喜欢音乐
+         * @param song 选择的音乐
+         * @param favorite 添加或移除收藏
+         */
         fun setSongAsFavorite(song: Music, favorite: Boolean)
-
+        /**
+         *绑定播放音乐服务
+         */
         fun bindPlaybackService()
-
+        /**
+         * 解除绑定
+         */
         fun unbindPlaybackService()
     }
 }

@@ -60,6 +60,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 //lottie
     implementation 'com.airbnb.android:lottie:2.7.0'
+// butterknife
+    /*implementation 'com.jakewharton:butterknife:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'*/
 //
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
 //穿山甲广告

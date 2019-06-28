@@ -2,14 +2,14 @@ package com.brins.lightmusic.ui.fragment.localmusic
 
 import android.content.Context
 import android.view.View
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.LocalMusic
 import com.brins.lightmusic.ui.base.adapter.IAdapterView
 import kotlinx.android.synthetic.main.item_local_music.view.*
 
 class LocalMusicView @JvmOverloads constructor(context: Context)
-    : LinearLayout(context),IAdapterView<LocalMusic> {
+    : ConstraintLayout(context),IAdapterView<LocalMusic> {
 
 
     init {

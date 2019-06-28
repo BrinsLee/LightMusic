@@ -33,7 +33,7 @@ class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, AD_TIME_OUT)
-        loadSplashAd()
+//        loadSplashAd()
 
     }
 

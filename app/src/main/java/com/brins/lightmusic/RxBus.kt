@@ -80,7 +80,7 @@ class RxBus {
      * 取消订阅
      */
     fun unSubcribe() {
-        if (dispoable != null && dispoable.isDisposed()) {
+        if (dispoable != null && dispoable.isDisposed) {
             dispoable.dispose()
         }
 
