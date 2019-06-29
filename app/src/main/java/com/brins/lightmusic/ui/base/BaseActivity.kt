@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.brins.lightmusic.R
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.reactivestreams.Subscription
 
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -16,6 +16,10 @@ abstract class BaseActivity : AppCompatActivity() {
     protected var fragment : QuickControlFragment? = null
     protected var mBindDestroyDisposable: CompositeDisposable? = null
     protected val STATU_BAR = 20
+    protected val COMMAND_PLAY_PAUSE = 1001
+    protected val COMMAND_LAST = 1002
+    protected val COMMAND_NEXT = 1003
+    protected val COMMAND_CHANGE_PLAYMODE = 1004
 /*
 *设置状态栏透明
 * */
@@ -54,17 +58,38 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected open fun showBottomBar(show : Boolean){
         val ft = supportFragmentManager.beginTransaction()
-        if (show) {
-            if (fragment == null) {
-                fragment = QuickControlFragment.newInstance()
-                ft.add(R.id.bottom_container, fragment!!).commitAllowingStateLoss()
-            } else {
-                ft.show(fragment!!).commitAllowingStateLoss()
-            }
+        if (fragment == null) {
+            fragment = QuickControlFragment.newInstance()
+            ft.add(R.id.bottom_container, fragment!!).commitAllowingStateLoss()
         } else {
-            if (fragment != null)
-                ft.hide(fragment!!).commitAllowingStateLoss()
+            ft.show(fragment!!).commitAllowingStateLoss()
         }
+        if (show) {
+            fragment!!.appear()
+        } else {
+            fragment!!.disappear()
+        }
+    }
+
+    protected open fun PlayBackControll(command : Int){
+
+        if (fragment == null || fragment?.mPlayer == null){
+            return
+        }
+        when(command){
+            COMMAND_PLAY_PAUSE -> fragment!!.onPlayPauseToggle()
+            COMMAND_LAST -> fragment!!.onPlayLast()
+            COMMAND_NEXT -> fragment!!.onPlayNext()
+        }
+    }
+
+    protected open  fun getCurrentMusic() : Music? {
+        if (fragment != null) {
+            if (fragment!!.playList != null) {
+                return fragment!!.playList!!.getCurrentSong()
+            }
+        }
+        return null
     }
 
     fun bindUntilDestroy(disposable: Disposable?) {

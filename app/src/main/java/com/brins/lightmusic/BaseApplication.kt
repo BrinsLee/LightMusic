@@ -27,9 +27,11 @@ open class BaseApplication : Application(){
         RxJavaPlugins.setErrorHandler {
             //异常处理
         }
+        setApplication(this)
     }
 
-    @Synchronized private fun setApplication(baseApplication: BaseApplication){
+    @Synchronized
+    private fun setApplication(baseApplication: BaseApplication){
         sInstance = baseApplication
         baseApplication.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks{
             override fun onActivityPaused(activity: Activity?) {

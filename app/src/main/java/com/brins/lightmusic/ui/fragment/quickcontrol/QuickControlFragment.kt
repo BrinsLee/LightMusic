@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.quickcontrol
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
@@ -10,13 +11,15 @@ import com.brins.lightmusic.model.PlayList
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
+import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
 
-    private var mPlayer: IPlayback? = null
+    var mPlayer: IPlayback? = null
     lateinit var playList: PlayList
     private lateinit var mPresenter: MusicPlayerContract.Presenter
     override fun getLayoutResID(): Int {
@@ -58,6 +61,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         ivPlayOrPause.setOnClickListener(this)
         ivPlaybarPre.setOnClickListener(this)
         ivPlaybarNext.setOnClickListener(this)
+        playBarLayout.setOnClickListener(this)
     }
 
     override fun onStart() {
@@ -80,19 +84,38 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
                 onPlayPauseToggle()
             }
             R.id.ivPlaybarPre -> {
-                if (mPlayer == null) return
-                mPlayer!!.playLast()
+                onPlayLast()
             }
             R.id.ivPlaybarNext -> {
-                if (mPlayer == null) return
-                mPlayer!!.playNext()
+                onPlayNext()
             }
             R.id.playBarLayout -> {
-
+                if (mPlayer != null && ::playList.isInitialized){
+                    MusicPlayActivity.startThisActivity((activity as AppCompatActivity),mPlayer!!.isPlaying())
+                }
+                return
             }
         }
     }
 
+    fun disappear(){
+        if(playBarLayout == null){
+            return
+        }
+        playBarLayout.visibility = View.GONE
+    }
+
+    fun appear(){
+        if (playBarLayout == null){
+            return
+        }
+        if (playBarLayout.visibility == View.GONE)
+        {
+            playBarLayout.visibility = View.VISIBLE
+        }else{
+            return
+        }
+    }
 
     fun onPlayPauseToggle() {
         if (mPlayer == null || !::playList.isInitialized) {
@@ -105,6 +128,16 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
             mPlayer!!.play()
             ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
         }
+    }
+
+    fun onPlayLast(){
+        if (mPlayer == null) return
+        mPlayer!!.playLast()
+    }
+
+    fun onPlayNext(){
+        if (mPlayer == null) return
+        mPlayer!!.playNext()
     }
 
     private fun onPlayMusic(playListEvent: PlayListEvent) {
@@ -177,7 +210,8 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun onPlaybackServiceUnbound() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPlayer!!.unregisterCallback(this)
+        mPlayer = null
     }
 
     override fun onSongSetAsFavorite(song: Music?) {
@@ -191,7 +225,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
         tvPlaybarTitle.text = song.title
         tvPlaybarArtist.text = song.singer
-        ivPlaybarCover.setImageBitmap(song.cover)
+        ivPlaybarCover.setImageBitmap(String2Bitmap(song.cover!!))
         ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
         ivPlaybarCover.startRotateAnimation()
 

@@ -1,21 +1,17 @@
 package com.brins.lightmusic
 
 import android.util.Log
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.processors.FlowableProcessor
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.PublishSubject
-import org.reactivestreams.Subscriber
-import io.reactivex.internal.disposables.DisposableHelper.dispose
-import io.reactivex.internal.disposables.DisposableHelper.isDisposed
-
+import java.util.concurrent.ConcurrentHashMap
 
 
 class RxBus {
+
+    private val mStickyEventMap: MutableMap<Class<*>, Any> = ConcurrentHashMap()
 
     companion object {
         @JvmStatic
@@ -36,8 +32,8 @@ class RxBus {
         }
 
         @JvmStatic
-        fun defaultSubscriber() : Observer<Any>{
-            return object : Observer<Any>{
+        fun defaultSubscriber(): Observer<Any> {
+            return object : Observer<Any> {
                 override fun onComplete() {
                     Log.d(TAG, "Duty off!!!")
                 }
@@ -46,7 +42,8 @@ class RxBus {
                 }
 
                 override fun onNext(t: Any) {
-                    Log.d(TAG, "New event received: $t")                }
+                    Log.d(TAG, "New event received: $t")
+                }
 
                 override fun onError(e: Throwable) {
                     Log.e(TAG, "What is this? Please solve this as soon as possible!", e)
@@ -56,14 +53,36 @@ class RxBus {
         }
     }
 
-    private lateinit var dispoable : Disposable
-    private val mEventBus  = PublishSubject.create<Any>()
+    private lateinit var dispoable: Disposable
+    private val mEventBus = PublishSubject.create<Any>()
 
     fun post(event: Any) {
         mEventBus.onNext(event)
     }
 
-    fun toObservable(classType : Class<Any>): Observable<Any> {
+    /**
+     * 发送一个新Sticky事件
+     */
+    @Synchronized
+    fun postSticky(event: Any) {
+        run {
+            mStickyEventMap.put(event.javaClass, event)
+        }
+        post(event)
+    }
+
+    @Synchronized
+    fun toObservableSticky(classType: Class<Any>): Observable<Any> {
+        val observable = mEventBus.ofType(classType)
+        val obEvent = mStickyEventMap[classType]
+        return if (obEvent != null) {
+            observable.mergeWith(Observable.just(classType.cast(obEvent)))
+        } else {
+            observable
+        }
+    }
+
+    fun toObservable(classType: Class<Any>): Observable<Any> {
         return mEventBus.ofType(classType)
     }
 

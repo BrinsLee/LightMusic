@@ -32,6 +32,11 @@ class MainActivity : BaseActivity() {
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         initViewPagerAndTabLay()
+    }
+
+
+    override fun onStart() {
+        super.onStart()
         showBottomBar(true)
     }
 

@@ -38,6 +38,7 @@ class MusicPlayerPresenter(var context: Context, var mView: MusicPlayerContract.
     override fun retrieveLastPlayMode() {
 
     }
+    
 
     override fun setSongAsFavorite(song: Music, favorite: Boolean) {
 

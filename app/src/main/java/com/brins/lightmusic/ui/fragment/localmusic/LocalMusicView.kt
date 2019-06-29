@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.LocalMusic
 import com.brins.lightmusic.ui.base.adapter.IAdapterView
+import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
 import kotlinx.android.synthetic.main.item_local_music.view.*
 
 class LocalMusicView @JvmOverloads constructor(context: Context)
@@ -18,6 +19,6 @@ class LocalMusicView @JvmOverloads constructor(context: Context)
     override fun bind(item: LocalMusic, position: Int) {
         textViewName.text = item.title
         textViewArtist.text = item.singer
-        imgCover.setImageBitmap(item.cover)
+        imgCover.setImageBitmap(String2Bitmap(item.cover!!))
     }
 }
