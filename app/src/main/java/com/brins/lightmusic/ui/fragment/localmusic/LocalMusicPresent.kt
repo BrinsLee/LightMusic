@@ -24,14 +24,14 @@ import io.reactivex.schedulers.Schedulers
 import java.util.ArrayList
 
 
-class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContract.Presenter
-    , LoaderManager.LoaderCallbacks<Cursor>{
+class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContract.Presenter
+    , LoaderManager.LoaderCallbacks<Cursor> {
 
-    val mSubscriptions : CompositeDisposable = CompositeDisposable()
+    val mSubscriptions: CompositeDisposable = CompositeDisposable()
     private val TAG = "LocalMusicPresenter"
     private val URL_LOAD_LOCAL_MUSIC = 0
     private val MEDIA_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-    private val WHERE = (MediaStore.Audio.Media.DURATION + "> ?"+ "AND "
+    private val WHERE = (MediaStore.Audio.Media.DURATION + "> ?" + "AND "
             + MediaStore.Audio.Media.SIZE + ">?")
     private val ORDER_BY = MediaStore.Audio.Media.DISPLAY_NAME + " ASC"
     val FILTER_SIZE = 1 * 1024 * 1024// 1MB
@@ -44,7 +44,8 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
         MediaStore.Audio.Media.ARTIST,
         MediaStore.Audio.Media.ALBUM,
         MediaStore.Audio.Media.SIZE,
-        MediaStore.Audio.Media.DATA)
+        MediaStore.Audio.Media.DATA
+    )
 
     init {
         mView?.setPresenter(this)
@@ -69,7 +70,7 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
             projectLocal,
             MediaStore.Audio.Media.SIZE + "> ?"
                     + "and " + MediaStore.Audio.Media.DURATION + "> ?",
-            arrayOf("$FILTER_SIZE", "$FILTER_DURATION"),null
+            arrayOf("$FILTER_SIZE", "$FILTER_DURATION"), null
         )
 
     }
@@ -90,41 +91,41 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
     @SuppressLint("CheckResult")
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         val songs = ArrayList<LocalMusic>()
-        val flow : Flowable<ArrayList<LocalMusic>> = Flowable.create(
+        val flow: Flowable<ArrayList<LocalMusic>> = Flowable.create(
             {
-                Log.d(TAG,"${cursor?.moveToNext()}")
-                if (!cursor!!.moveToNext()){
+                Log.d(TAG, "${cursor?.moveToNext()}")
+                if (!cursor!!.moveToNext()) {
                     it.onNext(songs)
-                }else{
+                } else {
                     do {
                         var song = cursorToMusic(cursor)
                         songs.add(song)
-                    }while (cursor.moveToNext())
+                    } while (cursor.moveToNext())
                 }
                 it.onNext(songs)
             }, BackpressureStrategy.BUFFER
         )
-        val disposable =  flow.observeOn(AndroidSchedulers.mainThread())
+        val disposable = flow.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({
                 mView!!.onLocalMusicLoaded(it)
             }, {
-                Log.e(TAG ,it.message)
+                Log.e(TAG, it.message)
             })
         mSubscriptions.add(disposable)
 
     }
 
-    private fun createObservable(songs: MutableList<LocalMusic>) : Observable<MutableList<LocalMusic>> {
-        return Observable.create {
-                emitter -> emitter.onNext(songs)
+    private fun createObservable(songs: MutableList<LocalMusic>): Observable<MutableList<LocalMusic>> {
+        return Observable.create { emitter ->
+            emitter.onNext(songs)
         }
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
     }
 
-    private fun cursorToMusic(cursor: Cursor): LocalMusic{
+    private fun cursorToMusic(cursor: Cursor): LocalMusic {
         val id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
         val name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
         val title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
@@ -132,9 +133,9 @@ class LocalMusicPresent(var mView : LocalMusicContract.View? ) : LocalMusicContr
         val artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
         val album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM))
         val size = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
-        val url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))?:""
-        val song = LocalMusic(id,name,title,artist,duration,size,url,album)
-        if (url.isNotEmpty()){
+        val url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) ?: ""
+        val song = LocalMusic(id, name, title, artist, size, url, album, duration = duration)
+        if (url.isNotEmpty()) {
             val bitmap = loadingCover(url)
             song.cover = bitmap
         }

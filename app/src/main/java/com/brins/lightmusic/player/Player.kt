@@ -10,10 +10,11 @@ import java.util.ArrayList
 
 class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
-    companion object{
+    companion object {
         private val TAG = "Player"
         @Volatile
         private var sInstance: Player? = null
+
         @JvmStatic
         fun getInstance(): Player {
             if (sInstance == null) {
@@ -38,17 +39,18 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     init {
         mPlayer.setOnCompletionListener(this)
     }
+
     override fun setPlayList(list: PlayList) {
         mPlayList = list
     }
 
     override fun play(): Boolean {
-        if(isPaused){
+        if (isPaused) {
             mPlayer.start()
             notifyPlayStatusChanged(true)
             return true
         }
-        if(mPlayList.prepare()){
+        if (mPlayList.prepare()) {
             var music = mPlayList.getCurrentSong()
             try {
                 mPlayer.reset()
@@ -56,7 +58,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
                 mPlayer.prepare()
                 mPlayer.start()
                 notifyPlayStatusChanged(true)
-            }catch (e : IOException){
+            } catch (e: IOException) {
                 Log.e(TAG, "play: ", e)
                 notifyPlayStatusChanged(false)
                 return false
@@ -67,7 +69,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     private fun notifyPlayStatusChanged(isPlaying: Boolean) {
-        for (callback in mCallbacks){
+        for (callback in mCallbacks) {
             callback.onPlayStatusChanged(isPlaying)
         }
     }
@@ -81,7 +83,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     override fun play(list: PlayList, startIndex: Int): Boolean {
 
-        if (list == null || startIndex < 0 || startIndex >= list.getNumOfSongs()){
+        if (list == null || startIndex < 0 || startIndex >= list.getNumOfSongs()) {
             return false
         }
         isPaused = false
@@ -119,7 +121,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun playNext(): Boolean {
         isPaused = false
         val hasNext = mPlayList.hasNext(false)
-        if (hasNext){
+        if (hasNext) {
             val song = mPlayList.next()
             play()
             notifyPlayNext(song)
@@ -157,7 +159,18 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun seekTo(progress: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        if (mPlayList.getSongs().isEmpty()) return false
+        val currentSong = mPlayList.getCurrentSong()
+        if (currentSong != null) {
+            if (currentSong.duration <= progress) {
+                onCompletion(mPlayer)
+            } else {
+                mPlayer.seekTo(progress)
+            }
+            return true
+        }
+        return false
     }
 
     override fun setPlayMode(playMode: PlayMode) {
@@ -183,14 +196,14 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        var next : Music? = null
+        var next: Music? = null
         if (mPlayList.getPlayMode() === PlayMode.LIST && mPlayList.getPlayingIndex() === mPlayList.getNumOfSongs() - 1) run {
             // In the end of the list
             // Do nothing, just deliver the callback
-        }else if (mPlayList.getPlayMode() === PlayMode.SINGLE){
+        } else if (mPlayList.getPlayMode() === PlayMode.SINGLE) {
             next = mPlayList.getCurrentSong()
             play()
-        }else{
+        } else {
             val hasNext = mPlayList.hasNext(true)
             if (hasNext) {
                 next = mPlayList.next()

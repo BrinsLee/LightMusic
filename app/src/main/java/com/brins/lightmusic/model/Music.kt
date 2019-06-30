@@ -4,14 +4,17 @@ import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 
-open class Music(var fileName : String,var title: String, var singer: String, var album: String,var cover : String? , var fileUrl : String = "") :
+open class Music(var fileName : String,var title: String, var singer: String, var album: String,var cover : String? , var fileUrl : String = ""
+                 ,var duration : Int ) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -20,6 +23,8 @@ open class Music(var fileName : String,var title: String, var singer: String, va
         parcel.writeString(singer)
         parcel.writeString(album)
         parcel.writeString(cover)
+        parcel.writeString(fileUrl)
+        parcel.writeInt(duration)
     }
 
     override fun describeContents(): Int {

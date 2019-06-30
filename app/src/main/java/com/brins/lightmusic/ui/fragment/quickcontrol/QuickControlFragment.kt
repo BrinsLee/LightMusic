@@ -16,6 +16,14 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
+import android.content.ComponentName
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
+import androidx.core.content.ContextCompat.getSystemService
+import android.text.TextUtils
+
+
 
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
 
@@ -53,7 +61,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        MusicPlayerPresenter(activity!!, this).subscribe()
+        MusicPlayerPresenter.instance.setContext(activity!!).setView(this).subscribe()
         setListener()
     }
 
@@ -230,4 +238,5 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         ivPlaybarCover.startRotateAnimation()
 
     }
+
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.PlayList
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -15,11 +16,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected var TAG = this.javaClass.simpleName
     protected var fragment : QuickControlFragment? = null
     protected var mBindDestroyDisposable: CompositeDisposable? = null
-    protected val STATU_BAR = 20
-    protected val COMMAND_PLAY_PAUSE = 1001
-    protected val COMMAND_LAST = 1002
-    protected val COMMAND_NEXT = 1003
-    protected val COMMAND_CHANGE_PLAYMODE = 1004
+
 /*
 *设置状态栏透明
 * */
@@ -70,24 +67,9 @@ abstract class BaseActivity : AppCompatActivity() {
             fragment!!.disappear()
         }
     }
-
-    protected open fun PlayBackControll(command : Int){
-
-        if (fragment == null || fragment?.mPlayer == null){
-            return
-        }
-        when(command){
-            COMMAND_PLAY_PAUSE -> fragment!!.onPlayPauseToggle()
-            COMMAND_LAST -> fragment!!.onPlayLast()
-            COMMAND_NEXT -> fragment!!.onPlayNext()
-        }
-    }
-
-    protected open  fun getCurrentMusic() : Music? {
+    protected open  fun getCurrentList() : PlayList? {
         if (fragment != null) {
-            if (fragment!!.playList != null) {
-                return fragment!!.playList!!.getCurrentSong()
-            }
+            return fragment!!.playList
         }
         return null
     }
