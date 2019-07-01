@@ -29,7 +29,7 @@ class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContrac
 
     val mSubscriptions: CompositeDisposable = CompositeDisposable()
     private val TAG = "LocalMusicPresenter"
-    private val URL_LOAD_LOCAL_MUSIC = 0
+    private var URL_LOAD_LOCAL_MUSIC = 0
     private val MEDIA_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private val WHERE = (MediaStore.Audio.Media.DURATION + "> ?" + "AND "
             + MediaStore.Audio.Media.SIZE + ">?")
@@ -94,15 +94,14 @@ class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContrac
         val flow: Flowable<ArrayList<LocalMusic>> = Flowable.create(
             {
                 Log.d(TAG, "${cursor?.moveToNext()}")
-                if (!cursor!!.moveToNext()) {
-                    it.onNext(songs)
-                } else {
+                if (cursor != null && cursor.count > 0) {
+                    cursor.moveToFirst()
                     do {
                         var song = cursorToMusic(cursor)
                         songs.add(song)
                     } while (cursor.moveToNext())
+                    it.onNext(songs)
                 }
-                it.onNext(songs)
             }, BackpressureStrategy.BUFFER
         )
         val disposable = flow.observeOn(AndroidSchedulers.mainThread())

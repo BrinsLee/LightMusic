@@ -15,7 +15,6 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.postDelayed
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music

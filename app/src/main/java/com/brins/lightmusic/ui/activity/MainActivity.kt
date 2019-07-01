@@ -9,6 +9,7 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
+import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -44,9 +45,9 @@ class MainActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
         list.add(LocalMusicFragment())
-        list.add(LocalMusicFragment())
-        list.add(LocalMusicFragment())
-        list.add(LocalMusicFragment())
+        list.add(VideoFragment())
+        list.add(VideoFragment())
+        list.add(VideoFragment())
         view_pager.adapter = adapter
         tab_layout.setupWithViewPager(view_pager)
 
