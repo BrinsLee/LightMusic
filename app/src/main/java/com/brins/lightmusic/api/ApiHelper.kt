@@ -2,7 +2,9 @@ package com.brins.lightmusic.api
 
 import com.brins.lightmusic.api.service.MusicService
 import com.brins.lightmusic.common.AppConfig.BASEURL
+import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.PlayList
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -12,10 +14,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ApiHelper {
+object ApiHelper {
 
-    companion object{
-        @JvmStatic
         fun getRetrofitFactory(baseurl : String): MusicService {
             val retrofit = Retrofit.Builder().baseUrl(baseurl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -25,7 +25,6 @@ class ApiHelper {
             return retrofit.create(MusicService::class.java)
         }
 
-        @JvmStatic
         fun  getClient() : OkHttpClient {
             val builder : OkHttpClient.Builder = OkHttpClient().newBuilder()
             val client = builder.connectTimeout(15, TimeUnit.SECONDS)
@@ -33,12 +32,9 @@ class ApiHelper {
                 .build()
             return client
         }
-    }
 
-    fun getArtist(observer: Observer<PlayList>, i: Int) {
-        getRetrofitFactory(BASEURL).getArtist(i)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(observer)
+
+    fun getArtist(i: Int): Observable<MutableList<Artist>> {
+        return getRetrofitFactory(BASEURL).getArtist(i)
     }
 }

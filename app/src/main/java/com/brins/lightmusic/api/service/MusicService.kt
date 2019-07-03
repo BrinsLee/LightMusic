@@ -1,6 +1,7 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig.*
+import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.PlayList
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -23,6 +24,6 @@ interface MusicService {
     * 获取歌手列表
     * */
     @GET(ARTISTS)
-    fun getArtist(@Query("limit")limit:Int): Observable<PlayList>
+    fun getArtist(@Query("limit")limit:Int): Observable<MutableList<Artist>>
 
 }
