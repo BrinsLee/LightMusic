@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
@@ -45,7 +46,7 @@ class MainActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
         list.add(LocalMusicFragment())
-        list.add(VideoFragment())
+        list.add(DiscoveryFragment())
         list.add(VideoFragment())
         list.add(VideoFragment())
         view_pager.adapter = adapter

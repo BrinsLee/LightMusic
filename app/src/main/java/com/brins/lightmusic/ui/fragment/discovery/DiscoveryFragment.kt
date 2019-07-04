@@ -70,7 +70,7 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
             }
 
             override fun bindView(view: View, index: Int) {
-                var viewHolder : ViewHolder? = view.tag as ViewHolder
+                var viewHolder : ViewHolder? = view.tag as ViewHolder?
                 if (viewHolder == null){
                     viewHolder = ViewHolder()
                     viewHolder.imageView = view.findViewById(R.id.iv_recovery)
