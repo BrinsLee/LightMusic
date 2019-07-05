@@ -11,8 +11,10 @@ import retrofit2.http.Query
 
 interface MusicService {
 
-    @Headers("Accept: */*",
-        "User-Agent: $USER_AGENT")
+    @Headers(
+        "Accept: */*",
+        "User-Agent: $USER_AGENT"
+    )
     /*
     * 登录网络接口
     * */
@@ -21,9 +23,15 @@ interface MusicService {
 */
 
     /*
+    * 获取歌单列表
+    * */
+    @GET(PLAYLIST)
+    fun getPlayList(@Query("limit") limit: Int): Observable<PlayList>
+
+    /*
     * 获取歌手列表
     * */
     @GET(ARTISTS)
-    fun getArtist(@Query("limit")limit:Int): Observable<MutableList<Artist>>
+    fun getArtist(@Query("limit") limit: Int): Observable<MutableList<Artist>>
 
 }

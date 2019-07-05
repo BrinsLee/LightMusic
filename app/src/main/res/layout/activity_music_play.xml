@@ -18,7 +18,7 @@
             app:subtitleTextAppearance="@style/netease_toolbar_subtitle"
             app:titleTextAppearance="@style/netease_toolbar_title"/>
 
-    <TextView
+    <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="normal"
@@ -29,7 +29,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textColor="@color/white_80"
             android:layout_marginBottom="@dimen/common_margin_30"
+    />-->
+    <com.hw.lrcviewlib.LrcView
+            android:id="@+id/mLrcView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_margin_100"
+            app:layout_constraintBottom_toTopOf="@id/ablum_cover"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolBar"
     />
+
     <com.brins.lightmusic.ui.customview.RoundConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

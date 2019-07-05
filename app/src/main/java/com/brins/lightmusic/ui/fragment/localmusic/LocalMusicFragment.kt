@@ -28,7 +28,7 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
     lateinit var mAdapter: LocalMusicAdapter
     lateinit var mPresenter: LocalMusicContract.Presenter
     private var  playList : PlayList = PlayList()
-
+    private var isLoad = false
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_localmusic
@@ -49,7 +49,10 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
 
     override fun onResume() {
         super.onResume()
-
+        if (!isLoad){
+            val PERMISSIONS = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            permissionManager.checkPermissions(0,PERMISSIONS[0])
+        }
     }
 
     private fun requestpermission() {
@@ -63,12 +66,15 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
                 builder.setTitle("提示")
                 builder.setMessage("缺少读取权限！")
                 builder.setPositiveButton("设置权限") { _, _ -> PermissionManager.startAppSettings(context!!) }
-                builder.create().show()            }
+                builder.create().show()
+            }
         }
-        val PERMISSIONS = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        permissionManager.checkPermissions(0,PERMISSIONS[0])
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionManager.recheckPermissions(requestCode , permissions , grantResults)
+    }
 
     override fun getcontext(): Context {
         return context!!
@@ -85,6 +91,7 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
         playList.addSong(songs)
         mAdapter.setData(songs)
         mAdapter.notifyDataSetChanged()
+        isLoad = true
     }
 
     override fun setPresenter(presenter: LocalMusicContract.Presenter?) {

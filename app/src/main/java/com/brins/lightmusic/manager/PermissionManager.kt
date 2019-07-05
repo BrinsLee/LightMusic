@@ -67,6 +67,8 @@ abstract class PermissionManager (var targetActivity : AppCompatActivity){
         }
     }
 
+
+
     fun recheckPermissions(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         for (grantResult in grantResults) {
             if (grantResult == PackageManager.PERMISSION_DENIED) {
