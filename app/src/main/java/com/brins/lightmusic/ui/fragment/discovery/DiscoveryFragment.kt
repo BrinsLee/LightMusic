@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.MusicList
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
@@ -53,7 +54,7 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
 
     }
 
-    override fun onMusicListLoad(songs: MutableList<Music>) {
+    override fun onMusicListLoad(songs: MutableList<MusicList>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

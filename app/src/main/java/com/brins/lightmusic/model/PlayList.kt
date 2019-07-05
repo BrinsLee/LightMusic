@@ -13,6 +13,9 @@ import com.litesuits.orm.db.enums.AssignType
 import com.litesuits.orm.db.enums.Relation
 import java.util.*
 
+/*
+* 本地歌单
+* */
 @Entity(tableName = "PlayList")
 class PlayList() : Parcelable {
 
