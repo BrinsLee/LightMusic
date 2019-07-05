@@ -9,6 +9,8 @@
     <color name="lightblue">#86a8e7</color>
     <color name="lightgreen">#91eae4</color>
 
+    <color name="start">#fff1eb</color>
+    <color name="end">#ace0f9</color>
     <color name="gray">#7EB1B0B0</color>
     <color name="white">#ffffff</color>
     <color name="white_10">#1AFFFFFF</color>

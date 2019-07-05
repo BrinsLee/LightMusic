@@ -2,12 +2,18 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.PlayList
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observer
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.function.Consumer
 
 class DiscoverPresent (var mView : DiscoveryContract.View?): DiscoveryContract.Presenter {
@@ -17,6 +23,9 @@ class DiscoverPresent (var mView : DiscoveryContract.View?): DiscoveryContract.P
     @RequiresApi(Build.VERSION_CODES.N)
     override fun loadArtist() {
         ApiHelper.getArtist(12)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .autoDisposable(AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY))
             .subscribe(object : Observer<MutableList<Artist>>{
                 override fun onComplete() {
                 }

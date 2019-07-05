@@ -7,14 +7,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
-import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicContract
-import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
@@ -41,9 +39,15 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
     override fun hideLoading() {
     }
 
+    override fun getLifeActivity(): AppCompatActivity {
+        return activity as AppCompatActivity
+    }
+
     override fun getcontext(): Context {
         return context!!
     }
+
+
 
     override fun handleError(error: Throwable) {
 

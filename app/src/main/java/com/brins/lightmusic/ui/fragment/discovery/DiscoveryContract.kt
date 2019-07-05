@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.ui.base.BasePresenter
@@ -15,6 +16,8 @@ interface DiscoveryContract {
         fun hideLoading()
 
         fun getcontext() : Context
+
+        fun getLifeActivity() : AppCompatActivity
 
         fun handleError(error: Throwable)
 
