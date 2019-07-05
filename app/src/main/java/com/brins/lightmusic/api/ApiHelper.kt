@@ -3,6 +3,7 @@ package com.brins.lightmusic.api
 import com.brins.lightmusic.api.service.MusicService
 import com.brins.lightmusic.common.AppConfig.BASEURL
 import com.brins.lightmusic.model.Artist
+import com.brins.lightmusic.model.MusicList
 import com.brins.lightmusic.model.Data
 import com.brins.lightmusic.model.PlayList
 import io.reactivex.Observable
@@ -37,5 +38,9 @@ object ApiHelper {
 
     fun getArtist(i: Int): Observable<Data> {
         return getRetrofitFactory(BASEURL).getArtist(i)
+    }
+
+    fun getPlayList(i : Int): Observable<MutableList<MusicList>>{
+        return getRetrofitFactory(BASEURL).getPlayList(i)
     }
 }

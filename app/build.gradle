@@ -12,7 +12,7 @@ apply plugin: 'AndResGuard'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.brins.myapplication"
+        applicationId "com.brins.lightmusic"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
@@ -45,8 +45,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 //RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+//AutoDispose
+    implementation 'com.uber.autodispose:autodispose-kotlin:0.8.0'
+    implementation 'com.uber.autodispose:autodispose-android-archcomponents-kotlin:0.8.0'
+
+
+
 //EventBus
     implementation 'de.greenrobot:eventbus:3.0.0-beta1'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
@@ -69,6 +76,8 @@ dependencies {
     kapt 'com.jakewharton:butterknife-compiler:10.0.0'*/
 //
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
+//歌词第三方依赖
+    implementation 'com.github.bifan-wei:LrcView:V1.3'
 //穿山甲广告
     implementation(name: 'open_ad_sdk', ext: 'aar')
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'

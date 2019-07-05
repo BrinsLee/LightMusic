@@ -1,5 +1,7 @@
 package com.brins.lightmusic.ui.activity
 
+import android.content.ContentProvider
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,14 +9,12 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
-import android.os.AsyncTask
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
+import android.os.*
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import com.airbnb.lottie.animation.content.Content
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
@@ -31,6 +31,10 @@ import com.brins.lightmusic.utils.HandlerUtil
 import com.brins.lightmusic.utils.TimeUtils
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
+import com.hw.lrcviewlib.LrcDataBuilder
+import com.hw.lrcviewlib.LrcRow
+
+
 
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
 
@@ -293,14 +297,13 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             return
         }
         cover = String2Bitmap(song.cover!!)
-        tvDuration.text = TimeUtils.formatDuration(song.duration)
+        ivCover.setImageBitmap(cover)
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
         supportActionBar!!.title = song.title
-        ivCover.setImageBitmap(String2Bitmap(song.cover!!))
-        val i = initProgress(mPlayer!!.getProgress())
-        Log.d("duration", "$i")
-        seekBar.progress = i
+        tvDuration.text = TimeUtils.formatDuration(song.duration)
+        seekBar.progress = initProgress(mPlayer!!.getProgress())
         updateProgressTextWithProgress(mPlayer!!.getProgress())
+        loadLrc()
         mHandler.removeCallbacks(mProgressCallback)
         if (mPlayer!!.isPlaying()) {
             playOrPause.setImageResource(R.drawable.ic_pausemusic)
@@ -309,6 +312,23 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             playOrPause.setImageResource(R.drawable.ic_playmusic)
             playAnimate.pauseAnimation()
         }
+    }
+
+    private fun loadLrc() {
+        val a = Environment.getDownloadCacheDirectory().toString()
+        val lrcRows = LrcDataBuilder().BuiltFromAssets(this, "")
+        mLrcView.lrcSetting
+            .setTimeTextSize(40)//时间字体大小
+            .setSelectLineColor(Color.parseColor("#1d9dfc"))
+            .setSelectLineTextSize(25)//选中线大小
+            .setHeightRowColor(Color.parseColor("#aaffffff"))//高亮字体颜色
+            .setNormalRowTextSize(17)//正常行字体大小
+            .setHeightLightRowTextSize(20)//高亮行字体大小
+            .setTrySelectRowTextSize(17)//尝试选中行字体大小
+            .setTimeTextColor(Color.parseColor("#ffffff"))//时间字体颜色
+            .setTrySelectRowColor(Color.parseColor("#55ffffff"))//尝试选中字体颜色
+        mLrcView.commitLrcSettings()
+        mLrcView.setLrcData(lrcRows)
     }
 
     override fun updatePlayMode(playMode: PlayMode) {

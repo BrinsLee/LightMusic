@@ -7,6 +7,8 @@
             <enum name="DIN-Regular" value="3" />
             <enum name="LilyScriptOne-Regular" value="4" />
         </attr>
+        <attr name="start_color" format="color"/>
+        <attr name="end_color" format="color"/>
     </declare-styleable>
 
     <declare-styleable name="CardViewPager">
