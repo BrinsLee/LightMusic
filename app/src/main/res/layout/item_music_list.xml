@@ -4,49 +4,48 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin_10">
 
     <com.brins.lightmusic.ui.customview.RoundConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/common_margin_200"
+            android:layout_height="@dimen/common_margin_150"
             app:round_corner="@dimen/common_margin_30"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/common_margin_20"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/common_margin_30"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/common_margin_30"
-            android:background="@color/end">
+            android:background="@color/white"
+            app:layout_constraintHorizontal_bias="0.0">
 
         <com.brins.lightmusic.ui.customview.FontTextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="start"
                 android:text="All Your Days"
-                app:font_type="DIN-Medium"
+                app:font_type="DIN-Bold"
                 android:id="@+id/title"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/common_margin_150"
-                android:layout_marginTop="@dimen/common_margin_20"
-                android:textSize="20sp"
-        />
-        <com.brins.lightmusic.ui.customview.FontTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All Your Days 0000asjadakjdlkaksldkladjlkj"
-                app:font_type="DIN-Medium"
-                android:id="@+id/description"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/common_margin_150"
-                android:layout_marginTop="@dimen/common_margin_5"
-                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:maxLength="20"
+                android:layout_marginStart="@dimen/common_margin_150"
+                android:layout_marginEnd="@dimen/common_margin_20"
+                android:layout_marginTop="@dimen/common_margin_30"
+                android:textSize="15sp"
         />
+
     </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+    <ImageView
+            android:src="@drawable/ic_thumbtack"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/common_margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/cover"
             android:layout_width="@dimen/common_margin_130"
             android:layout_height="@dimen/common_margin_130"
             app:layout_constraintTop_toTopOf="parent"
@@ -58,5 +57,22 @@
             app:riv_corner_radius_top_right="@dimen/common_margin_20"
             android:src="@mipmap/avart"/>
 
+    <com.brins.lightmusic.ui.customview.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            app:font_type="DIN-Medium"
+            android:gravity="start"
+            android:id="@+id/description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/common_margin_50"
+            android:layout_marginStart="@dimen/common_margin_50"
+            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintTop_toBottomOf="@id/cover"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:maxLength="20"
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

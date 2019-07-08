@@ -28,7 +28,7 @@ interface MusicService {
     * 获取歌单列表
     * */
     @GET(PLAYLIST)
-    fun getPlayList(@Query("limit") limit: Int): Observable<MutableList<MusicList>>
+    fun getPlayList(@Query("limit") limit: Int): Observable<Data>
 
     /*
     * 获取歌手列表

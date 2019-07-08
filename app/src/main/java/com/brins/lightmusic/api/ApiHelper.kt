@@ -40,7 +40,7 @@ object ApiHelper {
         return getRetrofitFactory(BASEURL).getArtist(i)
     }
 
-    fun getPlayList(i : Int): Observable<MutableList<MusicList>>{
+    fun getPlayList(i : Int): Observable<Data>{
         return getRetrofitFactory(BASEURL).getPlayList(i)
     }
 }

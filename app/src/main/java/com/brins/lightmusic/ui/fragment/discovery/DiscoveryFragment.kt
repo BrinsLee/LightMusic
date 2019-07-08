@@ -5,22 +5,26 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.MusicList
+import com.brins.lightmusic.ui.adapter.MusicListAdapter
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
-class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
+class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
     lateinit var mPresenter: DiscoveryContract.Presenter
-    lateinit var artistlist : MutableList<Artist>
+    lateinit var artistlist: MutableList<Artist>
+    lateinit var musicList: MutableList<MusicList>
 
 
     override fun onLazyLoad() {
@@ -49,13 +53,13 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
     }
 
 
-
     override fun handleError(error: Throwable) {
 
     }
 
     override fun onMusicListLoad(songs: MutableList<MusicList>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        musicList = songs
+        initMusicList()
     }
 
     override fun onArtistLoad(artists: MutableList<Artist>) {
@@ -65,7 +69,7 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
 
     private fun initArtistView() {
         pileLayout.visibility = View.VISIBLE
-        pileLayout.setAdapter(object : PileLayout.Adapter(){
+        pileLayout.setAdapter(object : PileLayout.Adapter() {
             override fun getLayoutId(): Int {
                 return R.layout.artist_item
             }
@@ -75,8 +79,8 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
             }
 
             override fun bindView(view: View, index: Int) {
-                var viewHolder : ViewHolder? = view.tag as ViewHolder?
-                if (viewHolder == null){
+                var viewHolder: ViewHolder? = view.tag as ViewHolder?
+                if (viewHolder == null) {
                     viewHolder = ViewHolder()
                     viewHolder.imageView = view.findViewById(R.id.iv_recovery)
                     viewHolder.textView = view.findViewById(R.id.introduce)
@@ -91,6 +95,11 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
 
     }
 
+    private fun initMusicList() {
+        recycleMusiclist.adapter = MusicListAdapter(MusicListAdapter.TYPE_MUSIC_LIST, context!!, musicList)
+        recycleMusiclist.layoutManager = LinearLayoutManager(context!!)
+    }
+
     override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
         mPresenter = presenter!!
     }
@@ -101,7 +110,7 @@ class DiscoveryFragment : BaseFragment() , DiscoveryContract.View{
 
     class ViewHolder {
         var imageView: ImageView? = null
-        var textView : TextView? = null
+        var textView: TextView? = null
     }
 
 }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class Data {
     @SerializedName("playlists")
-    var playlists : List<PlayList>? = null
+    var playlists : List<MusicList>? = null
     @SerializedName("artists")
     var artists : List<Artist>? = null
 }

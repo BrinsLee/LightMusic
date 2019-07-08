@@ -48,8 +48,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                     android:layout_gravity="center"
-                    android:id="@+id/recycle_musiclist"
-                    android:layout_margin="15dp"
+                    android:id="@+id/recycleMusiclist"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    android:layout_marginBottom="@dimen/common_margin_10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
             </androidx.recyclerview.widget.RecyclerView>
