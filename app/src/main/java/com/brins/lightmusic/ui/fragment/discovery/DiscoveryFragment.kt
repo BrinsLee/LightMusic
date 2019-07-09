@@ -14,6 +14,7 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.MusicList
+import com.brins.lightmusic.model.PlayListDetail
 import com.brins.lightmusic.ui.adapter.MusicListAdapter
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_discovery.*
 import kotlinx.android.synthetic.main.include_loading_animation.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
+
 
     lateinit var mPresenter: DiscoveryContract.Presenter
     lateinit var artistlist: MutableList<Artist>
@@ -39,6 +41,10 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
     }
 
     //MVP View
+
+    override fun onDetailLoad(detail: PlayListDetail) {
+
+    }
     override fun showLoading() {
         loadingLayout.visibility = View.VISIBLE
     }

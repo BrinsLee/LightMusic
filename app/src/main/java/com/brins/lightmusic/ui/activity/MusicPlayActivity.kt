@@ -1,7 +1,5 @@
 package com.brins.lightmusic.ui.activity
 
-import android.content.ContentProvider
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -10,11 +8,9 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.*
-import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.lottie.animation.content.Content
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
@@ -32,8 +28,6 @@ import com.brins.lightmusic.utils.TimeUtils
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import com.hw.lrcviewlib.LrcDataBuilder
-import com.hw.lrcviewlib.LrcRow
-
 
 
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
@@ -299,7 +293,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         cover = String2Bitmap(song.cover!!)
         ivCover.setImageBitmap(cover)
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
-        supportActionBar!!.title = song.title
+        supportActionBar!!.title = song.name
         tvDuration.text = TimeUtils.formatDuration(song.duration)
         seekBar.progress = initProgress(mPlayer!!.getProgress())
         updateProgressTextWithProgress(mPlayer!!.getProgress())

@@ -17,7 +17,7 @@ class LocalMusicView @JvmOverloads constructor(context: Context)
         View.inflate(context, R.layout.item_local_music, this)
     }
     override fun bind(item: LocalMusic, position: Int) {
-        textViewName.text = item.title
+        textViewName.text = item.name
         textViewArtist.text = item.singer
         imgCover.setImageBitmap(String2Bitmap(item.cover!!))
     }

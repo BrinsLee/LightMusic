@@ -16,13 +16,6 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
-import android.content.ComponentName
-import android.app.ActivityManager
-import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
-import android.text.TextUtils
-
 
 
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
@@ -231,7 +224,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
             ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
             return
         }
-        tvPlaybarTitle.text = song.title
+        tvPlaybarTitle.text = song.name
         tvPlaybarArtist.text = song.singer
         ivPlaybarCover.setImageBitmap(String2Bitmap(song.cover!!))
         ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)

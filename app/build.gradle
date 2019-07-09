@@ -53,7 +53,6 @@ dependencies {
     implementation 'com.uber.autodispose:autodispose-android-archcomponents-kotlin:0.8.0'
 
 
-
 //EventBus
     implementation 'de.greenrobot:eventbus:3.0.0-beta1'
     implementation 'com.github.bumptech.glide:glide:4.8.0'

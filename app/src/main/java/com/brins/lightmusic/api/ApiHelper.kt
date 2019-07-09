@@ -2,10 +2,7 @@ package com.brins.lightmusic.api
 
 import com.brins.lightmusic.api.service.MusicService
 import com.brins.lightmusic.common.AppConfig.BASEURL
-import com.brins.lightmusic.model.Artist
-import com.brins.lightmusic.model.MusicList
-import com.brins.lightmusic.model.Data
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.*
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiHelper {
 
-        fun getRetrofitFactory(baseurl : String): MusicService {
+        private fun getRetrofitFactory(baseurl : String): MusicService {
             val retrofit = Retrofit.Builder().baseUrl(baseurl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -42,5 +39,9 @@ object ApiHelper {
 
     fun getPlayList(i : Int): Observable<Data>{
         return getRetrofitFactory(BASEURL).getPlayList(i)
+    }
+
+    fun getPlayListDetail(id : String) : Observable<MusicListDetail>{
+        return getRetrofitFactory(BASEURL).getPlayListDetail(id)
     }
 }

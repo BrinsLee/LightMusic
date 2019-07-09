@@ -5,7 +5,7 @@ package com.brins.lightmusic.model
 import android.os.Parcel
 import android.os.Parcelable
 /*
-* 歌单
+* 在线歌单
  */
 class MusicList : Parcelable {
     var name: String = ""

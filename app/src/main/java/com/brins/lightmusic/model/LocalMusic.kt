@@ -3,7 +3,8 @@ package com.brins.lightmusic.model
 import android.graphics.Bitmap
 
 class LocalMusic(
-    var id: Int = 0, fileNmae: String = ""
+    var id: Int = 0
+    , fileNmae: String = ""
     , title: String = ""
     , singer: String = ""
     , var size: String = ""

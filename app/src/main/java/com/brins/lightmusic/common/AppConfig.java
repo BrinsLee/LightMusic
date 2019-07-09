@@ -5,10 +5,26 @@ import android.content.Context;
 public class AppConfig {
     public static boolean ISFIRST = true;
     public static final String BASEURL = "https://5340b06e.ngrok.io";
+
+
+    /**
+     * 登录
+     */
     public static final String LOGIN_EMAIL = "/login";
     public static final String USER = "/user/detail";
+
+
+    /**
+     * 歌单
+     */
     public static final String PLAYLIST = "/top/playlist";
+    public static final String PLAYLISTDETAIL = "/playlist/detail";
+
+    /**
+     * 歌手
+     */
     public static final String ARTISTS ="/top/artists";
+
     public static final String RECOMMEND_MV = "/personalized/mv";
     public static final String MV_DETAIL = "/mv/url";
     public static final String VIDEO ="/video/url";

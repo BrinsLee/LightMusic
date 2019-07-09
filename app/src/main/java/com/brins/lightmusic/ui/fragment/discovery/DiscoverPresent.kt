@@ -10,6 +10,7 @@ import com.brins.lightmusic.model.MusicList
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import com.brins.lightmusic.model.Data
+import com.brins.lightmusic.model.MusicListDetail
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -61,6 +62,26 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
                         mView!!.onMusicListLoad(t.playlists as MutableList<MusicList>)
                     }
                     mView?.hideLoading()
+                }
+
+                override fun onError(e: Throwable) {}
+
+            })
+    }
+
+    override fun loadMusicListDetail(id : String) {
+        ApiHelper.getPlayListDetail(id)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
+            .autoDisposable(provider)
+            .subscribe(object :Observer<MusicListDetail>{
+                override fun onComplete() {}
+                override fun onSubscribe(d: Disposable) {}
+                override fun onNext(t: MusicListDetail) {
+                    if (t.playlist != null){
+                        mView!!.onDetailLoad(t.playlist!!)
+                        mView!!.hideLoading()
+                    }
                 }
 
                 override fun onError(e: Throwable) {}
