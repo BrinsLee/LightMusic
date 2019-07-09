@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_main"
+        android:background="@drawable/bg_main"
         android:fitsSystemWindows="true"
         android:id="@+id/drawer"
         tools:context=".ui.activity.MainActivity">

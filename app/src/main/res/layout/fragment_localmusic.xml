@@ -7,7 +7,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/common_margin_180"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true">
 
@@ -40,7 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="@dimen/common_margin_10"
                         android:text="轻籁LM"
                         android:textColor="@color/white"
                         android:textSize="30sp"

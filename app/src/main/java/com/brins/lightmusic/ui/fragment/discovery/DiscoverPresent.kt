@@ -60,6 +60,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
                     if (t.playlists != null && t.playlists!!.isNotEmpty()) {
                         mView!!.onMusicListLoad(t.playlists as MutableList<MusicList>)
                     }
+                    mView?.hideLoading()
                 }
 
                 override fun onError(e: Throwable) {}
@@ -69,6 +70,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun subscribe() {
+        mView?.showLoading()
         loadArtist()
         loadMusicList()
     }

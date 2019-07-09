@@ -19,6 +19,7 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
+import kotlinx.android.synthetic.main.include_loading_animation.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
@@ -39,9 +40,11 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
     //MVP View
     override fun showLoading() {
+        loadingLayout.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
+        loadingLayout.visibility = View.GONE
     }
 
     override fun getLifeActivity(): AppCompatActivity {
