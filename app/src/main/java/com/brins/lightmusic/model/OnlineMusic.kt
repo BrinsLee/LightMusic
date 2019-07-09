@@ -1,23 +1,17 @@
 package com.brins.lightmusic.model
 
-class OnlineMusic(
+import com.google.gson.annotations.SerializedName
+
+class OnlineMusic() /*: Music(fileNmae, name, ar[0].name, al.name, al.picUrl, "", dt) */{
+
+    @SerializedName("id")
     var id: String = ""
-    , fileNmae: String = ""
-    , name: String = ""
-    , ar: artist
-    , al: Album
-    , dt : Int
-) : Music(fileNmae, name, ar.name, al.name, al.picUrl, "", dt) {
-
-    inner class artist {
-        var id: String = ""
-        var name: String = ""
-    }
-
-    inner class Album {
-        var id: String = ""
-        var name: String = ""
-        var picUrl: String = ""
-
-    }
+    @SerializedName("name")
+    var name: String = ""
+    @SerializedName("ar")
+    var artists: List<Artist>? = null
+    @SerializedName("al")
+    var album: Album? = null
+    @SerializedName("dt")
+    var duration : Int = 0
 }

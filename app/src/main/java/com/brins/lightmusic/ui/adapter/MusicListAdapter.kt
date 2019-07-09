@@ -49,7 +49,12 @@ class MusicListAdapter(var type: Int, var context: Context, var list: MutableLis
             Glide.with(context)
                 .load(musicList.coverImgUrl)
                 .into(holder.cover)
+            holder.itemView.tag = position
         }
+    }
+
+    fun setOnItemClickListener(listener : OnItemClickListener){
+        this.onItemClickListener = listener
     }
 
     override fun onClick(v: View) {

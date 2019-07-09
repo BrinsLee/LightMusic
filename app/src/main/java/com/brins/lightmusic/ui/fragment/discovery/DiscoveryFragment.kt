@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -21,6 +22,7 @@ import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
 import kotlinx.android.synthetic.main.include_loading_animation.*
+import java.lang.Exception
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
@@ -105,8 +107,21 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
     }
 
     private fun initMusicList() {
-        recycleMusiclist.adapter = MusicListAdapter(MusicListAdapter.TYPE_MUSIC_LIST, context!!, musicList)
+        val adapter = MusicListAdapter(MusicListAdapter.TYPE_MUSIC_LIST, context!!, musicList)
+        adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener{
+            override fun onItemClick(view: View, position: Int) {
+                val id = musicList[position].id
+                try {
+                    MusicDetailActivity.startThisActivity((activity as AppCompatActivity) , id)
+                }catch (e:Exception){
+                    Log.e(TAG,e.message)
+                }
+            }
+
+        })
+        recycleMusiclist.adapter = adapter
         recycleMusiclist.layoutManager = LinearLayoutManager(context!!)
+
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter?) {

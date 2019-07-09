@@ -71,8 +71,8 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
 
     override fun loadMusicListDetail(id : String) {
         ApiHelper.getPlayListDetail(id)
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(provider)
             .subscribe(object :Observer<MusicListDetail>{
                 override fun onComplete() {}

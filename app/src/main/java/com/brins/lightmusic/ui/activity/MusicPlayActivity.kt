@@ -66,8 +66,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     companion object {
-        @JvmStatic
-        private val PLAYLIST = "playlist"
+
         @JvmStatic
         private var PLAYINDEX = "playindex"
 
