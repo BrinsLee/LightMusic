@@ -30,7 +30,7 @@
             android:textColor="@color/white_80"
             android:layout_marginBottom="@dimen/common_margin_30"
     />-->
-    <com.hw.lrcviewlib.LrcView
+<!--    <com.hw.lrcviewlib.LrcView
             android:id="@+id/mLrcView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/common_margin_100"
@@ -38,7 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolBar"
-    />
+    />-->
 
 
     <com.brins.lightmusic.ui.customview.RoundConstraintLayout
@@ -47,24 +47,37 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:round_corner="40dp"
-            android:background="@color/white"
+            android:background="@drawable/background"
             android:layout_marginTop="200dp"
             android:src="@mipmap/avart"
             android:scaleType="fitXY"
             android:id="@+id/ablum_cover">
 
+        <com.brins.lightmusic.ui.customview.FontTextView
+                android:id="@+id/musicTitle"
+                app:font_type="DIN-Bold"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="@dimen/common_margin_150"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <com.brins.lightmusic.ui.customview.BaseLottieAnimationview
-                android:id="@+id/playAnimate"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/common_margin_60"
-                app:layout_constraintBottom_toTopOf="@id/playOrPause"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="@dimen/common_margin_60"
-                app:lottie_fileName="lottie/playactivity/music_playbar.json"
-                app:lottie_loop="true"
-                app:lottie_autoPlay="true"/>
+        <com.brins.lightmusic.ui.customview.FontTextView
+                android:id="@+id/musicArtist"
+                app:font_type="DIN-Bold"
+                android:gravity="center_horizontal"
+                android:textSize="12sp"
+                android:layout_marginTop="@dimen/common_margin_10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/musicTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         <include
                 android:id="@+id/include_play_control"
                 layout="@layout/include_play_control"/>

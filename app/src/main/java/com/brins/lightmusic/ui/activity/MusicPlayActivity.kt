@@ -80,6 +80,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         setSupportActionBar(toolBar)
+        supportActionBar!!.title = ""
         MusicPlayerPresenter.instance.setContext(this).setView(this).subscribe()
         showBottomBar(false)
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
@@ -202,12 +203,10 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         }
         isPlaying = if (mPlayer!!.isPlaying()) {
             mPlayer!!.pause()
-            playAnimate.pauseAnimation()
             playOrPause.setImageResource(R.drawable.ic_playmusic)
             false
         } else {
             mPlayer!!.play()
-            playAnimate.playAnimation()
             playOrPause.setImageResource(R.drawable.ic_pausemusic)
             true
         }
@@ -292,37 +291,20 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         cover = String2Bitmap(song.cover!!)
         ivCover.setImageBitmap(cover)
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
-        supportActionBar!!.title = song.name
+        musicTitle.text = song.name
+        musicArtist.text = song.singer
         tvDuration.text = TimeUtils.formatDuration(song.duration)
         seekBar.progress = initProgress(mPlayer!!.getProgress())
         updateProgressTextWithProgress(mPlayer!!.getProgress())
-        loadLrc()
         mHandler.removeCallbacks(mProgressCallback)
         if (mPlayer!!.isPlaying()) {
             playOrPause.setImageResource(R.drawable.ic_pausemusic)
             mHandler.post(mProgressCallback)
         } else {
             playOrPause.setImageResource(R.drawable.ic_playmusic)
-            playAnimate.pauseAnimation()
         }
     }
 
-    private fun loadLrc() {
-        val a = Environment.getDownloadCacheDirectory().toString()
-        val lrcRows = LrcDataBuilder().BuiltFromAssets(this, "")
-        mLrcView.lrcSetting
-            .setTimeTextSize(40)//时间字体大小
-            .setSelectLineColor(Color.parseColor("#1d9dfc"))
-            .setSelectLineTextSize(25)//选中线大小
-            .setHeightRowColor(Color.parseColor("#aaffffff"))//高亮字体颜色
-            .setNormalRowTextSize(17)//正常行字体大小
-            .setHeightLightRowTextSize(20)//高亮行字体大小
-            .setTrySelectRowTextSize(17)//尝试选中行字体大小
-            .setTimeTextColor(Color.parseColor("#ffffff"))//时间字体颜色
-            .setTrySelectRowColor(Color.parseColor("#55ffffff"))//尝试选中字体颜色
-        mLrcView.commitLrcSettings()
-        mLrcView.setLrcData(lrcRows)
-    }
 
     override fun updatePlayMode(playMode: PlayMode) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -356,11 +338,9 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     override fun onPlayStatusChanged(isPlaying: Boolean) {
         updatePlayToggle(isPlaying)
         if (isPlaying) {
-            playAnimate.playAnimation()
             mHandler.removeCallbacks(mProgressCallback)
             mHandler.post(mProgressCallback)
         } else {
-            playAnimate.pauseAnimation()
             mHandler.removeCallbacks(mProgressCallback)
 
         }
