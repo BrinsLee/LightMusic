@@ -2,7 +2,7 @@
 Light Music （轻籁)
 
 <p align="left">
-	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_main.jpg" alt="Sample"  width="550" height="900">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_main.jpg" alt="Sample"  width="720" height="1280">
 	<p align="left">
 		<em>主界面</em>
 	</p>
@@ -10,8 +10,16 @@ Light Music （轻籁)
 <br>
 <br>
 <p align ="left">
-	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_play.jpg" alt="Sample"  width="550" height="900">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_play.jpg" alt="Sample"  width="720" height="1280">
 	<p align="left">
 		<em>播放界面</em>
+	</p>
+</p>
+<br>
+<br>
+<p align ="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_discovery.jpg" alt="Sample"  width="720" height="1280">
+	<p align="left">
+		<em>发现页</em>
 	</p>
 </p>
