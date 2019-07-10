@@ -13,7 +13,10 @@
     <dimen name="common_margin_130">130dp</dimen>
     <dimen name="common_margin_150">150dp</dimen>
     <dimen name="common_margin_180">180dp</dimen>
-    <dimen name="common_margin_200">200dp</dimen>
+    <dimen name="common_margin_250">250dp</dimen>
+    <dimen name="common_margin_270">270dp</dimen>
+    <dimen name="common_margin_280">280dp</dimen>
+    <dimen name="common_margin_300">300dp</dimen>
 
     <dimen name="fragment_quick_control_radius">20dp</dimen>
     <dimen name="fragment_quick_control_height">65dp</dimen>

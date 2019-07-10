@@ -70,6 +70,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     }
 
     override fun loadMusicListDetail(id : String) {
+        mView?.showLoading()
         ApiHelper.getPlayListDetail(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

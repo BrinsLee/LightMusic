@@ -7,12 +7,52 @@
         android:layout_height="match_parent"
         tools:context=".ui.fragment.discovery.MusicDetailActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/common_margin_200"
-            android:background="@android:color/transparent"
-    >
+            android:layout_height="match_parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <include
+                layout="@layout/include_loading_animation"/>
+        <com.google.android.material.appbar.AppBarLayout
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_margin_300"
+                android:background="@android:color/transparent"
+                android:fitsSystemWindows="true">
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:contentScrim="?attr/colorAccent"
+                    app:expandedTitleMarginEnd="@dimen/common_margin_10"
+                    app:expandedTitleMarginStart="@dimen/common_margin_10"
+                    app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/coverMusicList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:layout_collapseMode="parallax"
+                        app:layout_collapseParallaxMultiplier="0.5"
+                        android:src="@drawable/default_cover"
+                        app:riv_corner_radius_bottom_right="@dimen/common_margin_80"
+                />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="@dimen/common_margin_50"
+                android:layout_height="@dimen/common_margin_50"
+                android:background="@drawable/bg_floatingactionbar"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tt_play_movebar_textpage"
+                app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/common_margin_270"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/common_margin_50"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
