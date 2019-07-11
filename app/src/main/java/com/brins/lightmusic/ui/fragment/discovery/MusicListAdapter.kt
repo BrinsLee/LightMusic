@@ -1,4 +1,4 @@
-package com.brins.lightmusic.ui.adapter
+package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -6,17 +6,14 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
-import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.MusicList
 import com.brins.lightmusic.model.PlayListDetail
-import com.brins.lightmusic.ui.adapter.MusicListAdapter
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
@@ -107,7 +104,11 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
     }
 
     private fun initMusicList() {
-        val adapter = MusicListAdapter(MusicListAdapter.TYPE_MUSIC_LIST, context!!, musicList)
+        val adapter = MusicListAdapter(
+            MusicListAdapter.TYPE_MUSIC_LIST,
+            context!!,
+            musicList
+        )
         adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
                 val id = musicList[position].id

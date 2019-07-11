@@ -4,7 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_margin_80">
+        android:layout_height="wrap_content">
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -21,11 +21,11 @@
               android:layout_height="wrap_content"
               app:layout_constraintTop_toTopOf="parent"
               android:id="@+id/name"
-              android:layout_marginTop="@dimen/common_margin_10"
+              android:layout_marginTop="@dimen/common_margin_20"
               app:layout_constraintStart_toEndOf="@id/count"
               android:gravity="center"
               android:text=""
-              android:textSize="25sp"
+              android:textSize="15sp"
               android:textColor="@color/tt_trans_half_black"
               android:layout_marginStart="@dimen/common_margin_30"
     />
@@ -36,6 +36,8 @@
               app:layout_constraintStart_toEndOf="@id/count"
               android:textSize="12sp"
               app:layout_constraintTop_toBottomOf="@id/name"
-              android:layout_marginStart="@dimen/common_margin_50"/>
+              android:layout_marginTop="@dimen/common_margin_5"
+              android:layout_marginBottom="@dimen/common_margin_5"
+              android:layout_marginStart="@dimen/common_margin_30"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

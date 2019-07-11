@@ -1,15 +1,24 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
+import android.annotation.SuppressLint
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.MusicList
+import com.brins.lightmusic.model.OnlineMusic
 import com.brins.lightmusic.model.PlayListDetail
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.bumptech.glide.Glide
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_music_detail.*
 import kotlinx.android.synthetic.main.include_loading_animation.*
 
 class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
@@ -28,14 +37,33 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
 
     lateinit var mPresenter: DiscoveryContract.Presenter
     var id: String = ""
+    var musicDetails = mutableListOf<OnlineMusic>()
+    lateinit var mAdapter: MusicDetailAdapter
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_music_detail
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         id = intent.getStringExtra(MUSIC_ID)
+        setSupportActionBar(toolbar)
+        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { p0, p1 ->
+            if (p1 == 0){
+                playAll.show()
+            }else{
+                playAll.hide()
+            }
+        })
+        mAdapter = MusicDetailAdapter(this, musicDetails)
         DiscoverPresent(this).loadMusicListDetail(id)
+        musicRecycler.adapter = mAdapter
+        musicRecycler.layoutManager = LinearLayoutManager(this)
+        musicRecycler.addItemDecoration(
+            DividerItemDecoration(
+                this, LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     //MVP View
@@ -72,6 +100,13 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
     }
 
     override fun onDetailLoad(detail: PlayListDetail) {
+        Glide.with(this)
+            .load(detail.coverImgUrl)
+            .into(coverMusicList)
 
+        collapsing.title = detail.name
+        mAdapter.setData(detail.tracks as MutableList<OnlineMusic>)
+        mAdapter.notifyDataSetChanged()
     }
+
 }
