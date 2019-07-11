@@ -37,13 +37,4 @@
             android:layout_marginTop="@dimen/common_margin_10"
             app:layout_constraintStart_toEndOf="@id/imgCover"
             app:layout_constraintTop_toBottomOf="@id/textViewName"/>
-    <com.brins.lightmusic.ui.customview.BaseLottieAnimationview
-            app:lottie_fileName="lottie/play_item/music_items.json"
-            app:lottie_loop="true"
-            android:visibility="gone"
-            app:lottie_autoPlay="true"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
