@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.OnlineMusic
-import org.w3c.dom.Text
 import java.lang.StringBuilder
 
 class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusic>) :
@@ -29,7 +28,7 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusi
         if (list.isNotEmpty()){
             val musicDetail = list[position]
             val strBuilder = StringBuilder()
-            musicDetail.artists?.forEach { strBuilder.append("${it.name},") }
+            musicDetail.artists?.forEach { strBuilder.append("${it.name} ") }
             holder.artist.text = strBuilder.toString()
             holder.name.text = musicDetail.name
             holder.count.text = "$position"

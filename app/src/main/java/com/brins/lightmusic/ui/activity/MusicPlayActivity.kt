@@ -27,7 +27,6 @@ import com.brins.lightmusic.utils.HandlerUtil
 import com.brins.lightmusic.utils.TimeUtils
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
-import com.hw.lrcviewlib.LrcDataBuilder
 
 
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
@@ -82,7 +81,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         setSupportActionBar(toolBar)
         supportActionBar!!.title = ""
         MusicPlayerPresenter.instance.setContext(this).setView(this).subscribe()
-        showBottomBar(false)
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
         setPlayView()
     }

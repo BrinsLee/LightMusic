@@ -1,24 +1,54 @@
 package com.brins.lightmusic
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.utils.FileUtils
 import com.brins.lightmusic.utils.MachineUtils
 import io.reactivex.plugins.RxJavaPlugins
+import com.danikula.videocache.HttpProxyCacheServer
+import com.danikula.videocache.file.FileNameGenerator
+
 
 class LightMusicApplication : BaseApplication() {
 
-    var isExitHome : Boolean = true
+    var isExitHome: Boolean = true
+    private var proxy: HttpProxyCacheServer? = null
+
 
     companion object {
-        fun  getLightApplication() : LightMusicApplication {
+        @JvmStatic
+        fun getLightApplication(): LightMusicApplication {
             return sInstance as LightMusicApplication
         }
     }
 
+    fun getProxy(context: Context): HttpProxyCacheServer {
+        val myApplication = getLightApplication()
+        if (myApplication.proxy == null)
+            myApplication.proxy = myApplication.newProxy()
+        return myApplication.proxy!!
+    }
+
+    fun newProxy(): HttpProxyCacheServer {
+        return HttpProxyCacheServer.Builder(this).cacheDirectory(FileUtils.getAudioCacheDir(this))
+            .fileNameGenerator(NameGenerator()).build()
+    }
+
+
+    open class NameGenerator : FileNameGenerator {
+        override fun generate(url: String): String {
+            val uri = Uri.parse(url)
+            val audioId = uri.getQueryParameter("guid")
+            return audioId + "mp3"
+        }
+
+    }
+
     override fun onCreate() {
         super.onCreate()
-        if(isMainProcess(this)){
+        if (isMainProcess(this)) {
             initRxJava()
         }
     }

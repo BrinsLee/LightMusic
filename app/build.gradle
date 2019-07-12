@@ -75,8 +75,8 @@ dependencies {
     kapt 'com.jakewharton:butterknife-compiler:10.0.0'*/
 //
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
-//歌词第三方依赖
-    implementation 'com.github.bifan-wei:LrcView:V1.3'
+//AndroidVideoCache
+    implementation 'com.danikula:videocache:2.7.1'
 //穿山甲广告
     implementation(name: 'open_ad_sdk', ext: 'aar')
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'

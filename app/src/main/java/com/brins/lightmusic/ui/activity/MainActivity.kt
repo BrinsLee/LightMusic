@@ -39,8 +39,9 @@ class MainActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        showBottomBar(true)
+        showBottomBar()
     }
+
 
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)

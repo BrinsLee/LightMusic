@@ -73,7 +73,9 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun onDestroyView() {
-        mPresenter.unsubscribe()
+        if (::mPresenter.isInitialized){
+            mPresenter.unsubscribe()
+        }
         super.onDestroyView()
     }
 
@@ -99,7 +101,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
     }
 
-    fun disappear(){
+    /*fun disappear(){
         if(playBarLayout == null){
             return
         }
@@ -116,7 +118,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }else{
             return
         }
-    }
+    }*/
 
     fun onPlayPauseToggle() {
         if (mPlayer == null || !::playList.isInitialized) {

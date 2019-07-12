@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.MusicList
@@ -17,6 +16,7 @@ import com.brins.lightmusic.model.OnlineMusic
 import com.brins.lightmusic.model.PlayListDetail
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.bumptech.glide.Glide
+import com.danikula.videocache.HttpProxyCacheServer
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_music_detail.*
 import kotlinx.android.synthetic.main.include_loading_animation.*
@@ -35,6 +35,8 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
         }
     }
 
+    private val mApplication = LightMusicApplication.getLightApplication()
+    private val proxy : HttpProxyCacheServer by lazy { mApplication.getProxy(this) }
     lateinit var mPresenter: DiscoveryContract.Presenter
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
@@ -64,7 +66,13 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
                 this, LinearLayoutManager.VERTICAL
             )
         )
+
     }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
 
     //MVP View
 

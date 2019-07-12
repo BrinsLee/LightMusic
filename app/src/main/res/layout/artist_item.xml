@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:scaleType="centerCrop"
-        app:riv_corner_radius="30dp" />
+        app:riv_corner_radius="10dp" />
 
     <com.brins.lightmusic.ui.customview.FontTextView
         android:id="@+id/introduce"

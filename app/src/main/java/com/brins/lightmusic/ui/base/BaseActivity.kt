@@ -14,17 +14,18 @@ import io.reactivex.disposables.Disposable
 abstract class BaseActivity : AppCompatActivity() {
 
     protected var TAG = this.javaClass.simpleName
-    protected var fragment : QuickControlFragment? = null
+    protected var fragment: QuickControlFragment = QuickControlFragment.newInstance()
+
     protected var mBindDestroyDisposable: CompositeDisposable? = null
 
-/*
-*设置状态栏透明
-* */
+    /*
+    *设置状态栏透明
+    * */
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.decorView.systemUiVisibility = option
-        window.statusBarColor = resources.getColor(R.color.alpha,null)
+        window.statusBarColor = resources.getColor(R.color.alpha, null)
     }
 
     protected abstract fun getLayoutResId(): Int
@@ -33,7 +34,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         onCreateBeforeBinding(savedInstanceState)
         var resId = getLayoutResId()
-        if (resId != 0){
+        if (resId != 0) {
             setContentView(resId)
         }
         onCreateAfterBinding(savedInstanceState)
@@ -48,34 +49,24 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mBindDestroyDisposable != null){
+        if (mBindDestroyDisposable != null) {
             mBindDestroyDisposable!!.clear()
         }
     }
 
-    protected open fun showBottomBar(show : Boolean){
+    protected open fun showBottomBar() {
         val ft = supportFragmentManager.beginTransaction()
-        if (fragment == null) {
-            fragment = QuickControlFragment.newInstance()
-            ft.add(R.id.bottom_container, fragment!!).commitAllowingStateLoss()
-        } else {
-            ft.show(fragment!!).commitAllowingStateLoss()
-        }
-        if (show) {
-            fragment!!.appear()
-        } else {
-            fragment!!.disappear()
+        if (!fragment.isAdded) {
+            ft.add(R.id.bottom_container, fragment).commit()
         }
     }
-    protected open  fun getCurrentList() : PlayList? {
-        if (fragment != null) {
-            return fragment!!.playList
-        }
-        return null
+
+    protected open fun getCurrentList(): PlayList? {
+        return fragment.playList
     }
 
     fun bindUntilDestroy(disposable: Disposable?) {
-        if (disposable == null){
+        if (disposable == null) {
             return
         }
         if (mBindDestroyDisposable == null) {
