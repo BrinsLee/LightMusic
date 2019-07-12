@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.brins.lightmusic.R
@@ -14,10 +15,15 @@ import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : BaseActivity() {
 
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
+    val mLocalMusicFragment = LocalMusicFragment()
+    val mDiscoveryFragment = DiscoveryFragment()
+    val mVideoFragment = VideoFragment()
+    val mFriendFragment = VideoFragment()
 
     companion object {
         fun startThisActivity(activity: AppCompatActivity) {
@@ -36,20 +42,18 @@ class MainActivity : BaseActivity() {
         initViewPagerAndTabLay()
     }
 
-
     override fun onStart() {
         super.onStart()
         showBottomBar()
     }
 
-
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-        list.add(LocalMusicFragment())
-        list.add(DiscoveryFragment())
-        list.add(VideoFragment())
-        list.add(VideoFragment())
+        list.add(mLocalMusicFragment)
+        list.add(mDiscoveryFragment)
+        list.add(mVideoFragment)
+        list.add(mVideoFragment)
         view_pager.adapter = adapter
         tab_layout.setupWithViewPager(view_pager)
 

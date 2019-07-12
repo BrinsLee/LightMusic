@@ -28,10 +28,11 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
         val MUSIC_ID = "musicId"
 
         @JvmStatic
-        fun startThisActivity(activity: AppCompatActivity, id: String) {
+        fun startThisActivity(activity: AppCompatActivity, id: String , options : Bundle) {
             val intent = Intent(activity, MusicDetailActivity::class.java)
             intent.putExtra(MUSIC_ID, id)
-            activity.startActivity(intent)
+            activity.startActivity(intent , options)
+            activity.finish()
         }
     }
 
@@ -108,10 +109,6 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
     }
 
     override fun onDetailLoad(detail: PlayListDetail) {
-        Glide.with(this)
-            .load(detail.coverImgUrl)
-            .into(coverMusicList)
-
         collapsing.title = detail.name
         mAdapter.setData(detail.tracks as MutableList<OnlineMusic>)
         mAdapter.notifyDataSetChanged()

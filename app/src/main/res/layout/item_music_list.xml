@@ -56,6 +56,7 @@
             app:riv_corner_radius_top_left="@dimen/common_margin_20"
             app:riv_corner_radius_top_right="@dimen/common_margin_20"
             android:src="@mipmap/avart"
+            android:transitionName="transitionImg"
             android:elevation = "4dp"/>
 
     <com.brins.lightmusic.ui.customview.FontTextView

@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -44,6 +45,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
     override fun onDetailLoad(detail: PlayListDetail) {
 
     }
+
     override fun showLoading() {
         loadingLayout.visibility = View.VISIBLE
     }
@@ -109,13 +111,14 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
             context!!,
             musicList
         )
-        adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val id = musicList[position].id
                 try {
-                    MusicDetailActivity.startThisActivity((activity as AppCompatActivity) , id)
-                }catch (e:Exception){
-                    Log.e(TAG,e.message)
+                    val activity = activity as AppCompatActivity
+                    MusicDetailActivity.startThisActivity(activity, id, ActivityOptions.makeSceneTransitionAnimation(activity, view.findViewById(R.id.cover), "transitionImg").toBundle())
+                } catch (e: Exception) {
+                    Log.e(TAG, e.message)
                 }
             }
 

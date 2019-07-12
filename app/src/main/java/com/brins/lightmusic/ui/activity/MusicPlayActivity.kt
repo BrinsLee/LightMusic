@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.activity
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -8,7 +9,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.*
+import android.transition.Explode
+import android.transition.TransitionInflater
 import android.view.View
+import android.view.Window
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
@@ -74,6 +78,10 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             intent.putExtra(PLAYINDEX, isPlaying)
             activity.startActivity(intent)
         }
+    }
+
+    override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
+        super.onCreateBeforeBinding(savedInstanceState)
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {

@@ -45,6 +45,7 @@
                         app:layout_collapseMode="parallax"
                         app:layout_collapseParallaxMultiplier="0.5"
                         android:src="@drawable/default_cover"
+                        android:transitionName="transitionImg"
                         app:riv_corner_radius_bottom_right="@dimen/common_margin_80"
                 />
                 <androidx.appcompat.widget.Toolbar

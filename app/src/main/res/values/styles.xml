@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowReenterTransition">@transition/activity_explode</item>
+        <item name="android:windowEnterAnimation">@transition/activity_explode</item>
+        <item name="android:windowExitTransition">@transition/activity_explode</item>
+
     </style>
 
     <style name="AppTheme.Text" parent="TextAppearance.AppCompat" />
