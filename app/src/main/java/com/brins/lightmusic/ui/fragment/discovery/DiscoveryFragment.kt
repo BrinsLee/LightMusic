@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 
-import android.app.ActivityOptions
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -10,11 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.MusicList
 import com.brins.lightmusic.model.PlayListDetail
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
@@ -115,8 +116,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
             override fun onItemClick(view: View, position: Int) {
                 val id = musicList[position].id
                 try {
-                    val activity = activity as AppCompatActivity
-                    MusicDetailActivity.startThisActivity(activity, id, ActivityOptions.makeSceneTransitionAnimation(activity, view.findViewById(R.id.cover), "transitionImg").toBundle())
+                     (activity as MainActivity).switchFragment(id,MusicDetailFragment.newInstance())
+                         .addToBackStack(TAG)
+                         .commit()
                 } catch (e: Exception) {
                     Log.e(TAG, e.message)
                 }

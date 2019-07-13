@@ -1,56 +1,55 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
-import android.annotation.SuppressLint
+
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.transition.TransitionInflater
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.brins.lightmusic.LightMusicApplication
+
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.MusicList
 import com.brins.lightmusic.model.OnlineMusic
 import com.brins.lightmusic.model.PlayListDetail
-import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.activity.MainActivity
+import com.brins.lightmusic.ui.base.BaseFragment
 import com.bumptech.glide.Glide
-import com.danikula.videocache.HttpProxyCacheServer
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_music_detail.*
-import kotlinx.android.synthetic.main.include_loading_animation.*
+import kotlinx.android.synthetic.main.fragment_music_detail.*
 
-class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
+class MusicDetailFragment : BaseFragment() , DiscoveryContract.View {
 
-    companion object {
-        @JvmStatic
-        val MUSIC_ID = "musicId"
 
-        @JvmStatic
-        fun startThisActivity(activity: AppCompatActivity, id: String , options : Bundle) {
-            val intent = Intent(activity, MusicDetailActivity::class.java)
-            intent.putExtra(MUSIC_ID, id)
-            activity.startActivity(intent , options)
-            activity.finish()
-        }
-    }
-
-    private val mApplication = LightMusicApplication.getLightApplication()
-    private val proxy : HttpProxyCacheServer by lazy { mApplication.getProxy(this) }
     lateinit var mPresenter: DiscoveryContract.Presenter
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
     lateinit var mAdapter: MusicDetailAdapter
-
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_music_detail
+    override fun getLayoutResID(): Int {
+        return R.layout.fragment_music_detail
     }
 
-    @SuppressLint("RestrictedApi")
-    override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
-        id = intent.getStringExtra(MUSIC_ID)
-        setSupportActionBar(toolbar)
+    companion object {
+        var Instance: MusicDetailFragment? = null
+
+        @JvmStatic
+        fun newInstance(): MusicDetailFragment {
+            return if (Instance == null) {
+                Instance = MusicDetailFragment()
+                Instance!!
+            } else {
+                Instance!!
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { p0, p1 ->
             if (p1 == 0){
                 playAll.show()
@@ -58,60 +57,51 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View {
                 playAll.hide()
             }
         })
-        mAdapter = MusicDetailAdapter(this, musicDetails)
+        mAdapter = MusicDetailAdapter(context!!, musicDetails)
+        id = (activity as MainActivity).currentMusicListId
         DiscoverPresent(this).loadMusicListDetail(id)
         musicRecycler.adapter = mAdapter
-        musicRecycler.layoutManager = LinearLayoutManager(this)
+        musicRecycler.layoutManager = LinearLayoutManager(context)
         musicRecycler.addItemDecoration(
             DividerItemDecoration(
-                this, LinearLayoutManager.VERTICAL
+                context!!, LinearLayoutManager.VERTICAL
             )
         )
-
     }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-
-    //MVP View
 
     override fun showLoading() {
-        loadingLayout.visibility = View.VISIBLE
-
     }
 
     override fun hideLoading() {
-        loadingLayout.visibility = View.GONE
     }
 
     override fun getcontext(): Context {
-        return this
+        return context!!
     }
 
     override fun getLifeActivity(): AppCompatActivity {
-        return this
+        return activity as AppCompatActivity
     }
 
     override fun handleError(error: Throwable) {
     }
 
     override fun onMusicListLoad(songs: MutableList<MusicList>) {
-
     }
 
     override fun onArtistLoad(artists: MutableList<Artist>) {
     }
 
-    override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
-        mPresenter = presenter!!
-    }
-
     override fun onDetailLoad(detail: PlayListDetail) {
+        Glide.with(context!!)
+            .load(detail.coverImgUrl)
+            .into(coverMusicList)
         collapsing.title = detail.name
         mAdapter.setData(detail.tracks as MutableList<OnlineMusic>)
         mAdapter.notifyDataSetChanged()
     }
 
+    override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
+        mPresenter = presenter!!
+    }
 }

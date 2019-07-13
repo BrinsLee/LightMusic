@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
+import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
@@ -20,10 +23,8 @@ class MainActivity : BaseActivity() {
 
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
-    val mLocalMusicFragment = LocalMusicFragment()
-    val mDiscoveryFragment = DiscoveryFragment()
-    val mVideoFragment = VideoFragment()
-    val mFriendFragment = VideoFragment()
+    var currentFragment : BaseFragment? = null
+    var currentMusicListId : String = "";
 
     companion object {
         fun startThisActivity(activity: AppCompatActivity) {
@@ -50,10 +51,10 @@ class MainActivity : BaseActivity() {
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-        list.add(mLocalMusicFragment)
-        list.add(mDiscoveryFragment)
-        list.add(mVideoFragment)
-        list.add(mVideoFragment)
+        list.add(LocalMusicFragment())
+        list.add(DiscoveryFragment())
+        list.add(VideoFragment())
+        list.add(VideoFragment())
         view_pager.adapter = adapter
         tab_layout.setupWithViewPager(view_pager)
 
@@ -77,4 +78,24 @@ class MainActivity : BaseActivity() {
         })
 
     }
+
+     fun switchFragment(currentId : String,targetFragment : BaseFragment) : FragmentTransaction{
+         currentMusicListId = currentId
+         val transaction = supportFragmentManager.beginTransaction()
+         if(!targetFragment.isAdded){
+             if (currentFragment != null){
+                 transaction.hide(currentFragment!!)
+             }
+             transaction.add(R.id.drawer,targetFragment
+                 ,targetFragment::class.java.name)
+         }else{
+             if (currentFragment != null){
+                 transaction.hide(currentFragment!!)
+             }
+             transaction.show(targetFragment)
+         }
+         currentFragment = targetFragment
+         return transaction
+
+     }
 }

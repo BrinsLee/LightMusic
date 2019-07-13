@@ -14,7 +14,7 @@ abstract class BaseFragment : Fragment() {
 
     val TAG = javaClass.simpleName
     protected var mBindDestroyDisposable: CompositeDisposable? = null
-
+    private var rootView : View? = null
     /*实现懒加载*/
     protected var mIsViewBinding: Boolean = false
     protected var mIsVisibleToUser: Boolean = false
@@ -63,9 +63,11 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(getLayoutResID(), container, false)
-        onCreateViewAfterBinding(view)
-        return view
+        if (rootView == null){
+            rootView = inflater.inflate(getLayoutResID(), container, false)
+            onCreateViewAfterBinding(rootView!!)
+        }
+        return rootView
     }
 
     override fun onDestroyView() {
@@ -73,6 +75,7 @@ abstract class BaseFragment : Fragment() {
         if (mBindDestroyDisposable != null){
             mBindDestroyDisposable!!.clear()
         }
+        (rootView?.parent as ViewGroup).removeView(rootView)
     }
 
     override fun onDestroy() {
