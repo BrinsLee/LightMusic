@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.activity
 
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,10 +12,15 @@ import android.graphics.drawable.TransitionDrawable
 import android.os.*
 import android.transition.Explode
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
@@ -23,14 +29,19 @@ import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.customview.CustPagerTransformer
+import com.brins.lightmusic.ui.customview.RoundCoverImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
 import com.brins.lightmusic.utils.FastBlurUtil
 import com.brins.lightmusic.utils.HandlerUtil
 import com.brins.lightmusic.utils.TimeUtils
+import com.bytedance.sdk.openadsdk.core.widget.RoundImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
 
 
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
@@ -43,9 +54,29 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     private val mPlayList: PlayList by lazy { getCurrentList()!! }
     private var current: Music? = null
     private var cover: Bitmap? = null
+    private var musics: MutableList<Music>? = null
     private val mHandler = Handler()
-    private val UPDATE_PROGRESS_INTERVAL: Long = 1000
+    private val mMusicHandler =
+        @SuppressLint("HandlerLeak")
+        object : Handler() {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    MOVE_TO_NEXT -> onPlayNext()
+                    MOVE_TO_LAST -> onPlayLast()
+                    else -> {
+                    }
+                }
+                super.handleMessage(msg)
 
+            }
+        }
+    private val UPDATE_PROGRESS_INTERVAL: Long = 1000
+    private val UPDATE_MUSIC_INTERVAL: Long = 500
+
+    private val MOVE_TO_NEXT = 1
+    private val MOVE_TO_LAST = 2
+    private var pageAdapter: PagerAdapter? = null
+    val singleThreadExecutor = Executors.newSingleThreadExecutor()
     private var mProgressCallback = object : Runnable {
         override fun run() {
             if (mPlayer != null && mPlayer!!.isPlaying()) {
@@ -72,6 +103,8 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
         @JvmStatic
         private var PLAYINDEX = "playindex"
+        @JvmStatic
+        var mImageViewList = mutableListOf<ImageView>()
 
         fun startThisActivity(activity: AppCompatActivity, isPlaying: Boolean) {
             val intent = Intent(activity, MusicPlayActivity::class.java)
@@ -80,9 +113,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         }
     }
 
-    override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
-        super.onCreateBeforeBinding(savedInstanceState)
-    }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
@@ -90,11 +120,23 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         supportActionBar!!.title = ""
         MusicPlayerPresenter.instance.setContext(this).setView(this).subscribe()
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
+        ivCover.setPageTransformer(false, CustPagerTransformer())
         setPlayView()
     }
 
     fun setPlayView() {
         current = mPlayList.getCurrentSong()
+        musics = mPlayList.getSongs()
+        if (mImageViewList.size == 0) {
+            for (i in 0 until mPlayList.getNumOfSongs()) {
+                val imageView = RoundImageView(applicationContext)
+                imageView.setImageBitmap(String2Bitmap(musics!![i].cover!!))
+                imageView.layoutParams = ViewGroup.LayoutParams(100, 100)
+                imageView.scaleType = ImageView.ScaleType.CENTER
+                mImageViewList.add(imageView)
+            }
+        }
+
         if (current != null) {
             initView()
             setListener()
@@ -166,6 +208,31 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
                     mHandler.removeCallbacks(mProgressCallback)
                     mHandler.post(mProgressCallback)
                 }
+            }
+
+        })
+        ivCover.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                Log.d(TAG, "currentIndex be: ${mPlayList.getPlayingIndex()}")
+                if (position > mPlayList.getPlayingIndex()) {
+                    val msg = mMusicHandler.obtainMessage()
+                    msg.what = MOVE_TO_NEXT
+                    mMusicHandler.sendMessageDelayed(msg, UPDATE_MUSIC_INTERVAL)
+                } else if (position < mPlayList.getPlayingIndex()) {
+                    val msg = mMusicHandler.obtainMessage()
+                    msg.what = MOVE_TO_LAST
+                    mMusicHandler.sendMessageDelayed(msg, UPDATE_MUSIC_INTERVAL)
+                }
+                Log.d(TAG, "position: $position")
+                Log.d(TAG, "currentIndex af: ${mPlayList.getPlayingIndex()}")
             }
 
         })
@@ -265,6 +332,35 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     }
 
+    fun initViewPager() {
+        if (pageAdapter == null) {
+            pageAdapter = object : PagerAdapter() {
+                override fun isViewFromObject(view: View, ob: Any): Boolean {
+                    return view == ob
+                }
+
+                override fun instantiateItem(container: ViewGroup, position: Int): Any {
+                    val imageView = mImageViewList[position]
+                    if (imageView.parent != null) {
+                        (imageView.parent as ViewGroup).removeView(imageView)
+                    }
+                    container.addView(imageView)
+                    return imageView
+                }
+
+                override fun destroyItem(container: ViewGroup, position: Int, ob: Any) {
+                    container.removeView(ob as View)
+                }
+
+                override fun getCount(): Int {
+                    return mImageViewList.size
+                }
+            }
+        }
+        ivCover.adapter = pageAdapter
+        ivCover.currentItem = mPlayList.getPlayingIndex()
+    }
+
     //MVP View
     override fun handleError(error: Throwable) {
 
@@ -284,6 +380,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+
     override fun onSongUpdated(song: Music?) {
 
         if (song == null) {
@@ -295,7 +392,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             return
         }
         cover = String2Bitmap(song.cover!!)
-        ivCover.setImageBitmap(cover)
+        initViewPager()
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
         musicTitle.text = song.name
         musicArtist.text = song.singer
