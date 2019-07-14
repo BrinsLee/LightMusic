@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.OnlineMusic
+import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import java.lang.StringBuilder
 
 class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusic>) :
     RecyclerView.Adapter<MusicDetailAdapter.ViewHolder>() {
 
+
+    private var mItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_online_music,parent,false)
@@ -32,6 +36,13 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusi
             holder.artist.text = strBuilder.toString()
             holder.name.text = musicDetail.name
             holder.count.text = "$position"
+            if (mItemClickListener != null){
+                holder.layouot.setOnClickListener {
+                    mItemClickListener!!.onItemClick(position)
+                }
+
+            }
+
         }
     }
 
@@ -40,8 +51,14 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusi
     }
 
     class ViewHolder (var view : View): RecyclerView.ViewHolder(view){
+        val layouot = view.findViewById<ConstraintLayout>(R.id.rootLayout)
         val name = view.findViewById<TextView>(R.id.name)
         val artist = view.findViewById<TextView>(R.id.artist)
         val count = view.findViewById<TextView>(R.id.count)
     }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mItemClickListener = listener
+    }
+
 }

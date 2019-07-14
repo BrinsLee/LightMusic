@@ -1,12 +1,16 @@
 package com.brins.lightmusic.model
 
+import com.google.gson.annotations.SerializedName
+
 /*
 * 歌单中的歌曲信息
 * */
 class MusicMetaData {
-    var id: String = ""
-    /*
-    * 码率
-    * */
-    var maxbr : String = ""
+
+    @SerializedName("type")
+    var type : String = ""
+    @SerializedName("payed")
+    var payed : Int = 0
+    @SerializedName("url")
+    var url : String = ""
 }

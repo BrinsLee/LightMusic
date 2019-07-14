@@ -10,6 +10,4 @@ class MusicListDetail {
     @SerializedName("playlist")
     var playlist : PlayListDetail? = null
 
-    @SerializedName("privileges")
-    var privileges : List<MusicMetaData>? = null
 }

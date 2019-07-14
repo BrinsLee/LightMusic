@@ -2,10 +2,7 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
-import com.brins.lightmusic.model.Artist
-import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.MusicList
-import com.brins.lightmusic.model.PlayListDetail
+import com.brins.lightmusic.model.*
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
@@ -28,6 +25,8 @@ interface DiscoveryContract {
         fun onArtistLoad(artists : MutableList<Artist>)
 
         fun onDetailLoad(detail : PlayListDetail)
+
+        fun onMusicDetail(metaData : MusicMetaData?)
     }
     interface Presenter : BasePresenter{
         fun loadArtist()
@@ -35,5 +34,7 @@ interface DiscoveryContract {
         fun loadMusicList()
 
         fun loadMusicListDetail(id : String)
+
+        fun loadMusicDetail(ids :String)
     }
 }

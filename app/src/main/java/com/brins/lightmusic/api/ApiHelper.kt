@@ -44,4 +44,12 @@ object ApiHelper {
     fun getPlayListDetail(id : String) : Observable<MusicListDetail>{
         return getRetrofitFactory(BASEURL).getPlayListDetail(id)
     }
+
+    fun getMusicDetail(ids : String): Observable<MusicMetaData>{
+        return getRetrofitFactory(BASEURL).getAlbum(ids)
+    }
+
+    fun getMusicUrl(ids : String): Observable<Songs>{
+        return getRetrofitFactory(BASEURL).getUrl(ids)
+    }
 }

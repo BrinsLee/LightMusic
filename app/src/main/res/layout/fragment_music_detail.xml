@@ -16,9 +16,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/common_margin_10"
             tools:context=".ui.fragment.discovery.MusicDetailActivity">
-
-        <include
-                layout="@layout/include_loading_animation"/>
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBar"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,6 +48,9 @@
                         android:src="@drawable/default_cover"
                         app:riv_corner_radius_bottom_right="@dimen/common_margin_80"
                 />
+                <include
+                        layout="@layout/include_loading_animation"/>
+
                 <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"

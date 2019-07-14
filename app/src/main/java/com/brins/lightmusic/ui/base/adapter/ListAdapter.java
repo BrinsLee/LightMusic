@@ -30,27 +30,21 @@ public abstract class ListAdapter<T, V extends IAdapterView> extends RecyclerVie
         final View itemView = (View) createView(mContext);
         final RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(itemView) {};
         if (mItemClickListener != null) {
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = holder.getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        mLastItemClickPosition = position;
-                        mItemClickListener.onItemClick(position);
-                    }
+            itemView.setOnClickListener(v -> {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    mLastItemClickPosition = position;
+                    mItemClickListener.onItemClick(position);
                 }
             });
         }
         if (mItemLongClickListener != null) {
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    int position = holder.getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        mItemLongClickListener.onItemClick(position);
-                    }
-                    return false;
+            itemView.setOnLongClickListener(v -> {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    mItemLongClickListener.onItemClick(position);
                 }
+                return false;
             });
         }
         return holder;

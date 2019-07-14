@@ -11,5 +11,4 @@
             app:lottie_loop="true"
             app:lottie_autoPlay="true"
     />
-
 </merge>

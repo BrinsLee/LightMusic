@@ -1,8 +1,10 @@
 package com.brins.lightmusic.player
 
 import android.media.MediaPlayer
+import android.os.PowerManager
 import android.provider.MediaStore
 import android.util.Log
+import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.PlayList
 import java.io.IOException
@@ -38,6 +40,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     init {
         mPlayer.setOnCompletionListener(this)
+        mPlayer.setWakeMode(LightMusicApplication.getLightApplication(), PowerManager.PARTIAL_WAKE_LOCK)
     }
 
     override fun setPlayList(list: PlayList) {

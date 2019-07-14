@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class AppConfig {
     public static boolean ISFIRST = true;
-    public static final String BASEURL = "https://e2602dcc.ngrok.io";
+    public static final String BASEURL = "https://e91bba37.ngrok.io";
 
 
     /**
@@ -24,6 +24,16 @@ public class AppConfig {
      * 歌手
      */
     public static final String ARTISTS ="/top/artists";
+
+    /**
+     *音乐链接
+     */
+    public static final String SONG = "/song/url";
+
+    /**
+    * 音乐封面
+    */
+    public static final String ALBUM = "/song/detail";
 
     public static final String RECOMMEND_MV = "/personalized/mv";
     public static final String MV_DETAIL = "/mv/url";

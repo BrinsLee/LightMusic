@@ -13,23 +13,28 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.Artist
-import com.brins.lightmusic.model.MusicList
-import com.brins.lightmusic.model.OnlineMusic
-import com.brins.lightmusic.model.PlayListDetail
+import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.event.PlayListEvent
+import com.brins.lightmusic.model.*
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_music_detail.*
+import android.media.MediaPlayer
+import kotlinx.android.synthetic.main.include_loading_animation.*
+import java.lang.Exception
 
-class MusicDetailFragment : BaseFragment() , DiscoveryContract.View {
 
+class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
 
-    lateinit var mPresenter: DiscoveryContract.Presenter
+    private val mPresenter: DiscoveryContract.Presenter by lazy { DiscoverPresent(this) }
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
     lateinit var mAdapter: MusicDetailAdapter
+    private var playList: PlayList = PlayList()
+
     override fun getLayoutResID(): Int {
         return R.layout.fragment_music_detail
     }
@@ -51,15 +56,20 @@ class MusicDetailFragment : BaseFragment() , DiscoveryContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { p0, p1 ->
-            if (p1 == 0){
+            if (p1 == 0) {
                 playAll.show()
-            }else{
+            } else {
                 playAll.hide()
             }
         })
         mAdapter = MusicDetailAdapter(context!!, musicDetails)
+        mAdapter.setOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                mPresenter.loadMusicDetail(musicDetails[position].id)
+            }
+        })
         id = (activity as MainActivity).currentMusicListId
-        DiscoverPresent(this).loadMusicListDetail(id)
+        mPresenter.loadMusicListDetail(id)
         musicRecycler.adapter = mAdapter
         musicRecycler.layoutManager = LinearLayoutManager(context)
         musicRecycler.addItemDecoration(
@@ -70,9 +80,11 @@ class MusicDetailFragment : BaseFragment() , DiscoveryContract.View {
     }
 
     override fun showLoading() {
+        loadingLayout.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
+        loadingLayout.visibility = View.GONE
     }
 
     override fun getcontext(): Context {
@@ -97,11 +109,25 @@ class MusicDetailFragment : BaseFragment() , DiscoveryContract.View {
             .load(detail.coverImgUrl)
             .into(coverMusicList)
         collapsing.title = detail.name
+        musicDetails = detail.tracks as MutableList<OnlineMusic>
         mAdapter.setData(detail.tracks as MutableList<OnlineMusic>)
         mAdapter.notifyDataSetChanged()
     }
 
+    override fun onMusicDetail(metaData: MusicMetaData?) {
+        val mediaPlayer = MediaPlayer()
+        mediaPlayer.setDataSource(metaData!!.url)
+        try {
+            mediaPlayer.prepare()
+            mediaPlayer.setOnPreparedListener {
+                mediaPlayer.start()
+                hideLoading()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
-        mPresenter = presenter!!
     }
 }

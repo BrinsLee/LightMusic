@@ -5,19 +5,17 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.model.Artist
-import com.brins.lightmusic.model.MusicList
+import com.brins.lightmusic.api.ApiHelper.getMusicDetail
+import com.brins.lightmusic.api.ApiHelper.getMusicUrl
+import com.brins.lightmusic.model.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import com.brins.lightmusic.model.Data
-import com.brins.lightmusic.model.MusicListDetail
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Presenter {
-
 
     val provider: AndroidLifecycleScopeProvider =
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
@@ -69,17 +67,17 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
             })
     }
 
-    override fun loadMusicListDetail(id : String) {
+    override fun loadMusicListDetail(id: String) {
         mView?.showLoading()
         ApiHelper.getPlayListDetail(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(provider)
-            .subscribe(object :Observer<MusicListDetail>{
+            .subscribe(object : Observer<MusicListDetail> {
                 override fun onComplete() {}
                 override fun onSubscribe(d: Disposable) {}
                 override fun onNext(t: MusicListDetail) {
-                    if (t.playlist != null){
+                    if (t.playlist != null) {
                         mView!!.onDetailLoad(t.playlist!!)
                         mView!!.hideLoading()
                     }
@@ -89,6 +87,24 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
 
             })
     }
+
+    override fun loadMusicDetail(ids: String) {
+        var metaData: Songs
+        mView!!.showLoading()
+        getMusicUrl(ids).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(provider)
+            .subscribe({
+                metaData = it
+                if (metaData.data != null){
+                    mView!!.onMusicDetail(metaData.data!![0])
+                }
+            }, {
+                it.printStackTrace()
+            })
+    }
+
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun subscribe() {

@@ -31,12 +31,17 @@ interface MusicService {
     * 获取歌单详情信息
     * */
     @GET(PLAYLISTDETAIL)
-    fun getPlayListDetail(@Query("id") id : String) : Observable<MusicListDetail>
+    fun getPlayListDetail(@Query("id") id: String): Observable<MusicListDetail>
 
     /*
     * 获取歌手列表
     * */
     @GET(ARTISTS)
-    fun getArtist(@Query("limit")limit:Int): Observable<Data>
+    fun getArtist(@Query("limit") limit: Int): Observable<Data>
 
+    @GET(ALBUM)
+    fun getAlbum(@Query("ids") ids: String) : Observable<MusicMetaData>
+
+    @GET(SONG)
+    fun getUrl(@Query("id") id : String) : Observable<Songs>
 }

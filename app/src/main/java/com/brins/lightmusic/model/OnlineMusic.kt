@@ -14,4 +14,6 @@ class OnlineMusic() /*: Music(fileNmae, name, ar[0].name, al.name, al.picUrl, ""
     var album: Album? = null
     @SerializedName("dt")
     var duration : Int = 0
+
+    var metaData : MusicMetaData? = null
 }

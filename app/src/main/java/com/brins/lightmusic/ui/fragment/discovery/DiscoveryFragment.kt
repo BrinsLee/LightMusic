@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Artist
 import com.brins.lightmusic.model.MusicList
+import com.brins.lightmusic.model.MusicMetaData
 import com.brins.lightmusic.model.PlayListDetail
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
@@ -24,7 +25,6 @@ import kotlinx.android.synthetic.main.include_loading_animation.*
 import java.lang.Exception
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
-
 
     lateinit var mPresenter: DiscoveryContract.Presenter
     lateinit var artistlist: MutableList<Artist>
@@ -77,6 +77,8 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
         artistlist = artists
         initArtistView()
     }
+
+    override fun onMusicDetail(metaData: MusicMetaData?) {}
 
     private fun initArtistView() {
         pileLayout.visibility = View.VISIBLE
