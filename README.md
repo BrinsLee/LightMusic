@@ -23,3 +23,11 @@ Light Music （轻籁)
 		<em>发现页</em>
 	</p>
 </p>
+<br>
+<br>
+<p align ="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_detail.jpg" alt="Sample"  width="400" height="800">
+	<p align="left">
+		<em>歌单详情页</em>
+	</p>
+</p>
