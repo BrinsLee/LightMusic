@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class AppConfig {
     public static boolean ISFIRST = true;
-    public static final String BASEURL = "https://e91bba37.ngrok.io";
+    public static final String BASEURL = "https://ba58f476.ngrok.io";
 
 
     /**

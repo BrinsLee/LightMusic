@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/loading_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_loading_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_loading"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_percent="0.2777777778"
+            app:layout_constraintDimensionRatio="1:1"/>
+
+        <com.brins.lightmusic.ui.customview.BaseLottieAnimationview
+            android:id="@+id/lottie_loading"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:lottie_fileName="lottie/loading/data.json"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            app:layout_constraintLeft_toLeftOf="@id/iv_loading_bg"
+            app:layout_constraintRight_toRightOf="@id/iv_loading_bg"
+            app:layout_constraintTop_toTopOf="@id/iv_loading_bg"
+            app:layout_constraintBottom_toTopOf="@id/loading"
+            app:layout_constraintVertical_chainStyle="packed"/>
+        <TextView
+            android:id="@+id/loading"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:text="Loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/iv_loading_bg"
+            app:layout_constraintRight_toRightOf="@id/iv_loading_bg"
+            app:layout_constraintTop_toBottomOf="@id/lottie_loading"
+            app:layout_constraintBottom_toBottomOf="@id/iv_loading_bg"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>

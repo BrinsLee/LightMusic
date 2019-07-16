@@ -15,9 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipChildren="false">
-
-        <include
-                layout="@layout/include_loading_animation"/>
         <com.brins.lightmusic.ui.customview.PileLayout
                 android:id="@+id/pileLayout"
                 android:layout_width="match_parent"
@@ -34,6 +31,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent">
+            <include
+                    android:id="@+id/loadingLayout"
+                    layout="@layout/loading_layout"/>
             <TextView
                     android:id="@+id/musicTitle"
                     android:text="推荐歌单"

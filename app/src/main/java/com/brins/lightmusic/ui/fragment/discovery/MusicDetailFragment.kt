@@ -3,18 +3,12 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
 import android.os.Bundle
-import android.transition.TransitionInflater
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
-import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.*
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
@@ -23,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_music_detail.*
 import android.media.MediaPlayer
-import kotlinx.android.synthetic.main.include_loading_animation.*
 import java.lang.Exception
 
 
