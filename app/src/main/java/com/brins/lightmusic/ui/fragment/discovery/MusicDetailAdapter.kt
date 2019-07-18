@@ -34,10 +34,10 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusi
             val strBuilder = StringBuilder()
             musicDetail.artists?.forEach { strBuilder.append("${it.name} ") }
             holder.artist.text = strBuilder.toString()
-            holder.name.text = musicDetail.name
+            holder.name.text = musicDetail.nameMusic
             holder.count.text = "$position"
             if (mItemClickListener != null){
-                holder.layouot.setOnClickListener {
+                holder.layout.setOnClickListener {
                     mItemClickListener!!.onItemClick(position)
                 }
 
@@ -51,7 +51,7 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusi
     }
 
     class ViewHolder (var view : View): RecyclerView.ViewHolder(view){
-        val layouot = view.findViewById<ConstraintLayout>(R.id.rootLayout)
+        val layout = view.findViewById<ConstraintLayout>(R.id.rootLayout)
         val name = view.findViewById<TextView>(R.id.name)
         val artist = view.findViewById<TextView>(R.id.artist)
         val count = view.findViewById<TextView>(R.id.count)

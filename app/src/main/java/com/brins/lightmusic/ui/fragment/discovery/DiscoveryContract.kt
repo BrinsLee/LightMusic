@@ -26,7 +26,7 @@ interface DiscoveryContract {
 
         fun onDetailLoad(detail : PlayListDetail)
 
-        fun onMusicDetail(metaData : MusicMetaData?)
+        fun onMusicDetail(onlineMusic: OnlineMusic)
     }
     interface Presenter : BasePresenter{
         fun loadArtist()
@@ -35,6 +35,6 @@ interface DiscoveryContract {
 
         fun loadMusicListDetail(id : String)
 
-        fun loadMusicDetail(ids :String)
+        fun loadMusicDetail(onlineMusic: OnlineMusic)
     }
 }

@@ -3,8 +3,10 @@ package com.brins.lightmusic.model
 import android.os.Parcel
 import android.os.Parcelable
 
-open class Music(var fileName : String, var name: String, var singer: String, var album: String, var cover : String?, var fileUrl : String = ""
-                 , var duration : Int ) :
+open class Music(
+    var fileName: String, @Transient var name: String, var singer: String, var album: String, var cover: String?, var fileUrl: String = ""
+    , var duration: Int
+) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

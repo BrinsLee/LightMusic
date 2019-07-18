@@ -9,13 +9,13 @@ import com.brins.lightmusic.utils.MachineUtils
 import io.reactivex.plugins.RxJavaPlugins
 import com.danikula.videocache.HttpProxyCacheServer
 import com.danikula.videocache.file.FileNameGenerator
+import com.squareup.leakcanary.LeakCanary
 
 
 class LightMusicApplication : BaseApplication() {
 
     var isExitHome: Boolean = true
     private var proxy: HttpProxyCacheServer? = null
-
 
     companion object {
         @JvmStatic
@@ -51,6 +51,12 @@ class LightMusicApplication : BaseApplication() {
         if (isMainProcess(this)) {
             initRxJava()
         }
+        if (LeakCanary.isInAnalyzerProcess(this)) {//1
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return
+        }
+        LeakCanary.install(this)
     }
 
     fun isMainProcess(context: Context): Boolean {

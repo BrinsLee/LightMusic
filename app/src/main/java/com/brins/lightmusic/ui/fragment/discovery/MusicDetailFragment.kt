@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_music_detail.*
 import android.media.MediaPlayer
+import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import java.lang.Exception
 
 
@@ -33,22 +35,16 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
     }
 
     companion object {
-        var Instance: MusicDetailFragment? = null
 
-        @JvmStatic
-        fun newInstance(): MusicDetailFragment {
-            return if (Instance == null) {
-                Instance = MusicDetailFragment()
-                Instance!!
-            } else {
-                Instance!!
-            }
+        val Instance = SingletonHolder.holder
+        private object SingletonHolder {
+            val holder = MusicDetailFragment()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { p0, p1 ->
+        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
             if (p1 == 0) {
                 playAll.show()
             } else {
@@ -58,7 +54,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
         mAdapter = MusicDetailAdapter(context!!, musicDetails)
         mAdapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(position: Int) {
-                mPresenter.loadMusicDetail(musicDetails[position].id)
+                mPresenter.loadMusicDetail(musicDetails[position])
             }
         })
         id = (activity as MainActivity).currentMusicListId
@@ -107,18 +103,9 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun onMusicDetail(metaData: MusicMetaData?) {
-        val mediaPlayer = MediaPlayer()
-        mediaPlayer.setDataSource(metaData!!.url)
-        try {
-            mediaPlayer.prepare()
-            mediaPlayer.setOnPreparedListener {
-                mediaPlayer.start()
-                hideLoading()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    override fun onMusicDetail(onlineMusic : OnlineMusic) {
+        RxBus.getInstance().post(PlayOnLineMusicEvent(onlineMusic))
+        hideLoading()
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter?) {

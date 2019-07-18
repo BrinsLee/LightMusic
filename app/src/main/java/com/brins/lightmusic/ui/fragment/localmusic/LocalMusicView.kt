@@ -19,6 +19,9 @@ class LocalMusicView @JvmOverloads constructor(context: Context)
     override fun bind(item: LocalMusic, position: Int) {
         textViewName.text = item.name
         textViewArtist.text = item.singer
-        imgCover.setImageBitmap(String2Bitmap(item.cover!!))
+        if (item.coverBitmap == null){
+            item.coverBitmap = String2Bitmap(item.cover!!)
+        }
+        imgCover.setImageBitmap(item.coverBitmap)
     }
 }

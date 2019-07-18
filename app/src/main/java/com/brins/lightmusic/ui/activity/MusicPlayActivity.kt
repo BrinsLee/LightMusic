@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.activity
 
 import android.annotation.SuppressLint
-import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -10,12 +9,9 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.*
-import android.transition.Explode
-import android.transition.TransitionInflater
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +26,6 @@ import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
-import com.brins.lightmusic.ui.customview.RoundCoverImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
@@ -41,7 +36,6 @@ import com.bytedance.sdk.openadsdk.core.widget.RoundImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import java.util.concurrent.Executors
-import java.util.concurrent.ThreadPoolExecutor
 
 
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {

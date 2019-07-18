@@ -13,4 +13,6 @@ class LocalMusic(
     , var type: String = ""
     , bitmapcover: String? = ""
     , duration: Int = 0
-) : Music(fileNmae, title, singer, album, bitmapcover, fileUrl , duration)
+) : Music(fileNmae, title, singer, album, bitmapcover, fileUrl , duration){
+    var coverBitmap : Bitmap? = null
+}

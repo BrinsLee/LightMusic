@@ -88,16 +88,17 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
             })
     }
 
-    override fun loadMusicDetail(ids: String) {
+    override fun loadMusicDetail(onlineMusic: OnlineMusic) {
         var metaData: Songs
         mView!!.showLoading()
-        getMusicUrl(ids).subscribeOn(Schedulers.io())
+        getMusicUrl(onlineMusic.id).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(provider)
             .subscribe({
                 metaData = it
                 if (metaData.data != null){
-                    mView!!.onMusicDetail(metaData.data!![0])
+//                    onlineMusic.fileUrl = metaData.data!![0].url
+                    mView!!.onMusicDetail(onlineMusic)
                 }
             }, {
                 it.printStackTrace()

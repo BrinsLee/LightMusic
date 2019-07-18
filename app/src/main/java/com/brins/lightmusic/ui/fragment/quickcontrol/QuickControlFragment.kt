@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
+import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.PlayList
 import com.brins.lightmusic.player.IPlayback
@@ -48,8 +49,22 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
             , Consumer {
                 when (it) {
                     is PlayListEvent -> onPlayMusic(it)
+                    is PlayOnLineMusicEvent -> onPlayOnlineMusic(it)
                 }
             })
+    }
+
+    private fun onPlayOnlineMusic(onLineMusicEvent: PlayOnLineMusicEvent) {
+        if (mPlayer!!.isPlaying()) {
+            mPlayer!!.pause()
+            ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
+        }
+        val index = playList.getPlayingIndex() + 1
+        val onLineMusic = onLineMusicEvent.music
+        val music = Music(onLineMusic.nameMusic, onLineMusic.nameMusic, onLineMusic.artists!![0].name, onLineMusic.al!!.name
+            ,onLineMusic.al!!.picUrl , onLineMusic.fileUrl, onLineMusic.dt )
+        playList.addSong(music, index)
+        playSong(playList, index)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +88,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun onDestroyView() {
-        if (::mPresenter.isInitialized){
+        if (::mPresenter.isInitialized) {
             mPresenter.unsubscribe()
         }
         super.onDestroyView()
@@ -93,8 +108,8 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
                 onPlayNext()
             }
             R.id.playBarLayout -> {
-                if (mPlayer != null && ::playList.isInitialized){
-                    MusicPlayActivity.startThisActivity((activity as AppCompatActivity),mPlayer!!.isPlaying())
+                if (mPlayer != null && ::playList.isInitialized) {
+                    MusicPlayActivity.startThisActivity((activity as AppCompatActivity), mPlayer!!.isPlaying())
                 }
                 return
             }
@@ -133,12 +148,13 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
     }
 
-    fun onPlayLast(){
+
+    fun onPlayLast() {
         if (mPlayer == null) return
         mPlayer!!.playLast()
     }
 
-    fun onPlayNext(){
+    fun onPlayNext() {
         if (mPlayer == null) return
         mPlayer!!.playNext()
     }

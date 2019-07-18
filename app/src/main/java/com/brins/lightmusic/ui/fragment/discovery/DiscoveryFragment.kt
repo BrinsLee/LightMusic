@@ -11,10 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.Artist
-import com.brins.lightmusic.model.MusicList
-import com.brins.lightmusic.model.MusicMetaData
-import com.brins.lightmusic.model.PlayListDetail
+import com.brins.lightmusic.model.*
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
@@ -76,7 +73,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
         initArtistView()
     }
 
-    override fun onMusicDetail(metaData: MusicMetaData?) {}
+    override fun onMusicDetail(onlineMusic: OnlineMusic) {}
 
     private fun initArtistView() {
         pileLayout.visibility = View.VISIBLE
@@ -116,7 +113,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
             override fun onItemClick(view: View, position: Int) {
                 val id = musicList[position].id
                 try {
-                     (activity as MainActivity).switchFragment(id,MusicDetailFragment.newInstance())
+                     (activity as MainActivity).switchFragment(id,MusicDetailFragment.Instance)
                          .addToBackStack(TAG)
                          .commit()
                 } catch (e: Exception) {
