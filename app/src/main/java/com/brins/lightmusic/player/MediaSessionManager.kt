@@ -1,13 +1,30 @@
 package com.brins.lightmusic.player
 
 import android.annotation.SuppressLint
-import android.media.session.MediaSession
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 
 class MediaSessionManager(private val mPlayService : PlayBackService) {
 
-    val mMediaSession : MediaSession by lazy { MediaSession(mPlayService, Tag) }
+    val mMediaSession : MediaSessionCompat by lazy { MediaSessionCompat(mPlayService, Tag) }
+    val callback = object :MediaSessionCompat.Callback(){
+        override fun onPlay() {
+            mPlayService.play()
+        }
+
+        override fun onPause() {
+            mPlayService.pause()
+        }
+
+        override fun onSkipToPrevious() {
+            mPlayService.playLast()
+        }
+
+        override fun onSkipToNext() {
+            mPlayService.playNext()
+        }
+
+    }
     companion object{
         @JvmStatic
         val Tag = "MediaSessionManager"
@@ -29,8 +46,15 @@ class MediaSessionManager(private val mPlayService : PlayBackService) {
     @SuppressLint("WrongConstant")
     private fun setupMediaSession() {
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS or MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS)
-//        mMediaSession.setCallback()
+        mMediaSession.setCallback(callback)
         mMediaSession.isActive = true
+    }
+
+
+    fun release() {
+        mMediaSession.setCallback(null)
+        mMediaSession.isActive = false
+        mMediaSession.release()
     }
 
 }

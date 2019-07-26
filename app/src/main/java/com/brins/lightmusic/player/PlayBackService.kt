@@ -39,7 +39,7 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun onCreate() {
         super.onCreate()
-
+        MediaSessionManager(this)
         mPlayer.registerCallback(this)
     }
 
