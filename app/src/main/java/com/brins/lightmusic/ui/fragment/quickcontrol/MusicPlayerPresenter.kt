@@ -99,7 +99,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun unsubscribe() {
 
-        unbindPlaybackService()
+//        unbindPlaybackService()
         mSubscriptions.clear()
 
     }

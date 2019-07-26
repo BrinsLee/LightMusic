@@ -1,9 +1,14 @@
 package com.brins.lightmusic.player
 
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Binder
 import android.os.IBinder
+import android.view.KeyEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.PlayList
 
@@ -21,6 +26,8 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
     private val mPlayer: Player by lazy { Player.getInstance() }
     private val mBinder = LocalBinder()
 
+
+
     override fun onBind(intent: Intent): IBinder {
         return mBinder
     }
@@ -32,6 +39,7 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun onCreate() {
         super.onCreate()
+
         mPlayer.registerCallback(this)
     }
 
@@ -43,7 +51,8 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun onDestroy() {
         releasePlayer()
-        super.onDestroy()
+        val intent = Intent(applicationContext, PlayBackService::class.java)
+        startService(intent)
     }
 
     //IPlayback
@@ -131,4 +140,21 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
     override fun onPlayStatusChanged(isPlaying: Boolean) {
 
     }
+
+  /*inner class MediaButtonReceiver : BroadcastReceiver() {
+        private val Tag = "MediaButtonReceiver"
+
+        override fun onReceive(context: Context?, intent: Intent) {
+            val action = intent.action
+            val event : KeyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
+            if (Intent.ACTION_MEDIA_BUTTON == action){
+                val keyCode = event.keyCode
+                when(keyCode){
+                    KeyEvent.KEYCODE_MEDIA_NEXT -> playNext()
+                    KeyEvent.KEYCODE_MEDIA_PREVIOUS -> playLast()
+                    KeyEvent.KEYCODE_HEADSETHOOK -> if (mPlayer.isPlaying()) pause() else play()
+                }
+            }
+        }
+    }*/
 }

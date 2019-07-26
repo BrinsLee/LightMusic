@@ -30,6 +30,12 @@
                 android:exported="true">
         </service>
 
+        <receiver android:name=".player.PlayBackService$MediaButtonReceiver">
+            <intent-filter >
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".ui.base.BaseActivity">
         </activity>
         <activity android:name=".ui.activity.SplashActivity">
