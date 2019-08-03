@@ -2,6 +2,8 @@ package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.model.*
+import com.brins.lightmusic.model.musicvideo.LastestMvData
+import com.brins.lightmusic.model.musicvideo.MvMetaData
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -40,8 +42,14 @@ interface MusicService {
     fun getArtist(@Query("limit") limit: Int): Observable<Data>
 
     @GET(ALBUM)
-    fun getAlbum(@Query("ids") ids: String) : Observable<MusicMetaData>
+    fun getAlbum(@Query("ids") ids: String): Observable<MusicMetaData>
 
     @GET(SONG)
-    fun getUrl(@Query("id") id : String) : Observable<Songs>
+    fun getUrl(@Query("id") id: String): Observable<Songs>
+
+    @GET(LASTESTMUSICVIDEO)
+    fun getLatestMusicVideo(@Query("limit") limit: String = "10"): Observable<LastestMvData>
+
+    @GET(MVURL)
+    fun getMvMetaData(@Query("id") id : String): Observable<MvMetaData>
 }

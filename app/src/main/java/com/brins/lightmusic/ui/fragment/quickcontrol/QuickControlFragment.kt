@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,20 +9,28 @@ import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.OnlineMusic
 import com.brins.lightmusic.model.PlayList
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
+import com.brins.lightmusic.utils.getStringCover
+import com.brins.lightmusic.utils.loadingOnlineCover
+import com.brins.lightmusic.utils.string2Bitmap
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
+import java.lang.ref.WeakReference
 
 
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
 
     var mPlayer: IPlayback? = null
+
     lateinit var playList: PlayList
     private lateinit var mPresenter: MusicPlayerContract.Presenter
     override fun getLayoutResID(): Int {
@@ -54,17 +63,41 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
             })
     }
 
+    private fun onPlayMusic(playListEvent: PlayListEvent) {
+
+        playList = playListEvent.playlist
+        val index = playListEvent.playIndex
+        playSong(playList, index)
+    }
+
+    private fun playSong(playList: PlayList, index: Int) {
+        playList.setPlayMode(PlayMode.getDefault())
+        mPlayer!!.play(playList, index)
+        val song = playList.getCurrentSong()
+        onSongUpdated(song)
+    }
+
+    private fun playOnlineSong(playList: PlayList, index: Int) {
+        playList.setPlayMode(PlayMode.getDefault())
+        mPlayer!!.play(playList, index)
+        val song = playList.getCurrentSong()
+        mPresenter.getOnLineCover(song!!.cover!!)
+    }
+
     private fun onPlayOnlineMusic(onLineMusicEvent: PlayOnLineMusicEvent) {
         if (mPlayer!!.isPlaying()) {
             mPlayer!!.pause()
             ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
         }
         val index = playList.getPlayingIndex() + 1
-        val onLineMusic = onLineMusicEvent.music
-        val music = Music(onLineMusic.nameMusic, onLineMusic.nameMusic, onLineMusic.artists!![0].name, onLineMusic.al!!.name
-            ,onLineMusic.al!!.picUrl , onLineMusic.fileUrl, onLineMusic.dt )
-        playList.addSong(music, index)
-        playSong(playList, index)
+        val wtf = WeakReference<OnlineMusic>(onLineMusicEvent.music)
+        val music = WeakReference<Music>(Music(wtf.get()!!.nameMusic, wtf.get()!!.nameMusic, wtf.get()!!.artists!![0].name, wtf.get()!!.al!!.name
+            ,wtf.get()!!.al!!.picUrl , wtf.get()!!.fileUrl, wtf.get()!!.dt ))
+        if (!::playList.isInitialized){
+            playList = PlayList()
+        }
+        playList.addSong(music.get(), index)
+        playOnlineSong(playList, index)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -159,24 +192,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         mPlayer!!.playNext()
     }
 
-    private fun onPlayMusic(playListEvent: PlayListEvent) {
-
-        playList = playListEvent.playlist
-        val index = playListEvent.playIndex
-        playSong(playList, index)
-    }
-
-    private fun playSong(playList: PlayList, index: Int) {
-        playList.setPlayMode(PlayMode.getDefault())
-        mPlayer!!.play(playList, index)
-        val song = playList.getCurrentSong()
-        onSongUpdated(song)
-    }
-
-    private fun playSong(song: Music) {
-        val playList = PlayList(song)
-        playSong(playList, 0)
-    }
 
 
     // Player Callbacks
@@ -203,6 +218,15 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
 
     // MVP View
+    override fun getLifeActivity(): AppCompatActivity {
+        return activity as AppCompatActivity
+    }
+
+    override fun onCoverLoad(cover: Bitmap?) {
+        playList.getCurrentSong()!!.cover = getStringCover(cover)
+        onSongUpdated(playList.getCurrentSong())
+    }
+
     override fun onPlaybackServiceBound(service: PlayBackService) {
         mPlayer = service
         mPlayer!!.registerCallback(this)
@@ -244,7 +268,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
         tvPlaybarTitle.text = song.name
         tvPlaybarArtist.text = song.singer
-        ivPlaybarCover.setImageBitmap(String2Bitmap(song.cover!!))
+        ivPlaybarCover.setImageBitmap(string2Bitmap(song.cover!!))
         ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
         ivPlaybarCover.startRotateAnimation()
 

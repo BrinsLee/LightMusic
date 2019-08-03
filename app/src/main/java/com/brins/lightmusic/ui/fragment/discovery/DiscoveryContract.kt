@@ -16,8 +16,6 @@ interface DiscoveryContract {
 
         fun getcontext() : Context
 
-        fun getLifeActivity() : AppCompatActivity
-
         fun handleError(error: Throwable)
 
         fun onMusicListLoad(songs : MutableList<MusicList>)

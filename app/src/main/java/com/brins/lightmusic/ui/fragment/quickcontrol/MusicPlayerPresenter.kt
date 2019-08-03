@@ -5,12 +5,33 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Bitmap
 import android.os.IBinder
+import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.player.PlayBackService
-import io.reactivex.disposables.CompositeDisposable
+import com.brins.lightmusic.utils.loadingOnlineCover
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter {
+    override fun getOnLineCover(url: String) {
+        val provider: AndroidLifecycleScopeProvider =
+            AndroidLifecycleScopeProvider.from(mView.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+
+        Observable.create(ObservableOnSubscribe<Bitmap> {
+            it.onNext(loadingOnlineCover(url))
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(provider)
+            .subscribe {
+                mView.onCoverLoad(it)
+            }
+    }
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -22,9 +43,9 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
         }
     }
 
+
     private lateinit var mContext: Context
     private lateinit var mView: MusicPlayerContract.View
-    val mSubscriptions: CompositeDisposable = CompositeDisposable()
     private var mIsServiceBound: Boolean = false
     private var mPlaybackService: PlayBackService? = null
 
@@ -59,6 +80,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
     @Synchronized
     fun setView(view: MusicPlayerContract.View): MusicPlayerPresenter {
         mView = view
+        mView.setPresenter(this)
         return this
     }
 
@@ -100,7 +122,5 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
     override fun unsubscribe() {
 
 //        unbindPlaybackService()
-        mSubscriptions.clear()
-
     }
 }

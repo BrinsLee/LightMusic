@@ -14,7 +14,7 @@ import androidx.loader.content.Loader
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.LocalMusic
-import com.brins.lightmusic.utils.AlbumUtils.Companion.loadingCover
+import com.brins.lightmusic.utils.loadingCover
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable

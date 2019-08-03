@@ -24,6 +24,7 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 
 class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
+
     lateinit var permissionManager : PermissionManager
     lateinit var mAdapter: LocalMusicAdapter
     lateinit var mPresenter: LocalMusicContract.Presenter
@@ -96,5 +97,9 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
 
     override fun setPresenter(presenter: LocalMusicContract.Presenter?) {
         mPresenter = presenter!!
+    }
+
+    override fun getLifeActivity(): AppCompatActivity {
+        return activity as AppCompatActivity
     }
 }

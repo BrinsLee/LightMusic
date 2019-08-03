@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.api.ApiHelper.getMusicDetail
 import com.brins.lightmusic.api.ApiHelper.getMusicUrl
 import com.brins.lightmusic.model.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -97,7 +96,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
             .subscribe({
                 metaData = it
                 if (metaData.data != null){
-//                    onlineMusic.fileUrl = metaData.data!![0].url
+                    onlineMusic.fileUrl = metaData.data!![0].url
                     mView!!.onMusicDetail(onlineMusic)
                 }
             }, {

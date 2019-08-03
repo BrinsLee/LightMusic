@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
+import android.graphics.Bitmap
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.brins.lightmusic.model.Music
@@ -27,6 +28,8 @@ interface MusicPlayerContract {
         fun updatePlayToggle(play: Boolean)
 
         fun updateFavoriteToggle(favorite: Boolean)
+
+        fun onCoverLoad(cover: Bitmap?)
     }
 
     interface Presenter : BasePresenter {
@@ -47,5 +50,10 @@ interface MusicPlayerContract {
          * 解除绑定
          */
         fun unbindPlaybackService()
+
+        /**
+         * 获取在线封面
+         */
+        fun getOnLineCover(url : String)
     }
 }

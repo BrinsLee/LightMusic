@@ -30,10 +30,7 @@ import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
-import com.brins.lightmusic.utils.AlbumUtils.Companion.String2Bitmap
-import com.brins.lightmusic.utils.FastBlurUtil
-import com.brins.lightmusic.utils.HandlerUtil
-import com.brins.lightmusic.utils.TimeUtils
+import com.brins.lightmusic.utils.*
 import com.bytedance.sdk.openadsdk.core.widget.RoundImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
@@ -126,7 +123,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         if (mImageViewList.size == 0) {
             for (i in 0 until mPlayList.getNumOfSongs()) {
                 val imageView = RoundImageView(applicationContext)
-                imageView.setImageBitmap(String2Bitmap(musics!![i].cover!!))
+                imageView.setImageBitmap(string2Bitmap(musics!![i].cover!!))
                 imageView.layoutParams = ViewGroup.LayoutParams(100, 100)
                 imageView.scaleType = ImageView.ScaleType.CENTER
                 mImageViewList.add(imageView)
@@ -157,11 +154,11 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     private fun updateProgressTextWithProgress(progress: Int) {
-        tvProgress.text = TimeUtils.formatDuration(progress)
+        tvProgress.text = formatDuration(progress)
     }
 
     private fun updateProgressTextWithDuration(duration: Int) {
-        tvProgress.text = TimeUtils.formatDuration(duration)
+        tvProgress.text = formatDuration(duration)
     }
 
     private fun getDuration(progress: Int): Int {
@@ -362,6 +359,15 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     }
 
+    override fun onCoverLoad(cover: Bitmap?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getLifeActivity(): AppCompatActivity {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
     override fun onPlaybackServiceBound(service: PlayBackService) {
         mPlayer = service
         mPlayer!!.registerCallback(this)
@@ -387,12 +393,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             mHandler.removeCallbacks(mProgressCallback)
             return
         }
-        cover = String2Bitmap(song.cover!!)
+        cover = string2Bitmap(song.cover!!)
         initViewPager()
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
         musicTitle.text = song.name
         musicArtist.text = song.singer
-        tvDuration.text = TimeUtils.formatDuration(song.duration)
+        tvDuration.text = formatDuration(song.duration)
         seekBar.progress = initProgress(mPlayer!!.getProgress())
         updateProgressTextWithProgress(mPlayer!!.getProgress())
         mHandler.removeCallbacks(mProgressCallback)

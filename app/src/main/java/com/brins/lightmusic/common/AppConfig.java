@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class AppConfig {
     public static boolean ISFIRST = true;
-    public static final String BASEURL = "https://d858a663.ngrok.io";
+    public static final String BASEURL = "https://15ed5d46.ngrok.io";
 
 
     /**
@@ -30,13 +30,20 @@ public class AppConfig {
      */
     public static final String SONG = "/song/url";
 
+
+    /**
+     * 最新MV
+     */
+    public static final String LASTESTMUSICVIDEO = "/mv/first";
+
+    public static final String MVURL = "/mv/url";
     /**
     * 音乐封面
     */
     public static final String ALBUM = "/song/detail";
 
     public static final String RECOMMEND_MV = "/personalized/mv";
-    public static final String MV_DETAIL = "/mv/url";
+
     public static final String VIDEO ="/video/url";
     public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 

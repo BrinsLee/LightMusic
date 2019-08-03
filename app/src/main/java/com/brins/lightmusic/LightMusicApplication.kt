@@ -4,12 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.brins.lightmusic.common.AppConfig
-import com.brins.lightmusic.utils.FileUtils
-import com.brins.lightmusic.utils.MachineUtils
+import com.brins.lightmusic.utils.getAudioCacheDir
+import com.brins.lightmusic.utils.getCurrProcessName
 import io.reactivex.plugins.RxJavaPlugins
 import com.danikula.videocache.HttpProxyCacheServer
 import com.danikula.videocache.file.FileNameGenerator
-import com.squareup.leakcanary.LeakCanary
 
 
 class LightMusicApplication : BaseApplication() {
@@ -32,7 +31,7 @@ class LightMusicApplication : BaseApplication() {
     }
 
     fun newProxy(): HttpProxyCacheServer {
-        return HttpProxyCacheServer.Builder(this).cacheDirectory(FileUtils.getAudioCacheDir(this))
+        return HttpProxyCacheServer.Builder(this).cacheDirectory(getAudioCacheDir(this))
             .fileNameGenerator(NameGenerator()).build()
     }
 
@@ -51,16 +50,16 @@ class LightMusicApplication : BaseApplication() {
         if (isMainProcess(this)) {
             initRxJava()
         }
-        if (LeakCanary.isInAnalyzerProcess(this)) {//1
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {//1
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return
         }
-        LeakCanary.install(this)
+        LeakCanary.install(this)*/
     }
 
     fun isMainProcess(context: Context): Boolean {
-        return AppConfig.Package.MAIN_PROCESS_NAME.equals(MachineUtils.getCurrProcessName(context))
+        return AppConfig.Package.MAIN_PROCESS_NAME.equals(getCurrProcessName(context))
     }
 
 

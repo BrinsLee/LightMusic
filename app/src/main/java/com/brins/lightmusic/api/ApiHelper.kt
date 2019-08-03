@@ -3,6 +3,8 @@ package com.brins.lightmusic.api
 import com.brins.lightmusic.api.service.MusicService
 import com.brins.lightmusic.common.AppConfig.BASEURL
 import com.brins.lightmusic.model.*
+import com.brins.lightmusic.model.musicvideo.LastestMvData
+import com.brins.lightmusic.model.musicvideo.MvMetaData
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,5 +53,13 @@ object ApiHelper {
 
     fun getMusicUrl(ids : String): Observable<Songs>{
         return getRetrofitFactory(BASEURL).getUrl(ids)
+    }
+
+    fun getLatestMvData(limit: String = "10"): Observable<LastestMvData>{
+        return getRetrofitFactory(BASEURL).getLatestMusicVideo(limit)
+    }
+
+    fun getMvMetaData(id : String): Observable<MvMetaData>{
+        return getRetrofitFactory(BASEURL).getMvMetaData(id)
     }
 }

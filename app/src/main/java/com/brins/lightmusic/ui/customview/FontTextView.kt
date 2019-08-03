@@ -5,9 +5,8 @@ import android.content.Context
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import com.brins.lightmusic.R
-import com.brins.lightmusic.utils.TypefaceUtils
+import com.brins.lightmusic.utils.getTypeface
 import android.util.AttributeSet as AttributeSet1
 
 class FontTextView @JvmOverloads constructor(
@@ -29,7 +28,7 @@ class FontTextView @JvmOverloads constructor(
 
     private fun initTypeface(context: Context, fontType: Int) {
         if (fontType > 0) {
-            val typeface = TypefaceUtils.Companion.getTypeface(context, fontType)
+            val typeface = getTypeface(context, fontType)
             if (typeface != null) {
                 setTypeface(typeface)
             }
