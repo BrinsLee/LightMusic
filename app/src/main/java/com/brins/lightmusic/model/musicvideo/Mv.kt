@@ -1,6 +1,6 @@
 package com.brins.lightmusic.model.musicvideo
 
-class Mv{
-    var data : LastestMvData? = null
-    var metaData : MvMetaData? = null
-}
+class Mv(
+    var data: LastestMvData,
+    var metaData: MvMetaData
+)

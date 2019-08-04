@@ -17,11 +17,7 @@ import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.getStringCover
-import com.brins.lightmusic.utils.loadingOnlineCover
 import com.brins.lightmusic.utils.string2Bitmap
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.ref.WeakReference

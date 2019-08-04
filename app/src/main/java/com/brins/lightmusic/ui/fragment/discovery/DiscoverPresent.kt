@@ -6,13 +6,11 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.ApiHelper.getMusicUrl
+import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+
 
 class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Presenter {
 
@@ -22,80 +20,49 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     @RequiresApi(Build.VERSION_CODES.N)
     override fun loadArtist() {
         ApiHelper.getArtist(12)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
+            .compose(AsyncTransformer<Data>())
             .autoDisposable(provider)
-            .subscribe(object : Observer<Data> {
-                override fun onComplete() {
+            .subscribe({ t ->
+                if (t.artists != null && t.artists?.size != 0) {
+                    mView!!.onArtistLoad(t.artists as MutableList<Artist>)
                 }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onNext(t: Data) {
-                    if (t.artists != null && t.artists?.size != 0) {
-                        mView!!.onArtistLoad(t.artists as MutableList<Artist>)
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.d("LoadError", e.message)
-                }
-            })
+            }, { t -> Log.d("LoadError", t.message) })
     }
 
     override fun loadMusicList() {
         ApiHelper.getPlayList(12)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
+            .compose(AsyncTransformer<Data>())
             .autoDisposable(provider)
-            .subscribe(object : Observer<Data> {
-                override fun onComplete() {}
-
-                override fun onSubscribe(d: Disposable) {}
-
-                override fun onNext(t: Data) {
-                    if (t.playlists != null && t.playlists!!.isNotEmpty()) {
-                        mView!!.onMusicListLoad(t.playlists as MutableList<MusicList>)
-                    }
-                    mView?.hideLoading()
+            .subscribe { t ->
+                if (t.playlists != null && t.playlists!!.isNotEmpty()) {
+                    mView!!.onMusicListLoad(t.playlists as MutableList<MusicList>)
                 }
-
-                override fun onError(e: Throwable) {}
-
-            })
+                mView?.hideLoading()
+            }
     }
 
     override fun loadMusicListDetail(id: String) {
         mView?.showLoading()
         ApiHelper.getPlayListDetail(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(AsyncTransformer<MusicListDetail>())
             .autoDisposable(provider)
-            .subscribe(object : Observer<MusicListDetail> {
-                override fun onComplete() {}
-                override fun onSubscribe(d: Disposable) {}
-                override fun onNext(t: MusicListDetail) {
-                    if (t.playlist != null) {
-                        mView!!.onDetailLoad(t.playlist!!)
-                        mView!!.hideLoading()
-                    }
+            .subscribe { t ->
+                if (t.playlist != null) {
+                    mView!!.onDetailLoad(t.playlist!!)
+                    mView!!.hideLoading()
                 }
-
-                override fun onError(e: Throwable) {}
-
-            })
+            }
     }
 
     override fun loadMusicDetail(onlineMusic: OnlineMusic) {
         var metaData: Songs
         mView!!.showLoading()
-        getMusicUrl(onlineMusic.id).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        getMusicUrl(onlineMusic.id)
+            .compose(AsyncTransformer<Songs>())
             .autoDisposable(provider)
             .subscribe({
                 metaData = it
-                if (metaData.data != null){
+                if (metaData.data != null) {
                     onlineMusic.fileUrl = metaData.data!![0].url
                     mView!!.onMusicDetail(onlineMusic)
                 }
@@ -103,7 +70,6 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
                 it.printStackTrace()
             })
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)

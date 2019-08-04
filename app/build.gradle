@@ -78,7 +78,7 @@ dependencies {
 //AndroidVideoCache
     implementation 'com.danikula:videocache:2.7.1'
 //JZVideoPlayer
-    implementation 'cn.jzvd:jiaozivideoplayer:6.4.1'
+    implementation 'cn.jzvd:jiaozivideoplayer:7.0.5'
 //穿山甲广告
     implementation(name: 'open_ad_sdk', ext: 'aar')
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'

@@ -47,7 +47,9 @@
         </activity>
         <activity
                 android:name=".ui.activity.MainActivity"
-                android:launchMode="singleInstance">
+                android:launchMode="singleInstance"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait">
         </activity>
 
         <provider

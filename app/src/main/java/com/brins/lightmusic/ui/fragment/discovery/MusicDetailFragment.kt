@@ -22,7 +22,7 @@ import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import java.lang.Exception
 
 
-class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
+class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener {
 
     private val mPresenter: DiscoveryContract.Presenter by lazy { DiscoverPresent(this) }
     var id: String = ""
@@ -52,11 +52,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
             }
         })
         mAdapter = MusicDetailAdapter(context!!, musicDetails)
-        mAdapter.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                mPresenter.loadMusicDetail(musicDetails[position])
-            }
-        })
+        mAdapter.setOnItemClickListener(this)
         id = (activity as MainActivity).currentMusicListId
         mPresenter.loadMusicListDetail(id)
         musicRecycler.adapter = mAdapter
@@ -68,6 +64,13 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
         )
     }
 
+    //ItemClick
+    override fun onItemClick(position: Int) {
+        mPresenter.loadMusicDetail(musicDetails[position])
+    }
+
+
+    //MVP VIEW
     override fun showLoading() {
         loadingLayout.visibility = View.VISIBLE
     }
@@ -98,8 +101,8 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View {
             .load(detail.coverImgUrl)
             .into(coverMusicList)
         collapsing.title = detail.name
-        musicDetails = detail.tracks as MutableList<OnlineMusic>
-        mAdapter.setData(detail.tracks as MutableList<OnlineMusic>)
+        musicDetails.addAll(detail.tracks!!)
+        mAdapter.setData(musicDetails)
         mAdapter.notifyDataSetChanged()
     }
 

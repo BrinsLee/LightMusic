@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.os.IBinder
 import androidx.lifecycle.Lifecycle
+import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.utils.loadingOnlineCover
@@ -15,8 +16,7 @@ import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+
 
 class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter {
     override fun getOnLineCover(url: String) {
@@ -25,8 +25,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
         Observable.create(ObservableOnSubscribe<Bitmap> {
             it.onNext(loadingOnlineCover(url))
-        }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        }).compose(AsyncTransformer<Bitmap>())
             .autoDisposable(provider)
             .subscribe {
                 mView.onCoverLoad(it)

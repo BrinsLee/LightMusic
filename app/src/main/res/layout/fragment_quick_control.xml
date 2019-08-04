@@ -27,7 +27,7 @@
             style="@style/AppTheme.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLength="15"
+            android:maxLength="13"
             android:ellipsize="end"
             android:singleLine="true"
             app:layout_constraintStart_toEndOf="@id/ivPlaybarCover"

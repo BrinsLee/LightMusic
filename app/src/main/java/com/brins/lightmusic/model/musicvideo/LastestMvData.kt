@@ -9,6 +9,7 @@ class LastestMvData {
     var cover : String = ""
     var name: String = ""
     var playCount : Int = 0
+    var artistId : String = ""
     var artistName: String = ""
     var duration: Int = 0
     var briefDesc : String = ""

@@ -4,10 +4,16 @@
              android:layout_height="match_parent"
              tools:context="com.brins.lightmusic.ui.fragment.video.VideoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <include
+            android:id="@+id/loadingLayout"
+            layout="@layout/loading_layout"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/videoListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="video"/>
+            android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>
