@@ -94,10 +94,12 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun bindPlaybackService() {
 
-        val intent = Intent(mContext, PlayBackService::class.java)
-        mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-        mIsServiceBound = true
-        mContext.startService(intent)
+        if(!mIsServiceBound){
+            val intent = Intent(mContext, PlayBackService::class.java)
+            mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+            mIsServiceBound = true
+            mContext.startService(intent)
+        }
     }
 
     override fun unbindPlaybackService() {

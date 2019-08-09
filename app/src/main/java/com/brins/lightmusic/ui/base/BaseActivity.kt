@@ -2,7 +2,9 @@ package com.brins.lightmusic.ui.base
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.PlayList
@@ -15,7 +17,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected var TAG = this.javaClass.simpleName
     protected var fragment: QuickControlFragment = QuickControlFragment.newInstance()
-
+    protected var firstTime : Long = 0
     protected var mBindDestroyDisposable: CompositeDisposable? = null
 
     /*
@@ -77,5 +79,22 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected fun subscribeEvents(): Disposable? {
         return null
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+
+        when (keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                var second = System.currentTimeMillis()
+                if (second - firstTime > 2000) {
+                    Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show()
+                    firstTime = second
+                    return true
+                }else {
+                    System.exit(0)
+                }
+            }
+        }
+        return super.onKeyUp(keyCode, event)
     }
 }
