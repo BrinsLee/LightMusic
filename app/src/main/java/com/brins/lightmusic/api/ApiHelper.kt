@@ -55,7 +55,7 @@ object ApiHelper {
         return getRetrofitFactory(BASEURL).getUrl(ids)
     }
 
-    fun getLatestMvData(limit: String = "10"): Observable<MvResult> {
+    fun getLatestMvData(limit: String = "15"): Observable<MvResult> {
         return getRetrofitFactory(BASEURL).getLatestMusicVideo(limit)
     }
 

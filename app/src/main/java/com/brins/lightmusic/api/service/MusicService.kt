@@ -51,7 +51,7 @@ interface MusicService {
     fun getUrl(@Query("id") id: String): Observable<MusicBean>
 
     @GET(LASTESTMUSICVIDEO)
-    fun getLatestMusicVideo(@Query("limit") limit: String = "10"): Observable<MvResult>
+    fun getLatestMusicVideo(@Query("limit") limit: String = "15"): Observable<MvResult>
 
     @GET(MVURL)
     fun getMvMetaData(@Query("id") id: String): Observable<MvMetaResult>
