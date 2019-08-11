@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.OnlineMusic
+import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import java.lang.StringBuilder
 
@@ -32,7 +32,7 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<OnlineMusi
         if (list.isNotEmpty()){
             val musicDetail = list[position]
             val strBuilder = StringBuilder()
-            musicDetail.artists?.forEach { strBuilder.append("${it.name} ") }
+            musicDetail.artistBeans?.forEach { strBuilder.append("${it.name} ") }
             holder.artist.text = strBuilder.toString()
             holder.name.text = musicDetail.nameMusic
             holder.count.text = "$position"

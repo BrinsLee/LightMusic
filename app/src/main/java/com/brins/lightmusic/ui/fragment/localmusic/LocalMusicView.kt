@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.LocalMusic
+import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.ui.base.adapter.IAdapterView
 import com.brins.lightmusic.utils.string2Bitmap
 import kotlinx.android.synthetic.main.item_local_music.view.*

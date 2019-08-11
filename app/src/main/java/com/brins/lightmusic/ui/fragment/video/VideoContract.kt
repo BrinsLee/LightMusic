@@ -2,7 +2,6 @@ package com.brins.lightmusic.ui.fragment.video
 
 import android.content.Context
 import com.brins.lightmusic.model.musicvideo.Mv
-import com.brins.lightmusic.model.musicvideo.MvMetaData
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView

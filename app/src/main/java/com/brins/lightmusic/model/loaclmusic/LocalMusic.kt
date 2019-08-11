@@ -1,6 +1,7 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.loaclmusic
 
 import android.graphics.Bitmap
+import com.brins.lightmusic.model.Music
 
 class LocalMusic(
     var id: Int = 0

@@ -8,10 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.MusicList
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.bumptech.glide.Glide
 
-class MusicListAdapter(var type: Int, var context: Context, var list: MutableList<MusicList>) :
+class MusicListAdapter(var type: Int, var context: Context, var listBean: MutableList<MusicListBean>) :
     RecyclerView.Adapter<MusicListAdapter.ViewHolder>()
     , View.OnClickListener {
 
@@ -38,12 +38,12 @@ class MusicListAdapter(var type: Int, var context: Context, var list: MutableLis
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return listBean.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (list.isNotEmpty()){
-            val musicList = list[position]
+        if (listBean.isNotEmpty()){
+            val musicList = listBean[position]
             holder.title.text = musicList.name
             holder.description.text = musicList.description
             Glide.with(context)

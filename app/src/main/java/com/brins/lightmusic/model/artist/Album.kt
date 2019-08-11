@@ -1,4 +1,4 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.artist
 
 import com.google.gson.annotations.SerializedName
 

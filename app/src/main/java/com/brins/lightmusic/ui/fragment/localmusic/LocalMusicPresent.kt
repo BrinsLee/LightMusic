@@ -2,9 +2,6 @@ package com.brins.lightmusic.ui.fragment.localmusic
 
 import android.annotation.SuppressLint
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -12,8 +9,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.brins.lightmusic.BaseApplication
-import com.brins.lightmusic.R
-import com.brins.lightmusic.model.LocalMusic
+import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.utils.loadingCover
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -133,7 +129,16 @@ class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContrac
         val album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM))
         val size = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
         val url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) ?: ""
-        val song = LocalMusic(id, name, title, artist, size, url, album, duration = duration)
+        val song = LocalMusic(
+            id,
+            name,
+            title,
+            artist,
+            size,
+            url,
+            album,
+            duration = duration
+        )
         if (url.isNotEmpty()) {
             val bitmap = loadingCover(url)
             song.cover = bitmap

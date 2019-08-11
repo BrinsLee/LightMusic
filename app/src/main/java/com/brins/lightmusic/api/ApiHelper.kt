@@ -2,9 +2,12 @@ package com.brins.lightmusic.api
 
 import com.brins.lightmusic.api.service.MusicService
 import com.brins.lightmusic.common.AppConfig.BASEURL
-import com.brins.lightmusic.model.*
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.model.musicvideo.MvResult
+import com.brins.lightmusic.model.onlinemusic.MusicBean
+import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
+import com.brins.lightmusic.model.onlinemusic.MusicListResult
+import com.brins.lightmusic.model.onlinemusic.MusicMetaDataBean
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -32,23 +35,23 @@ object ApiHelper {
     }
 
 
-    fun getArtist(i: Int): Observable<Data> {
+    fun getArtist(i: Int): Observable<MusicListResult> {
         return getRetrofitFactory(BASEURL).getArtist(i)
     }
 
-    fun getPlayList(i: Int): Observable<Data> {
+    fun getPlayList(i: Int): Observable<MusicListResult> {
         return getRetrofitFactory(BASEURL).getPlayList(i)
     }
 
-    fun getPlayListDetail(id: String): Observable<MusicListDetail> {
+    fun getPlayListDetail(id: String): Observable<MusicListDetailResult> {
         return getRetrofitFactory(BASEURL).getPlayListDetail(id)
     }
 
-    fun getMusicDetail(ids: String): Observable<MusicMetaData> {
+    fun getMusicDetail(ids: String): Observable<MusicMetaDataBean> {
         return getRetrofitFactory(BASEURL).getAlbum(ids)
     }
 
-    fun getMusicUrl(ids: String): Observable<Songs> {
+    fun getMusicUrl(ids: String): Observable<MusicBean> {
         return getRetrofitFactory(BASEURL).getUrl(ids)
     }
 

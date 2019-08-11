@@ -1,9 +1,9 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.onlinemusic
 
 /*
 * 歌单创建详情，如创建者，创建时间，关注数，播放数
  */
-class PlayListDetail {
+class MusicListDetailBean {
     var id :String = ""
     var coverImgUrl : String = ""
     var createTime : Long = 0

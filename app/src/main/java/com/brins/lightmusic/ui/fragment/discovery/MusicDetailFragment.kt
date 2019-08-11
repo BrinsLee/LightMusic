@@ -9,17 +9,19 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.*
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_music_detail.*
-import android.media.MediaPlayer
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayOnLineMusicEvent
-import java.lang.Exception
+import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
+import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
+import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 
 
 class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener {
@@ -28,7 +30,8 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
     lateinit var mAdapter: MusicDetailAdapter
-    private var playList: PlayList = PlayList()
+    private var playList: PlayList =
+        PlayList()
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_music_detail
@@ -90,18 +93,18 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun handleError(error: Throwable) {
     }
 
-    override fun onMusicListLoad(songs: MutableList<MusicList>) {
+    override fun onMusicListLoad(songs: MutableList<MusicListBean>) {
     }
 
-    override fun onArtistLoad(artists: MutableList<Artist>) {
+    override fun onArtistLoad(artistBeans: MutableList<ArtistBean>) {
     }
 
-    override fun onDetailLoad(detail: PlayListDetail) {
+    override fun onDetailLoad(detailBean: MusicListDetailBean) {
         Glide.with(context!!)
-            .load(detail.coverImgUrl)
+            .load(detailBean.coverImgUrl)
             .into(coverMusicList)
-        collapsing.title = detail.name
-        musicDetails.addAll(detail.tracks!!)
+        collapsing.title = detailBean.name
+        musicDetails.addAll(detailBean.tracks!!)
         mAdapter.setData(musicDetails)
         mAdapter.notifyDataSetChanged()
     }

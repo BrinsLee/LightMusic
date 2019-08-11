@@ -11,7 +11,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.*
+import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
+import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
+import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
@@ -22,8 +25,8 @@ import java.lang.Exception
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
     lateinit var mPresenter: DiscoveryContract.Presenter
-    lateinit var artistlist: MutableList<Artist>
-    lateinit var musicList: MutableList<MusicList>
+    lateinit var artistlist: MutableList<ArtistBean>
+    lateinit var musicListBean: MutableList<MusicListBean>
 
 
     override fun onLazyLoad() {
@@ -38,7 +41,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
     //MVP View
 
-    override fun onDetailLoad(detail: PlayListDetail) {
+    override fun onDetailLoad(detailBean: MusicListDetailBean) {
 
     }
 
@@ -63,13 +66,13 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
     }
 
-    override fun onMusicListLoad(songs: MutableList<MusicList>) {
-        musicList = songs
+    override fun onMusicListLoad(songs: MutableList<MusicListBean>) {
+        musicListBean = songs
         initMusicList()
     }
 
-    override fun onArtistLoad(artists: MutableList<Artist>) {
-        artistlist = artists
+    override fun onArtistLoad(artistBeans: MutableList<ArtistBean>) {
+        artistlist = artistBeans
         initArtistView()
     }
 
@@ -107,11 +110,11 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
         val adapter = MusicListAdapter(
             MusicListAdapter.TYPE_MUSIC_LIST,
             context!!,
-            musicList
+            musicListBean
         )
         adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val id = musicList[position].id
+                val id = musicListBean[position].id
                 try {
                      (activity as MainActivity).switchFragment(id,MusicDetailFragment.Instance)
                          .addToBackStack(TAG)

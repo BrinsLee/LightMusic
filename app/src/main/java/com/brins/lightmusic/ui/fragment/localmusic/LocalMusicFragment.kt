@@ -4,21 +4,17 @@ package com.brins.lightmusic.ui.fragment.localmusic
 import android.Manifest
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.manager.PermissionManager
-import com.brins.lightmusic.model.LocalMusic
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.loaclmusic.LocalMusic
+import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import kotlinx.android.synthetic.main.fragment_localmusic.*
@@ -28,7 +24,8 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
     lateinit var permissionManager : PermissionManager
     lateinit var mAdapter: LocalMusicAdapter
     lateinit var mPresenter: LocalMusicContract.Presenter
-    private var  playList : PlayList = PlayList()
+    private var  playList : PlayList =
+        PlayList()
     private var isLoad = false
 
     override fun getLayoutResID(): Int {

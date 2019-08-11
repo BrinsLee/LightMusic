@@ -2,7 +2,7 @@ package com.brins.lightmusic.player
 
 import androidx.annotation.Nullable
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.loaclmusic.PlayList
 
 interface IPlayback {
 

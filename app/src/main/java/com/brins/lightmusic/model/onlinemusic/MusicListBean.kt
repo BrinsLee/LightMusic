@@ -1,13 +1,13 @@
 
 
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.onlinemusic
 
 import android.os.Parcel
 import android.os.Parcelable
 /*
 * 在线歌单
  */
-class MusicList : Parcelable {
+class MusicListBean : Parcelable {
     var name: String = ""
 
     var id: String = ""
@@ -69,9 +69,10 @@ class MusicList : Parcelable {
 
     companion object {
         @JvmField
-        val CREATOR: Parcelable.Creator<MusicList> = object : Parcelable.Creator<MusicList> {
-            override fun createFromParcel(source: Parcel): MusicList = MusicList(source)
-            override fun newArray(size: Int): Array<MusicList?> = arrayOfNulls(size)
+        val CREATOR: Parcelable.Creator<MusicListBean> = object : Parcelable.Creator<MusicListBean> {
+            override fun createFromParcel(source: Parcel): MusicListBean =
+                MusicListBean(source)
+            override fun newArray(size: Int): Array<MusicListBean?> = arrayOfNulls(size)
         }
     }
 }

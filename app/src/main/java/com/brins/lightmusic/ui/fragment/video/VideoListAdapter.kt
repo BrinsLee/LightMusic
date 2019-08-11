@@ -2,7 +2,6 @@ package com.brins.lightmusic.ui.fragment.video
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -15,7 +14,6 @@ import cn.jzvd.Jzvd
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
-import com.brins.lightmusic.player.VideoStateListener
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.customview.JZVideoPalyerView
 import com.bumptech.glide.Glide
@@ -40,8 +38,8 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         if (MvData.isNotEmpty()) {
-            val mv = MvData[position].data
-            val metaData = MvData[position].metaData
+            val mv = MvData[position].dataBean
+            val metaData = MvData[position].metaDataBean
             holder.title.text = mv.name
             holder.nickName.text = mv.artistName
             holder.watchCount.text = if (mv.playCount > 1000) "${mv.playCount / 1000}万播放" else {

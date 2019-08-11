@@ -24,13 +24,13 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
             .subscribe({ t ->
-                if (t.datas != null && t.datas!!.isNotEmpty()) {
-                    val num = t.datas!!.size
-                    t.datas!!.forEach {
+                if (t.dataBeans != null && t.dataBeans!!.isNotEmpty()) {
+                    val num = t.dataBeans!!.size
+                    t.dataBeans!!.forEach {
                         loadUrl(it.id,
                             Consumer { t ->
-                                if (t.data != null) {
-                                    mvList.add(Mv(it, t.data!!))
+                                if (t.dataBean != null) {
+                                    mvList.add(Mv(it, t.dataBean!!))
                                     if (mvList.size == num) {
                                         mView?.onVideoLoad(mvList)
                                         mView?.hideLoading()

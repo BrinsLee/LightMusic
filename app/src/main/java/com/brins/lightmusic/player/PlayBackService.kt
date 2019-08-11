@@ -1,16 +1,11 @@
 package com.brins.lightmusic.player
 
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.media.AudioManager
 import android.os.Binder
 import android.os.IBinder
-import android.view.KeyEvent
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.loaclmusic.PlayList
 
 class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 

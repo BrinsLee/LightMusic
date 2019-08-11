@@ -7,7 +7,8 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.ApiHelper.getMusicUrl
 import com.brins.lightmusic.common.AsyncTransformer
-import com.brins.lightmusic.model.*
+import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.onlinemusic.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
@@ -20,22 +21,22 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     @RequiresApi(Build.VERSION_CODES.N)
     override fun loadArtist() {
         ApiHelper.getArtist(12)
-            .compose(AsyncTransformer<Data>())
+            .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe({ t ->
-                if (t.artists != null && t.artists?.size != 0) {
-                    mView!!.onArtistLoad(t.artists as MutableList<Artist>)
+                if (t.artistBeans != null && t.artistBeans?.size != 0) {
+                    mView!!.onArtistLoad(t.artistBeans as MutableList<ArtistBean>)
                 }
             }, { t -> Log.d("LoadError", t.message) })
     }
 
     override fun loadMusicList() {
         ApiHelper.getPlayList(12)
-            .compose(AsyncTransformer<Data>())
+            .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe { t ->
                 if (t.playlists != null && t.playlists!!.isNotEmpty()) {
-                    mView!!.onMusicListLoad(t.playlists as MutableList<MusicList>)
+                    mView!!.onMusicListLoad(t.playlists as MutableList<MusicListBean>)
                 }
                 mView?.hideLoading()
             }
@@ -44,7 +45,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     override fun loadMusicListDetail(id: String) {
         mView?.showLoading()
         ApiHelper.getPlayListDetail(id)
-            .compose(AsyncTransformer<MusicListDetail>())
+            .compose(AsyncTransformer<MusicListDetailResult>())
             .autoDisposable(provider)
             .subscribe { t ->
                 if (t.playlist != null) {
@@ -55,10 +56,10 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     }
 
     override fun loadMusicDetail(onlineMusic: OnlineMusic) {
-        var metaData: Songs
+        var metaData: MusicBean
         mView!!.showLoading()
         getMusicUrl(onlineMusic.id)
-            .compose(AsyncTransformer<Songs>())
+            .compose(AsyncTransformer<MusicBean>())
             .autoDisposable(provider)
             .subscribe({
                 metaData = it

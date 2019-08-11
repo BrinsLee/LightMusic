@@ -2,7 +2,7 @@ package com.brins.lightmusic.ui.fragment.localmusic
 
 import android.content.Context
 import androidx.loader.app.LoaderManager
-import com.brins.lightmusic.model.LocalMusic
+import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 

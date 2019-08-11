@@ -2,11 +2,10 @@ package com.brins.lightmusic.player
 
 import android.media.MediaPlayer
 import android.os.PowerManager
-import android.provider.MediaStore
 import android.util.Log
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.loaclmusic.PlayList
 import java.io.IOException
 import java.util.ArrayList
 
@@ -31,7 +30,8 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     private var mPlayer: MediaPlayer = MediaPlayer()
-    private var mPlayList: PlayList = PlayList()
+    private var mPlayList: PlayList =
+        PlayList()
     // Default size 2: for service and UI
     private val mCallbacks = ArrayList<IPlayback.Callback>(2)
 

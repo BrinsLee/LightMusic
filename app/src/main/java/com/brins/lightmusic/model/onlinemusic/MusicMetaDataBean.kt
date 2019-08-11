@@ -1,11 +1,11 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.onlinemusic
 
 import com.google.gson.annotations.SerializedName
 
 /*
 * 歌单中的歌曲信息
 * */
-class MusicMetaData {
+class MusicMetaDataBean {
 
     @SerializedName("type")
     var type : String = ""

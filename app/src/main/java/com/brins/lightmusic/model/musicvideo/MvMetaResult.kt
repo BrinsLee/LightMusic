@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 class MvMetaResult {
     @SerializedName("data")
-    var data: MvMetaData? = null
+    var dataBean: MvMetaDataBean? = null
 }

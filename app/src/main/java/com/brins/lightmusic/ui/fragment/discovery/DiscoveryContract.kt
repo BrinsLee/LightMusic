@@ -1,8 +1,10 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import com.brins.lightmusic.model.*
+import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
+import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
+import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
@@ -18,11 +20,11 @@ interface DiscoveryContract {
 
         fun handleError(error: Throwable)
 
-        fun onMusicListLoad(songs : MutableList<MusicList>)
+        fun onMusicListLoad(songs : MutableList<MusicListBean>)
 
-        fun onArtistLoad(artists : MutableList<Artist>)
+        fun onArtistLoad(artistBeans : MutableList<ArtistBean>)
 
-        fun onDetailLoad(detail : PlayListDetail)
+        fun onDetailLoad(detailBean : MusicListDetailBean)
 
         fun onMusicDetail(onlineMusic: OnlineMusic)
     }

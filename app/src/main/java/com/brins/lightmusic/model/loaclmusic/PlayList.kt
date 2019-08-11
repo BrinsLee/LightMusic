@@ -1,4 +1,4 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.loaclmusic
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -7,9 +7,9 @@ import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.player.PlayMode
 import com.litesuits.orm.db.annotation.*
-import com.litesuits.orm.db.enums.AssignType
 import com.litesuits.orm.db.enums.Relation
 import java.util.*
 
@@ -69,7 +69,7 @@ class PlayList() : Parcelable {
         favorite = parcel.readByte() != 0.toByte()
         playingIndex = parcel.readInt()
         numOfSongs = parcel.readInt()
-        songs = parcel.createTypedArrayList(Music.CREATOR)
+        songs = parcel.createTypedArrayList(Music)
         playingIndex = parcel.readInt()
         val tmpPlayMode = parcel.readInt()
         playMode = if (tmpPlayMode == -1) null else PlayMode.values()[tmpPlayMode]

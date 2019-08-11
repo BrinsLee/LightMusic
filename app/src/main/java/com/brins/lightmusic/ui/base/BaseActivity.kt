@@ -6,8 +6,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

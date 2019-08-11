@@ -1,6 +1,6 @@
 package com.brins.lightmusic.model.musicvideo
 
-class MvMetaData {
+class MvMetaDataBean {
 
     var id : String = ""
     var url : String = ""

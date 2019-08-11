@@ -2,7 +2,7 @@ package com.brins.lightmusic.model.musicvideo
 
 import com.google.gson.annotations.SerializedName
 
-class LastestMvData {
+class LastestMvDataBean {
 
     @SerializedName("id")
     var id : String =  ""

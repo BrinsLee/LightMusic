@@ -1,5 +1,7 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.onlinemusic
 
+import com.brins.lightmusic.model.artist.Album
+import com.brins.lightmusic.model.artist.ArtistBean
 import com.google.gson.annotations.SerializedName
 
 class OnlineMusic(
@@ -8,7 +10,7 @@ class OnlineMusic(
     @SerializedName("name")
     var nameMusic: String = "",
     @SerializedName("ar")
-    var artists: List<Artist>? = null,
+    var artistBeans: List<ArtistBean>? = null,
     @SerializedName("al")
     var al: Album? = null,
     @SerializedName("dt")

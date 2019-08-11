@@ -11,7 +11,6 @@ import android.graphics.drawable.TransitionDrawable
 import android.os.*
 import android.util.Log
 import android.view.KeyEvent
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -22,7 +21,7 @@ import androidx.viewpager.widget.ViewPager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.PlayList
+import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode

@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class AppConfig {
     public static boolean ISFIRST = true;
-    public static final String BASEURL = "https://c7506302.ngrok.io";
+    public static final String BASEURL = "http://139.155.145.61/";
 
 
     /**
@@ -25,6 +25,15 @@ public class AppConfig {
      */
     public static final String ARTISTS ="/top/artists";
 
+    /**
+     * 歌手音乐
+     */
+    public static final String ARTISTS_MUSIC = "artists";
+
+    /**
+     * 歌手MV
+     */
+    public static final String ARTISTS_MV = "artists";
     /**
      *音乐链接
      */

@@ -1,11 +1,11 @@
-package com.brins.lightmusic.model
+package com.brins.lightmusic.model.artist
 
 import android.os.Parcel
 import android.os.Parcelable
 import org.json.JSONObject
 
 
-class Artist : Parcelable {
+class ArtistBean : Parcelable {
 
     /*
     * 歌手专辑数量
@@ -66,9 +66,10 @@ class Artist : Parcelable {
 
     companion object {
         @JvmField
-        val CREATOR: Parcelable.Creator<Artist> = object : Parcelable.Creator<Artist> {
-            override fun createFromParcel(source: Parcel): Artist = Artist(source)
-            override fun newArray(size: Int): Array<Artist?> = arrayOfNulls(size)
+        val CREATOR: Parcelable.Creator<ArtistBean> = object : Parcelable.Creator<ArtistBean> {
+            override fun createFromParcel(source: Parcel): ArtistBean =
+                ArtistBean(source)
+            override fun newArray(size: Int): Array<ArtistBean?> = arrayOfNulls(size)
         }
     }
 }
