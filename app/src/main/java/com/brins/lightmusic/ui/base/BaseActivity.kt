@@ -79,21 +79,4 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun subscribeEvents(): Disposable? {
         return null
     }
-
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-
-        when (keyCode) {
-            KeyEvent.KEYCODE_BACK -> {
-                var second = System.currentTimeMillis()
-                if (second - firstTime > 2000) {
-                    Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show()
-                    firstTime = second
-                    return true
-                }else {
-                    System.exit(0)
-                }
-            }
-        }
-        return super.onKeyUp(keyCode, event)
-    }
 }

@@ -85,13 +85,14 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
             mPlayer!!.pause()
             ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
         }
+        if (!::playList.isInitialized){
+            playList = PlayList()
+        }
         val index = playList.getPlayingIndex() + 1
         val wtf = WeakReference<OnlineMusic>(onLineMusicEvent.music)
         val music = WeakReference<Music>(Music(wtf.get()!!.nameMusic, wtf.get()!!.nameMusic, wtf.get()!!.artistBeans!![0].name, wtf.get()!!.al!!.name
             ,wtf.get()!!.al!!.picUrl , wtf.get()!!.fileUrl, wtf.get()!!.dt ))
-        if (!::playList.isInitialized){
-            playList = PlayList()
-        }
+
         playList.addSong(music.get(), index)
         playOnlineSong(playList, index)
     }

@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.view.KeyEvent
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.R
@@ -13,6 +15,7 @@ import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
+import com.brins.lightmusic.ui.fragment.friends.FriendsFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
@@ -54,7 +57,7 @@ class MainActivity : BaseActivity() {
         list.add(LocalMusicFragment())
         list.add(DiscoveryFragment())
         list.add(VideoFragment())
-        list.add(VideoFragment())
+        list.add(FriendsFragment())
         view_pager.adapter = adapter
         tab_layout.setupWithViewPager(view_pager)
 
@@ -98,4 +101,21 @@ class MainActivity : BaseActivity() {
          return transaction
 
      }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+
+        when (keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                var second = System.currentTimeMillis()
+                if (second - firstTime > 2000) {
+                    Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show()
+                    firstTime = second
+                    return true
+                }else {
+                    System.exit(0)
+                }
+            }
+        }
+        return super.onKeyUp(keyCode, event)
+    }
 }

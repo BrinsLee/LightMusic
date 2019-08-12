@@ -106,6 +106,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
 
+
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         setSupportActionBar(toolBar)
@@ -456,4 +457,5 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         }
         return super.onKeyDown(keyCode, event)
     }
+
 }
