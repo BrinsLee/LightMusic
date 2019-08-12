@@ -3,7 +3,6 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.KeyEvent
 import android.widget.TextView
 import android.widget.Toast
@@ -14,7 +13,6 @@ import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
-import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
 import com.brins.lightmusic.ui.fragment.friends.FriendsFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
@@ -27,7 +25,7 @@ class MainActivity : BaseActivity() {
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
     var currentFragment : BaseFragment? = null
-    var currentMusicListId : String = "";
+    var currentMusicListId : String = ""
 
     companion object {
         fun startThisActivity(activity: AppCompatActivity) {

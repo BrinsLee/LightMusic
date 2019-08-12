@@ -115,7 +115,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
             override fun onItemClick(view: View, position: Int) {
                 val id = musicListBean[position].id
                 try {
-                    (activity as MainActivity).switchFragment(id, MusicDetailFragment.Instance)
+                    (activity as MainActivity).switchFragment(id, MusicDetailFragment())
                         .addToBackStack(TAG)
                         .commit()
                 } catch (e: Exception) {

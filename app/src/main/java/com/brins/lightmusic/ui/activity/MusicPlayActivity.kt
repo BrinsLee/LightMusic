@@ -117,21 +117,28 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         setPlayView()
     }
 
+
+
     fun setPlayView() {
         current = mPlayList.getCurrentSong()
         musics = mPlayList.getSongs()
-        if (mImageViewList.size == 0) {
+        if (mImageViewList.size == 0 || mImageViewList.size != musics?.size) {
+            mImageViewList.clear()
             for (i in 0 until mPlayList.getNumOfSongs()) {
                 val imageView = RoundImageView(applicationContext)
-                imageView.setImageBitmap(string2Bitmap(musics!![i].cover!!))
+                var bitmap = musics!![i].bitmapCover
+                if (bitmap == null){
+                    bitmap = string2Bitmap(musics!![i].cover!!)
+                }
+                imageView.setImageBitmap(bitmap)
                 imageView.layoutParams = ViewGroup.LayoutParams(100, 100)
                 imageView.scaleType = ImageView.ScaleType.CENTER
                 mImageViewList.add(imageView)
             }
         }
-
+        ivCover.currentItem = mPlayList.getPlayingIndex()
+        pageAdapter!!.notifyDataSetChanged()
         if (current != null) {
-            initView()
             setListener()
         }
     }
@@ -345,6 +352,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
                     container.removeView(ob as View)
                 }
 
+
                 override fun getCount(): Int {
                     return mImageViewList.size
                 }
@@ -360,7 +368,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     override fun onCoverLoad(cover: Bitmap?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun getLifeActivity(): AppCompatActivity {
@@ -393,7 +401,10 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             mHandler.removeCallbacks(mProgressCallback)
             return
         }
-        cover = string2Bitmap(song.cover!!)
+        cover = song.bitmapCover
+        if (cover == null){
+            cover = string2Bitmap(song.cover!!)
+        }
         initViewPager()
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
         musicTitle.text = song.name

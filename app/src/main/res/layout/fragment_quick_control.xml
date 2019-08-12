@@ -22,13 +22,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="@dimen/common_margin_10"/>
 
-    <TextView
+    <com.brins.lightmusic.ui.customview.FontTextView
             android:id="@+id/tvPlaybarTitle"
             style="@style/AppTheme.Text"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/common_margin_100"
             android:layout_height="wrap_content"
-            android:maxLength="13"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             app:layout_constraintStart_toEndOf="@id/ivPlaybarCover"
             android:layout_marginStart="@dimen/common_margin_10"

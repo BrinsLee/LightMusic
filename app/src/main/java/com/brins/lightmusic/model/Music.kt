@@ -1,13 +1,14 @@
 package com.brins.lightmusic.model
 
+import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 
 open class Music(
     var fileName: String, @Transient var name: String, var singer: String, var album: String, var cover: String?, var fileUrl: String = ""
     , var duration: Int
-) :
-    Parcelable {
+) : Parcelable {
+    var bitmapCover : Bitmap? = null
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),

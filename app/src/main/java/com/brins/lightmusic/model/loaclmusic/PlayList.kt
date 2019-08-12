@@ -12,6 +12,7 @@ import com.brins.lightmusic.player.PlayMode
 import com.litesuits.orm.db.annotation.*
 import com.litesuits.orm.db.enums.Relation
 import java.util.*
+import kotlin.collections.LinkedHashSet
 
 /*
 * 本地歌单
@@ -123,6 +124,10 @@ class PlayList() : Parcelable {
     fun addSong(@Nullable songs: List<Music>?, index: Int = 0) {
         if (songs == null || songs.isEmpty()) return
         this.songs.addAll(index, songs)
+        val tempSet = LinkedHashSet<Music>(this.songs.size)
+        tempSet.addAll(songs)
+        this.songs.clear()
+        this.songs.addAll(tempSet)
         this.numOfSongs = this.songs.size
     }
 

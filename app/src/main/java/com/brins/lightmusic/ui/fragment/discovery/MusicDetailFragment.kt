@@ -34,13 +34,6 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         return R.layout.fragment_music_detail
     }
 
-    companion object {
-
-        val Instance = SingletonHolder.holder
-        private object SingletonHolder {
-            val holder = MusicDetailFragment()
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

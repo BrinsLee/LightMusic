@@ -97,9 +97,19 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         playOnlineSong(playList, index)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         MusicPlayerPresenter.instance.setContext(activity!!).setView(this).subscribe()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (mPlayer != null) {
+            ivPlayOrPause.setImageResource(if (mPlayer!!.isPlaying()) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+            onPlayStatusChanged(mPlayer!!.isPlaying())
+
+        }
         setListener()
     }
 
@@ -110,12 +120,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         playBarLayout.setOnClickListener(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (mPlayer != null) {
-            ivPlayOrPause.setImageResource(if (mPlayer!!.isPlaying()) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
-        }
-    }
 
     override fun onDestroyView() {
         if (::mPresenter.isInitialized) {
@@ -221,6 +225,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onCoverLoad(cover: Bitmap?) {
         playList.getCurrentSong()!!.cover = getStringCover(cover)
+        playList.getCurrentSong()!!.bitmapCover = cover
         onSongUpdated(playList.getCurrentSong())
     }
 
@@ -265,7 +270,9 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
         tvPlaybarTitle.text = song.name
         tvPlaybarArtist.text = song.singer
-        ivPlaybarCover.setImageBitmap(string2Bitmap(song.cover!!))
+        val bitmap = string2Bitmap(song.cover!!)
+        song.bitmapCover = bitmap
+        ivPlaybarCover.setImageBitmap(bitmap)
         ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
         ivPlaybarCover.startRotateAnimation()
 
