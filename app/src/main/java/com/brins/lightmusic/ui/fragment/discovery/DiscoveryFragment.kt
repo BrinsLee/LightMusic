@@ -20,7 +20,6 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
-import java.lang.Exception
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
 
@@ -116,9 +115,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
             override fun onItemClick(view: View, position: Int) {
                 val id = musicListBean[position].id
                 try {
-                     (activity as MainActivity).switchFragment(id,MusicDetailFragment.Instance)
-                         .addToBackStack(TAG)
-                         .commit()
+                    (activity as MainActivity).switchFragment(id, MusicDetailFragment.Instance)
+                        .addToBackStack(TAG)
+                        .commit()
                 } catch (e: Exception) {
                     Log.e(TAG, e.message)
                 }

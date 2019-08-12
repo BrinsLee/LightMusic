@@ -7,16 +7,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.activity.MainActivity
-import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_music_detail.*
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayOnLineMusicEvent
+import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
@@ -24,14 +22,13 @@ import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 
 
-class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener {
+class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener , View.OnClickListener {
 
     private val mPresenter: DiscoveryContract.Presenter by lazy { DiscoverPresent(this) }
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
     lateinit var mAdapter: MusicDetailAdapter
-    private var playList: PlayList =
-        PlayList()
+    private var playList: PlayList = PlayList()
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_music_detail
@@ -47,15 +44,11 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
-            if (p1 == 0) {
-                playAll.show()
-            } else {
-                playAll.hide()
-            }
-        })
         mAdapter = MusicDetailAdapter(context!!, musicDetails)
         mAdapter.setOnItemClickListener(this)
+        close.setOnClickListener(this)
+        nestScrollView.fadingView = toolbar
+        nestScrollView.fadingHeightView = coverMusicList
         id = (activity as MainActivity).currentMusicListId
         mPresenter.loadMusicListDetail(id)
         musicRecycler.adapter = mAdapter
@@ -71,6 +64,12 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun onItemClick(position: Int) {
         mPresenter.loadMusicDetail(musicDetails[position])
     }
+    override fun onClick(v: View) {
+        when(v.id){
+            R.id.close -> activity!!.onBackPressed()
+        }
+    }
+
 
 
     //MVP VIEW
@@ -103,7 +102,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         Glide.with(context!!)
             .load(detailBean.coverImgUrl)
             .into(coverMusicList)
-        collapsing.title = detailBean.name
+        toolbar.title = detailBean.name
         musicDetails.addAll(detailBean.tracks!!)
         mAdapter.setData(musicDetails)
         mAdapter.notifyDataSetChanged()
