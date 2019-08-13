@@ -32,7 +32,7 @@ fun loadingCover(mediaUri: String): String {
     val mediaMetadataRetriever = MediaMetadataRetriever()
     mediaMetadataRetriever.setDataSource(mediaUri)
     val picture = mediaMetadataRetriever.embeddedPicture
-    return if (picture == null)getStringCover() else Hex.toHexString(picture)
+    return if (picture == null) getStringCover() else Hex.toHexString(picture)
 }
 
 fun loadingOnlineCover(url : String): Bitmap{

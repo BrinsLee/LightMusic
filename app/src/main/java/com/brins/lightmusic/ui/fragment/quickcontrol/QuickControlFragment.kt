@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
 import android.graphics.Bitmap
-import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R

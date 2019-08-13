@@ -17,6 +17,8 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.brins.lib_common.utils.FastBlurUtil
+import com.brins.lib_common.utils.HandlerUtil
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
@@ -29,7 +31,8 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
-import com.brins.lightmusic.utils.*
+import com.brins.lightmusic.utils.formatDuration
+import com.brins.lightmusic.utils.string2Bitmap
 import com.bytedance.sdk.openadsdk.core.widget.RoundImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*

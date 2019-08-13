@@ -1,4 +1,4 @@
-package com.brins.lightmusic.utils;
+package com.brins.lib_common.utils;
 
 import android.content.Context;
 import android.os.Handler;

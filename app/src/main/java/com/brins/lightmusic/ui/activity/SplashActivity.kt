@@ -4,19 +4,14 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Message
-import android.util.Log
-import android.view.View
 import com.brins.lightmusic.R
 import com.brins.lightmusic.manager.TTAdManagerHolder
 import com.brins.lightmusic.ui.base.BaseActivity
-import com.brins.lightmusic.utils.WeakHandler
-import com.bytedance.sdk.openadsdk.AdSlot
+import com.brins.lib_common.utils.WeakHandler
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTSplashAd
-import kotlinx.android.synthetic.main.activity_splash.*
 
 
-class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
+class SplashActivity : BaseActivity() , com.brins.lib_common.utils.WeakHandler.IHandler {
 
     private val mTTAdNative: TTAdNative by lazy { TTAdManagerHolder.get().createAdNative(this) }
     private var mForceGoMain: Boolean = false
@@ -24,7 +19,7 @@ class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
     private val MSG_GO_MAIN = 1
     //开屏广告是否已经加载
     private var mHasLoaded: Boolean = false
-    private val mHandler = WeakHandler(this)
+    private val mHandler = com.brins.lib_common.utils.WeakHandler(this)
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_splash
@@ -37,6 +32,7 @@ class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
 
     }
 
+/*
     private fun loadSplashAd() {
         val adSlot = AdSlot.Builder()
             .setCodeId("801121648")
@@ -88,6 +84,7 @@ class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
 
         })
     }
+*/
 
     override fun onResume() {
         if (mForceGoMain) {

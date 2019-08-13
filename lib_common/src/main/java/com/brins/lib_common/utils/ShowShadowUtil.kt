@@ -1,4 +1,4 @@
-package com.brins.lightmusic.utils
+package com.brins.lib_common.utils
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -22,7 +22,7 @@ class ShowShadowUtil(
             offsetX: Float,
             offsetY: Float
         ) {
-            val drawable = ShowShadowUtil.Companion.Builder()
+            val drawable = Builder()
                 .setShapeRadius(shapeRadius)
                 .setShadowColor(shadowColor)
                 .setShadowRadius(shadowRadius)
@@ -42,7 +42,7 @@ class ShowShadowUtil(
             offsetX: Float,
             offsetY: Float
         ) {
-            val drawable = ShowShadowUtil.Companion.Builder()
+            val drawable = Builder()
                 .setBgColor(bgColor)
                 .setShapeRadius(shapeRadius)
                 .setShadowColor(shadowColor)
@@ -64,7 +64,7 @@ class ShowShadowUtil(
             offsetX: Float,
             offsetY: Float
         ) {
-            val drawable = ShowShadowUtil.Companion.Builder()
+            val drawable = Builder()
                 .setShape(shape)
                 .setBgColor(bgColor)
                 .setShapeRadius(shapeRadius)
@@ -86,7 +86,7 @@ class ShowShadowUtil(
             offsetX: Float,
             offsetY: Float
         ) {
-            val drawable = ShowShadowUtil.Companion.Builder()
+            val drawable = Builder()
                 .setBgColor(bgColor)
                 .setShapeRadius(shapeRadius)
                 .setShadowColor(shadowColor)
@@ -156,7 +156,15 @@ class ShowShadowUtil(
             }
 
             fun builder(): ShowShadowUtil {
-                return ShowShadowUtil(mShape, mBgColor, mShapeRadius, mShadowColor, mShadowRadius, mOffsetX, mOffsetY)
+                return ShowShadowUtil(
+                    mShape,
+                    mBgColor,
+                    mShapeRadius,
+                    mShadowColor,
+                    mShadowRadius,
+                    mOffsetX,
+                    mOffsetY
+                )
             }
         }
     }

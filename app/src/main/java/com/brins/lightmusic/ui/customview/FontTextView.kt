@@ -7,7 +7,6 @@ import android.graphics.Shader
 import androidx.appcompat.widget.AppCompatTextView
 import com.brins.lightmusic.R
 import com.brins.lightmusic.utils.getTypeface
-import android.util.AttributeSet as AttributeSet1
 
 class FontTextView @JvmOverloads constructor(
     context: Context,

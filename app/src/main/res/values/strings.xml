@@ -16,4 +16,5 @@
     <string name="bad_network">网络状态不良</string>
     <string name="parse_error">数据解析错误</string>
     <string name="unknown_error">未知错误</string>
+    <string name="transitions_name">transitionTitle</string>
 </resources>
