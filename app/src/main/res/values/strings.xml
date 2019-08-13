@@ -11,4 +11,9 @@
     <string name="subscribe">关注</string>
     <string name="author">作者</string>
     <string name="exit">再按一次退出程序</string>
+    <string name="connect_error">网络连接失败，请重试</string>
+    <string name="connect_timeout">网络连接超时，请重试</string>
+    <string name="bad_network">网络状态不良</string>
+    <string name="parse_error">数据解析错误</string>
+    <string name="unknown_error">未知错误</string>
 </resources>

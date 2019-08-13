@@ -1,9 +1,9 @@
 package com.brins.lightmusic.ui.fragment.video
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
+import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
@@ -23,23 +23,25 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
         ApiHelper.getLatestMvData()
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
-            .subscribe({ t ->
-                if (t.dataBeans != null && t.dataBeans!!.isNotEmpty()) {
-                    val num = t.dataBeans!!.size
-                    t.dataBeans!!.forEach {
-                        loadUrl(it.id,
-                            Consumer { t ->
-                                if (t.dataBean != null) {
-                                    mvList.add(Mv(it, t.dataBean!!))
-                                    if (mvList.size == num) {
-                                        mView?.onVideoLoad(mvList)
-                                        mView?.hideLoading()
+            .subscribe(object : DefaultObserver<MvResult>() {
+                override fun onSuccess(response: MvResult) {
+                    if (response.dataBeans != null && response.dataBeans!!.isNotEmpty()) {
+                        val num = response.dataBeans!!.size
+                        response.dataBeans!!.forEach {
+                            loadUrl(it.id,
+                                Consumer { t ->
+                                    if (t.dataBean != null) {
+                                        mvList.add(Mv(it, t.dataBean!!))
+                                        if (mvList.size == num) {
+                                            mView?.onVideoLoad(mvList)
+                                            mView?.hideLoading()
+                                        }
                                     }
-                                }
-                            })
+                                })
+                        }
                     }
                 }
-            }, { t -> Log.d("error", t.message) })
+            })
     }
 
     @SuppressLint("CheckResult")

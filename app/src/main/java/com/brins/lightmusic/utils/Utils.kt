@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.media.MediaMetadataRetriever
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.collection.SimpleArrayMap
@@ -16,6 +17,7 @@ import com.brins.lightmusic.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.spongycastle.util.encoders.Hex
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -153,3 +155,18 @@ fun getTypeface(context: Context, fontType: Int): Typeface? {
     }
     return typeface
 }
+
+fun show(str : String){
+    if (str.isNotEmpty()){
+        AndroidSchedulers.mainThread().scheduleDirect { Toast.makeText(LightMusicApplication.getLightApplication(),str,Toast.LENGTH_SHORT).show() }
+    }
+}
+
+fun show(strId: Int) {
+    if (strId != 0) {
+        // 预防从非主线程中调用崩溃，这里直接切换到主线程中执行
+        AndroidSchedulers.mainThread()
+            .scheduleDirect { Toast.makeText(LightMusicApplication.getLightApplication(), strId, Toast.LENGTH_SHORT).show() }
+    }
+}
+

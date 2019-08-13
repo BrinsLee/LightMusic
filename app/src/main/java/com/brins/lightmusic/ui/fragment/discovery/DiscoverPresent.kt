@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.ApiHelper.getMusicUrl
+import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.onlinemusic.*
@@ -18,28 +19,37 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     val provider: AndroidLifecycleScopeProvider =
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
+    //    DefaultObserver
     @RequiresApi(Build.VERSION_CODES.N)
     override fun loadArtist() {
         ApiHelper.getArtist(12)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
-            .subscribe({ t ->
-                if (t.artistBeans != null && t.artistBeans?.size != 0) {
-                    mView!!.onArtistLoad(t.artistBeans as MutableList<ArtistBean>)
+            .subscribe(object : DefaultObserver<MusicListResult>() {
+                override fun onSuccess(response: MusicListResult) {
+                    if (response.artistBeans != null && response.artistBeans?.size != 0) {
+                        mView!!.onArtistLoad(response.artistBeans as MutableList<ArtistBean>)
+                    }else{
+                        onFail("网络连接失败")
+                        mView?.hideLoading()
+                    }
                 }
-            }, { t -> Log.d("LoadError", t.message) })
+            })
     }
 
     override fun loadMusicList() {
         ApiHelper.getPlayList(12)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
-            .subscribe { t ->
-                if (t.playlists != null && t.playlists!!.isNotEmpty()) {
-                    mView!!.onMusicListLoad(t.playlists as MutableList<MusicListBean>)
+            .subscribe(object : DefaultObserver<MusicListResult>() {
+                override fun onSuccess(response: MusicListResult) {
+                    if (response.playlists != null && response.playlists!!.isNotEmpty()) {
+                        mView!!.onMusicListLoad(response.playlists as MutableList<MusicListBean>)
+                    }
+                    mView?.hideLoading()
                 }
-                mView?.hideLoading()
-            }
+
+            })
     }
 
     override fun loadMusicListDetail(id: String) {
@@ -47,12 +57,15 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
         ApiHelper.getPlayListDetail(id)
             .compose(AsyncTransformer<MusicListDetailResult>())
             .autoDisposable(provider)
-            .subscribe { t ->
-                if (t.playlist != null) {
-                    mView!!.onDetailLoad(t.playlist!!)
-                    mView!!.hideLoading()
+            .subscribe(object : DefaultObserver<MusicListDetailResult>() {
+                override fun onSuccess(response: MusicListDetailResult) {
+                    if (response.playlist != null) {
+                        mView!!.onDetailLoad(response.playlist!!)
+                        mView!!.hideLoading()
+                    }
                 }
-            }
+
+            })
     }
 
     override fun loadMusicDetail(onlineMusic: OnlineMusic) {
@@ -61,14 +74,15 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
         getMusicUrl(onlineMusic.id)
             .compose(AsyncTransformer<MusicBean>())
             .autoDisposable(provider)
-            .subscribe({
-                metaData = it
-                if (metaData.data != null) {
-                    onlineMusic.fileUrl = metaData.data!![0].url
-                    mView!!.onMusicDetail(onlineMusic)
+            .subscribe(object : DefaultObserver<MusicBean>() {
+                override fun onSuccess(response: MusicBean) {
+                    metaData = response
+                    if (metaData.data != null) {
+                        onlineMusic.fileUrl = metaData.data!![0].url
+                        mView!!.onMusicDetail(onlineMusic)
+                    }
                 }
-            }, {
-                it.printStackTrace()
+
             })
     }
 
