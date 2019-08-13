@@ -9,14 +9,13 @@
         android:fitsSystemWindows="true"
         android:background="@color/background">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.brins.lightmusic.ui.customview.CommonHeaderView
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            app:chv_title=""
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@android:color/transparent"
-            app:subtitleTextAppearance="@style/netease_toolbar_subtitle"
-            app:titleTextAppearance="@style/netease_toolbar_title"/>
+            android:background="@android:color/transparent"/>
 
     <!--<TextView
             android:layout_width="wrap_content"

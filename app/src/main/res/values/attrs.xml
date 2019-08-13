@@ -29,4 +29,9 @@
     <declare-styleable name="RoundConstraintLayout">
         <attr name="round_corner" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="CommonHeaderView">
+        <attr name="chv_title" format="string" />
+        <attr name="chv_back" format="boolean"/>
+    </declare-styleable>
 </resources>

@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.*
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -26,6 +25,7 @@ import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
@@ -109,8 +109,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        setSupportActionBar(toolBar)
-        supportActionBar!!.title = ""
         MusicPlayerPresenter.instance.setContext(this).setView(this).subscribe()
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
         ivCover.setPageTransformer(false, CustPagerTransformer())
@@ -188,6 +186,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     //click event
 
     fun setListener() {
+        toolBar.setOnBackClickListener(object : CommonHeaderView.OnBackClickListener{
+            override fun onBackClick(view: View) {
+                MainActivity.startThisActivity(this@MusicPlayActivity)
+            }
+
+        })
         playOrPause.setOnClickListener(this)
         preSong.setOnClickListener(this)
         nextSong.setOnClickListener(this)
@@ -461,12 +465,4 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
         }
     }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        when(keyCode){
-            KeyEvent.KEYCODE_BACK -> MainActivity.startThisActivity(this)
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
 }

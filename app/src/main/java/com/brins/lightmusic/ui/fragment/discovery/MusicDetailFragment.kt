@@ -20,9 +20,10 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
+import com.brins.lightmusic.ui.customview.CommonHeaderView
 
 
-class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener , View.OnClickListener {
+class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener , CommonHeaderView.OnBackClickListener {
 
     private val mPresenter: DiscoveryContract.Presenter by lazy { DiscoverPresent(this) }
     var id: String = ""
@@ -39,7 +40,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         super.onViewCreated(view, savedInstanceState)
         mAdapter = MusicDetailAdapter(context!!, musicDetails)
         mAdapter.setOnItemClickListener(this)
-        close.setOnClickListener(this)
+        toolbar.setOnBackClickListener(this)
         nestScrollView.fadingView = toolbar
         nestScrollView.fadingHeightView = coverMusicList
         id = (activity as MainActivity).currentMusicListId
@@ -57,10 +58,9 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun onItemClick(position: Int) {
         mPresenter.loadMusicDetail(musicDetails[position])
     }
-    override fun onClick(v: View) {
-        when(v.id){
-            R.id.close -> activity!!.onBackPressed()
-        }
+
+    override fun onBackClick(view: View) {
+        (activity as MainActivity).onBackPressed()
     }
 
 
