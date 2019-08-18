@@ -122,6 +122,10 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
         super.onDestroy()
     }
 
+    override fun stop() {
+        mPlayer.stop()
+    }
+
     //Callback
     override fun onSwitchLast(last: Music) {
     }

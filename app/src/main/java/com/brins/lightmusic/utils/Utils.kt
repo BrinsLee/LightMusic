@@ -57,8 +57,8 @@ fun getStringCover(bitmap: Bitmap? = null): String {
 
 fun string2Bitmap(bitmapString: String): Bitmap? {
     var bitmap: Bitmap? = null
-    val b = Hex.decode(bitmapString)
     try {
+        val b = Hex.decode(bitmapString)
         bitmap = BitmapFactory.decodeByteArray(
             b, 0,
             b.size

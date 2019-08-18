@@ -31,22 +31,27 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
                         mView!!.onArtistLoad(response.artistBeans as MutableList<ArtistBean>)
                     }else{
                         onFail("网络连接失败")
-                        mView?.hideLoading()
                     }
+                }
+                override fun onFinish() {
+                    mView?.hideLoading()
                 }
             })
     }
 
-    override fun loadMusicList() {
-        ApiHelper.getPlayList(12)
+    override fun loadMusicList(top : Int) {
+        ApiHelper.getPlayList(top)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
+                override fun onFinish() {
+                    mView?.hideLoading()
+                }
+
                 override fun onSuccess(response: MusicListResult) {
                     if (response.playlists != null && response.playlists!!.isNotEmpty()) {
                         mView!!.onMusicListLoad(response.playlists as MutableList<MusicListBean>)
                     }
-                    mView?.hideLoading()
                 }
 
             })
@@ -58,10 +63,14 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
             .compose(AsyncTransformer<MusicListDetailResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListDetailResult>() {
+                override fun onFinish() {
+                    mView?.hideLoading()
+
+                }
+
                 override fun onSuccess(response: MusicListDetailResult) {
                     if (response.playlist != null) {
                         mView!!.onDetailLoad(response.playlist!!)
-                        mView!!.hideLoading()
                     }
                 }
 
@@ -75,6 +84,10 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
             .compose(AsyncTransformer<MusicBean>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicBean>() {
+                override fun onFinish() {
+                    mView?.hideLoading()
+                }
+
                 override fun onSuccess(response: MusicBean) {
                     metaData = response
                     if (metaData.data != null) {
@@ -90,6 +103,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     @RequiresApi(Build.VERSION_CODES.N)
     override fun subscribe() {
         mView?.showLoading()
+        mView?.setPresenter(this)
         loadArtist()
         loadMusicList()
     }

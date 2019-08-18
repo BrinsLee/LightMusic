@@ -31,7 +31,7 @@ interface DiscoveryContract {
     interface Presenter : BasePresenter{
         fun loadArtist()
 
-        fun loadMusicList()
+        fun loadMusicList(top : Int = 12)
 
         fun loadMusicListDetail(id : String)
 

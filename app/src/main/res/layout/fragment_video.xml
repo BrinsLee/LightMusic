@@ -1,10 +1,14 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/loadMore"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.brins.lightmusic.ui.fragment.video.VideoFragment">
 
 
+<FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <include
             android:id="@+id/loadingLayout"
             layout="@layout/loading_layout"/>
@@ -15,5 +19,6 @@
             android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
-
 </FrameLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -1,15 +1,18 @@
 package com.brins.lightmusic.player
 
+import android.content.Context.AUDIO_SERVICE
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.PowerManager
 import android.util.Log
+import androidx.core.content.getSystemService
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import java.io.IOException
 import java.util.ArrayList
 
-class Player : IPlayback, MediaPlayer.OnCompletionListener {
+class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioFocusChangeListener {
 
     companion object {
         private val TAG = "Player"
@@ -29,9 +32,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         }
     }
 
+    private val mAudioManager : AudioManager by lazy { LightMusicApplication.getLightApplication().getSystemService(AUDIO_SERVICE) as AudioManager }
     private var mPlayer: MediaPlayer = MediaPlayer()
-    private var mPlayList: PlayList =
-        PlayList()
+    private var mPlayList: PlayList = PlayList()
     // Default size 2: for service and UI
     private val mCallbacks = ArrayList<IPlayback.Callback>(2)
 
@@ -43,30 +46,56 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         mPlayer.setWakeMode(LightMusicApplication.getLightApplication(), PowerManager.PARTIAL_WAKE_LOCK)
     }
 
+    override fun onAudioFocusChange(focusChange: Int) {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT){
+            pause()
+        }else if (focusChange == AudioManager.AUDIOFOCUS_GAIN){
+            play()
+        }else if (focusChange == AudioManager.AUDIOFOCUS_LOSS){
+            mAudioManager.abandonAudioFocus(this)
+            stop()
+        }
+    }
+
+    private fun requestFocus(): Boolean {
+        // Request audio focus for playback
+        val result = mAudioManager.requestAudioFocus(
+            this,
+            // Use the music stream.
+            AudioManager.STREAM_MUSIC,
+            // Request permanent focus.
+            AudioManager.AUDIOFOCUS_GAIN
+        )
+        return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+    }
+
+
     override fun setPlayList(list: PlayList) {
         mPlayList = list
     }
 
     override fun play(): Boolean {
-        if (isPaused) {
-            mPlayer.start()
-            notifyPlayStatusChanged(true)
-            return true
-        }
-        if (mPlayList.prepare()) {
-            var music = mPlayList.getCurrentSong()
-            try {
-                mPlayer.reset()
-                mPlayer.setDataSource(music?.fileUrl)
-                mPlayer.prepare()
+        if (requestFocus()){
+            if (isPaused) {
                 mPlayer.start()
                 notifyPlayStatusChanged(true)
-            } catch (e: IOException) {
-                Log.e(TAG, "play: ", e)
-                notifyPlayStatusChanged(false)
-                return false
+                return true
             }
-            return true
+            if (mPlayList.prepare()) {
+                var music = mPlayList.getCurrentSong()
+                try {
+                    mPlayer.reset()
+                    mPlayer.setDataSource(music?.fileUrl)
+                    mPlayer.prepare()
+                    mPlayer.start()
+                    notifyPlayStatusChanged(true)
+                } catch (e: IOException) {
+                    Log.e(TAG, "play: ", e)
+                    notifyPlayStatusChanged(false)
+                    return false
+                }
+                return true
+            }
         }
         return false
     }
@@ -147,6 +176,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             return true
         }
         return false
+    }
+
+    override fun stop() {
+        mPlayer.stop()
     }
 
     override fun isPlaying(): Boolean {

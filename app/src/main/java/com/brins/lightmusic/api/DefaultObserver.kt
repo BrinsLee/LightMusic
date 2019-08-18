@@ -58,7 +58,7 @@ abstract class DefaultObserver<T> : Observer<T> {
         show(message)
     }
 
-    fun onFinish() {}
+    abstract fun onFinish()
 
     /**
      * 请求异常

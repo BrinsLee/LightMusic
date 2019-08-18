@@ -5,12 +5,6 @@
              android:layout_height="match_parent"
              tools:context=".ui.fragment.friends.FriendsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:text="别傻了，你没朋友。"/>
+
 
 </FrameLayout>

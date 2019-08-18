@@ -40,6 +40,8 @@ interface IPlayback {
 
     fun releasePlayer()
 
+    fun stop()
+
     interface Callback {
 
         fun onSwitchLast(@Nullable last: Music)

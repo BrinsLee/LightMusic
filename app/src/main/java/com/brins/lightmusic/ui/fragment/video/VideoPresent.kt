@@ -19,11 +19,15 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
     val mvList = mutableListOf<Mv>()
-    override fun loadVideo() {
-        ApiHelper.getLatestMvData()
+    override fun loadVideo(limit : Int) {
+        ApiHelper.getLatestMvData(limit)
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MvResult>() {
+                override fun onFinish() {
+                    mView?.hideLoading()
+                }
+
                 override fun onSuccess(response: MvResult) {
                     if (response.dataBeans != null && response.dataBeans!!.isNotEmpty()) {
                         val num = response.dataBeans!!.size
@@ -34,7 +38,6 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
                                         mvList.add(Mv(it, t.dataBean!!))
                                         if (mvList.size == num) {
                                             mView?.onVideoLoad(mvList)
-                                            mView?.hideLoading()
                                         }
                                     }
                                 })
@@ -53,6 +56,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
     override fun subscribe() {
         mView?.showLoading()
+        mView?.setPresenter(this)
         loadVideo()
     }
 

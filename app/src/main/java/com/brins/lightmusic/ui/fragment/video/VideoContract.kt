@@ -22,7 +22,7 @@ interface VideoContract {
     }
 
     interface Presenter : BasePresenter {
-        fun loadVideo()
+        fun loadVideo(limit : Int = 15)
 
         fun loadUrl(id : String,consumer: Consumer<MvMetaResult>)
     }

@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
@@ -20,13 +22,14 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
+import java.util.*
 
-class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
-
+class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLayout.OnRefreshListener {
+    private var isFresh: Boolean = false
+    var count: Int = 1
     lateinit var mPresenter: DiscoveryContract.Presenter
     lateinit var artistlist: MutableList<ArtistBean>
     lateinit var musicListBean: MutableList<MusicListBean>
-
 
     override fun onLazyLoad() {
         super.onLazyLoad()
@@ -36,6 +39,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getArtist() {
         DiscoverPresent(this@DiscoveryFragment).subscribe()
+        initLoadingMore()
     }
 
     //MVP View
@@ -66,6 +70,8 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
     }
 
     override fun onMusicListLoad(songs: MutableList<MusicListBean>) {
+        isFresh = false
+        songs.reverse()
         musicListBean = songs
         initMusicList()
     }
@@ -127,6 +133,24 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View {
         recycleMusiclist.adapter = adapter
         recycleMusiclist.layoutManager = LinearLayoutManager(context!!)
 
+    }
+
+    private fun initLoadingMore() {
+        loadingMore.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
+        loadingMore.setDistanceToTriggerSync(700)
+        loadingMore.setProgressBackgroundColorSchemeColor(Color.WHITE)
+        loadingMore.setSize(SwipeRefreshLayout.DEFAULT)
+        loadingMore.setOnRefreshListener(this)
+    }
+
+    override fun onRefresh() {
+        if (!isFresh) {
+            ++count
+            isFresh = true
+            loadingMore.isRefreshing = false
+            showLoading()
+            mPresenter.loadMusicList(count * 12)
+        }
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
