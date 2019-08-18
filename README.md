@@ -2,6 +2,16 @@
 Light Music （轻籁)
 
 <p align="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_download.png" alt="Sample"  width="200" height="200">
+	<p align="left">
+		<em>app下载：https://www.lanzous.com/i5n288b
+</em>
+	</p>
+</p>
+<br>
+<br>
+
+<p align="left">
 	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_main.jpg" alt="Sample"  width="400" height="800">
 	<p align="left">
 		<em>主界面</em>
