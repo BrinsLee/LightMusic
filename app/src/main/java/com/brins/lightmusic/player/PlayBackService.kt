@@ -16,6 +16,7 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
         private val ACTION_PLAY_NEXT = "com.brins.lightmusic.ACTION.PLAY_NEXT"
         private val ACTION_STOP_SERVICE = "com.brins.lightmusic.ACTION.STOP_SERVICE"
         private val NOTIFICATION_ID = 1
+        var mIsServiceBound: Boolean = false
     }
 
     private val mPlayer: Player by lazy { Player.getInstance() }
@@ -34,6 +35,7 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun onCreate() {
         super.onCreate()
+        mIsServiceBound = true
         MediaSessionManager(this)
         mPlayer.registerCallback(this)
     }

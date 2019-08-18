@@ -174,8 +174,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
             isPaused = true
             notifyPlayStatusChanged(false)
             return true
+        }else{
+            play()
+            return false
         }
-        return false
     }
 
     override fun stop() {

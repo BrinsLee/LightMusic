@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
@@ -13,6 +14,7 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
+import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver
 import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.getStringCover
@@ -22,7 +24,8 @@ import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.ref.WeakReference
 
 
-class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
+class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener,
+    HeadsetButtonReceiver.onHeadsetListener {
 
     var mPlayer: IPlayback? = null
 
@@ -48,7 +51,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
-
+        HeadsetButtonReceiver(this)
         RxBus.getInstance().subscribe(Any::class.java
             , Consumer {
                 when (it) {
@@ -110,6 +113,29 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
         }
         setListener()
+    }
+
+
+    //耳机线控回调
+    override fun playOrPause() {
+        Log.d(TAG,"headSet_PlayOrPause")
+        mPlayer?.pause()
+    }
+
+    override fun playNext() {
+        Log.d(TAG, "headSet_PlayNext")
+        if (playList.getNumOfSongs() == 1){
+            return
+        }
+        onPlayNext()
+    }
+
+    override fun playPrevious() {
+        Log.d(TAG,"headSet_PlayLast")
+        if (playList.getNumOfSongs() == 1){
+            return
+        }
+        onPlayLast()
     }
 
     private fun setListener() {

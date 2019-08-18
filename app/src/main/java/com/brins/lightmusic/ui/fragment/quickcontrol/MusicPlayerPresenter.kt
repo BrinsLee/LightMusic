@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.player.PlayBackService
+import com.brins.lightmusic.player.PlayBackService.Companion.mIsServiceBound
 import com.brins.lightmusic.utils.loadingOnlineCover
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -45,7 +46,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     private lateinit var mContext: Context
     private lateinit var mView: MusicPlayerContract.View
-    private var mIsServiceBound: Boolean = false
     private var mPlaybackService: PlayBackService? = null
 
     val mConnection: ServiceConnection = object : ServiceConnection {
@@ -97,7 +97,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
         if(!mIsServiceBound){
             val intent = Intent(mContext, PlayBackService::class.java)
             mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-            mIsServiceBound = true
             mContext.startService(intent)
         }
     }

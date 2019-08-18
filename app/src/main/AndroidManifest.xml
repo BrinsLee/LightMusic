@@ -31,7 +31,7 @@
         </service>
 
         <receiver android:name=".player.PlayBackService$MediaButtonReceiver">
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </receiver>
@@ -65,6 +65,13 @@
                 android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
                 android:authorities="${applicationId}.TTMultiProvider"
                 android:exported="false"/>
+
+        <receiver android:name=".player.broadcast.HeadsetButtonReceiver">
+            <intent-filter
+                    android:priority="1000">
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
