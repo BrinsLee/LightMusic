@@ -38,6 +38,8 @@ class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
             override fun run() {
                 when (clickCount) {
                     1 -> handler.sendEmptyMessage(PLAY_OR_PAUSE)
+                    2 -> handler.sendEmptyMessage(PLAY_NEXT)
+                    3 -> handler.sendEmptyMessage(PLAY_PREVIOUS)
                 }
                 clickCount = 0
             }
@@ -101,10 +103,11 @@ class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
                     if (keyEvent.action == KeyEvent.ACTION_UP) {
                         clickCount += 1
                         when (keyEvent.keyCode) {
-                            KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY -> {
+                            KeyEvent.KEYCODE_HEADSETHOOK -> {
                                 val headsetTimerTask = HeadsetTimerTask()
                                 timer.schedule(headsetTimerTask, 500)
                             }
+                            KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY -> handler.sendEmptyMessage(PLAY_OR_PAUSE)
                             KeyEvent.KEYCODE_MEDIA_NEXT -> handler.sendEmptyMessage(PLAY_NEXT)
                             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> handler.sendEmptyMessage(PLAY_PREVIOUS)
                         }
