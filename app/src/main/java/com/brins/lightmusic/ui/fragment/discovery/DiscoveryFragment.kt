@@ -38,7 +38,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getArtist() {
-        DiscoverPresent(this@DiscoveryFragment).subscribe()
+        DiscoverPresent.instance.subscribe(this@DiscoveryFragment)
         initLoadingMore()
     }
 
@@ -60,9 +60,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
         return activity as AppCompatActivity
     }
 
-    override fun getcontext(): Context {
+/*    override fun getcontext(): Context {
         return context!!
-    }
+    }*/
 
 
     override fun handleError(error: Throwable) {

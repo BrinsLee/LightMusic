@@ -12,6 +12,7 @@ public class AppConfig {
      */
     public static final String LOGIN_EMAIL = "/login";
     public static final String USER = "/user/detail";
+    public static final String DEFAULT_ID = "490583871";
 
 
     /**

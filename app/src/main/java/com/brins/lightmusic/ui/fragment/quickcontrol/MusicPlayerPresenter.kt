@@ -20,50 +20,49 @@ import io.reactivex.ObservableOnSubscribe
 
 
 class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter {
+
+    companion object {
+        val instance = SingletonHolder.holder
+    }
+
+    private object SingletonHolder {
+        val holder = MusicPlayerPresenter()
+    }
+
+
+    private lateinit var mContext: Context
+    private var mView: MusicPlayerContract.View? = null
+    private var mPlaybackService: PlayBackService? = null
+
+    val mConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            mPlaybackService = null
+            mView?.onPlaybackServiceUnbound()
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            mPlaybackService = (service as PlayBackService.LocalBinder).service
+            mView?.onPlaybackServiceBound(mPlaybackService!!)
+            if (mPlaybackService!!.getPlayingSong() == null) {
+                return
+            } else {
+                mView?.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
+            }
+        }
+
+    }
+
     override fun getOnLineCover(url: String) {
         val provider: AndroidLifecycleScopeProvider =
-            AndroidLifecycleScopeProvider.from(mView.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+            AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
         Observable.create(ObservableOnSubscribe<Bitmap> {
             it.onNext(loadingOnlineCover(url))
         }).compose(AsyncTransformer<Bitmap>())
             .autoDisposable(provider)
             .subscribe {
-                mView.onCoverLoad(it)
+                mView!!.onCoverLoad(it)
             }
-    }
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        val instance = SingletonHolder.holder
-
-        private object SingletonHolder {
-            @SuppressLint("StaticFieldLeak")
-            val holder = MusicPlayerPresenter()
-        }
-    }
-
-
-    private lateinit var mContext: Context
-    private lateinit var mView: MusicPlayerContract.View
-    private var mPlaybackService: PlayBackService? = null
-
-    val mConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName?) {
-            mPlaybackService = null
-            mView.onPlaybackServiceUnbound()
-        }
-
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            mPlaybackService = (service as PlayBackService.LocalBinder).service
-            mView.onPlaybackServiceBound(mPlaybackService!!)
-            if (mPlaybackService!!.getPlayingSong() == null) {
-                return
-            } else {
-                mView.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
-            }
-        }
-
     }
 
     @Synchronized
@@ -74,13 +73,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
             this.mContext = context
             this
         }
-    }
-
-    @Synchronized
-    fun setView(view: MusicPlayerContract.View): MusicPlayerPresenter {
-        mView = view
-        mView.setPresenter(this)
-        return this
     }
 
     override fun retrieveLastPlayMode() {
@@ -94,7 +86,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun bindPlaybackService() {
 
-        if(!mIsServiceBound){
+        if (!mIsServiceBound) {
             val intent = Intent(mContext, PlayBackService::class.java)
             mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
             mContext.startService(intent)
@@ -109,18 +101,21 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
         }
     }
 
-    override fun subscribe() {
+
+    override fun subscribe(view: MusicPlayerContract.View?) {
+        mView = view
+        mView!!.setPresenter(this)
         bindPlaybackService()
         retrieveLastPlayMode()
         if (mPlaybackService != null && mPlaybackService!!.getPlayingSong() != null) {
-            mView.onPlaybackServiceBound(mPlaybackService!!)
-            mView.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
+            mView!!.onPlaybackServiceBound(mPlaybackService!!)
+            mView!!.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
         } else {
         }
     }
 
     override fun unsubscribe() {
-
+        mView = null
 //        unbindPlaybackService()
     }
 }

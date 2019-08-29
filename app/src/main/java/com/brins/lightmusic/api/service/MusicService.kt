@@ -19,17 +19,6 @@ interface MusicService {
         "Accept: */*",
         "User-Agent: $USER_AGENT"
     )
-    /*
-    * 登录网络接口
-    * */
-    /*@GET(LOGIN_EMAIL)
-    fun Login_email(@Query("email")email : String,@Query("password")password :String): Observable<UserInfo>
-*/
-
-
-
-
-
     @GET(ALBUM)
     fun getAlbum(@Query("ids") ids: String): Observable<MusicMetaDataBean>
 

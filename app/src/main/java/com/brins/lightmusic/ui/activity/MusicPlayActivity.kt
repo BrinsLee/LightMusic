@@ -112,7 +112,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        MusicPlayerPresenter.instance.setContext(this).setView(this).subscribe()
+        MusicPlayerPresenter.instance.setContext(this).subscribe(this)
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
         ivCover.setPageTransformer(false, CustPagerTransformer())
         setPlayView()

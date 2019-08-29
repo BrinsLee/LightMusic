@@ -11,7 +11,7 @@ import com.brins.lib_common.utils.WeakHandler
 import com.bytedance.sdk.openadsdk.TTAdNative
 
 
-class SplashActivity : BaseActivity() , com.brins.lib_common.utils.WeakHandler.IHandler {
+class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
 
     private val mTTAdNative: TTAdNative by lazy { TTAdManagerHolder.get().createAdNative(this) }
     private var mForceGoMain: Boolean = false
@@ -19,7 +19,7 @@ class SplashActivity : BaseActivity() , com.brins.lib_common.utils.WeakHandler.I
     private val MSG_GO_MAIN = 1
     //开屏广告是否已经加载
     private var mHasLoaded: Boolean = false
-    private val mHandler = com.brins.lib_common.utils.WeakHandler(this)
+    private val mHandler = WeakHandler(this)
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_splash

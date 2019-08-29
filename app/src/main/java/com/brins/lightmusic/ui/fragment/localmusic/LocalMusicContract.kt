@@ -1,6 +1,5 @@
 package com.brins.lightmusic.ui.fragment.localmusic
 
-import android.content.Context
 import androidx.loader.app.LoaderManager
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.ui.base.BasePresenter
@@ -20,7 +19,7 @@ interface LocalMusicContract {
 
     }
 
-    interface Presenter : BasePresenter {
+    interface Presenter : BasePresenter<View> {
         fun loadLocalMusic()
     }
 }

@@ -27,8 +27,7 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View, OnItemClickL
     lateinit var permissionManager : PermissionManager
     lateinit var mAdapter: ListAdapter<LocalMusic>
     lateinit var mPresenter: LocalMusicContract.Presenter
-    private var  playList : PlayList =
-        PlayList()
+    private var  playList : PlayList = PlayList()
     private var isLoad = false
 
     override fun getLayoutResID(): Int {
@@ -64,7 +63,7 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View, OnItemClickL
     private fun requestpermission() {
         permissionManager = object : PermissionManager((activity as AppCompatActivity?)!!) {
             override fun authorized(requestCode: Int) {
-                LocalMusicPresent(this@LocalMusicFragment).subscribe()
+                LocalMusicPresent.instance.subscribe(this@LocalMusicFragment)
             }
 
             override fun noAuthorization(requestCode: Int, lacksPermissions: Array<String>) {

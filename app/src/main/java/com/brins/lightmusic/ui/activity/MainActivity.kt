@@ -19,6 +19,7 @@ import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_common_toolbar.*
 
 
 class MainActivity : BaseActivity() {

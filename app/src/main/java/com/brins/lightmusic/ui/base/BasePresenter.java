@@ -1,8 +1,8 @@
 package com.brins.lightmusic.ui.base;
 
-public interface BasePresenter {
+public interface BasePresenter<V> {
 
-    void subscribe();
+    void subscribe(V view);
 
     void unsubscribe();
 }

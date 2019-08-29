@@ -16,7 +16,7 @@ interface DiscoveryContract {
 
         fun hideLoading()
 
-        fun getcontext() : Context
+//        fun getcontext() : Context
 
         fun handleError(error: Throwable)
 
@@ -28,7 +28,7 @@ interface DiscoveryContract {
 
         fun onMusicDetail(onlineMusic: OnlineMusic)
     }
-    interface Presenter : BasePresenter{
+    interface Presenter : BasePresenter<View>{
         fun loadArtist()
 
         fun loadMusicList(top : Int = 12)

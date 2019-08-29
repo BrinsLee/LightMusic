@@ -12,33 +12,45 @@ import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
 
-class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Presenter {
+class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
 
-    val provider: AndroidLifecycleScopeProvider =
-        AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+
+    val provider: AndroidLifecycleScopeProvider by lazy {
+        AndroidLifecycleScopeProvider.from(mView?.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+    }
+    private var mView: DiscoveryContract.View? = null
+
+    companion object {
+        val instance = SingletonHolder.holder
+    }
+
+    private object SingletonHolder {
+        val holder = DiscoverPresent()
+    }
 
     //    DefaultObserver
     @RequiresApi(Build.VERSION_CODES.N)
     override fun loadArtist() {
-        ApiHelper.getArtistSerVice().getArtist(12)
+        ApiHelper.getArtistService().getArtist(12)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
                 override fun onSuccess(response: MusicListResult) {
                     if (response.artistBeans != null && response.artistBeans?.size != 0) {
                         mView!!.onArtistLoad(response.artistBeans as MutableList<ArtistBean>)
-                    }else{
+                    } else {
                         onFail("网络连接失败")
                     }
                 }
+
                 override fun onFinish() {
                     mView?.hideLoading()
                 }
             })
     }
 
-    override fun loadMusicList(top : Int) {
-        ApiHelper.getPlayListSerVice().getPlayList(top)
+    override fun loadMusicList(top: Int) {
+        ApiHelper.getPlayListService().getPlayList(top)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
@@ -57,7 +69,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
 
     override fun loadMusicListDetail(id: String) {
         mView?.showLoading()
-        ApiHelper.getPlayListSerVice().getPlayListDetail(id)
+        ApiHelper.getPlayListService().getPlayListDetail(id)
             .compose(AsyncTransformer<MusicListDetailResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListDetailResult>() {
@@ -78,7 +90,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     override fun loadMusicDetail(onlineMusic: OnlineMusic) {
         var metaData: MusicBean
         mView!!.showLoading()
-        ApiHelper.getMusicSerVice().getUrl(onlineMusic.id)
+        ApiHelper.getMusicService().getUrl(onlineMusic.id)
             .compose(AsyncTransformer<MusicBean>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicBean>() {
@@ -97,9 +109,8 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
             })
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun subscribe() {
+    override fun subscribe(view: DiscoveryContract.View) {
+        mView = view
         mView?.showLoading()
         mView?.setPresenter(this)
         loadArtist()

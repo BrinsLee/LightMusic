@@ -101,7 +101,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onStart() {
         super.onStart()
-        MusicPlayerPresenter.instance.setContext(activity!!).setView(this).subscribe()
+        MusicPlayerPresenter.instance.setContext(activity!!).subscribe(this)
 
     }
 

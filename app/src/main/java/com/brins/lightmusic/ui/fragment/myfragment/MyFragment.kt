@@ -1,21 +1,14 @@
 package com.brins.lightmusic.ui.fragment.myfragment
 
 
-import android.Manifest
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
-import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.manager.PermissionManager
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
-import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.ListAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
@@ -62,7 +55,9 @@ class MyFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-
+        when(v.id){
+            R.id.avatar,R.id.nickName -> LoginActivity.startThisActivity(activity as AppCompatActivity)
+        }
     }
 
 

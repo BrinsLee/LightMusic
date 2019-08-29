@@ -37,7 +37,7 @@ class VideoFragment : BaseFragment(), VideoContract.View, OnItemClickListener, S
     }
 
     private fun initView() {
-        VideoPresent(this).subscribe()
+        VideoPresent(this).subscribe(this)
         videoAdapter.setOnItemListener(this)
         videoListView.layoutManager = LinearLayoutManager(context)
         videoListView.adapter = videoAdapter
@@ -78,9 +78,9 @@ class VideoFragment : BaseFragment(), VideoContract.View, OnItemClickListener, S
         loadingLayout.visibility = View.GONE
     }
 
-    override fun getcontext(): Context {
+/*    override fun getcontext(): Context {
         return context!!
-    }
+    }*/
 
     override fun handleError(error: Throwable) {
     }

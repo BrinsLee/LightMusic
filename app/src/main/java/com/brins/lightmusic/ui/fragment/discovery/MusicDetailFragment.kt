@@ -25,7 +25,7 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 
 class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener , CommonHeaderView.OnBackClickListener {
 
-    private val mPresenter: DiscoveryContract.Presenter by lazy { DiscoverPresent(this) }
+    private lateinit var mPresenter: DiscoveryContract.Presenter
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
     lateinit var mAdapter: MusicDetailAdapter
@@ -44,6 +44,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         nestScrollView.fadingView = toolbar
         nestScrollView.fadingHeightView = coverMusicList
         id = (activity as MainActivity).currentMusicListId
+        DiscoverPresent.instance.subscribe(this)
         mPresenter.loadMusicListDetail(id)
         musicRecycler.adapter = mAdapter
         musicRecycler.layoutManager = LinearLayoutManager(context)
@@ -74,9 +75,9 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         loadingLayout.visibility = View.GONE
     }
 
-    override fun getcontext(): Context {
+/*    override fun getcontext(): Context {
         return context!!
-    }
+    }*/
 
     override fun getLifeActivity(): AppCompatActivity {
         return activity as AppCompatActivity
@@ -107,5 +108,6 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
+
     }
 }

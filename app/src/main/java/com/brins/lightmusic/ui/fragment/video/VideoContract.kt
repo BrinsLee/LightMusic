@@ -13,7 +13,7 @@ interface VideoContract {
 
         fun hideLoading()
 
-        fun getcontext() : Context
+//        fun getcontext() : Context
 
         fun handleError(error: Throwable)
 
@@ -21,7 +21,7 @@ interface VideoContract {
 
     }
 
-    interface Presenter : BasePresenter {
+    interface Presenter : BasePresenter<View> {
         fun loadVideo(limit : Int = 15)
 
         fun loadUrl(id : String,consumer: Consumer<MvMetaResult>)

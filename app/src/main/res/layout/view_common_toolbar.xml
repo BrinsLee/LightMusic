@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge>
+    <androidx.appcompat.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/alpha"
+            app:layout_scrollFlags="scroll|enterAlways" app:titleTextColor="@android:color/white">
+        <com.brins.lightmusic.ui.customview.FontTextView
+                android:id="@+id/tv_title"
+                android:text="@string/app_name"
+                app:start_color="@color/start"
+                app:end_color="@color/end"
+                app:font_type="DIN-Bold"
+                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </androidx.appcompat.widget.Toolbar>
+</merge>

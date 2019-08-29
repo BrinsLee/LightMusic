@@ -21,8 +21,19 @@ import io.reactivex.schedulers.Schedulers
 import java.util.ArrayList
 
 
-class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContract.Presenter
+class LocalMusicPresent private constructor() : LocalMusicContract.Presenter
     , LoaderManager.LoaderCallbacks<Cursor> {
+
+
+    private var mView: LocalMusicContract.View? = null
+
+    companion object {
+        val instance = SingletonHolder.holder
+    }
+
+    private object SingletonHolder {
+        val holder = LocalMusicPresent()
+    }
 
     val mSubscriptions: CompositeDisposable = CompositeDisposable()
     private val TAG = "LocalMusicPresenter"
@@ -52,7 +63,8 @@ class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContrac
         mView?.getLoaderManager()!!.initLoader(URL_LOAD_LOCAL_MUSIC, null, this)
     }
 
-    override fun subscribe() {
+    override fun subscribe(view: LocalMusicContract.View?) {
+        mView = view
         loadLocalMusic()
     }
 

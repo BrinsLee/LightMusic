@@ -32,7 +32,7 @@ interface MusicPlayerContract {
         fun onCoverLoad(cover: Bitmap?)
     }
 
-    interface Presenter : BasePresenter {
+    interface Presenter : BasePresenter<View> {
         /**
          * 检索上次播放模式
          */

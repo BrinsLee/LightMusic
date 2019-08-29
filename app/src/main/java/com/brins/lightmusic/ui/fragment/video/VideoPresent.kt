@@ -15,12 +15,13 @@ import io.reactivex.functions.Consumer
 
 class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
+
     val provider: AndroidLifecycleScopeProvider =
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
     val mvList = mutableListOf<Mv>()
     override fun loadVideo(limit : Int) {
-        ApiHelper.getMvSerVice().getLatestMusicVideo(limit)
+        ApiHelper.getMvService().getLatestMusicVideo(limit)
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MvResult>() {
@@ -49,12 +50,12 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
     @SuppressLint("CheckResult")
     override fun loadUrl(id: String, consumer: Consumer<MvMetaResult>) {
-        ApiHelper.getMvSerVice().getMvMetaData(id).compose(AsyncTransformer<MvMetaResult>())
+        ApiHelper.getMvService().getMvMetaData(id).compose(AsyncTransformer<MvMetaResult>())
             .subscribe(consumer)
 
     }
 
-    override fun subscribe() {
+    override fun subscribe(view: VideoContract.View?) {
         mView?.showLoading()
         mView?.setPresenter(this)
         loadVideo()
