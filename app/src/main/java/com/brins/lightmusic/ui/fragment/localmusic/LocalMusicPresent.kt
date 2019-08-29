@@ -9,6 +9,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.brins.lightmusic.BaseApplication
+import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.utils.loadingCover
 import io.reactivex.BackpressureStrategy
@@ -73,7 +74,7 @@ class LocalMusicPresent(var mView: LocalMusicContract.View?) : LocalMusicContrac
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         var loader = CursorLoader(
-            mView!!.getcontext(),
+            BaseApplication.getInstance().applicationContext,
             MEDIA_URI,
             projectLocal,
             MediaStore.Audio.Media.IS_MUSIC + "=1 AND "

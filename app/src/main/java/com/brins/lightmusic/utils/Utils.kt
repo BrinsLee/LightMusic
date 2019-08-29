@@ -4,13 +4,16 @@ import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.media.MediaMetadataRetriever
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.collection.SimpleArrayMap
+import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
@@ -167,6 +170,16 @@ fun show(strId: Int) {
         // 预防从非主线程中调用崩溃，这里直接切换到主线程中执行
         AndroidSchedulers.mainThread()
             .scheduleDirect { Toast.makeText(LightMusicApplication.getLightApplication(), strId, Toast.LENGTH_SHORT).show() }
+    }
+}
+
+
+class SpacesItemDecoration(var space: Int) : RecyclerView.ItemDecoration(){
+
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        outRect.left = space
+        outRect.right = space
+        outRect.bottom = 4 * space
     }
 }
 

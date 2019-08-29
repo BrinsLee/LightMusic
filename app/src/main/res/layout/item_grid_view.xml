@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/common_margin_100"
+                android:layout_weight="1"
+                app:round_corner="@dimen/common_margin_10"
+                android:layout_marginTop="@dimen/common_margin_20"
+                android:layout_marginStart="@dimen/common_margin_30"
+                android:layout_marginEnd="@dimen/common_margin_10"
+                android:background="@drawable/background_item_list">
+
+            <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    android:layout_marginStart="@dimen/common_margin_30"
+                    android:id="@+id/ic_local"
+                    android:src="@drawable/ic_local_music"
+                    android:scaleType="fitXY"
+                    android:layout_width="@dimen/common_margin_50"
+                    android:layout_height="@dimen/common_margin_50"/>
+
+            <com.brins.lightmusic.ui.customview.FontTextView
+                    android:textSize="15sp"
+                    android:text="本地音乐"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/tv_local"
+                    app:font_type="DIN-Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/ic_local"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+
+        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/common_margin_100"
+                android:layout_weight="1"
+                app:round_corner="@dimen/common_margin_10"
+                android:layout_marginTop="@dimen/common_margin_20"
+                android:layout_marginStart="@dimen/common_margin_10"
+                android:layout_marginEnd="@dimen/common_margin_10"
+                android:background="@drawable/background_item_list">
+
+            <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    android:layout_marginStart="@dimen/common_margin_30"
+                    android:id="@+id/icon"
+                    android:src="@drawable/ic_fm"
+                    android:scaleType="centerCrop"
+                    android:layout_width="@dimen/common_margin_50"
+                    android:layout_height="@dimen/common_margin_50"/>
+
+            <com.brins.lightmusic.ui.customview.FontTextView
+                    android:textSize="15sp"
+                    android:text="私人FM"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:font_type="DIN-Bold"
+                    app:layout_constraintTop_toBottomOf="@id/icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+
+        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/common_margin_100"
+                android:layout_weight="1"
+                app:round_corner="@dimen/common_margin_10"
+                android:layout_marginTop="@dimen/common_margin_20"
+                android:layout_marginStart="@dimen/common_margin_10"
+                android:layout_marginEnd="@dimen/common_margin_30"
+                android:background="@drawable/background_item_list">
+
+            <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    android:layout_marginStart="@dimen/common_margin_30"
+                    android:id="@+id/ic_collection"
+                    android:src="@drawable/ic_collection"
+                    android:scaleType="fitXY"
+                    android:layout_width="@dimen/common_margin_50"
+                    android:layout_height="@dimen/common_margin_50"/>
+
+            <com.brins.lightmusic.ui.customview.FontTextView
+                    android:textSize="15sp"
+                    android:text="我的收藏"
+                    android:textColor="@color/colorAccent"
+                    app:font_type="DIN-Bold"
+                    android:id="@+id/tv_collection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/ic_collection"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_10"
+                    app:layout_constraintEnd_toEndOf="parent"
+            />
+        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+
+    </LinearLayout>
+</merge>

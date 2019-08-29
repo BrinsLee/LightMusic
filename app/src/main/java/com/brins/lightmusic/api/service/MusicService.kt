@@ -26,23 +26,9 @@ interface MusicService {
     fun Login_email(@Query("email")email : String,@Query("password")password :String): Observable<UserInfo>
 */
 
-    /*
-    * 获取歌单列表
-    * */
-    @GET(PLAYLIST)
-    fun getPlayList(@Query("limit") limit: Int): Observable<MusicListResult>
 
-    /*
-    * 获取歌单详情信息
-    * */
-    @GET(PLAYLISTDETAIL)
-    fun getPlayListDetail(@Query("id") id: String): Observable<MusicListDetailResult>
 
-    /*
-    * 获取歌手列表
-    * */
-    @GET(ARTISTS)
-    fun getArtist(@Query("limit") limit: Int): Observable<MusicListResult>
+
 
     @GET(ALBUM)
     fun getAlbum(@Query("ids") ids: String): Observable<MusicMetaDataBean>
@@ -50,15 +36,6 @@ interface MusicService {
     @GET(SONG)
     fun getUrl(@Query("id") id: String): Observable<MusicBean>
 
-    @GET(LASTESTMUSICVIDEO)
-    fun getLatestMusicVideo(@Query("limit") limit: Int): Observable<MvResult>
 
-    @GET(MVURL)
-    fun getMvMetaData(@Query("id") id: String): Observable<MvMetaResult>
 
-    @GET(ARTISTS_MUSIC)
-    fun getArtistMusic(@Query("id") id : String): Observable<ArtistResult>
-
-    @GET(ARTISTS_MV)
-    fun getArtistMV(@Query("id") id : String): Observable<ArtistResult>
 }

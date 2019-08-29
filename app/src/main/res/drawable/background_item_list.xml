@@ -16,10 +16,10 @@
                     android:startColor="#0F000000" />
 
             <corners
-                    android:bottomLeftRadius="@dimen/common_margin_30"
-                    android:bottomRightRadius="@dimen/common_margin_30"
-                    android:topLeftRadius="@dimen/common_margin_30"
-                    android:topRightRadius="@dimen/common_margin_30" />
+                    android:bottomLeftRadius="@dimen/common_margin_10"
+                    android:bottomRightRadius="@dimen/common_margin_10"
+                    android:topLeftRadius="@dimen/common_margin_10"
+                    android:topRightRadius="@dimen/common_margin_10" />
         </shape>
     </item>
 
@@ -38,10 +38,10 @@
                     android:startColor="#FFFFFF" />
 
             <corners
-                    android:bottomLeftRadius="@dimen/common_margin_30"
-                    android:bottomRightRadius="@dimen/common_margin_30"
-                    android:topLeftRadius="@dimen/common_margin_30"
-                    android:topRightRadius="@dimen/common_margin_30" />
+                    android:bottomLeftRadius="@dimen/common_margin_10"
+                    android:bottomRightRadius="@dimen/common_margin_10"
+                    android:topLeftRadius="@dimen/common_margin_10"
+                    android:topRightRadius="@dimen/common_margin_10" />
         </shape>
     </item>
 </layer-list>

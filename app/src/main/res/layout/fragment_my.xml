@@ -3,11 +3,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false">
 
     <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/common_margin_180"
+            android:layout_height="@dimen/common_margin_200"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true">
 
@@ -27,52 +29,61 @@
 
                 <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/avatar"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_marginEnd="20dp"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/avart"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:riv_corner_radius="50dp" />
+                        app:riv_corner_radius="50dp"/>
 
                 <com.brins.lightmusic.ui.customview.FontTextView
                         android:id="@+id/nickName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="@dimen/common_margin_10"
+                        android:layout_marginBottom="@dimen/common_margin_50"
                         android:text="@string/login"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:maxLines="1"
                         android:maxEms="5"
                         android:ellipsize="end"
                         android:singleLine="true"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
+                        app:layout_constraintRight_toRightOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
             android:background="@drawable/bg_fragment_local"
             android:descendantFocusability="afterDescendants"
+            android:fillViewport="true"
+            android:clipChildren="false"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="30dp"
-                android:nestedScrollingEnabled="true">
+                android:layout_marginTop="-60dp">
+            <include
+                    android:id="@+id/tab"
+                    layout="@layout/item_grid_view"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    app:layout_constraintTop_toBottomOf="@id/tab"
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/common_margin_20"
+                    android:nestedScrollingEnabled="true">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -20,7 +20,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
     val mvList = mutableListOf<Mv>()
     override fun loadVideo(limit : Int) {
-        ApiHelper.getLatestMvData(limit)
+        ApiHelper.getMvSerVice().getLatestMusicVideo(limit)
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MvResult>() {
@@ -49,7 +49,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
     @SuppressLint("CheckResult")
     override fun loadUrl(id: String, consumer: Consumer<MvMetaResult>) {
-        ApiHelper.getMvMetaData(id).compose(AsyncTransformer<MvMetaResult>())
+        ApiHelper.getMvSerVice().getMvMetaData(id).compose(AsyncTransformer<MvMetaResult>())
             .subscribe(consumer)
 
     }

@@ -12,7 +12,7 @@ interface LocalMusicContract {
 
         fun getLoaderManager() : LoaderManager
 
-        fun getcontext() : Context
+//        fun getcontext() : Context
 
         fun handleError(error: Throwable)
 

@@ -15,6 +15,7 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.friends.FriendsFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
+import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -52,7 +53,7 @@ class MainActivity : BaseActivity() {
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-        list.add(LocalMusicFragment())
+        list.add(MyFragment())
         list.add(DiscoveryFragment())
         list.add(VideoFragment())
         list.add(FriendsFragment())

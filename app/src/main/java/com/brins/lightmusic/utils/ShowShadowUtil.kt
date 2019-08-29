@@ -1,4 +1,4 @@
-package com.brins.lib_common.utils
+package com.brins.lightmusic.utils
 
 import android.graphics.*
 import android.graphics.drawable.Drawable

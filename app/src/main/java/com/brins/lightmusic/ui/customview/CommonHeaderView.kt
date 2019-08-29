@@ -18,7 +18,7 @@ class CommonHeaderView @JvmOverloads constructor(context: Context, attrs: Attrib
 
 
     init {
-        val view = LayoutInflater.from(context).inflate(R.layout.view_common_header, this)
+        LayoutInflater.from(context).inflate(R.layout.view_common_header, this)
         val a = context.obtainStyledAttributes(attrs, R.styleable.CommonHeaderView)
         title = a.getString(R.styleable.CommonHeaderView_chv_title)
         a.recycle()

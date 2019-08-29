@@ -1,11 +1,9 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.api.ApiHelper.getMusicUrl
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.artist.ArtistBean
@@ -22,7 +20,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     //    DefaultObserver
     @RequiresApi(Build.VERSION_CODES.N)
     override fun loadArtist() {
-        ApiHelper.getArtist(12)
+        ApiHelper.getArtistSerVice().getArtist(12)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
@@ -40,7 +38,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     }
 
     override fun loadMusicList(top : Int) {
-        ApiHelper.getPlayList(top)
+        ApiHelper.getPlayListSerVice().getPlayList(top)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
@@ -59,7 +57,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
 
     override fun loadMusicListDetail(id: String) {
         mView?.showLoading()
-        ApiHelper.getPlayListDetail(id)
+        ApiHelper.getPlayListSerVice().getPlayListDetail(id)
             .compose(AsyncTransformer<MusicListDetailResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListDetailResult>() {
@@ -80,7 +78,7 @@ class DiscoverPresent(var mView: DiscoveryContract.View?) : DiscoveryContract.Pr
     override fun loadMusicDetail(onlineMusic: OnlineMusic) {
         var metaData: MusicBean
         mView!!.showLoading()
-        getMusicUrl(onlineMusic.id)
+        ApiHelper.getMusicSerVice().getUrl(onlineMusic.id)
             .compose(AsyncTransformer<MusicBean>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicBean>() {

@@ -16,13 +16,16 @@ import com.brins.lightmusic.manager.PermissionManager
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.base.adapter.ListAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 
-class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
+class LocalMusicFragment : BaseFragment(), LocalMusicContract.View, OnItemClickListener, View.OnClickListener {
+
 
     lateinit var permissionManager : PermissionManager
-    lateinit var mAdapter: LocalMusicAdapter
+    lateinit var mAdapter: ListAdapter<LocalMusic>
     lateinit var mPresenter: LocalMusicContract.Presenter
     private var  playList : PlayList =
         PlayList()
@@ -34,15 +37,20 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter = LocalMusicAdapter(context!!, null)
-        mAdapter.setOnItemClickListener(object : OnItemClickListener{
-            override fun onItemClick(position: Int) {
-                RxBus.getInstance().post(PlayListEvent(playList , position))
-            }
-        })
+        mAdapter = ListAdapter(context!!, null)
+        setListener()
+        recyclerView.setItemViewCacheSize(5)
         recyclerView.adapter = mAdapter
+        recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.addItemDecoration(SpacesItemDecoration(10))
         requestpermission()
+    }
+
+    private fun setListener() {
+        mAdapter.setOnItemClickListener(this)
+        avatar.setOnClickListener(this)
+        nickName.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -74,9 +82,9 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
         permissionManager.recheckPermissions(requestCode , permissions , grantResults)
     }
 
-    override fun getcontext(): Context {
+/*    override fun getcontext(): Context {
         return context!!
-    }
+    }*/
 
     override fun handleError(error: Throwable) {
         Toast.makeText(activity, error.message , Toast.LENGTH_SHORT).show()
@@ -99,4 +107,13 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View {
     override fun getLifeActivity(): AppCompatActivity {
         return activity as AppCompatActivity
     }
+
+    override fun onItemClick(position: Int) {
+        RxBus.getInstance().post(PlayListEvent(playList , position))
+    }
+
+    override fun onClick(v: View) {
+
+    }
+
 }

@@ -1,65 +1,63 @@
 package com.brins.lightmusic.api
 
+import com.brins.lightmusic.api.service.ArtistService
 import com.brins.lightmusic.api.service.MusicService
+import com.brins.lightmusic.api.service.MusicVideoService
+import com.brins.lightmusic.api.service.PlayListService
 import com.brins.lightmusic.common.AppConfig.BASEURL
-import com.brins.lightmusic.model.musicvideo.MvMetaResult
-import com.brins.lightmusic.model.musicvideo.MvResult
-import com.brins.lightmusic.model.onlinemusic.MusicBean
-import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
-import com.brins.lightmusic.model.onlinemusic.MusicListResult
-import com.brins.lightmusic.model.onlinemusic.MusicMetaDataBean
-import io.reactivex.Observable
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 object ApiHelper {
 
-    private fun getRetrofitFactory(baseurl: String): MusicService {
-        val retrofit = Retrofit.Builder().baseUrl(baseurl)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(getClient())
-            .build()
-        return retrofit.create(MusicService::class.java)
+    val LOG_TAG_NETWORK_LOGIN = "network_login"
+    val LOG_TAG_NETWORK_USERINFO = "network_userinfo"
+    val LOG_TAG_NETWORK_API = "network_api"
+
+    private var mMusicService: MusicService? = null
+    private var mPlayListService: PlayListService? = null
+    private var mArtistService: ArtistService? = null
+    private var mMvService : MusicVideoService? = null
+
+    fun getMusicSerVice(): MusicService{
+        if (mMusicService == null){
+            synchronized(MusicService::class.java){
+                if (mMusicService == null){
+                    mMusicService = RetrofitFactory.newRetrofit(BASEURL).create(MusicService::class.java)
+                }
+            }
+        }
+        return mMusicService!!
     }
 
-    fun getClient(): OkHttpClient {
-        val builder: OkHttpClient.Builder = OkHttpClient().newBuilder()
-        val client = builder.connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .build()
-        return client
+    fun getPlayListSerVice(): PlayListService{
+        if (mPlayListService == null){
+            synchronized(PlayListService::class.java){
+                if (mPlayListService == null){
+                    mPlayListService = RetrofitFactory.newRetrofit(BASEURL).create(PlayListService::class.java)
+                }
+            }
+        }
+        return mPlayListService!!
     }
 
-
-    fun getArtist(i: Int): Observable<MusicListResult> {
-        return getRetrofitFactory(BASEURL).getArtist(i)
+    fun getArtistSerVice(): ArtistService{
+        if (mArtistService == null){
+            synchronized(ArtistService::class.java){
+                if (mArtistService == null){
+                    mArtistService = RetrofitFactory.newRetrofit(BASEURL).create(ArtistService::class.java)
+                }
+            }
+        }
+        return mArtistService!!
     }
 
-    fun getPlayList(i: Int): Observable<MusicListResult> {
-        return getRetrofitFactory(BASEURL).getPlayList(i)
-    }
-
-    fun getPlayListDetail(id: String): Observable<MusicListDetailResult> {
-        return getRetrofitFactory(BASEURL).getPlayListDetail(id)
-    }
-
-    fun getMusicDetail(ids: String): Observable<MusicMetaDataBean> {
-        return getRetrofitFactory(BASEURL).getAlbum(ids)
-    }
-
-    fun getMusicUrl(ids: String): Observable<MusicBean> {
-        return getRetrofitFactory(BASEURL).getUrl(ids)
-    }
-
-    fun getLatestMvData(limit: Int = 15): Observable<MvResult> {
-        return getRetrofitFactory(BASEURL).getLatestMusicVideo(limit)
-    }
-
-    fun getMvMetaData(id: String): Observable<MvMetaResult> {
-        return getRetrofitFactory(BASEURL).getMvMetaData(id)
+    fun getMvSerVice(): MusicVideoService{
+        if (mMvService == null){
+            synchronized(MusicVideoService::class.java){
+                if (mMvService == null){
+                    mMvService = RetrofitFactory.newRetrofit(BASEURL).create(MusicVideoService::class.java)
+                }
+            }
+        }
+        return mMvService!!
     }
 }

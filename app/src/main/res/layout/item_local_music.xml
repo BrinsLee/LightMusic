@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.brins.lightmusic.ui.customview.RoundConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="410dp"
-        android:layout_height="@dimen/common_margin_80">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_margin_80"
+        android:background="@color/white"
+        android:elevation="3dp"
+        android:layout_marginTop="@dimen/common_margin_5"
+        app:round_corner="@dimen/common_margin_5">
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imgCover"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@mipmap/album"
             android:scaleType="fitXY"
+            app:riv_corner_radius="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -37,4 +43,4 @@
             android:layout_marginTop="@dimen/common_margin_10"
             app:layout_constraintStart_toEndOf="@id/imgCover"
             app:layout_constraintTop_toBottomOf="@id/textViewName"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.brins.lightmusic.ui.customview.RoundConstraintLayout>

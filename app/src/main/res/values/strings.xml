@@ -17,4 +17,5 @@
     <string name="parse_error">数据解析错误</string>
     <string name="unknown_error">未知错误</string>
     <string name="transitions_name">transitionTitle</string>
+    <string name="login">点击登录</string>
 </resources>

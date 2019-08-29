@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class AppConfig {
     public static boolean ISFIRST = true;
-    public static final String BASEURL = "";
+    public static final String BASEURL = "http://106.53.83.229";
 
 
     /**

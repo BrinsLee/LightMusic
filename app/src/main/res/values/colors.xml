@@ -26,4 +26,9 @@
     <color name="background">#f69aaab6</color>
     <color name="navigator">#bbffffff</color>
     <color name="translucent">#aa000000</color>
+
+    <color name="white1">#F5F4F9</color>
+    <color name="white1_80">#99F5F4F9</color>
+    <color name="gery">#C4C4C4</color>
+    <color name="gery_80">#CCC4C4C4</color>
 </resources>
