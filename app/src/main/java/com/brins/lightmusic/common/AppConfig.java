@@ -2,8 +2,11 @@ package com.brins.lightmusic.common;
 
 import android.content.Context;
 
+import com.brins.lightmusic.model.userlogin.UserAccountBean;
+import com.brins.lightmusic.model.userlogin.UserProfileBean;
+
 public class AppConfig {
-    public static boolean ISFIRST = true;
+    public static boolean isLogin = false;
     public static final String BASEURL = "http://106.53.83.229";
 
 
@@ -113,4 +116,13 @@ public class AppConfig {
     }
     public static final int NEXT_MUSIC = 0;
     public static final int PRE_MUSIC = 1;
+
+    /**
+     * 用户信息，缓存，方便调用
+     */
+    public static UserAccountBean userAccount;
+    /**
+     * 用户画像，缓存，方便调用
+     */
+    public static UserProfileBean userProfile;
 }

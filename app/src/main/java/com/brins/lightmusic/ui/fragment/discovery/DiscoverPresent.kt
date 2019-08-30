@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.os.Build
+import android.os.Message
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
@@ -43,7 +44,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
                     }
                 }
 
-                override fun onFinish() {
+                override fun onFail(message: String) {
                     mView?.hideLoading()
                 }
             })
@@ -54,7 +55,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
-                override fun onFinish() {
+                override fun onFail(message: String) {
                     mView?.hideLoading()
                 }
 
@@ -73,9 +74,8 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
             .compose(AsyncTransformer<MusicListDetailResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListDetailResult>() {
-                override fun onFinish() {
+                override fun onFail(message: String) {
                     mView?.hideLoading()
-
                 }
 
                 override fun onSuccess(response: MusicListDetailResult) {
@@ -94,7 +94,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
             .compose(AsyncTransformer<MusicBean>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicBean>() {
-                override fun onFinish() {
+                override fun onFail(message: String) {
                     mView?.hideLoading()
                 }
 

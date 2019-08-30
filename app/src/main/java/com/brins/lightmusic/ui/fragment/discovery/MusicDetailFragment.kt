@@ -107,7 +107,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         hideLoading()
     }
 
-    override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
-
+    override fun setPresenter(presenter: DiscoveryContract.Presenter) {
+        mPresenter = presenter
     }
 }

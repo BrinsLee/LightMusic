@@ -4,10 +4,12 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
+import com.brins.lightmusic.model.database.DatabaseFactory
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.fragment.discovery.DiscoverPresent
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract
+import com.brins.lightmusic.utils.subscribeDbResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
@@ -61,19 +63,28 @@ class LoginPresenter() : LoginContract.Presenter {
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<UserLoginResult>() {
                 override fun onSuccess(response: UserLoginResult) {
-                    mView?.onLoginSuccess(response)
+                    storeUserInfo(response)
                 }
 
-                override fun onFinish() {
+                override fun onFail(message: String) {
                     mView?.onLoginFail()
                 }
-
             })
     }
 
     private fun phoneLogin(request: UserLoginRequest) {
 
     }
+
+    private fun storeUserInfo(result: UserLoginResult) {
+        DatabaseFactory.getUserInfoDB().insertUserAccount(result.account)
+            .subscribeDbResult({
+                mView?.onLoginSuccess(result)
+            }, {
+                mView?.onLoginFail()
+            })
+    }
+
 
     override fun subscribe(view: LoginContract.View?) {
         mView = view

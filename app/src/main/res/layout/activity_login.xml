@@ -46,33 +46,30 @@
             android:layout_width="match_parent"
             android:layout_height="130dip"
             layout="@layout/input_layout" />-->
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/input_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dip"
+                android:layout_height="@dimen/common_margin_150"
+                android:layout_margin="50dp"
                 android:background="@drawable/radius_drawable_bg"
                 android:orientation="vertical"
                 android:padding="10dip" >
 
-                <LinearLayout
+            <LinearLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/common_margin_20"
                     android:id="@+id/input_layout_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_email" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -82,28 +79,30 @@
                         android:padding="5dip"
                         android:textSize="16sp"
                         android:autofillHints="username" />
-                </LinearLayout>
+            </LinearLayout>
 
-                <View
+            <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_marginBottom="5dip"
                     android:layout_marginTop="5dip"
                     android:background="#eeeeee" />
 
-                <LinearLayout
+            <LinearLayout
+                    app:layout_constraintTop_toBottomOf="@id/input_layout_name"
+                    android:layout_marginTop="@dimen/common_margin_20"
                     android:id="@+id/input_layout_psw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_pwd" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -114,9 +113,9 @@
                         android:padding="5dip"
                         android:textSize="16sp"
                         android:autofillHints="password" />
-                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <include
             android:id="@+id/layout_progress"

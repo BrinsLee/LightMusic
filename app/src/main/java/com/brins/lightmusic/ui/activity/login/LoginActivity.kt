@@ -8,38 +8,39 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
+import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.common.AppConfig.PASSWORD
 import com.brins.lightmusic.common.AppConfig.USERNAME
 import com.brins.lightmusic.model.userlogin.UserAccountBean
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
-import com.brins.lightmusic.utils.inputAnimator
-import com.brins.lightmusic.utils.progressAnimator
-import com.brins.lightmusic.utils.recovery
+import com.brins.lightmusic.utils.*
 import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : BaseActivity(), LoginContract.View ,View.OnClickListener {
+class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
 
     lateinit var mPresenter: LoginContract.Presenter
+
     companion object {
-        fun startThisActivity(activity: AppCompatActivity){
-            val intent = Intent(activity,LoginActivity::class.java)
+        fun startThisActivity(activity: AppCompatActivity) {
+            val intent = Intent(activity, LoginActivity::class.java)
             activity.startActivity(intent)
         }
     }
 
 
-
     override fun onClick(v: View?) {
         USERNAME = et_username.text.toString()
         PASSWORD = et_password.text.toString()
-        if (USERNAME.isEmpty()||PASSWORD.isEmpty()){
-            Toast.makeText(this,"用户名或密码不能为空", Toast.LENGTH_SHORT).show()
+        if (USERNAME.isEmpty() || PASSWORD.isEmpty()) {
+            Toast.makeText(this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show()
             return
         }
-        val request = UserLoginRequest(LoginPresenter.Companion.LOGIN_TYPE.TYPE_EMAIL, USERNAME, PASSWORD)
+        val request =
+            UserLoginRequest(LoginPresenter.Companion.LOGIN_TYPE.TYPE_EMAIL, USERNAME, PASSWORD)
         mPresenter.startLogin(request)
     }
 
@@ -58,9 +59,9 @@ class LoginActivity : BaseActivity(), LoginContract.View ,View.OnClickListener {
         val height = btn_login.measuredHeight.toFloat()
         input_layout_name.visibility = View.INVISIBLE
         input_layout_psw.visibility = View.INVISIBLE
-        val set = inputAnimator(input_layout,weight,height)
+        val set = inputAnimator(input_layout, weight, height)
         set.start()
-        set.addListener(object : Animator.AnimatorListener{
+        set.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {}
             override fun onAnimationEnd(animation: Animator?) {
                 layout_progress.visibility = View.VISIBLE
@@ -88,8 +89,11 @@ class LoginActivity : BaseActivity(), LoginContract.View ,View.OnClickListener {
 
     }
 
-    fun saveUserAccount(info : UserLoginResult) {
-//        setStoredAccount(this@LoginActivity,account,info)
+    fun saveUserAccount(info: UserLoginResult) {
+        AppConfig.userAccount = info.account
+        AppConfig.userProfile = info.profile
+        SpUtils.obtain(SP_USER_INFO, this).save(KEY_IS_LOGIN, true)
+        AppConfig.isLogin = true
         finish()
     }
 
@@ -104,8 +108,8 @@ class LoginActivity : BaseActivity(), LoginContract.View ,View.OnClickListener {
     }
 
     override fun onLoginSuccess(respone: UserLoginResult) {
-//        saveUserAccount(respone)
-        Log.d(TAG,"success :")
+        saveUserAccount(respone)
+        Log.d(TAG, "success :")
     }
 
     override fun onLoginFail() {

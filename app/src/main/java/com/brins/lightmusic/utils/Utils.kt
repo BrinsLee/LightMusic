@@ -16,7 +16,6 @@ import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.annotation.ColorInt
@@ -29,12 +28,17 @@ import com.brins.lightmusic.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import io.reactivex.Maybe
+import io.reactivex.MaybeObserver
+import io.reactivex.Single
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.lang.Exception
 import java.lang.ref.WeakReference
-import kotlin.math.roundToInt
 
 val option = RequestOptions()
     .error(R.drawable.default_cover)
@@ -175,7 +179,8 @@ fun getTypeface(context: Context, fontType: Int): Typeface? {
 fun show(str: String) {
     if (str.isNotEmpty()) {
         AndroidSchedulers.mainThread().scheduleDirect {
-            Toast.makeText(LightMusicApplication.getLightApplication(), str, Toast.LENGTH_SHORT).show()
+            Toast.makeText(LightMusicApplication.getLightApplication(), str, Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }
@@ -185,7 +190,11 @@ fun show(strId: Int) {
         // 预防从非主线程中调用崩溃，这里直接切换到主线程中执行
         AndroidSchedulers.mainThread()
             .scheduleDirect {
-                Toast.makeText(LightMusicApplication.getLightApplication(), strId, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    LightMusicApplication.getLightApplication(),
+                    strId,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 }
@@ -193,7 +202,12 @@ fun show(strId: Int) {
 
 class SpacesItemDecoration(var space: Int) : RecyclerView.ItemDecoration() {
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         outRect.left = space
         outRect.right = space
         outRect.bottom = 4 * space
@@ -206,15 +220,15 @@ fun inputAnimator(view: View, w: Float, h: Float): AnimatorSet {
     val animator = ValueAnimator.ofFloat(0f, w)
     animator.addUpdateListener {
         val value: Float = it.animatedValue as Float
-        val params = view.layoutParams as ViewGroup.MarginLayoutParams
-        params.leftMargin = value.roundToInt()
-        params.rightMargin = value.roundToInt()
+        var params = view.layoutParams as ViewGroup.MarginLayoutParams
+        params.leftMargin = value.toInt()
+        params.rightMargin = value.toInt()
         view.layoutParams = params
     }
 
     val animator2 = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0.5f)
     set.duration = 1000
-    set.interpolator = AccelerateInterpolator()
+    set.interpolator = AccelerateDecelerateInterpolator()
     set.playTogether(animator, animator2)
     return set
 }
@@ -255,3 +269,30 @@ class JellyInterpolator(var factor: Float = 0.15f) : LinearInterpolator() {
 
 }
 
+fun <T> Maybe<T>.subscribeDbResult(
+    onSuccess: (data: T) -> Unit,
+    onFailed: (e: Throwable) -> Unit
+) {
+    subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : MaybeObserver<T> {
+            override fun onSuccess(t: T) {
+                onSuccess(t)
+            }
+
+            override fun onComplete() {
+            }
+
+            override fun onSubscribe(d: Disposable) {
+            }
+
+            override fun onError(e: Throwable) {
+                onFailed(e)
+            }
+
+        })
+}
+
+
+val SP_USER_INFO : String = "sp_user_info"
+val KEY_IS_LOGIN : String = "key_is_login"

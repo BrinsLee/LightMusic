@@ -40,7 +40,7 @@ abstract class DefaultObserver<T> : Observer<T> {
         } else {
             onException(ExceptionReason.UNKNOWN_ERROR)
         }
-        onFinish()
+        onFail("")
     }
 
     /**
@@ -54,11 +54,9 @@ abstract class DefaultObserver<T> : Observer<T> {
     /**
      * 服务器返回数据，但响应码不为200
      */
-    fun onFail(message: String) {
-        show(message)
-    }
+    abstract fun onFail(message: String)
 
-    abstract fun onFinish()
+    fun onFinish(){}
 
     /**
      * 请求异常

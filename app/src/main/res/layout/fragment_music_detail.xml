@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_music_detail"
         android:id="@+id/rootContraint"
-        android:layout_marginBottom="@dimen/common_margin_70"
+        android:layout_marginBottom="65dp"
         tools:context=".ui.fragment.discovery.MusicDetailFragment">
 
     <com.brins.lightmusic.ui.customview.FadingScrollView

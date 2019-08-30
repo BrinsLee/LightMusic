@@ -25,7 +25,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MvResult>() {
-                override fun onFinish() {
+                override fun onFail(message: String) {
                     mView?.hideLoading()
                 }
 

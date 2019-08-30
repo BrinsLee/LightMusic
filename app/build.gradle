@@ -29,6 +29,14 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+    //启用DataBinding
+    dataBinding {
+        enabled true
+    }
+}
+
+kapt {  // kapt 配置
+    generateStubs = true
 }
 
 dependencies {
@@ -48,20 +56,22 @@ dependencies {
 //RxJava
     implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'androidx.room:room-rxjava2:2.2.0-beta01'
+
 
 //AutoDispose
     implementation 'com.uber.autodispose:autodispose-kotlin:0.8.0'
     implementation 'com.uber.autodispose:autodispose-android-archcomponents-kotlin:0.8.0'
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 //EventBus
     implementation 'de.greenrobot:eventbus:3.0.0-beta1'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
 //Room
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt "android.arch.persistence.room:compiler:1.1.1"
+    implementation "androidx.room:room-compiler:2.1.0"
     annotationProcessor 'com.android.databinding:compiler:3.1.4'
-    implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation "androidx.room:room-runtime:2.1.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 //RoundImageView
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -74,7 +84,7 @@ dependencies {
 // butterknife
     /*implementation 'com.jakewharton:butterknife:10.0.0'
     kapt 'com.jakewharton:butterknife-compiler:10.0.0'*/
-//
+
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
 //AndroidVideoCache
     implementation 'com.danikula:videocache:2.7.1'

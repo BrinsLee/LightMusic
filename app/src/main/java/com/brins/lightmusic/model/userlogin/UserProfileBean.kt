@@ -13,7 +13,7 @@ class UserProfileBean {
     @ColumnInfo(name = "ID")
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    var mId: Int = 0
+    var mId: Long = 0
     /**
      * 用户ID
      * */
