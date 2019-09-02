@@ -39,6 +39,8 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
                                         mvList.add(Mv(it, t.dataBean!!))
                                         if (mvList.size == num) {
                                             mView?.onVideoLoad(mvList)
+                                            mView?.hideLoading()
+
                                         }
                                     }
                                 })

@@ -62,6 +62,8 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
                 override fun onSuccess(response: MusicListResult) {
                     if (response.playlists != null && response.playlists!!.isNotEmpty()) {
                         mView!!.onMusicListLoad(response.playlists as MutableList<MusicListBean>)
+                        mView?.hideLoading()
+
                     }
                 }
 
@@ -81,6 +83,8 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
                 override fun onSuccess(response: MusicListDetailResult) {
                     if (response.playlist != null) {
                         mView!!.onDetailLoad(response.playlist!!)
+                        mView?.hideLoading()
+
                     }
                 }
 
@@ -103,6 +107,8 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
                     if (metaData.data != null) {
                         onlineMusic.fileUrl = metaData.data!![0].url
                         mView!!.onMusicDetail(onlineMusic)
+                        mView?.hideLoading()
+
                     }
                 }
 
