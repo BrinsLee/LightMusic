@@ -77,9 +77,13 @@ class LoginPresenter() : LoginContract.Presenter {
     }
 
     private fun storeUserInfo(result: UserLoginResult) {
-        DatabaseFactory.getUserInfoDB().insertUserAccount(result.account)
+        DatabaseFactory.storeUserInfo(result.account)
             .subscribeDbResult({
-                mView?.onLoginSuccess(result)
+                DatabaseFactory.storeUserProfile(result.profile).subscribeDbResult({
+                    mView?.onLoginSuccess(result)
+                }, {
+                    mView?.onLoginFail()
+                })
             }, {
                 mView?.onLoginFail()
             })
@@ -92,6 +96,8 @@ class LoginPresenter() : LoginContract.Presenter {
     }
 
     override fun unsubscribe() {
+
+        mView = null
     }
 
 }

@@ -18,6 +18,14 @@ public class AppConfig {
     public static final String DEFAULT_ID = "490583871";
 
 
+    public static final String USER_PLAYLIST = "/user/playlist";
+
+
+    /**
+     * 心动模式
+     */
+    public static final String INTELLIGENCE = "/playmode/intelligence/list";
+
     /**
      * 歌单
      */
@@ -27,7 +35,13 @@ public class AppConfig {
     /**
      * 歌手
      */
-    public static final String ARTISTS ="/top/artists";
+    public static final String ARTISTS = "/top/artists";
+
+    /**
+     * 歌手分类
+     */
+    public static final String ARTISTS_CATEGORY = "/artist/list";
+
 
     /**
      * 歌手音乐
@@ -39,7 +53,7 @@ public class AppConfig {
      */
     public static final String ARTISTS_MV = "artists";
     /**
-     *音乐链接
+     * 音乐链接
      */
     public static final String SONG = "/song/url";
 
@@ -51,17 +65,17 @@ public class AppConfig {
 
     public static final String MVURL = "/mv/url";
     /**
-    * 音乐封面
-    */
+     * 音乐封面
+     */
     public static final String ALBUM = "/song/detail";
 
     public static final String RECOMMEND_MV = "/personalized/mv";
 
-    public static final String VIDEO ="/video/url";
+    public static final String VIDEO = "/video/url";
     public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
     public static String USERNAME = "";
-    public static  String PASSWORD = "";
+    public static String PASSWORD = "";
 
     /**
      * 包名相关常量
@@ -114,6 +128,7 @@ public class AppConfig {
             return context.getResources().getDisplayMetrics().heightPixels;
         }
     }
+
     public static final int NEXT_MUSIC = 0;
     public static final int PRE_MUSIC = 1;
 

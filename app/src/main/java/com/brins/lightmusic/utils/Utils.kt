@@ -269,18 +269,15 @@ class JellyInterpolator(var factor: Float = 0.15f) : LinearInterpolator() {
 
 }
 
-fun <T> Maybe<T>.subscribeDbResult(
+fun <T> Single<T>.subscribeDbResult(
     onSuccess: (data: T) -> Unit,
     onFailed: (e: Throwable) -> Unit
 ) {
     subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(object : MaybeObserver<T> {
+        .subscribe(object : SingleObserver<T> {
             override fun onSuccess(t: T) {
                 onSuccess(t)
-            }
-
-            override fun onComplete() {
             }
 
             override fun onSubscribe(d: Disposable) {
@@ -290,9 +287,11 @@ fun <T> Maybe<T>.subscribeDbResult(
                 onFailed(e)
             }
 
+
         })
 }
 
 
 val SP_USER_INFO : String = "sp_user_info"
 val KEY_IS_LOGIN : String = "key_is_login"
+val KEY_AVATAR_STRING : String = "key_avatar_string"

@@ -7,6 +7,6 @@ class UserLoginResult {
     @SerializedName("account")
     var account : UserAccountBean = UserAccountBean()
     @SerializedName("profile")
-    var profile : UserProfileBean? = null
+    var profile : UserProfileBean = UserProfileBean()
 
 }

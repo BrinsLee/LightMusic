@@ -1,89 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false">
+        android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
+    <ImageView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/common_margin_200"
-            android:background="@android:color/transparent"
-            android:fitsSystemWindows="true">
+            android:layout_height="@dimen/common_margin_300"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_margin_200"
+                android:background="@android:color/transparent"
+                android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    app:contentScrim="@android:color/transparent"
+                    app:expandedTitleMarginEnd="10dp"
+                    app:expandedTitleMarginStart="10dp"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                            android:id="@+id/avatar"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginEnd="20dp"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/avart"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:riv_corner_radius="50dp" />
+
+                    <com.brins.lightmusic.ui.customview.FontTextView
+                            android:id="@+id/nickName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:layout_marginBottom="@dimen/common_margin_50"
+                            android:ellipsize="end"
+                            android:maxEms="5"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="@string/login"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:expandedTitleMarginEnd="10dp"
-                app:expandedTitleMarginStart="10dp"
-                android:background="@android:color/transparent"
-                app:contentScrim="@android:color/transparent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:background="@drawable/bg_fragment_local"
+                android:clipChildren="false"
+                android:descendantFocusability="afterDescendants"
+                android:fillViewport="true"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                        android:id="@+id/avatar"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginEnd="20dp"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/avart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:riv_corner_radius="50dp"/>
-
-                <com.brins.lightmusic.ui.customview.FontTextView
-                        android:id="@+id/nickName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="@dimen/common_margin_50"
-                        android:text="@string/login"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:maxLines="1"
-                        android:maxEms="5"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-    <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_fragment_local"
-            android:descendantFocusability="afterDescendants"
-            android:fillViewport="true"
-            android:clipChildren="false"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="-60dp">
-            <include
-                    android:id="@+id/tab"
-                    layout="@layout/item_grid_view"/>
-            <androidx.recyclerview.widget.RecyclerView
-                    app:layout_constraintTop_toBottomOf="@id/tab"
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/common_margin_20"
-                    android:nestedScrollingEnabled="true">
+                    android:layout_marginTop="-60dp">
 
-            </androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                <include layout="@layout/item_grid_view" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <com.brins.lightmusic.ui.customview.UserPlayListView
+                        android:id="@+id/userPlayList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/common_margin_10"
+                        app:layout_constraintTop_toBottomOf="@id/head"></com.brins.lightmusic.ui.customview.UserPlayListView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

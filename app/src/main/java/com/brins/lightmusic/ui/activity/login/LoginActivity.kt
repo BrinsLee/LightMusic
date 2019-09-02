@@ -54,6 +54,8 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
         btn_login.setOnClickListener(this)
     }
 
+
+
     override fun showLoading() {
         val weight = btn_login.measuredWidth.toFloat()
         val height = btn_login.measuredHeight.toFloat()

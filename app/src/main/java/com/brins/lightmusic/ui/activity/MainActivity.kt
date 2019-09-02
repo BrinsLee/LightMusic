@@ -47,7 +47,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        AppConfig.isLogin = SpUtils.obtain(SP_USER_INFO,this).getBoolean(KEY_IS_LOGIN,false)
         initViewPagerAndTabLay()
     }
 

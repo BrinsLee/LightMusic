@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.brins.lightmusic">
+        package="com.brins.lightmusic">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
             android:name=".LightMusicApplication"
@@ -21,39 +21,36 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.MusicPlayActivity">
-        </activity>
+        <activity android:name=".ui.activity.usermusiclist.UserMusicListActivity"></activity>
+        <activity android:name=".ui.activity.MusicPlayActivity"></activity>
 
         <service
                 android:name=".player.PlayBackService"
                 android:enabled="true"
-                android:exported="true">
-        </service>
+                android:exported="true"></service>
 
         <receiver android:name=".player.PlayBackService$MediaButtonReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.base.BaseActivity">
-        </activity>
+        <activity android:name=".ui.base.BaseActivity"></activity>
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.login.LoginActivity"
-                  android:launchMode="singleTask">
-        </activity>
+        <activity
+                android:name=".ui.activity.login.LoginActivity"
+                android:launchMode="singleTask"></activity>
         <activity
                 android:name=".ui.activity.MainActivity"
-                android:launchMode="singleInstance"
                 android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait">
-        </activity>
+                android:launchMode="singleInstance"
+                android:screenOrientation="portrait"></activity>
 
         <provider
                 android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
@@ -62,17 +59,16 @@
                 android:grantUriPermissions="true">
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_paths"/>
+                    android:resource="@xml/file_paths" />
         </provider>
         <provider
                 android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
                 android:authorities="${applicationId}.TTMultiProvider"
-                android:exported="false"/>
+                android:exported="false" />
 
         <receiver android:name=".player.broadcast.HeadsetButtonReceiver">
-            <intent-filter
-                    android:priority="1000">
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
     </application>

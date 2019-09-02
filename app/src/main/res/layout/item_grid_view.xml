@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
+            android:id="@+id/head"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -16,6 +17,7 @@
                 android:layout_marginStart="@dimen/common_margin_30"
                 android:layout_marginEnd="@dimen/common_margin_10"
                 android:background="@drawable/background_item_list">
+
 
             <ImageView
                     app:layout_constraintTop_toTopOf="parent"
@@ -86,6 +88,7 @@
                 android:layout_marginStart="@dimen/common_margin_10"
                 android:layout_marginEnd="@dimen/common_margin_30"
                 android:background="@drawable/background_item_list">
+
 
             <ImageView
                     app:layout_constraintTop_toTopOf="parent"

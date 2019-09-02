@@ -3,12 +3,15 @@ package com.brins.lightmusic
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.common.AppConfig
-import com.brins.lightmusic.utils.getAudioCacheDir
-import com.brins.lightmusic.utils.getCurrProcessName
+import com.brins.lightmusic.model.database.DatabaseFactory
+import com.brins.lightmusic.utils.*
 import io.reactivex.plugins.RxJavaPlugins
 import com.danikula.videocache.HttpProxyCacheServer
 import com.danikula.videocache.file.FileNameGenerator
+import java.util.zip.DataFormatException
 
 
 class LightMusicApplication : BaseApplication() {
@@ -49,6 +52,7 @@ class LightMusicApplication : BaseApplication() {
         super.onCreate()
         if (isMainProcess(this)) {
             initRxJava()
+            initUserData()
         }
         /*if (LeakCanary.isInAnalyzerProcess(this)) {//1
             // This process is dedicated to LeakCanary for heap analysis.
@@ -65,5 +69,22 @@ class LightMusicApplication : BaseApplication() {
 
     private fun initRxJava() {
         RxJavaPlugins.setErrorHandler { throwable -> Log.e("RxJava", "RX error handler") }
+    }
+
+    private fun initUserData() {
+        AppConfig.isLogin = SpUtils.obtain(SP_USER_INFO,this).getBoolean(KEY_IS_LOGIN, false)
+        if (AppConfig.isLogin) {
+            DatabaseFactory.getUserInfo().subscribeDbResult({
+                AppConfig.userAccount = it
+            }, {
+                it.printStackTrace()
+            })
+
+            DatabaseFactory.getUserProfile().subscribeDbResult({
+                AppConfig.userProfile = it
+            }, {
+                it.printStackTrace()
+            })
+        }
     }
 }

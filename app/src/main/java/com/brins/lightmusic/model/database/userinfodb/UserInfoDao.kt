@@ -14,7 +14,7 @@ interface UserInfoDao {
     @Insert
     fun addUserAccount(account : UserAccountBean) : Single<Long>
     @Insert
-    fun addUserProfile(account : UserProfileBean) : Maybe<Long>
+    fun addUserProfile(account : UserProfileBean) : Single<Long>
 
     @Query("select * from user_account order by ID DESC")
     fun getUserAccount() : Single<UserAccountBean>

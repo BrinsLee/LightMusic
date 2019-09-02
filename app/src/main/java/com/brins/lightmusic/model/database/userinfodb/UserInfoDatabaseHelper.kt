@@ -16,8 +16,8 @@ class UserInfoDatabaseHelper(context: Context) {
         return appDatabase.dao().addUserAccount(account)
     }
 
-    fun insertUserProfile(account: UserProfileBean){
-        appDatabase.dao().addUserProfile(account)
+    fun insertUserProfile(account: UserProfileBean): Single<Long>{
+        return appDatabase.dao().addUserProfile(account)
     }
 
     fun getUserAccount () :Single<UserAccountBean>{

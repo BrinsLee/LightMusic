@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rootli"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_margin_10"
+            android:orientation="horizontal">
+
+        <ImageView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_margin_20"
+                android:src="@drawable/ic_chevron_right" />
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_margin_20"
+                android:text="@string/my_music_list"
+                android:textColor="#333333"
+                android:textSize="15sp" />
+    </LinearLayout>
+
+</merge>

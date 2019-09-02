@@ -18,4 +18,5 @@
     <string name="unknown_error">未知错误</string>
     <string name="transitions_name">transitionTitle</string>
     <string name="login">点击登录</string>
+    <string name="my_music_list">我的歌单</string>
 </resources>
