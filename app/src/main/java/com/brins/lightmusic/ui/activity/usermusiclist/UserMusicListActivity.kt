@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.activity.usermusiclist
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -15,11 +16,13 @@ import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
+import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_user_music_list.*
 
-class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClickListener {
+class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClickListener,
+    CommonHeaderView.OnBackClickListener {
 
     private var mPlayList: UserPlayListBean? = null
     private lateinit var mPresenter: MusicListContract.Presenter
@@ -50,6 +53,7 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
 
     fun setListener(){
         mAdapter.setOnItemClickListener(this)
+        head.setOnBackClickListener(this)
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
@@ -73,6 +77,10 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
 
     override fun onItemClick(position: Int) {
         mPresenter.loadMusicDetail(mMusicLists[position])
+    }
+
+    override fun onBackClick(view: View) {
+        finish()
     }
 
     //MVP View
