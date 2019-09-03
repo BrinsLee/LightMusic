@@ -5,22 +5,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
+import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_user_music_list.*
 
-class UserMusicListActivity : BaseActivity(), MusicListContract.View {
-
+class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClickListener {
 
     private var mPlayList: UserPlayListBean? = null
-    private var mPresenter: MusicListContract.Presenter? = null
+    private lateinit var mPresenter: MusicListContract.Presenter
     private var mMusicLists = arrayListOf<OnlineMusic>()
     private var mAdapter: TreeRecyclerViewAdapter<OnlineMusic> =
         TreeRecyclerViewAdapter(mMusicLists)
@@ -43,6 +45,11 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View {
         super.onCreateBeforeBinding(savedInstanceState)
         mPlayList = intent.getParcelableExtra(PLAYBEAN)
         MusicListPresenter.instance.subscribe(this)
+
+    }
+
+    fun setListener(){
+        mAdapter.setOnItemClickListener(this)
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
@@ -60,6 +67,12 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(SpacesItemDecoration(10))
         recyclerView.adapter = mAdapter
+        setListener()
+
+    }
+
+    override fun onItemClick(position: Int) {
+        mPresenter.loadMusicDetail(mMusicLists[position])
     }
 
     //MVP View
@@ -86,5 +99,9 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View {
 
     override fun getLifeActivity(): AppCompatActivity {
         return this
+    }
+
+    override fun onMusicDetail(onlineMusic: OnlineMusic) {
+        RxBus.getInstance().post(PlayOnLineMusicEvent(onlineMusic))
     }
 }

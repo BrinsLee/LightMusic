@@ -63,6 +63,13 @@ class TreeRecyclerViewAdapter <T>(var list: ArrayList<T>) :
                 val playlist = (list[position] as OnlineMusic)
                 (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text = playlist.nameMusic
                 holder.tvAccount.text = playlist.artistBeans!![0].name
+                if (mItemClickListener != null) {
+                    holder.itemRoot.setOnClickListener {
+                        mItemClickListener!!.onItemClick(position)
+                    }
+
+
+                }
             }
 
         }

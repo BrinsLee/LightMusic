@@ -9,6 +9,7 @@
             android:layout_height="wrap_content">
 
         <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+                android:id="@+id/localMusic"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/common_margin_100"
                 android:layout_weight="1"

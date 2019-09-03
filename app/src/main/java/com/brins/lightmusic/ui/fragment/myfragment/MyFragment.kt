@@ -12,18 +12,21 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.usermusiclist.UserMusicListActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
+import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
+import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import kotlinx.android.synthetic.main.fragment_localmusic.avatar
-import kotlinx.android.synthetic.main.fragment_localmusic.nickName
 import kotlinx.android.synthetic.main.fragment_my.*
+import kotlinx.android.synthetic.main.item_grid_view.*
+import java.lang.Exception
 
 class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnClickListener {
 
@@ -84,6 +87,8 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
         mAdapter.setOnItemClickListener(this)
         avatar.setOnClickListener(this)
         nickName.setOnClickListener(this)
+        localMusic.setOnClickListener(this)
+
     }
 
 
@@ -94,6 +99,13 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
     override fun onClick(v: View) {
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(activity as AppCompatActivity)
+            R.id.localMusic -> try {
+                (activity as MainActivity).switchFragment(LocalMusicFragment())
+                    .addToBackStack(TAG)
+                    .commit()
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
         }
     }
 

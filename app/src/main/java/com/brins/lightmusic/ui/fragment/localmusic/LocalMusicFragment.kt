@@ -15,13 +15,15 @@ import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.manager.PermissionManager
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.ListAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 
-class LocalMusicFragment : BaseFragment(), LocalMusicContract.View, OnItemClickListener, View.OnClickListener {
+class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,LocalMusicContract.View, OnItemClickListener, View.OnClickListener {
 
 
     lateinit var permissionManager : PermissionManager
@@ -48,8 +50,7 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View, OnItemClickL
 
     private fun setListener() {
         mAdapter.setOnItemClickListener(this)
-        avatar.setOnClickListener(this)
-        nickName.setOnClickListener(this)
+        toolbar.setOnBackClickListener(this)
     }
 
     override fun onResume() {
@@ -113,6 +114,10 @@ class LocalMusicFragment : BaseFragment(), LocalMusicContract.View, OnItemClickL
 
     override fun onClick(v: View) {
 
+    }
+
+    override fun onBackClick(view: View) {
+        (activity as MainActivity).onBackPressed()
     }
 
 }

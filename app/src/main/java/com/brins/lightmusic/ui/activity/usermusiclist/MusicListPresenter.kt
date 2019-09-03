@@ -4,7 +4,9 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
+import com.brins.lightmusic.model.onlinemusic.MusicBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
+import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.login.LoginPresenter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -26,6 +28,31 @@ class MusicListPresenter : MusicListContract.Presenter {
 
     private object SingletonHolder {
         val holder = MusicListPresenter()
+    }
+
+
+    override fun loadMusicDetail(onlineMusic: OnlineMusic) {
+        var metaData: MusicBean
+        mView!!.showLoading()
+        ApiHelper.getMusicService().getUrl(onlineMusic.id)
+            .compose(AsyncTransformer<MusicBean>())
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<MusicBean>() {
+                override fun onFail(message: String) {
+                    mView?.hideLoading()
+                }
+
+                override fun onSuccess(response: MusicBean) {
+                    metaData = response
+                    if (metaData.data != null) {
+                        onlineMusic.fileUrl = metaData.data!![0].url
+                        mView!!.onMusicDetail(onlineMusic)
+                        mView?.hideLoading()
+
+                    }
+                }
+
+            })
     }
 
 

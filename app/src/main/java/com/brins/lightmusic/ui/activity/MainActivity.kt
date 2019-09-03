@@ -88,23 +88,26 @@ class MainActivity : BaseActivity() {
 
      fun switchFragment(currentId : String,targetFragment : BaseFragment) : FragmentTransaction{
          currentMusicListId = currentId
-         val transaction = supportFragmentManager.beginTransaction()
-         if(!targetFragment.isAdded){
-             if (currentFragment != null){
-                 transaction.hide(currentFragment!!)
-             }
-             transaction.add(R.id.drawer,targetFragment
-                 ,targetFragment::class.java.name)
-         }else{
-             if (currentFragment != null){
-                 transaction.hide(currentFragment!!)
-             }
-             transaction.show(targetFragment)
-         }
-         currentFragment = targetFragment
-         return transaction
-
+         return switchFragment(targetFragment)
      }
+
+    fun switchFragment(targetFragment : BaseFragment): FragmentTransaction{
+        val transaction = supportFragmentManager.beginTransaction()
+        if(!targetFragment.isAdded){
+            if (currentFragment != null){
+                transaction.hide(currentFragment!!)
+            }
+            transaction.add(R.id.drawer,targetFragment
+                ,targetFragment::class.java.name)
+        }else{
+            if (currentFragment != null){
+                transaction.hide(currentFragment!!)
+            }
+            transaction.show(targetFragment)
+        }
+        currentFragment = targetFragment
+        return transaction
+    }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
 
