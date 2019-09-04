@@ -28,7 +28,7 @@
     <item
             android:left="3dp"
             android:top="3dp"
-            android:right="@dimen/common_margin_5"
+            android:right="3dp"
             android:bottom="@dimen/common_margin_5">
         <shape android:shape="rectangle" >
 

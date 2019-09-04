@@ -19,6 +19,7 @@ import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.customview.DefaultAnimator
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
@@ -135,6 +136,10 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
             }
 
         })
+/*        val animator = DefaultAnimator()
+        animator.addDuration = 1000
+        animator.removeDuration = 1000
+        recycleMusiclist.itemAnimator = animator*/
         recycleMusiclist.adapter = musicListAdapter
         recycleMusiclist.layoutManager = GridLayoutManager(context!!,3)
 /*        recycleMusiclist2.adapter = musicListAdapter

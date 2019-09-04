@@ -10,6 +10,7 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
 import com.brins.lightmusic.utils.SpacesItemDecoration
+import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.item_recycler_head.view.*
 import kotlinx.android.synthetic.main.view_my_recycler.view.*
 
@@ -40,6 +41,7 @@ class UserPlayListView @JvmOverloads constructor(
     }
 
     private fun initView() {
+
         recyclerView.setItemViewCacheSize(5)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -48,6 +50,10 @@ class UserPlayListView @JvmOverloads constructor(
     }
 
     fun setAdapter(adapter: TreeRecyclerViewAdapter<UserPlayListBean>) {
+        val animator = DefaultAnimator()
+        animator.addDuration = 1000
+        animator.removeDuration = 1000
+        recyclerView.itemAnimator = animator
         recyclerView.adapter = adapter
     }
 

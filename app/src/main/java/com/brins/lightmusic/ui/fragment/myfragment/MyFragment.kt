@@ -18,6 +18,7 @@ import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
+import com.brins.lightmusic.ui.customview.DefaultAnimator
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.utils.*
