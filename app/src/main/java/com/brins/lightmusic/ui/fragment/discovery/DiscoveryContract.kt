@@ -21,7 +21,7 @@ interface DiscoveryContract {
 
         fun handleError(error: Throwable)
 
-        fun onMusicListLoad(songs : MutableList<MusicListBean>)
+        fun onMusicListLoad(songs : ArrayList<MusicListBean>)
 
         fun onBannerLoad(banners : ArrayList<Banner>)
 

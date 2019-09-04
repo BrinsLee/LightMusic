@@ -26,6 +26,7 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 
 class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener , CommonHeaderView.OnBackClickListener {
 
+
     private lateinit var mPresenter: DiscoveryContract.Presenter
     var id: String = ""
     var musicDetails = mutableListOf<OnlineMusic>()
@@ -87,7 +88,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun handleError(error: Throwable) {
     }
 
-    override fun onMusicListLoad(songs: MutableList<MusicListBean>) {
+    override fun onMusicListLoad(songs: ArrayList<MusicListBean>) {
     }
 
     override fun onBannerLoad(banners: ArrayList<Banner>) {

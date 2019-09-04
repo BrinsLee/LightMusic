@@ -24,6 +24,7 @@ public class AppConfig {
     public static final String USER_PLAYLIST = "/user/playlist";
 
 
+
     /**
      * 轮播图
      */
@@ -40,6 +41,11 @@ public class AppConfig {
      */
     public static final String PLAYLIST = "/top/playlist";
     public static final String PLAYLISTDETAIL = "/playlist/detail";
+
+    /**
+     * 精选歌单
+     */
+    public static final String MUSICLIST_HIGHQUALITY = "/top/playlist/highquality";
 
     /**
      * 歌手

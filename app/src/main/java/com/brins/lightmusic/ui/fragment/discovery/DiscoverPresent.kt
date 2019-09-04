@@ -51,7 +51,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
     }
 
     override fun loadMusicList(top: Int) {
-        ApiHelper.getPlayListService().getPlayList(top)
+        ApiHelper.getPlayListService().getHightQualityList()
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {
@@ -61,7 +61,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
 
                 override fun onSuccess(response: MusicListResult) {
                     if (response.playlists != null && response.playlists!!.isNotEmpty()) {
-                        mView!!.onMusicListLoad(response.playlists as MutableList<MusicListBean>)
+                        mView!!.onMusicListLoad(response.playlists as ArrayList<MusicListBean>)
                         mView?.hideLoading()
 
                     }
@@ -117,7 +117,6 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
 
     override fun subscribe(view: DiscoveryContract.View) {
         mView = view
-        mView?.showLoading()
         mView?.setPresenter(this)
         loadBanner()
         loadMusicList()

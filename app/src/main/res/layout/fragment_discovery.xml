@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
         xmlns:app="http://schemas.android.com/apk/res-auto"
-
-        xmlns:pile="http://schemas.android.com/tools"
         android:id="@+id/loadingMore"
-
         android:layout_width="match_parent"
-
         android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
@@ -30,38 +25,85 @@
                             pile:scaleStep="0.32"
                             pile:sizeRatio="1.12"/>-->
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/banner"
+                    android:layout_marginTop="@dimen/common_margin_20"
+                    android:id="@+id/recyclerBanner"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/common_margin_200" />
+                    android:layout_height="@dimen/common_margin_150" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    android:layout_height="wrap_content">
 
                 <include
                         android:id="@+id/loadingLayout"
-                        layout="@layout/loading_layout" />
+                        layout="@layout/loading_layout"
+                        android:visibility="gone"/>
 
                 <TextView
                         android:id="@+id/musicTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="推荐歌单"
+                        android:text="@string/recommend_list"
                         android:textColor="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/common_margin_10"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                <ImageView
+                        android:scaleType="centerCrop"
+                        android:id="@+id/recommend"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintStart_toEndOf="@id/musicTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleMusiclist"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/common_margin_10"
-                        android:layout_marginBottom="@dimen/common_margin_10"></androidx.recyclerview.widget.RecyclerView>
-            </LinearLayout>
+                        app:layout_constraintTop_toBottomOf="@id/recommend"
+                        android:layout_marginTop="@dimen/common_margin_20"
+                        android:layout_marginBottom="@dimen/common_margin_10">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <TextView
+                        android:id="@+id/musicTitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/hot_list"
+                        android:textColor="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/common_margin_10"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/recycleMusiclist"/>
+                <ImageView
+                        android:scaleType="centerCrop"
+                        android:id="@+id/recommend2"
+                        app:layout_constraintTop_toBottomOf="@id/recycleMusiclist"
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintStart_toEndOf="@id/musicTitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleMusiclist2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/recommend2"
+                        android:layout_marginTop="@dimen/common_margin_20"
+                        android:layout_marginBottom="@dimen/common_margin_10">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

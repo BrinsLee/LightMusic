@@ -20,4 +20,6 @@
     <string name="login">点击登录</string>
     <string name="my_music_list">我的歌单</string>
     <string name="local_music">本地音乐</string>
+    <string name="recommend_list">推荐歌单</string>
+    <string name="hot_list">热门歌单</string>
 </resources>

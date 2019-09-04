@@ -3,15 +3,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="@dimen/common_margin_300"
         android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/common_margin_60"
         app:round_corner="@dimen/common_margin_20">
 
     <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/cover"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/common_margin_80"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
             app:riv_corner_radius="@dimen/common_margin_20" />
 
     <com.brins.lightmusic.ui.customview.FontTextView
@@ -23,6 +22,7 @@
             android:textColor="@color/tt_trans_black"
             android:textSize="18sp"
             app:font_type="DIN-Bold"
+            android:layout_marginTop="@dimen/common_margin_20"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cover" />
 

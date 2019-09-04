@@ -9,17 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.banner.Banner
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.bumptech.glide.Glide
-import java.lang.reflect.ParameterizedType
 
-class MusicListAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
-    RecyclerView.Adapter<MusicListAdapter.ViewHolder>()
+class DiscoveryAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
+    RecyclerView.Adapter<DiscoveryAdapter.ViewHolder>()
     , View.OnClickListener {
 
     companion object {
         @JvmStatic
         val TYPE_MUSIC_LIST = 1
-        val TYPE_MUSIC = 2
+        val TYPE_BANNER = 2
     }
 
     private var onItemClickListener: OnItemClickListener? = null
@@ -44,16 +44,22 @@ class MusicListAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (listBean.isNotEmpty()) {
-
-            val pt = this.javaClass.genericSuperclass as ParameterizedType
-            val clazz = pt.actualTypeArguments[0] as Class<T>
-            val className = clazz.canonicalName
-            if (className == "Banner") {
+            //横幅
+            if (TYPE_BANNER == type) {
                 val banner = listBean[position] as Banner
                 holder.title.text = banner.song?.nameMusic
                 holder.description.text = banner.typeTitle
                 Glide.with(BaseApplication.getInstance().baseContext)
                     .load(banner.picUrl)
+                    .into(holder.cover)
+                holder.itemView.tag = position
+            }
+            if (TYPE_MUSIC_LIST == type){
+                val musicList = listBean[position] as MusicListBean
+                holder.title.text = musicList.name
+                holder.description.text = musicList.description
+                Glide.with(BaseApplication.getInstance().baseContext)
+                    .load(musicList.coverImgUrl)
                     .into(holder.cover)
                 holder.itemView.tag = position
             }

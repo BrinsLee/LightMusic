@@ -1,6 +1,7 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
 import io.reactivex.Observable
@@ -20,4 +21,12 @@ interface PlayListService {
     * */
     @GET(AppConfig.PLAYLISTDETAIL)
     fun getPlayListDetail(@Query("id") id: String): Observable<MusicListDetailResult>
+
+    /*
+    * 精选歌单
+    * */
+    @GET(AppConfig.MUSICLIST_HIGHQUALITY)
+    fun getHightQualityList(@Query("limit") limit : Int = 6) : Observable<MusicListResult>
+
+
 }

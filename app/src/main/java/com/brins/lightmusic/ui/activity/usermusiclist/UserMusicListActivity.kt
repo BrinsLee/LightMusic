@@ -63,7 +63,7 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
             Glide.with(this).load(mPlayList!!.coverImgUrl).into(cover)
             nickName.text = mPlayList!!.creator.nickName
             Glide.with(this).load(mPlayList!!.creator.avatarUrl).into(avatar)
-            mPresenter!!.loadMusicList(mPlayList!!.id)
+            mPresenter.loadMusicList(mPlayList!!.id)
         }
 
         recyclerView.setItemViewCacheSize(5)

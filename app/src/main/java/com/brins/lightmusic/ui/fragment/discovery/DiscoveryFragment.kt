@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
@@ -20,12 +21,19 @@ import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
-class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLayout.OnRefreshListener {
+class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
+    SwipeRefreshLayout.OnRefreshListener {
     private var isFresh: Boolean = false
-    var count: Int = 1
-    lateinit var mPresenter: DiscoveryContract.Presenter
-    lateinit var artistlist: ArrayList<Banner>
-    lateinit var musicListBean: MutableList<MusicListBean>
+    private var count: Int = 1
+    private lateinit var mPresenter: DiscoveryContract.Presenter
+    private lateinit var bannerList: ArrayList<Banner>
+    private lateinit var musicListBean: ArrayList<MusicListBean>
+    private val bannerAdapter by lazy {
+        DiscoveryAdapter(DiscoveryAdapter.TYPE_BANNER, bannerList)
+    }
+    private val musicListAdapter by lazy {
+        DiscoveryAdapter(DiscoveryAdapter.TYPE_MUSIC_LIST, musicListBean)
+    }
 
     override fun onLazyLoad() {
         super.onLazyLoad()
@@ -65,7 +73,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
 
     }
 
-    override fun onMusicListLoad(songs: MutableList<MusicListBean>) {
+    override fun onMusicListLoad(songs: ArrayList<MusicListBean>) {
         isFresh = false
         songs.reverse()
         musicListBean = songs
@@ -73,13 +81,18 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
     }
 
     override fun onBannerLoad(banners: ArrayList<Banner>) {
-        artistlist = banners
+        bannerList = banners
         initBannerView()
     }
 
     override fun onMusicDetail(onlineMusic: OnlineMusic) {}
 
     private fun initBannerView() {
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        recyclerBanner.layoutManager = layoutManager
+        recyclerBanner.adapter = bannerAdapter
+
         /*pileLayout.visibility = View.VISIBLE
         pileLayout.setAdapter(object : PileLayout.Adapter() {
             override fun getLayoutId(): Int {
@@ -87,7 +100,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
             }
 
             override fun getItemCount(): Int {
-                return artistlist.size
+                return bannerList.size
             }
 
             override fun bindView(view: View, index: Int) {
@@ -98,9 +111,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
                     viewHolder.textView = view.findViewById(R.id.introduce)
                     view.tag = viewHolder
                 }
-                viewHolder.textView!!.text = artistlist[index].name
+                viewHolder.textView!!.text = bannerList[index].name
                 Glide.with(this@DiscoveryFragment)
-                    .load(artistlist[index].picUrl)
+                    .load(bannerList[index].picUrl)
                     .into(viewHolder.imageView!!)
             }
         })*/
@@ -108,11 +121,8 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
     }
 
     private fun initMusicList() {
-        val adapter = MusicListAdapter(
-            MusicListAdapter.TYPE_MUSIC_LIST,
-            musicListBean as ArrayList<MusicListBean>
-        )
-        adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener {
+
+        musicListAdapter.setOnItemClickListener(object : DiscoveryAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val id = musicListBean[position].id
                 try {
@@ -125,8 +135,10 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
             }
 
         })
-        recycleMusiclist.adapter = adapter
-        recycleMusiclist.layoutManager = LinearLayoutManager(context!!)
+        recycleMusiclist.adapter = musicListAdapter
+        recycleMusiclist.layoutManager = GridLayoutManager(context!!,3)
+/*        recycleMusiclist2.adapter = musicListAdapter
+        recycleMusiclist2.layoutManager = GridLayoutManager(context!!,3)*/
 
     }
 
@@ -144,7 +156,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
             isFresh = true
             loadingMore.isRefreshing = false
             showLoading()
-            mPresenter.loadMusicList(count * 12)
+//            mPresenter.loadMusicList(count * 12)
         }
     }
 
