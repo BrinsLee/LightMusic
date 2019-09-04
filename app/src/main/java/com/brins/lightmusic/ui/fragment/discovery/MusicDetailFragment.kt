@@ -16,6 +16,7 @@ import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
@@ -89,7 +90,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun onMusicListLoad(songs: MutableList<MusicListBean>) {
     }
 
-    override fun onArtistLoad(artistBeans: MutableList<ArtistBean>) {
+    override fun onBannerLoad(banners: ArrayList<Banner>) {
     }
 
     override fun onDetailLoad(detailBean: MusicListDetailBean) {

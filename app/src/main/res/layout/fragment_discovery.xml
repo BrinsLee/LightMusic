@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
         xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -11,52 +10,59 @@
 
         android:layout_height="match_parent">
 
-<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
-                                       android:layout_height="match_parent">
-    <LinearLayout
-            android:orientation="vertical"
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false">
-        <com.brins.lightmusic.ui.customview.PileLayout
-                android:id="@+id/pileLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                pile:displayCount="1.8"
-                pile:interval="10dp"
-                pile:scaleStep="0.32"
-                pile:sizeRatio="1.12"/>
+            android:layout_height="match_parent">
 
         <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent">
-            <include
-                    android:id="@+id/loadingLayout"
-                    layout="@layout/loading_layout"/>
-            <TextView
-                    android:id="@+id/musicTitle"
-                    android:text="推荐歌单"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_margin="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:orientation="vertical">
+            <!--        <com.brins.lightmusic.ui.customview.PileLayout
+                            android:id="@+id/pileLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            pile:displayCount="1.8"
+                            pile:interval="10dp"
+                            pile:scaleStep="0.32"
+                            pile:sizeRatio="1.12"/>-->
             <androidx.recyclerview.widget.RecyclerView
-                    android:layout_gravity="center"
-                    android:id="@+id/recycleMusiclist"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    android:layout_marginBottom="@dimen/common_margin_10"
+                    android:id="@+id/banner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-            </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="@dimen/common_margin_200" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                <include
+                        android:id="@+id/loadingLayout"
+                        layout="@layout/loading_layout" />
+
+                <TextView
+                        android:id="@+id/musicTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="推荐歌单"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleMusiclist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/common_margin_10"
+                        android:layout_marginBottom="@dimen/common_margin_10"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

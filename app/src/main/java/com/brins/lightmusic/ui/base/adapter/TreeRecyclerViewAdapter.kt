@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.base.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,35 @@ import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.customview.RoundConstraintLayout
 import com.bumptech.glide.Glide
+import java.lang.reflect.ParameterizedType
 
-class TreeRecyclerViewAdapter <T>(var list: ArrayList<T>) :
+class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    companion object {
+        val TAG: String = "TreeRecyclerViewAdapter"
+    }
+
     private var mItemClickListener: OnItemClickListener? = null
+    private var className = ""
+
+    init {
+        declareType()
+    }
+
+    private fun declareType() {
+        if (list.isNotEmpty()) {
+            if (list[0] is UserPlayListBean) {
+                className = "UserPlayListBean"
+
+            }
+            if (list[0] is OnlineMusic) {
+                className = "OnlineMusic"
+            }
+        }
+        Log.d(TAG, className)
+
+    }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         mItemClickListener = listener
@@ -29,7 +54,12 @@ class TreeRecyclerViewAdapter <T>(var list: ArrayList<T>) :
             false
         )
         val holder = SecondViewHolder(itemView)
-        val position = holder.adapterPosition
+        if (mItemClickListener != null) {
+            itemView.setOnClickListener {
+                mItemClickListener!!.onItemClick(it.tag as Int)
+            }
+
+        }
         return holder
     }
 
@@ -43,33 +73,22 @@ class TreeRecyclerViewAdapter <T>(var list: ArrayList<T>) :
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         if (list.size != 0) {
-            if (list[position] is UserPlayListBean){
+            holder.itemView.tag = position
+            if (className == "UserPlayListBean") {
                 val playlist = (list[position] as UserPlayListBean)
                 Glide.with(BaseApplication.getInstance().baseContext)
-                    .load(playlist.coverImgUrl).into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
+                    .load(playlist.coverImgUrl)
+                    .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
                 holder.tvName.text = playlist.name
                 holder.tvAccount.text = "共${playlist.trackCount}首"
-
-                if (mItemClickListener != null) {
-                    holder.itemRoot.setOnClickListener {
-                        mItemClickListener!!.onItemClick(position)
-                    }
-
-
-                }
             }
-            if(list[position] is OnlineMusic){
+            else{
                 val playlist = (list[position] as OnlineMusic)
-                (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text = playlist.nameMusic
+                (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text =
+                    playlist.nameMusic
                 holder.tvAccount.text = playlist.artistBeans!![0].name
-                if (mItemClickListener != null) {
-                    holder.itemRoot.setOnClickListener {
-                        mItemClickListener!!.onItemClick(position)
-                    }
-
-
-                }
             }
 
         }

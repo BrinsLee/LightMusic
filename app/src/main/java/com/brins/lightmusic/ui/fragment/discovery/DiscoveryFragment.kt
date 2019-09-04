@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -13,31 +12,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.ui.customview.PileLayout
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_discovery.*
-import java.util.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLayout.OnRefreshListener {
     private var isFresh: Boolean = false
     var count: Int = 1
     lateinit var mPresenter: DiscoveryContract.Presenter
-    lateinit var artistlist: MutableList<ArtistBean>
+    lateinit var artistlist: ArrayList<Banner>
     lateinit var musicListBean: MutableList<MusicListBean>
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        getArtist()
+        getBanner()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getArtist() {
+    private fun getBanner() {
         DiscoverPresent.instance.subscribe(this@DiscoveryFragment)
         initLoadingMore()
     }
@@ -76,15 +72,15 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
         initMusicList()
     }
 
-    override fun onArtistLoad(artistBeans: MutableList<ArtistBean>) {
-        artistlist = artistBeans
-        initArtistView()
+    override fun onBannerLoad(banners: ArrayList<Banner>) {
+        artistlist = banners
+        initBannerView()
     }
 
     override fun onMusicDetail(onlineMusic: OnlineMusic) {}
 
-    private fun initArtistView() {
-        pileLayout.visibility = View.VISIBLE
+    private fun initBannerView() {
+        /*pileLayout.visibility = View.VISIBLE
         pileLayout.setAdapter(object : PileLayout.Adapter() {
             override fun getLayoutId(): Int {
                 return R.layout.artist_item
@@ -107,15 +103,14 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View, SwipeRefreshLa
                     .load(artistlist[index].picUrl)
                     .into(viewHolder.imageView!!)
             }
-        })
+        })*/
 
     }
 
     private fun initMusicList() {
         val adapter = MusicListAdapter(
             MusicListAdapter.TYPE_MUSIC_LIST,
-            context!!,
-            musicListBean
+            musicListBean as ArrayList<MusicListBean>
         )
         adapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {

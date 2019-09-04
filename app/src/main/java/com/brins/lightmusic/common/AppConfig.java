@@ -18,7 +18,16 @@ public class AppConfig {
     public static final String DEFAULT_ID = "490583871";
 
 
+    /**
+     * 用户歌单
+     */
     public static final String USER_PLAYLIST = "/user/playlist";
+
+
+    /**
+     * 轮播图
+     */
+    public static final String BANNER = "/banner";
 
 
     /**

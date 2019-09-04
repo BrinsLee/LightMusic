@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
 import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
@@ -22,14 +23,14 @@ interface DiscoveryContract {
 
         fun onMusicListLoad(songs : MutableList<MusicListBean>)
 
-        fun onArtistLoad(artistBeans : MutableList<ArtistBean>)
+        fun onBannerLoad(banners : ArrayList<Banner>)
 
         fun onDetailLoad(detailBean : MusicListDetailBean)
 
         fun onMusicDetail(onlineMusic: OnlineMusic)
     }
     interface Presenter : BasePresenter<View>{
-        fun loadArtist()
+        fun loadBanner()
 
         fun loadMusicList(top : Int = 12)
 

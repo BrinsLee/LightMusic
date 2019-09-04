@@ -1,13 +1,13 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.os.Build
-import android.os.Message
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.banner.BannerResult
 import com.brins.lightmusic.model.onlinemusic.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -31,14 +31,14 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
 
     //    DefaultObserver
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun loadArtist() {
-        ApiHelper.getArtistService().getArtist(12)
-            .compose(AsyncTransformer<MusicListResult>())
+    override fun loadBanner() {
+        ApiHelper.getDiscoveryService().getBanner()
+            .compose(AsyncTransformer<BannerResult>())
             .autoDisposable(provider)
-            .subscribe(object : DefaultObserver<MusicListResult>() {
-                override fun onSuccess(response: MusicListResult) {
-                    if (response.artistBeans != null && response.artistBeans?.size != 0) {
-                        mView!!.onArtistLoad(response.artistBeans as MutableList<ArtistBean>)
+            .subscribe(object : DefaultObserver<BannerResult>() {
+                override fun onSuccess(response: BannerResult) {
+                    if (response.bannners != null && response.bannners?.size != 0) {
+                        mView!!.onBannerLoad(response.bannners!!)
                     } else {
                         onFail("网络连接失败")
                     }
@@ -119,7 +119,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
         mView = view
         mView?.showLoading()
         mView?.setPresenter(this)
-        loadArtist()
+        loadBanner()
         loadMusicList()
     }
 

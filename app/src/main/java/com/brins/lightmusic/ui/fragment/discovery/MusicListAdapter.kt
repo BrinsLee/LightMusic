@@ -1,17 +1,18 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.onlinemusic.MusicListBean
+import com.brins.lightmusic.model.banner.Banner
 import com.bumptech.glide.Glide
+import java.lang.reflect.ParameterizedType
 
-class MusicListAdapter(var type: Int, var context: Context, var listBean: MutableList<MusicListBean>) :
+class MusicListAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
     RecyclerView.Adapter<MusicListAdapter.ViewHolder>()
     , View.OnClickListener {
 
@@ -28,9 +29,9 @@ class MusicListAdapter(var type: Int, var context: Context, var listBean: Mutabl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(
+        val view = LayoutInflater.from(parent.context).inflate(
             if (type == TYPE_MUSIC_LIST) R.layout.item_music_list
-            else R.layout.artist_item, parent, false
+            else R.layout.item_recycler_banner, parent, false
         )
         val myViewHolder = ViewHolder(view)
         view.setOnClickListener(this)
@@ -42,18 +43,24 @@ class MusicListAdapter(var type: Int, var context: Context, var listBean: Mutabl
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (listBean.isNotEmpty()){
-            val musicList = listBean[position]
-            holder.title.text = musicList.name
-            holder.description.text = musicList.description
-            Glide.with(context)
-                .load(musicList.coverImgUrl)
-                .into(holder.cover)
-            holder.itemView.tag = position
+        if (listBean.isNotEmpty()) {
+
+            val pt = this.javaClass.genericSuperclass as ParameterizedType
+            val clazz = pt.actualTypeArguments[0] as Class<T>
+            val className = clazz.canonicalName
+            if (className == "Banner") {
+                val banner = listBean[position] as Banner
+                holder.title.text = banner.song?.nameMusic
+                holder.description.text = banner.typeTitle
+                Glide.with(BaseApplication.getInstance().baseContext)
+                    .load(banner.picUrl)
+                    .into(holder.cover)
+                holder.itemView.tag = position
+            }
         }
     }
 
-    fun setOnItemClickListener(listener : OnItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.onItemClickListener = listener
     }
 
