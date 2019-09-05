@@ -8,19 +8,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
-import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
-import com.brins.lightmusic.ui.fragment.friends.FriendsFragment
-import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
+import com.brins.lightmusic.ui.fragment.friends.ArtistFragment
 import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
-import com.brins.lightmusic.utils.KEY_IS_LOGIN
-import com.brins.lightmusic.utils.SP_USER_INFO
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
@@ -61,7 +56,7 @@ class MainActivity : BaseActivity() {
         list.add(MyFragment())
         list.add(DiscoveryFragment())
         list.add(VideoFragment())
-        list.add(FriendsFragment())
+        list.add(ArtistFragment())
         view_pager.adapter = adapter
         tab_layout.setupWithViewPager(view_pager)
 

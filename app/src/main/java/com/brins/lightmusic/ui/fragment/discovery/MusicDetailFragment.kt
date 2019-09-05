@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_music_detail.*
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
@@ -46,7 +44,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         nestScrollView.fadingView = toolbar
         nestScrollView.fadingHeightView = coverMusicList
         id = (activity as MainActivity).currentMusicListId
-        DiscoverPresent.instance.subscribe(this)
+        DiscoverPresenter.instance.subscribe(this)
         mPresenter.loadMusicListDetail(id)
         musicRecycler.adapter = mAdapter
         musicRecycler.layoutManager = LinearLayoutManager(context)

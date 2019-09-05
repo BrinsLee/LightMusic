@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:pile="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.friends.ArtistFragment">
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+            <com.brins.lightmusic.ui.customview.PileLayout
+                    android:id="@+id/pileLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    pile:displayCount="1.8"
+                    pile:interval="10dp"
+                    pile:scaleStep="0.32"
+                    pile:sizeRatio="1.12" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_margin_150"
+                    android:layout_marginTop="@dimen/common_margin_20" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

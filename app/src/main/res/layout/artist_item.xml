@@ -24,7 +24,8 @@
                 android:layout_gravity="bottom"
                 android:gravity="start"
                 android:padding="10dp"
-                android:textColor="@android:color/white"
+                app:stroke="true"
+                android:textColor="@color/blue"
                 android:textSize="28sp"
                 app:font_type="DIN-Bold"
                 app:layout_constraintBottom_toBottomOf="parent" />

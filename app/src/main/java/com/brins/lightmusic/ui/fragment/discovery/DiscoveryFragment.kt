@@ -19,7 +19,6 @@ import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.ui.customview.DefaultAnimator
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
@@ -43,7 +42,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBanner() {
-        DiscoverPresent.instance.subscribe(this@DiscoveryFragment)
+        DiscoverPresenter.instance.subscribe(this@DiscoveryFragment)
         initLoadingMore()
     }
 
@@ -171,11 +170,6 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_discovery
-    }
-
-    class ViewHolder {
-        var imageView: ImageView? = null
-        var textView: TextView? = null
     }
 
 }

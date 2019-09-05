@@ -2,7 +2,6 @@ package com.brins.lightmusic.ui.fragment.localmusic
 
 
 import android.Manifest
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -64,7 +63,7 @@ class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,
     private fun requestpermission() {
         permissionManager = object : PermissionManager((activity as AppCompatActivity?)!!) {
             override fun authorized(requestCode: Int) {
-                LocalMusicPresent.instance.subscribe(this@LocalMusicFragment)
+                LocalMusicPresenter.instance.subscribe(this@LocalMusicFragment)
             }
 
             override fun noAuthorization(requestCode: Int, lacksPermissions: Array<String>) {

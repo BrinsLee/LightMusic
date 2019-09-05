@@ -9,6 +9,7 @@
         </attr>
         <attr name="start_color" format="color"/>
         <attr name="end_color" format="color"/>
+        <attr name="stroke" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="CardViewPager">

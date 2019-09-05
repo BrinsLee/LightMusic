@@ -9,7 +9,6 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.brins.lightmusic.BaseApplication
-import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.utils.loadingCover
 import io.reactivex.BackpressureStrategy
@@ -21,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.ArrayList
 
 
-class LocalMusicPresent private constructor() : LocalMusicContract.Presenter
+class LocalMusicPresenter private constructor() : LocalMusicContract.Presenter
     , LoaderManager.LoaderCallbacks<Cursor> {
 
 
@@ -32,7 +31,7 @@ class LocalMusicPresent private constructor() : LocalMusicContract.Presenter
     }
 
     private object SingletonHolder {
-        val holder = LocalMusicPresent()
+        val holder = LocalMusicPresenter()
     }
 
     val mSubscriptions: CompositeDisposable = CompositeDisposable()

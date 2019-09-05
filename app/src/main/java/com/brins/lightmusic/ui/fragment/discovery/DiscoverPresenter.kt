@@ -6,14 +6,13 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
-import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.banner.BannerResult
 import com.brins.lightmusic.model.onlinemusic.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
 
-class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
+class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
 
 
     val provider: AndroidLifecycleScopeProvider by lazy {
@@ -26,7 +25,7 @@ class DiscoverPresent private constructor() : DiscoveryContract.Presenter {
     }
 
     private object SingletonHolder {
-        val holder = DiscoverPresent()
+        val holder = DiscoverPresenter()
     }
 
     //    DefaultObserver
