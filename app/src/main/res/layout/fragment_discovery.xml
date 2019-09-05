@@ -39,11 +39,12 @@
                         layout="@layout/loading_layout"
                         android:visibility="gone"/>
 
-                <TextView
+                <com.brins.lightmusic.ui.customview.FontTextView
                         android:id="@+id/musicTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        app:stroke="true"
                         android:text="@string/recommend_list"
                         android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
@@ -72,12 +73,13 @@
                 </androidx.recyclerview.widget.RecyclerView>
 
 
-                <TextView
+                <com.brins.lightmusic.ui.customview.FontTextView
                         android:id="@+id/musicTitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="@string/hot_list"
+                        app:stroke="true"
                         android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginStart="@dimen/common_margin_10"

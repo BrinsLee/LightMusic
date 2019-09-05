@@ -14,7 +14,7 @@ interface PlayListService {
     * 获取歌单列表
     * */
     @GET(AppConfig.PLAYLIST)
-    fun getPlayList(@Query("limit") limit: Int): Observable<MusicListResult>
+    fun getPlayList(@Query("limit") limit: Int = 6): Observable<MusicListResult>
 
     /*
     * 获取歌单详情信息

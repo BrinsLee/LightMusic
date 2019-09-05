@@ -25,10 +25,11 @@
             app:lottie_fileName="lottie/loading/data.json"
             app:lottie_loop="true"
             app:lottie_autoPlay="true"
-            app:layout_constraintLeft_toLeftOf="@id/iv_loading_bg"
-            app:layout_constraintRight_toRightOf="@id/iv_loading_bg"
-            app:layout_constraintTop_toTopOf="@id/iv_loading_bg"
-            app:layout_constraintBottom_toTopOf="@id/loading"
+                android:scaleType="centerCrop"
+                app:layout_constraintLeft_toLeftOf="@id/iv_loading_bg"
+                app:layout_constraintRight_toRightOf="@id/iv_loading_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_chainStyle="packed"/>
         <TextView
             android:id="@+id/loading"

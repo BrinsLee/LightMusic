@@ -2,14 +2,15 @@ package com.brins.lightmusic.ui.customview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.Shader
+import android.graphics.*
 import androidx.appcompat.widget.AppCompatTextView
 import com.brins.lightmusic.R
 import com.brins.lightmusic.utils.getTypeface
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import java.lang.Exception
+import java.lang.reflect.Field
+import android.text.TextPaint
 
 
 class FontTextView @JvmOverloads constructor(
@@ -30,6 +31,12 @@ class FontTextView @JvmOverloads constructor(
         attributes.recycle()
         initTypeface(context, fontType)
     }
+
+    @ColorInt
+    private val mBorderColor = Color.GRAY
+    @ColorInt
+    private val mInnerColor = Color.WHITE
+    private val mTextPaint: TextPaint = this.paint
 
 
     private fun initTypeface(context: Context, fontType: Int) {
@@ -60,10 +67,34 @@ class FontTextView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas?) {
         if (stoke) {
-            val paint = this.paint
-            paint.strokeWidth = 5f
+            setTextColorUseReflection(mBorderColor)
+            paint.strokeWidth = 3f
             paint.style = Paint.Style.STROKE
+            paint.isFakeBoldText = true
+            paint.setShadowLayer(1f, 0f, 0f, 0)
+            super.onDraw(canvas)
+
+            setTextColorUseReflection(mInnerColor)
+            mTextPaint.strokeWidth = 0f
+            mTextPaint.style = Paint.Style.FILL
+            mTextPaint.isFakeBoldText = false
+
         }
         super.onDraw(canvas)
+
+    }
+
+    private fun setTextColorUseReflection(color: Int) {
+        var textColorField: Field
+        try {
+            textColorField = TextView::class.java.getDeclaredField("mCurTextColor")
+            textColorField.isAccessible = true
+            textColorField.set(this, color)
+            textColorField.isAccessible = false
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        mTextPaint.color = color
     }
 }

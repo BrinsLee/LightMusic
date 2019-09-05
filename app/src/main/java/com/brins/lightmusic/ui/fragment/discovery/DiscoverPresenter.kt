@@ -8,6 +8,8 @@ import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.banner.BannerResult
 import com.brins.lightmusic.model.onlinemusic.*
+import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
+import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HOT
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
@@ -60,7 +62,8 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
 
                 override fun onSuccess(response: MusicListResult) {
                     if (response.playlists != null && response.playlists!!.isNotEmpty()) {
-                        mView!!.onMusicListLoad(response.playlists as ArrayList<MusicListBean>)
+                        mView!!.onMusicListLoad(response.playlists as ArrayList<MusicListBean>,
+                            TYPE_HIGHT)
                         mView?.hideLoading()
 
                     }
@@ -114,11 +117,32 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
             })
     }
 
+    override fun loadHotMusicList(top: Int) {
+        ApiHelper.getPlayListService().getPlayList()
+            .compose(AsyncTransformer<MusicListResult>())
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<MusicListResult>() {
+                override fun onFail(message: String) {
+                    mView?.hideLoading()
+                }
+
+                override fun onSuccess(response: MusicListResult) {
+                    if (response.playlists != null && response.playlists!!.isNotEmpty()) {
+                        mView!!.onMusicListLoad(response.playlists as ArrayList<MusicListBean>,TYPE_HOT)
+                        mView?.hideLoading()
+
+                    }
+                }
+
+            })
+    }
+
     override fun subscribe(view: DiscoveryContract.View) {
         mView = view
         mView?.setPresenter(this)
         loadBanner()
-        loadMusicList()
+        loadMusicList(6)
+        loadHotMusicList(6)
     }
 
     override fun unsubscribe() {

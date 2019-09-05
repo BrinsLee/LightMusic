@@ -11,6 +11,10 @@ import com.brins.lightmusic.ui.base.BaseView
 
 interface DiscoveryContract {
 
+    companion object{
+        val TYPE_HIGHT = 1
+        val TYPE_HOT = 2
+    }
     interface View : BaseView<Presenter>{
 
         fun showLoading()
@@ -21,7 +25,7 @@ interface DiscoveryContract {
 
         fun handleError(error: Throwable)
 
-        fun onMusicListLoad(songs : ArrayList<MusicListBean>)
+        fun onMusicListLoad(songs : ArrayList<MusicListBean>,type : Int)
 
         fun onBannerLoad(banners : ArrayList<Banner>)
 
@@ -32,10 +36,12 @@ interface DiscoveryContract {
     interface Presenter : BasePresenter<View>{
         fun loadBanner()
 
-        fun loadMusicList(top : Int = 12)
+        fun loadMusicList(top : Int)
 
         fun loadMusicListDetail(id : String)
 
         fun loadMusicDetail(onlineMusic: OnlineMusic)
+
+        fun loadHotMusicList(top : Int)
     }
 }

@@ -19,6 +19,9 @@ import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.customview.DefaultAnimator
+import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
+import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HOT
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
@@ -28,11 +31,17 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     private lateinit var mPresenter: DiscoveryContract.Presenter
     private lateinit var bannerList: ArrayList<Banner>
     private lateinit var musicListBean: ArrayList<MusicListBean>
+    private lateinit var musicHotListBean: ArrayList<MusicListBean>
     private val bannerAdapter by lazy {
         DiscoveryAdapter(DiscoveryAdapter.TYPE_BANNER, bannerList)
     }
     private val musicListAdapter by lazy {
         DiscoveryAdapter(DiscoveryAdapter.TYPE_MUSIC_LIST, musicListBean)
+    }
+
+    private val musicHotAdapter by lazy {
+        DiscoveryAdapter(DiscoveryAdapter.TYPE_MUSIC_LIST, musicHotListBean)
+
     }
 
     override fun onLazyLoad() {
@@ -73,11 +82,39 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
     }
 
-    override fun onMusicListLoad(songs: ArrayList<MusicListBean>) {
+    override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
         isFresh = false
         songs.reverse()
-        musicListBean = songs
-        initMusicList()
+        when (type) {
+            TYPE_HOT -> {
+                musicHotListBean = songs
+                initHotMusicList()
+            }
+            TYPE_HIGHT -> {
+                musicListBean = songs
+                initMusicList()
+            }
+        }
+
+    }
+
+    private fun initHotMusicList() {
+        musicHotAdapter.setOnItemClickListener(object : DiscoveryAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                val id = musicHotListBean[position].id
+                try {
+                    (activity as MainActivity).switchFragment(id, MusicDetailFragment())
+                        .addToBackStack(TAG)
+                        .commit()
+                } catch (e: Exception) {
+                    Log.e(TAG, e.message)
+                }
+            }
+
+        })
+
+        recycleMusiclist2.adapter = musicHotAdapter
+        recycleMusiclist2.layoutManager = GridLayoutManager(context!!, 3)
     }
 
     override fun onBannerLoad(banners: ArrayList<Banner>) {
@@ -85,7 +122,8 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
         initBannerView()
     }
 
-    override fun onMusicDetail(onlineMusic: OnlineMusic) {}
+    override fun onMusicDetail(onlineMusic: OnlineMusic) {
+    }
 
     private fun initBannerView() {
         val layoutManager = LinearLayoutManager(context)
@@ -135,14 +173,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
             }
 
         })
-/*        val animator = DefaultAnimator()
-        animator.addDuration = 1000
-        animator.removeDuration = 1000
-        recycleMusiclist.itemAnimator = animator*/
+
         recycleMusiclist.adapter = musicListAdapter
-        recycleMusiclist.layoutManager = GridLayoutManager(context!!,3)
-/*        recycleMusiclist2.adapter = musicListAdapter
-        recycleMusiclist2.layoutManager = GridLayoutManager(context!!,3)*/
+        recycleMusiclist.layoutManager = GridLayoutManager(context!!, 3)
 
     }
 

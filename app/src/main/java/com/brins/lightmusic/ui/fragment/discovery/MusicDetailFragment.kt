@@ -72,7 +72,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     }
 
     override fun hideLoading() {
-        loadingLayout.visibility = View.GONE
+//        loadingLayout.visibility = View.GONE
     }
 
 /*    override fun getcontext(): Context {
@@ -86,7 +86,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun handleError(error: Throwable) {
     }
 
-    override fun onMusicListLoad(songs: ArrayList<MusicListBean>) {
+    override fun onMusicListLoad(songs: ArrayList<MusicListBean>,type : Int) {
     }
 
     override fun onBannerLoad(banners: ArrayList<Banner>) {
