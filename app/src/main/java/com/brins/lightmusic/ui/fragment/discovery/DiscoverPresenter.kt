@@ -93,7 +93,7 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
             })
     }
 
-    /*override fun loadMusicDetail(onlineMusic: OnlineMusic) {
+    override fun loadMusicDetail(onlineMusic: OnlineMusic) {
         var metaData: MusicBean
         mView!!.showLoading()
         ApiHelper.getMusicService().getUrl(onlineMusic.id)
@@ -115,7 +115,7 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
                 }
 
             })
-    }*/
+    }
 
     override fun loadHotMusicList(top: Int) {
         ApiHelper.getPlayListService().getPlayList()

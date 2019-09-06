@@ -40,6 +40,8 @@ interface DiscoveryContract {
 
         fun loadMusicListDetail(id : String)
 
+        fun loadMusicDetail(onlineMusic: OnlineMusic)
+
         fun loadHotMusicList(top : Int)
     }
 }

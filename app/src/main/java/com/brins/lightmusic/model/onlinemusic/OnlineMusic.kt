@@ -17,7 +17,7 @@ class OnlineMusic(
     @SerializedName("dt")
     var dt: Int = 0,
 
-    var fileUrl: String = ""
-) /*: Music(nameMusic, nameMusic, artistBeans!![0].name, al!!.name, al.picUrl, fileUrl, dt) */{
+    fileUrl: String = ""
+) : Music(nameMusic, nameMusic, artistBeans!![0].name, al!!.name, al.picUrl, fileUrl, dt) {
 
 }
