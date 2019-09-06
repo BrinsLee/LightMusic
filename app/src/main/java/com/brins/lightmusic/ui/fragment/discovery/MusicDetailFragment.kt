@@ -22,7 +22,8 @@ import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 
 
-class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener , CommonHeaderView.OnBackClickListener {
+class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener,
+    CommonHeaderView.OnBackClickListener {
 
 
     private lateinit var mPresenter: DiscoveryContract.Presenter
@@ -57,13 +58,12 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
     //ItemClick
     override fun onItemClick(position: Int) {
-        mPresenter.loadMusicDetail(musicDetails[position])
+        RxBus.getInstance().post(PlayOnLineMusicEvent(musicDetails, position))
     }
 
     override fun onBackClick(view: View) {
         (activity as MainActivity).onBackPressed()
     }
-
 
 
     //MVP VIEW
@@ -86,7 +86,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     override fun handleError(error: Throwable) {
     }
 
-    override fun onMusicListLoad(songs: ArrayList<MusicListBean>,type : Int) {
+    override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
     }
 
     override fun onBannerLoad(banners: ArrayList<Banner>) {
@@ -102,9 +102,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun onMusicDetail(onlineMusic : OnlineMusic) {
-        RxBus.getInstance().post(PlayOnLineMusicEvent(onlineMusic))
-        hideLoading()
+    override fun onMusicDetail(onlineMusic: OnlineMusic) {
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter) {

@@ -5,7 +5,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
+import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.artist.Category
 import com.brins.lightmusic.model.artist.CategoryResult
 import com.brins.lightmusic.ui.base.BaseFragment
@@ -16,8 +18,10 @@ import kotlinx.android.synthetic.main.fragment_artist.*
 class ArtistFragment : BaseFragment(), ArtistConstract.View {
 
 
-    private var artistCategory: ArrayList<Category> = arrayListOf()
+    private lateinit var artistCategory: ArrayList<Category>
+    private lateinit var artistList: ArrayList<ArtistBean>
     private lateinit var mPresenter: ArtistPresenter
+    private val mAdapter: ArtistAdapter by lazy { ArtistAdapter(artistList) }
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_artist
@@ -25,17 +29,22 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View {
 
 
     override fun onLazyLoad() {
-        super.onLazyLoad()
         ArtistPresenter.instance.subscribe(this@ArtistFragment)
-
     }
 
+
     //MVP View
-    override fun onArtistLoad() {
+    override fun onArtistLoad(artistList: ArrayList<ArtistBean>) {
+        this.artistList = artistList
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        recyclerArtist.layoutManager = LinearLayoutManager(context)
+        recyclerArtist.adapter = mAdapter
     }
 
     override fun onArtistCategoryLoad(category: CategoryResult) {
-
         if (category.artists != null && category.artists!!.isNotEmpty()) {
             artistCategory = category.artists!!
             initPileLayout()
@@ -81,7 +90,6 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View {
 
     override fun setPresenter(presenter: ArtistConstract.Presenter) {
         mPresenter = presenter as ArtistPresenter
-        mPresenter.loadArtistCategory()
     }
 
     override fun getLifeActivity(): AppCompatActivity {

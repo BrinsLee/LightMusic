@@ -10,4 +10,5 @@ class MusicListDetailResult {
     @SerializedName("playlist")
     var playlist : MusicListDetailBean? = null
 
+
 }

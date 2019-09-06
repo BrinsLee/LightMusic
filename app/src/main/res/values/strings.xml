@@ -22,4 +22,6 @@
     <string name="local_music">本地音乐</string>
     <string name="recommend_list">推荐歌单</string>
     <string name="hot_list">热门歌单</string>
+    <string name="hot_artist">热门歌手</string>
+    <string name="num_songs">首单曲</string>
 </resources>

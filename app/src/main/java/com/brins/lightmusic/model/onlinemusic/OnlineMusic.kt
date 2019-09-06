@@ -1,5 +1,6 @@
 package com.brins.lightmusic.model.onlinemusic
 
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.artist.Album
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.google.gson.annotations.SerializedName
@@ -17,6 +18,6 @@ class OnlineMusic(
     var dt: Int = 0,
 
     var fileUrl: String = ""
-) /*: Music(nameMusic, nameMusic, artists!![0].name, al!!.name, al.picUrl, fileUrl, dt) */{
+) /*: Music(nameMusic, nameMusic, artistBeans!![0].name, al!!.name, al.picUrl, fileUrl, dt) */{
 
 }

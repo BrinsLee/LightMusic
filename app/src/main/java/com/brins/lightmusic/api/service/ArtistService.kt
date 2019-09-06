@@ -14,7 +14,7 @@ interface ArtistService {
    * 获取歌手列表
    * */
     @GET(AppConfig.ARTISTS)
-    fun getArtist(@Query("limit") limit: Int): Observable<MusicListResult>
+    fun getArtist(@Query("limit") limit: Int = 15): Observable<MusicListResult>
 
     /*
     * 获取歌手音乐列表

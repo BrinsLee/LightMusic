@@ -65,9 +65,13 @@ abstract class BaseFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         if (rootView == null){
             rootView = inflater.inflate(getLayoutResID(), container, false)
-            onCreateViewAfterBinding(rootView!!)
         }
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onCreateViewAfterBinding(view!!)
     }
 
     override fun onDestroyView() {

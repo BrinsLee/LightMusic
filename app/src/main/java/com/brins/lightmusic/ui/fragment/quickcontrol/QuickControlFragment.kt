@@ -24,12 +24,12 @@ import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.ref.WeakReference
 
 
-class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener,
+class QuickControlFragment private constructor(): BaseFragment(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener,
     HeadsetButtonReceiver.onHeadsetListener {
 
-    var mPlayer: IPlayback? = null
+    private var mPlayer: IPlayback? = null
 
-    lateinit var playList: PlayList
+    private lateinit var playList: PlayList
     private lateinit var mPresenter: MusicPlayerContract.Presenter
     override fun getLayoutResID(): Int {
         return R.layout.fragment_quick_control
@@ -89,6 +89,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
         if (!::playList.isInitialized){
             playList = PlayList()
+            playList.addSong(onLineMusicEvent.playlists)
         }
         val index = playList.getPlayingIndex() + 1
         val wtf = WeakReference<OnlineMusic>(onLineMusicEvent.music)

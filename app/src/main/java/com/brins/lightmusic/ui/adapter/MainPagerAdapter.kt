@@ -11,7 +11,7 @@ import com.brins.lightmusic.R
 
 class MainPagerAdapter(fm: FragmentManager, var list: MutableList<Fragment>) : FragmentPagerAdapter(fm) {
 
-    val tabtitle = arrayOf("我的", "发现", "视频", "朋友")
+    val tabtitle = arrayOf("我的", "发现", "视频", "歌手")
     override fun getItem(position: Int): Fragment {
         return list[position]
     }

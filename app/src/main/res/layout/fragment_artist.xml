@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:pile="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.fragment.friends.ArtistFragment">
@@ -26,12 +27,24 @@
                     pile:interval="10dp"
                     pile:scaleStep="0.32"
                     pile:sizeRatio="1.12" />
+            <com.brins.lightmusic.ui.customview.FontTextView
+                    android:id="@+id/musicTitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/hot_artist"
+                    app:stroke="true"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/common_margin_10"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerBanner"
+                    android:id="@+id/recyclerArtist"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/common_margin_150"
-                    android:layout_marginTop="@dimen/common_margin_20" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_margin_10" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
