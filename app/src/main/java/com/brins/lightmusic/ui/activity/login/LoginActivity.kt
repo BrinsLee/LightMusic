@@ -1,19 +1,18 @@
 package com.brins.lightmusic.ui.activity.login
 
 import android.animation.Animator
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.common.AppConfig.PASSWORD
 import com.brins.lightmusic.common.AppConfig.USERNAME
-import com.brins.lightmusic.model.userlogin.UserAccountBean
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
@@ -22,12 +21,20 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
 
-    lateinit var mPresenter: LoginContract.Presenter
+    private lateinit var mPresenter: LoginContract.Presenter
 
     companion object {
-        fun startThisActivity(activity: AppCompatActivity) {
-            val intent = Intent(activity, LoginActivity::class.java)
-            activity.startActivity(intent)
+        val IS_LOGIN = "isLogin"
+        val LOGIN_SUCCESS_CODE = 1002
+        val LOGIN_FAIL_CODE = 1001
+
+        fun startThisActivity(
+            fragment: Fragment,
+            login: Boolean
+        ) {
+            val intent = Intent(fragment.activity, LoginActivity::class.java)
+            intent.putExtra(IS_LOGIN,login)
+            fragment.startActivityForResult(intent, 1)
         }
     }
 
@@ -96,6 +103,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
         AppConfig.userProfile = info.profile
         SpUtils.obtain(SP_USER_INFO, this).save(KEY_IS_LOGIN, true)
         AppConfig.isLogin = true
+        setResult(LOGIN_SUCCESS_CODE)
         finish()
     }
 
@@ -116,6 +124,8 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
 
     override fun onLoginFail() {
         hideLoading()
+        setResult(LOGIN_FAIL_CODE)
+        finish()
     }
 
     override fun setPresenter(presenter: LoginContract.Presenter?) {

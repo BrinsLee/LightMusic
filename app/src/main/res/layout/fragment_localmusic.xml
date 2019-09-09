@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="65dp"
-        android:background="@drawable/bg_main">
+        android:background="@color/gery">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

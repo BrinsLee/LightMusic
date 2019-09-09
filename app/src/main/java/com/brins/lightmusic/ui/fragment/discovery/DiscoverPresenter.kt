@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.banner.BannerResult
 import com.brins.lightmusic.model.onlinemusic.*
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
@@ -62,8 +63,10 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
 
                 override fun onSuccess(response: MusicListResult) {
                     if (response.playlists != null && response.playlists!!.isNotEmpty()) {
-                        mView!!.onMusicListLoad(response.playlists as ArrayList<MusicListBean>,
-                            TYPE_HIGHT)
+                        mView!!.onMusicListLoad(
+                            response.playlists as ArrayList<MusicListBean>,
+                            TYPE_HIGHT
+                        )
                         mView?.hideLoading()
 
                     }
@@ -93,29 +96,6 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
             })
     }
 
-    override fun loadMusicDetail(onlineMusic: OnlineMusic) {
-        var metaData: MusicBean
-        mView!!.showLoading()
-        ApiHelper.getMusicService().getUrl(onlineMusic.id)
-            .compose(AsyncTransformer<MusicBean>())
-            .autoDisposable(provider)
-            .subscribe(object : DefaultObserver<MusicBean>() {
-                override fun onFail(message: String) {
-                    mView?.hideLoading()
-                }
-
-                override fun onSuccess(response: MusicBean) {
-                    metaData = response
-                    if (metaData.data != null) {
-                        onlineMusic.fileUrl = metaData.data!![0].url
-                        mView!!.onMusicDetail(onlineMusic)
-                        mView?.hideLoading()
-
-                    }
-                }
-
-            })
-    }
 
     override fun loadHotMusicList(top: Int) {
         ApiHelper.getPlayListService().getPlayList()
@@ -128,7 +108,10 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
 
                 override fun onSuccess(response: MusicListResult) {
                     if (response.playlists != null && response.playlists!!.isNotEmpty()) {
-                        mView!!.onMusicListLoad(response.playlists as ArrayList<MusicListBean>,TYPE_HOT)
+                        mView!!.onMusicListLoad(
+                            response.playlists as ArrayList<MusicListBean>,
+                            TYPE_HOT
+                        )
                         mView?.hideLoading()
 
                     }
@@ -137,6 +120,7 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
             })
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun subscribe(view: DiscoveryContract.View) {
         mView = view
         mView?.setPresenter(this)

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
@@ -55,15 +56,22 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    protected open fun showBottomBar() {
-        val ft = supportFragmentManager.beginTransaction()
+    protected open fun showBottomBar(fragmentManager: FragmentManager) {
+        val ft = fragmentManager.beginTransaction()
         if (!fragment.isAdded) {
             ft.add(R.id.bottom_container, fragment).commit()
         }
     }
 
+    protected open fun removeBottomBar(fragmentManager: FragmentManager) {
+        val ft = fragmentManager.beginTransaction()
+        if (fragment.isAdded) {
+            ft.remove(fragment).commit()
+        }
+    }
+
     protected open fun getCurrentList(): PlayList? {
-        return fragment.playList
+        return fragment.getCurrentList()
     }
 
     fun bindUntilDestroy(disposable: Disposable?) {

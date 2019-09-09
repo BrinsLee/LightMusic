@@ -10,8 +10,6 @@ interface IPlayback {
 
     fun play(): Boolean
 
-    fun play(list: PlayList): Boolean
-
     fun play(list: PlayList, startIndex: Int): Boolean
 
     fun play(song: Music): Boolean

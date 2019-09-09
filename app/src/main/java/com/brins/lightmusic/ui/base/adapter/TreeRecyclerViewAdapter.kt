@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.customview.RoundConstraintLayout
@@ -35,7 +36,7 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
                 className = "UserPlayListBean"
 
             }
-            if (list[0] is OnlineMusic) {
+            if (list[0] is Music) {
                 className = "OnlineMusic"
             }
         }
@@ -85,9 +86,12 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
                 holder.tvAccount.text = "共${playlist.trackCount}首"
             }
             else{
-                val playlist = (list[position] as OnlineMusic)
+                val playlist = (list[position] as Music)
+                Glide.with(BaseApplication.getInstance().baseContext)
+                    .load(playlist.album.picUrl)
+                    .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
                 (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text =
-                    playlist.nameMusic
+                    playlist.name
                 holder.tvAccount.text = playlist.artistBeans!![0].name
             }
 

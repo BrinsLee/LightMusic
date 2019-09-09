@@ -5,7 +5,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.PowerManager
 import android.util.Log
-import androidx.core.content.getSystemService
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -46,6 +45,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         mPlayer.setWakeMode(LightMusicApplication.getLightApplication(), PowerManager.PARTIAL_WAKE_LOCK)
     }
 
+    /**
+     *
+     * 音乐焦点改变
+     */
     override fun onAudioFocusChange(focusChange: Int) {
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT){
             pause()
@@ -57,6 +60,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         }
     }
 
+    /**
+     * 请求焦点
+     */
     private fun requestFocus(): Boolean {
         // Request audio focus for playback
         val result = mAudioManager.requestAudioFocus(
@@ -69,7 +75,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 
-
+    /**
+     * 设置播放列表
+     */
     override fun setPlayList(list: PlayList) {
         mPlayList = list
     }
@@ -82,7 +90,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
                 return true
             }
             if (mPlayList.prepare()) {
-                var music = mPlayList.getCurrentSong()
+                val music = mPlayList.getCurrentSong()
                 try {
                     mPlayer.reset()
                     mPlayer.setDataSource(music?.fileUrl)
@@ -94,6 +102,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
                     notifyPlayStatusChanged(false)
                     return false
                 }
+                notifyComplete(music)
                 return true
             }
         }
@@ -106,16 +115,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         }
     }
 
-    override fun play(list: PlayList): Boolean {
-
-        isPaused = false
-        setPlayList(list)
-        return play()
-    }
-
     override fun play(list: PlayList, startIndex: Int): Boolean {
 
-        if (list == null || startIndex < 0 || startIndex >= list.getNumOfSongs()) {
+        if (startIndex < 0 || startIndex >= list.getNumOfSongs()) {
             return false
         }
         isPaused = false
@@ -134,14 +136,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
     override fun playLast(): Boolean {
 
         isPaused = false
-        val hasLast = mPlayList.hasLast()
-        if (hasLast) {
-            val song = mPlayList.last()
-            play()
-            notifyPlayLast(song)
-            return true
-        }
-        return false
+        val song = mPlayList.last()
+        play()
+        notifyPlayLast(song)
+        return true
     }
 
     private fun notifyPlayLast(song: Music) {
@@ -152,14 +150,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
 
     override fun playNext(): Boolean {
         isPaused = false
-        val hasNext = mPlayList.hasNext(false)
-        if (hasNext) {
-            val song = mPlayList.next()
-            play()
-            notifyPlayNext(song)
-            return true
-        }
-        return false
+        val song = mPlayList.next()
+        play()
+        notifyPlayNext(song)
+        return true
     }
 
     private fun notifyPlayNext(song: Music) {
@@ -245,7 +239,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
             val hasNext = mPlayList.hasNext(true)
             if (hasNext) {
                 next = mPlayList.next()
-                play()
+                if (mPlayList.next().fileUrl != null && mPlayList.next().fileUrl != ""){
+                    play()
+                }
             }
         }
         notifyComplete(next)

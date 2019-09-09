@@ -1,7 +1,10 @@
 package com.brins.lightmusic.ui.fragment.myfragment
+
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lib_common.utils.SpUtils
@@ -12,6 +15,8 @@ import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.usermusiclist.UserMusicListActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
+import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
+import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
@@ -24,12 +29,12 @@ import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import java.lang.Exception
 
-class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnClickListener {
+class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.OnClickListener {
 
 
     private lateinit var mAdapter: TreeRecyclerViewAdapter<UserPlayListBean>
-    private lateinit var myPresenter : MyPresenter
-    private var mPlayList : ArrayList<UserPlayListBean> = arrayListOf(UserPlayListBean())
+    private lateinit var myPresenter: MyPresenter
+    private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf(UserPlayListBean())
     private var mAvatar: Bitmap? = null
 
 
@@ -40,18 +45,15 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
     override fun onLazyLoad() {
         super.onLazyLoad()
         MyPresenter.instance.subscribe(this)
-        initUserData()
-        if (mPlayList.size == 1 && mPlayList[0].id == "" ){
-            myPresenter.loadUserMusicList(AppConfig.userAccount.id)
-        }
-    }
-
-
-
-    private fun initUserData(){
         mAdapter = TreeRecyclerViewAdapter(mPlayList)
         setListener()
         userPlayList.setAdapter(mAdapter)
+        initUserData()
+    }
+
+
+    private fun initUserData() {
+
         if (AppConfig.isLogin) {
             if (AppConfig.userAccount != null && AppConfig.userProfile != null) {
                 if (mAvatar == null) {
@@ -73,10 +75,11 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
                     avatar.setImageBitmap(mAvatar)
                 }
                 nickName.text = AppConfig.userProfile.nickname
+                checkToLoad()
+
             }
         }
     }
-
 
 
     private fun setListener() {
@@ -89,17 +92,17 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
 
 
     override fun onItemClick(position: Int) {
-        UserMusicListActivity.startThisActivity(activity as AppCompatActivity,mPlayList[position])
+        UserMusicListActivity.startThisActivity(activity as AppCompatActivity, mPlayList[position])
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(activity as AppCompatActivity)
+            R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this,AppConfig.isLogin)
             R.id.localMusic -> try {
                 (activity as MainActivity).switchFragment(LocalMusicFragment())
                     .addToBackStack(TAG)
                     .commit()
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -111,14 +114,25 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("aaaa","$resultCode")
+        when(resultCode){
+            LOGIN_SUCCESS_CODE -> {
+                initUserData()
+            }
+            LOGIN_FAIL_CODE -> {
 
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
     //MVP View
     override fun onUserProfileLoad() {
     }
 
     override fun onUserMusicListLoad(result: UserPlayListResult) {
-        if(result.playlist != null){
+        if (result.playlist != null) {
             mPlayList = result.playlist!!
             mAdapter.setData(mPlayList)
         }
@@ -136,6 +150,16 @@ class MyFragment : BaseFragment(),MyContract.View, OnItemClickListener, View.OnC
 
     override fun setPresenter(presenter: MyContract.Presenter?) {
         myPresenter = presenter as MyPresenter
+    }
+
+    private fun checkToLoad() {
+        if (mPlayList.size == 1 && mPlayList[0].id == "") {
+            if (::myPresenter.isInitialized) {
+                myPresenter.loadUserMusicList(AppConfig.userAccount.id)
+            } else {
+                MyPresenter.instance.subscribe(this)
+            }
+        }
     }
 
     override fun getLifeActivity(): AppCompatActivity {

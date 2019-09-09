@@ -63,9 +63,9 @@ public class ListAdapter<T> extends RecyclerView.Adapter<ListAdapter.viewHolder>
     public void onBindViewHolder(ListAdapter.viewHolder holder, int position) {
         LocalMusic music = (LocalMusic) getItem(position);
         holder.textViewName.setText(music.getName());
-        holder.textViewArtist.setText(music.getSinger());
+        holder.textViewArtist.setText(music.getArtistBeans().get(0).getName());
         if (music.getCoverBitmap() == null) {
-            music.setCoverBitmap(string2Bitmap(music.getCover()));
+            music.setCoverBitmap(string2Bitmap(music.getAlbum().getPicUrl()));
         }
         holder.imgCover.setImageBitmap(music.getCoverBitmap());
     }

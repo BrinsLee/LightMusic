@@ -24,7 +24,8 @@ class PlayList() : Parcelable {
         val NO_POSITION = -1
         val COLUMN_FAVORITE = "favorite"
 
-        @JvmField val CREATOR : Parcelable.Creator<PlayList> = object : Parcelable.Creator<PlayList>{
+        @JvmField
+        val CREATOR: Parcelable.Creator<PlayList> = object : Parcelable.Creator<PlayList> {
             override fun createFromParcel(source: Parcel?): PlayList {
                 return PlayList(source!!)
             }
@@ -36,7 +37,7 @@ class PlayList() : Parcelable {
         }
     }
 
-    constructor(song : Music) : this() {
+    constructor(song: Music) : this() {
         songs.add(song)
         numOfSongs = 1
     }
@@ -62,7 +63,7 @@ class PlayList() : Parcelable {
 
     private var numOfSongs: Int = 0
 
-    private var playMode : PlayMode? = PlayMode.LOOP
+    private var playMode: PlayMode? = PlayMode.LOOP
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readInt()
@@ -88,11 +89,11 @@ class PlayList() : Parcelable {
         parcel.writeInt(if (this.playMode == null) -1 else this.playMode!!.ordinal)
     }
 
-    fun setPlayMode(playMode: PlayMode){
+    fun setPlayMode(playMode: PlayMode) {
         this.playMode = playMode
     }
 
-    fun setPlayingIndex(playingIndex : Int){
+    fun setPlayingIndex(playingIndex: Int) {
         this.playingIndex = playingIndex
     }
 
@@ -100,7 +101,7 @@ class PlayList() : Parcelable {
         return songs
     }
 
-    fun getPlayMode() : PlayMode{
+    fun getPlayMode(): PlayMode {
         return playMode!!
     }
 
@@ -119,6 +120,11 @@ class PlayList() : Parcelable {
 
         songs.add(index, song)
         numOfSongs = songs.size
+    }
+
+    fun setSong(song: Music?, index: Int) {
+        if (song == null) return
+        songs[index] = song
     }
 
     fun addSong(@Nullable songs: List<Music>?, index: Int = 0) {
@@ -166,7 +172,7 @@ class PlayList() : Parcelable {
         } else null
     }
 
-    fun getNumOfSongs() : Int{
+    fun getNumOfSongs(): Int {
         return numOfSongs
     }
 

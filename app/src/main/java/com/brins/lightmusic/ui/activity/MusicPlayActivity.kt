@@ -112,7 +112,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        MusicPlayerPresenter.instance.setContext(this).subscribe(this)
+        MusicPlayerPresenter.instance.subscribe(this)
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
         ivCover.setPageTransformer(false, CustPagerTransformer())
         setPlayView()
@@ -129,7 +129,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
                 val imageView = RoundImageView(applicationContext)
                 var bitmap = musics!![i].bitmapCover
                 if (bitmap == null){
-                    bitmap = string2Bitmap(musics!![i].cover!!)
+                    bitmap = string2Bitmap(musics!![i].album.picUrl)
                 }
                 imageView.setImageBitmap(bitmap)
                 imageView.layoutParams = ViewGroup.LayoutParams(100, 100)
@@ -264,17 +264,29 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     private fun onPlayLast() {
-        if (mPlayer == null) {
-            return
+        if (mPlayer == null) return
+        val hasLast = mPlayList.hasLast()
+        if (hasLast){
+            val song = mPlayList.getSongs()[mPlayList.getPlayingIndex() - 1]
+            if (song?.fileUrl == null || song.fileUrl == "" ){
+                mPresenter.loadMusicDetail(song)
+            }
+            mPlayer!!.playLast()
         }
-        mPlayer!!.playLast()
+        return
     }
 
     private fun onPlayNext() {
-        if (mPlayer == null) {
-            return
+        if (mPlayer == null) return
+        val hasNext = mPlayList.hasNext(false)
+        if (hasNext) {
+            val song = mPlayList.getSongs()[mPlayList.getPlayingIndex() + 1]
+            if (song?.fileUrl == null || song.fileUrl == "" ) {
+                mPresenter.loadMusicDetail(song)
+            }
+            mPlayer!!.playNext()
         }
-        mPlayer!!.playNext()
+        return
     }
 
     fun onPlayPauseToggle() {
@@ -370,16 +382,18 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     //MVP View
+
+    override fun onMusicDetail(onlineMusic: Music) {
+
+    }
+
     override fun handleError(error: Throwable) {
 
     }
 
-    override fun onCoverLoad(cover: Bitmap?) {
-
-    }
 
     override fun getLifeActivity(): AppCompatActivity {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return this
     }
 
 
@@ -410,12 +424,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         }
         cover = song.bitmapCover
         if (cover == null){
-            cover = string2Bitmap(song.cover!!)
+            cover = string2Bitmap(song.album.picUrl)
         }
         initViewPager()
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
         musicTitle.text = song.name
-        musicArtist.text = song.singer
+        musicArtist.text = song.artistBeans!![0].name
         tvDuration.text = formatDuration(song.duration)
         seekBar.progress = initProgress(mPlayer!!.getProgress())
         updateProgressTextWithProgress(mPlayer!!.getProgress())

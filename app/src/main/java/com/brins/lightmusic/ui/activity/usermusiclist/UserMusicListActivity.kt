@@ -7,28 +7,30 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
-import com.brins.lightmusic.event.PlayOnLineMusicEvent
+import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.onlinemusic.MusicListBean
+import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
-import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
+import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_user_music_list.*
+import java.util.ArrayList
 
 class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
 
-    private var mPlayList: UserPlayListBean? = null
+    private var mUserPlayList: UserPlayListBean? = null
     private lateinit var mPresenter: MusicListContract.Presenter
-    private var mMusicLists = arrayListOf<OnlineMusic>()
-    private var mAdapter: TreeRecyclerViewAdapter<OnlineMusic> =
-        TreeRecyclerViewAdapter(mMusicLists)
+    private var mPlayList = PlayList()
+
+    private var mAdapter: TreeRecyclerViewAdapter<Music> =
+        TreeRecyclerViewAdapter(mPlayList.getSongs() as ArrayList<Music>)
 
 
     override fun getLayoutResId(): Int {
@@ -46,24 +48,24 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
-        mPlayList = intent.getParcelableExtra(PLAYBEAN)
+        mUserPlayList = intent.getParcelableExtra(PLAYBEAN)
         MusicListPresenter.instance.subscribe(this)
 
     }
 
-    fun setListener(){
+    fun setListener() {
         mAdapter.setOnItemClickListener(this)
         head.setOnBackClickListener(this)
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        if (mPlayList != null) {
-            head.title = mPlayList!!.name
-            Glide.with(this).load(mPlayList!!.coverImgUrl).into(cover)
-            nickName.text = mPlayList!!.creator.nickName
-            Glide.with(this).load(mPlayList!!.creator.avatarUrl).into(avatar)
-            mPresenter.loadMusicList(mPlayList!!.id)
+        if (mUserPlayList != null) {
+            head.title = mUserPlayList!!.name
+            Glide.with(this).load(mUserPlayList!!.coverImgUrl).into(cover)
+            nickName.text = mUserPlayList!!.creator.nickName
+            Glide.with(this).load(mUserPlayList!!.creator.avatarUrl).into(avatar)
+            mPresenter.loadMusicList(mUserPlayList!!.id)
         }
 
         recyclerView.setItemViewCacheSize(5)
@@ -75,8 +77,19 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        showBottomBar(supportFragmentManager)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        removeBottomBar(supportFragmentManager)
+    }
+
     override fun onItemClick(position: Int) {
-        mPresenter.loadMusicDetail(mMusicLists[position])
+        mPlayList.setPlayingIndex(position)
+        RxBus.getInstance().post(PlayListEvent(mPlayList, position, TYPE_ONLINE_MUSIC))
     }
 
     override fun onBackClick(view: View) {
@@ -94,7 +107,8 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
     }
 
     override fun onMusicListLoad(detailBean: MusicListDetailBean) {
-        mMusicLists.addAll(detailBean.tracks!!)
+        mPlayList.addSong(detailBean.tracks!!)
+
         mAdapter.notifyDataSetChanged()
     }
 
@@ -109,7 +123,4 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
         return this
     }
 
-    override fun onMusicDetail(onlineMusic: OnlineMusic) {
-        RxBus.getInstance().post(PlayOnLineMusicEvent(onlineMusic))
-    }
 }

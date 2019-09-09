@@ -60,6 +60,10 @@ class RxBus {
         mEventBus.onNext(event)
     }
 
+    fun toObservable(classType: Class<Any>): Observable<Any> {
+        return mEventBus.ofType(classType)
+    }
+
     /**
      * 发送一个新Sticky事件
      */
@@ -82,9 +86,7 @@ class RxBus {
         }
     }
 
-    fun toObservable(classType: Class<Any>): Observable<Any> {
-        return mEventBus.ofType(classType)
-    }
+
 
     /**
      * 订阅

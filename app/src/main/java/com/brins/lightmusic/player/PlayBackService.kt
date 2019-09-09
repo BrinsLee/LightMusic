@@ -7,7 +7,7 @@ import android.os.IBinder
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
 
-class PlayBackService : Service(), IPlayback, IPlayback.Callback {
+class PlayBackService : Service(), IPlayback{
 
     companion object {
         @JvmStatic
@@ -37,12 +37,10 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
         super.onCreate()
         mIsServiceBound = true
         MediaSessionManager(this)
-        mPlayer.registerCallback(this)
     }
 
     override fun stopService(name: Intent): Boolean {
         stopForeground(true)
-        unregisterCallback(this)
         return super.stopService(name)
     }
 
@@ -59,10 +57,6 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun play(): Boolean {
         return mPlayer.play()
-    }
-
-    override fun play(list: PlayList): Boolean {
-        return mPlayer.play(list)
     }
 
     override fun play(list: PlayList, startIndex: Int): Boolean {
@@ -107,7 +101,6 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {
-
         mPlayer.registerCallback(callback)
     }
 
@@ -128,34 +121,4 @@ class PlayBackService : Service(), IPlayback, IPlayback.Callback {
         mPlayer.stop()
     }
 
-    //Callback
-    override fun onSwitchLast(last: Music) {
-    }
-
-    override fun onSwitchNext(next: Music) {
-    }
-
-    override fun onComplete(next: Music?) {
-    }
-
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
-
-    }
-
-  /*inner class MediaButtonReceiver : BroadcastReceiver() {
-        private val Tag = "MediaButtonReceiver"
-
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action = intent.action
-            val event : KeyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
-            if (Intent.ACTION_MEDIA_BUTTON == action){
-                val keyCode = event.keyCode
-                when(keyCode){
-                    KeyEvent.KEYCODE_MEDIA_NEXT -> playNext()
-                    KeyEvent.KEYCODE_MEDIA_PREVIOUS -> playLast()
-                    KeyEvent.KEYCODE_HEADSETHOOK -> if (mPlayer.isPlaying()) pause() else play()
-                }
-            }
-        }
-    }*/
 }

@@ -9,6 +9,8 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.brins.lightmusic.BaseApplication
+import com.brins.lightmusic.model.artist.Album
+import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.loaclmusic.LocalMusic
 import com.brins.lightmusic.utils.loadingCover
 import io.reactivex.BackpressureStrategy
@@ -141,20 +143,23 @@ class LocalMusicPresenter private constructor() : LocalMusicContract.Presenter
         val album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM))
         val size = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
         val url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) ?: ""
+        val artistBean = ArtistBean()
+        artistBean.name = artist
+        val bitmap = if (url.isNotEmpty()) loadingCover(url) else ""
+        val albums = Album()
+        albums.name = album
+        albums.picUrl = bitmap
         val song = LocalMusic(
             id,
             name,
             title,
-            artist,
+            listOf(artistBean),
             size,
             url,
-            album,
+            albums,
             duration = duration
         )
-        if (url.isNotEmpty()) {
-            val bitmap = loadingCover(url)
-            song.cover = bitmap
-        }
+        Log.d(TAG,bitmap)
         return song
     }
 

@@ -3,30 +3,50 @@ package com.brins.lightmusic.model
 import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
+import com.brins.lightmusic.model.artist.Album
+import com.brins.lightmusic.model.artist.ArtistBean
+import com.google.gson.annotations.SerializedName
 
 open class Music(
-    var fileName: String, @Transient var name: String, var singer: String, var album: String, var cover: String?, var fileUrl: String = ""
-    , var duration: Int
+    @SerializedName("id")
+    var id: String = "",
+    @SerializedName("name")
+    var name: String,
+    @SerializedName("ar")
+    var artistBeans: List<ArtistBean>? = null,
+    @SerializedName("al")
+    var album: Album,
+    @SerializedName("dt")
+    var duration: Int,
+
+    var fileName: String = "",
+
+    var fileUrl: String = ""
+
 ) : Parcelable {
     var bitmapCover : Bitmap? = null
+
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readInt()
-    )
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.createTypedArrayList(ArtistBean.CREATOR),
+        parcel.readParcelable(Album::class.java.classLoader),
+        parcel.readInt(),
+        parcel.readString()!!,
+        parcel.readString()!!
+    ) {
+        bitmapCover = parcel.readParcelable(Bitmap::class.java.classLoader)
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(fileName)
+        parcel.writeString(id)
         parcel.writeString(name)
-        parcel.writeString(singer)
-        parcel.writeString(album)
-        parcel.writeString(cover)
-        parcel.writeString(fileUrl)
+        parcel.writeTypedList(artistBeans)
+        parcel.writeParcelable(album, flags)
         parcel.writeInt(duration)
+        parcel.writeString(fileName)
+        parcel.writeString(fileUrl)
+        parcel.writeParcelable(bitmapCover, flags)
     }
 
     override fun describeContents(): Int {
@@ -42,4 +62,5 @@ open class Music(
             return arrayOfNulls(size)
         }
     }
+
 }

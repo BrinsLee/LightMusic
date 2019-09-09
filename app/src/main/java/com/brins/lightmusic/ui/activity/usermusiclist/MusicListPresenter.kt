@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.MusicBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
@@ -31,7 +32,7 @@ class MusicListPresenter : MusicListContract.Presenter {
     }
 
 
-    override fun loadMusicDetail(onlineMusic: OnlineMusic) {
+/*    override fun loadMusicDetail(onlineMusic: Music) {
         var metaData: MusicBean
         mView!!.showLoading()
         ApiHelper.getMusicService().getUrl(onlineMusic.id)
@@ -53,7 +54,7 @@ class MusicListPresenter : MusicListContract.Presenter {
                 }
 
             })
-    }
+    }*/
 
 
     override fun loadMusicList(id: String) {

@@ -27,6 +27,7 @@ abstract class BaseFragment : Fragment() {
         checkLoad()
     }
 
+
     private fun checkLoad() {
         if (!mHadLoaded && mIsViewBinding && mIsVisibleToUser) {
             onLazyLoad()
@@ -71,7 +72,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onCreateViewAfterBinding(view!!)
+        onCreateViewAfterBinding(view)
     }
 
     override fun onDestroyView() {

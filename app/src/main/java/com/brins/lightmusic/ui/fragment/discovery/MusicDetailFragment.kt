@@ -12,7 +12,9 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_music_detail.*
 import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.event.PlayOnLineMusicEvent
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -20,6 +22,7 @@ import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 
 
 class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener,
@@ -28,7 +31,6 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
     private lateinit var mPresenter: DiscoveryContract.Presenter
     var id: String = ""
-    var musicDetails = mutableListOf<OnlineMusic>()
     lateinit var mAdapter: MusicDetailAdapter
     private var playList: PlayList = PlayList()
 
@@ -39,7 +41,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter = MusicDetailAdapter(context!!, musicDetails)
+        mAdapter = MusicDetailAdapter(context!!, playList.getSongs())
         mAdapter.setOnItemClickListener(this)
         toolbar.setOnBackClickListener(this)
         nestScrollView.fadingView = toolbar
@@ -58,7 +60,8 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
     //ItemClick
     override fun onItemClick(position: Int) {
-        RxBus.getInstance().post(PlayOnLineMusicEvent(musicDetails, position))
+        playList.setPlayingIndex(position)
+        RxBus.getInstance().post(PlayListEvent(playList, position, TYPE_ONLINE_MUSIC))
     }
 
     override fun onBackClick(view: View) {
@@ -97,12 +100,12 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
             .load(detailBean.coverImgUrl)
             .into(coverMusicList)
         toolbar.title = detailBean.name
-        musicDetails.addAll(detailBean.tracks!!)
-        mAdapter.setData(musicDetails)
+        playList.addSong(detailBean.tracks!!)
+        mAdapter.setData(playList.getSongs())
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun onMusicDetail(onlineMusic: OnlineMusic) {
+    override fun onMusicDetail(onlineMusic: Music) {
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter) {

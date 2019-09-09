@@ -1,5 +1,7 @@
 package com.brins.lightmusic.model.onlinemusic
 
+import com.brins.lightmusic.model.Music
+
 /*
 * 歌单创建详情，如创建者，创建时间，关注数，播放数
  */
@@ -14,5 +16,5 @@ class MusicListDetailBean {
     var shareCount : Int = 0
     var subscribed : Boolean = false
     var subscribedCount : Int = 0
-    var tracks : List<OnlineMusic>? = null
+    var tracks : List<Music>? = null
 }

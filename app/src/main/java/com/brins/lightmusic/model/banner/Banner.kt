@@ -1,6 +1,6 @@
 package com.brins.lightmusic.model.banner
 
-import com.brins.lightmusic.model.onlinemusic.OnlineMusic
+import com.brins.lightmusic.model.Music
 import com.google.gson.annotations.SerializedName
 
 class Banner {
@@ -15,7 +15,7 @@ class Banner {
     var titleColor : String = "white"
 
     @SerializedName("song")
-    var song : OnlineMusic? = null
+    var song : Music? = null
 
     @SerializedName("typeTitle")
     var typeTitle : String = ""

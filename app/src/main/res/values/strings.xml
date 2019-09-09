@@ -24,4 +24,5 @@
     <string name="hot_list">热门歌单</string>
     <string name="hot_artist">热门歌手</string>
     <string name="num_songs">首单曲</string>
+    <string name="search">search</string>
 </resources>

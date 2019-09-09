@@ -5,21 +5,18 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
-import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.ui.customview.DefaultAnimator
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HOT
 import kotlinx.android.synthetic.main.fragment_discovery.*
@@ -122,7 +119,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
         initBannerView()
     }
 
-    override fun onMusicDetail(onlineMusic: OnlineMusic) {
+    override fun onMusicDetail(onlineMusic: Music) {
     }
 
     private fun initBannerView() {

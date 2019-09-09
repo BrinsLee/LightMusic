@@ -4,6 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -28,6 +31,7 @@ class MainActivity : BaseActivity() {
     var currentFragment : BaseFragment? = null
     var currentMusicListId : String = ""
 
+
     companion object {
         fun startThisActivity(activity: AppCompatActivity) {
             val intent = Intent(activity, MainActivity::class.java)
@@ -47,7 +51,12 @@ class MainActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        showBottomBar()
+        showBottomBar(supportFragmentManager)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        removeBottomBar(supportFragmentManager)
     }
 
     private fun initViewPagerAndTabLay() {
@@ -119,5 +128,18 @@ class MainActivity : BaseActivity() {
             }
         }
         return super.onKeyUp(keyCode, event)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.search -> {}
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

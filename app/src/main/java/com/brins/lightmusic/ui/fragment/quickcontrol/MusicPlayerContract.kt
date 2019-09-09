@@ -29,7 +29,8 @@ interface MusicPlayerContract {
 
         fun updateFavoriteToggle(favorite: Boolean)
 
-        fun onCoverLoad(cover: Bitmap?)
+
+        fun onMusicDetail(onlineMusic: Music)
     }
 
     interface Presenter : BasePresenter<View> {
@@ -51,9 +52,8 @@ interface MusicPlayerContract {
          */
         fun unbindPlaybackService()
 
-        /**
-         * 获取在线封面
-         */
-        fun getOnLineCover(url : String)
+
+
+        fun loadMusicDetail(onlineMusic: Music)
     }
 }

@@ -1,6 +1,5 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
-import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,8 +7,12 @@ import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.os.IBinder
 import androidx.lifecycle.Lifecycle
+import com.brins.lightmusic.BaseApplication
+import com.brins.lightmusic.api.ApiHelper
+import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.onlinemusic.MusicBean
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayBackService.Companion.mIsServiceBound
 import com.brins.lightmusic.utils.loadingOnlineCover
@@ -21,6 +24,11 @@ import io.reactivex.ObservableOnSubscribe
 
 class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter {
 
+
+    val provider: AndroidLifecycleScopeProvider by lazy {
+        AndroidLifecycleScopeProvider.from(mView?.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+    }
+
     companion object {
         val instance = SingletonHolder.holder
     }
@@ -29,8 +37,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
         val holder = MusicPlayerPresenter()
     }
 
-
-    private lateinit var mContext: Context
     private var mView: MusicPlayerContract.View? = null
     private var mPlaybackService: PlayBackService? = null
 
@@ -52,20 +58,34 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     }
 
-    override fun getOnLineCover(url: String) {
-        val provider: AndroidLifecycleScopeProvider =
-            AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+    override fun loadMusicDetail(onlineMusic: Music) {
 
         Observable.create(ObservableOnSubscribe<Bitmap> {
-            it.onNext(loadingOnlineCover(url))
+            it.onNext(loadingOnlineCover(onlineMusic.album.picUrl))
         }).compose(AsyncTransformer<Bitmap>())
-            .autoDisposable(provider)
-            .subscribe {
-                mView!!.onCoverLoad(it)
+            .concatMap { t ->
+                onlineMusic.bitmapCover = t
+                ApiHelper.getMusicService().getUrl(onlineMusic.id)
+                    .compose(AsyncTransformer<MusicBean>())
             }
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<MusicBean>() {
+                override fun onSuccess(response: MusicBean) {
+                    val metaData = response
+                    if (metaData.data != null) {
+                        onlineMusic.fileUrl = metaData.data!![0].url
+                        mView!!.onMusicDetail(onlineMusic)
+                    }
+                }
+
+                override fun onFail(message: String) {
+                }
+
+            })
     }
 
-    @Synchronized
+
+/*    @Synchronized
     fun setContext(context: Context): MusicPlayerPresenter {
         return if (::mContext.isInitialized) {
             this
@@ -73,7 +93,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
             this.mContext = context
             this
         }
-    }
+    }*/
 
     override fun retrieveLastPlayMode() {
 
@@ -87,6 +107,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
     override fun bindPlaybackService() {
 
         if (!mIsServiceBound) {
+            val mContext = BaseApplication.getInstance().baseContext
             val intent = Intent(mContext, PlayBackService::class.java)
             mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
             mContext.startService(intent)
@@ -96,7 +117,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
     override fun unbindPlaybackService() {
 
         if (mIsServiceBound) {
-            mContext.unbindService(mConnection)
+            BaseApplication.getInstance().baseContext.unbindService(mConnection)
             mIsServiceBound = false
         }
     }
@@ -110,12 +131,13 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
         if (mPlaybackService != null && mPlaybackService!!.getPlayingSong() != null) {
             mView!!.onPlaybackServiceBound(mPlaybackService!!)
             mView!!.onSongUpdated(mPlaybackService!!.getPlayingSong()!!)
-        } else {
         }
     }
 
     override fun unsubscribe() {
+        mView?.onPlaybackServiceUnbound()
         mView = null
-//        unbindPlaybackService()
+
+        unbindPlaybackService()
     }
 }

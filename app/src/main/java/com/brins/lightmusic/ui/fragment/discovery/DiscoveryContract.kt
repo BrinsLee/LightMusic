@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Context
+import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
@@ -31,7 +32,7 @@ interface DiscoveryContract {
 
         fun onDetailLoad(detailBean : MusicListDetailBean)
 
-        fun onMusicDetail(onlineMusic: OnlineMusic)
+        fun onMusicDetail(onlineMusic: Music)
     }
     interface Presenter : BasePresenter<View>{
         fun loadBanner()
@@ -39,8 +40,6 @@ interface DiscoveryContract {
         fun loadMusicList(top : Int)
 
         fun loadMusicListDetail(id : String)
-
-        fun loadMusicDetail(onlineMusic: OnlineMusic)
 
         fun loadHotMusicList(top : Int)
     }

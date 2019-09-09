@@ -108,6 +108,7 @@ class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,
     }
 
     override fun onItemClick(position: Int) {
+        playList.setPlayingIndex(position)
         RxBus.getInstance().post(PlayListEvent(playList , position))
     }
 

@@ -11,8 +11,6 @@
         <com.brins.lightmusic.ui.customview.FontTextView
                 android:id="@+id/tv_title"
                 android:text="@string/app_name"
-                app:start_color="@color/start"
-                app:end_color="@color/end"
                 app:font_type="DIN-Bold"
                 android:textSize="25sp"
                 android:layout_width="wrap_content"
