@@ -29,6 +29,7 @@
 
     <color name="white1">#F5F4F9</color>
     <color name="white1_80">#99F5F4F9</color>
-    <color name="gery">#E2E2E2</color>
+    <color name="gery">#f2f2f2</color>
     <color name="gery_80">#CCE2E2E2</color>
+
 </resources>

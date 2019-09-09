@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.animation.LinearInterpolator
 import com.makeramen.roundedimageview.RoundedImageView
 
-class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs : AttributeSet): RoundedImageView(context , attrs) {
+class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs : AttributeSet? = null): RoundedImageView(context , attrs) {
     private var mRotateAnimator: ObjectAnimator
     private var mLastAnimationValue: Long = 0
     init {

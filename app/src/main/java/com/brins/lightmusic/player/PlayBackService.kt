@@ -1,16 +1,29 @@
 package com.brins.lightmusic.player
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
+import java.lang.Exception
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.getSystemService
+
+
+
 
 class PlayBackService : Service(), IPlayback{
 
     companion object {
         @JvmStatic
+        private val CHANNEL_ID = "com.brins.lightmusic.notification.channel"
         private val ACTION_PLAY_TOGGLE = "com.brins.lightmusic.ACTION.PLAY_TOGGLE"
         private val ACTION_PLAY_LAST = "com.brins.lightmusic.ACTION.PLAY_LAST"
         private val ACTION_PLAY_NEXT = "com.brins.lightmusic.ACTION.PLAY_NEXT"
@@ -37,6 +50,9 @@ class PlayBackService : Service(), IPlayback{
         super.onCreate()
         mIsServiceBound = true
         MediaSessionManager(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
     }
 
     override fun stopService(name: Intent): Boolean {
@@ -46,8 +62,33 @@ class PlayBackService : Service(), IPlayback{
 
     override fun onDestroy() {
         releasePlayer()
-        val intent = Intent(applicationContext, PlayBackService::class.java)
-        startService(intent)
+        try {
+            val intent = Intent(applicationContext, PlayBackService::class.java)
+            startService(intent)
+        }catch (e :Exception){
+
+        }
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
+    }
+
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channelName = getString(R.string.app_name)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID,channelName,importance)
+            channel.description = "轻籁后台运行中"
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            builder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("轻籁")
+                .setContentText("后台运行中").setOngoing(true)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+            startForeground(NOTIFICATION_ID,builder.build())
+
+        }
     }
 
     //IPlayback

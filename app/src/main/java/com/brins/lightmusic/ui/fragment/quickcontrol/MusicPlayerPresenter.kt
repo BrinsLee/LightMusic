@@ -110,7 +110,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
             val mContext = BaseApplication.getInstance().baseContext
             val intent = Intent(mContext, PlayBackService::class.java)
             mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-            mContext.startService(intent)
         }
     }
 
@@ -136,7 +135,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun unsubscribe() {
         mView?.onPlaybackServiceUnbound()
-        mView = null
 
         unbindPlaybackService()
     }

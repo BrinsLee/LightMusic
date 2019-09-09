@@ -138,7 +138,7 @@
             android:paddingRight="15dip"
             android:paddingTop="2dip"
             android:text="Login"
-            android:textColor="@color/tt_trans_half_black"
+            android:textColor="@color/translucent"
             android:textSize="20sp" />
     </RelativeLayout>
 

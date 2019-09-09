@@ -97,7 +97,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
                     mPlayer.prepare()
                     mPlayer.start()
                     notifyPlayStatusChanged(true)
-                } catch (e: IOException) {
+                } catch (e: Exception) {
                     Log.e(TAG, "play: ", e)
                     notifyPlayStatusChanged(false)
                     return false

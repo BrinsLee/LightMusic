@@ -18,8 +18,10 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.string2Bitmap
+import com.hwangjr.rxbus.annotation.Subscribe
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
+import java.lang.Exception
 
 
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback,
@@ -53,27 +55,20 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         HeadsetButtonReceiver(this)
-        RxBus.getInstance().subscribe(Any::class.java
-            , Consumer {
-                when (it) {
-                    is PlayListEvent -> {
-                        onPlayMusic(it)
-                        RxBus.getInstance().unSubcribe()
-                    }
-
-                }
-            })
+        RxBus.getInstance().register(this)
     }
 
     fun getCurrentList(): PlayList {
         return playList
     }
 
-    private fun onPlayMusic(playListEvent: PlayListEvent) {
+    @Subscribe
+    fun onPlayMusic(playListEvent: PlayListEvent) {
         type = playListEvent.type
         playList = playListEvent.playlist
         index = playListEvent.playIndex
         playSong(playList, index)
+        Log.d("RxBus:", "QuickControlFragment")
     }
 
     private fun playSong(playList: PlayList, index: Int) {
@@ -161,15 +156,15 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RxBus.getInstance().unSubcribe()
+        RxBus.getInstance().unregister(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun onDetach() {
+        super.onDetach()
         if (::mPresenter.isInitialized) {
             mPresenter.unsubscribe()
         }
-        super.onDestroy()
     }
 
     // Click Events
@@ -273,7 +268,11 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     override fun onComplete(next: Music?) {
         when (type) {
             TYPE_ONLINE_MUSIC -> {
-                mPresenter.loadMusicDetail(next!!)
+                if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
+                    mPresenter.loadMusicDetail(next)
+                } else {
+                    onSongUpdated(next)
+                }
             }
             TYPE_LOCAL_MUSIC -> {
                 onSongUpdated(next)
@@ -353,16 +352,21 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
             ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
             return
         }
-        tvPlaybarTitle.text = song.name
-        tvPlaybarArtist.text = song.artistBeans!![0].name
-        if (song.bitmapCover == null) {
-            val bitmap = string2Bitmap(song.album.picUrl)
-            song.bitmapCover = bitmap
+        try {
+            tvPlaybarTitle.text = song.name
+            tvPlaybarArtist.text = song.artistBeans!![0].name
+            if (song.bitmapCover == null) {
+                val bitmap = string2Bitmap(song.album.picUrl)
+                song.bitmapCover = bitmap
 
+            }
+            ivPlaybarCover.setImageBitmap(song.bitmapCover)
+            ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
+            ivPlaybarCover.startRotateAnimation()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return
         }
-        ivPlaybarCover.setImageBitmap(song.bitmapCover)
-        ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
-        ivPlaybarCover.startRotateAnimation()
 
     }
 

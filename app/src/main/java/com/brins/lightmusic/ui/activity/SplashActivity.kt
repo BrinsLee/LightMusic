@@ -5,15 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import com.brins.lightmusic.R
-import com.brins.lightmusic.manager.TTAdManagerHolder
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lib_common.utils.WeakHandler
-import com.bytedance.sdk.openadsdk.TTAdNative
 
 
 class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
 
-    private val mTTAdNative: TTAdNative by lazy { TTAdManagerHolder.get().createAdNative(this) }
     private var mForceGoMain: Boolean = false
     private val AD_TIME_OUT : Long = 2000
     private val MSG_GO_MAIN = 1

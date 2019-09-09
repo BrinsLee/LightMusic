@@ -29,17 +29,19 @@ import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
+import com.brins.lightmusic.ui.customview.RoundImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.string2Bitmap
-import com.bytedance.sdk.openadsdk.core.widget.RoundImageView
+import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import java.util.concurrent.Executors
 
 
-class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback, View.OnClickListener {
+class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback,
+    View.OnClickListener {
 
     private var mPlayer: IPlayback? = null
     private var isPlaying = false
@@ -109,7 +111,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
 
-
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         MusicPlayerPresenter.instance.subscribe(this)
@@ -117,7 +118,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         ivCover.setPageTransformer(false, CustPagerTransformer())
         setPlayView()
     }
-
 
 
     fun setPlayView() {
@@ -128,12 +128,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             for (i in 0 until mPlayList.getNumOfSongs()) {
                 val imageView = RoundImageView(applicationContext)
                 var bitmap = musics!![i].bitmapCover
-                if (bitmap == null){
+                if (bitmap == null) {
                     bitmap = string2Bitmap(musics!![i].album.picUrl)
                 }
                 imageView.setImageBitmap(bitmap)
-                imageView.layoutParams = ViewGroup.LayoutParams(100, 100)
-                imageView.scaleType = ImageView.ScaleType.CENTER
+                imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
+                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                 mImageViewList.add(imageView)
             }
         }
@@ -189,7 +189,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     //click event
 
     fun setListener() {
-        toolBar.setOnBackClickListener(object : CommonHeaderView.OnBackClickListener{
+        toolBar.setOnBackClickListener(object : CommonHeaderView.OnBackClickListener {
             override fun onBackClick(view: View) {
                 MainActivity.startThisActivity(this@MusicPlayActivity)
             }
@@ -224,7 +224,11 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
             }
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
             }
 
             override fun onPageSelected(position: Int) {
@@ -266,12 +270,14 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     private fun onPlayLast() {
         if (mPlayer == null) return
         val hasLast = mPlayList.hasLast()
-        if (hasLast){
+        if (hasLast) {
             val song = mPlayList.getSongs()[mPlayList.getPlayingIndex() - 1]
-            if (song?.fileUrl == null || song.fileUrl == "" ){
+            if (song?.fileUrl == null || song.fileUrl == "") {
                 mPresenter.loadMusicDetail(song)
+
+            } else {
+                mPlayer!!.playLast()
             }
-            mPlayer!!.playLast()
         }
         return
     }
@@ -281,10 +287,11 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         val hasNext = mPlayList.hasNext(false)
         if (hasNext) {
             val song = mPlayList.getSongs()[mPlayList.getPlayingIndex() + 1]
-            if (song?.fileUrl == null || song.fileUrl == "" ) {
+            if (song?.fileUrl == null || song.fileUrl == "") {
                 mPresenter.loadMusicDetail(song)
+            } else {
+                mPlayer!!.playNext()
             }
-            mPlayer!!.playNext()
         }
         return
     }
@@ -423,7 +430,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
             return
         }
         cover = song.bitmapCover
-        if (cover == null){
+        if (cover == null) {
             cover = string2Bitmap(song.album.picUrl)
         }
         initViewPager()
