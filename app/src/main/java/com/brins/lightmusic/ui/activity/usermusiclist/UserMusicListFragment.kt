@@ -31,6 +31,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) : BaseFragment(
 
 
     private var mPlayList = PlayList()
+    private var currentTime: Long = 0
     private lateinit var mPresenter: MusicListContract.Presenter
     private var mAdapter: TreeRecyclerViewAdapter<Music> =
         TreeRecyclerViewAdapter(mPlayList.getSongs() as ArrayList<Music>)
@@ -93,6 +94,10 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) : BaseFragment(
 
 
     override fun onItemClick(position: Int) {
+        if (System.currentTimeMillis() - currentTime < 2000) {
+            return
+        }
+        currentTime = System.currentTimeMillis()
         mPlayList.setPlayingIndex(position)
         RxBus.getInstance().post(PlayListEvent(mPlayList, position, TYPE_ONLINE_MUSIC))
         Log.d("RxBus:","UserMusicListActivity")

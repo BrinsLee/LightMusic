@@ -31,6 +31,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     var id: String = ""
     lateinit var mAdapter: MusicDetailAdapter
     private var playList: PlayList = PlayList()
+    private var currentTime: Long = 0
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_music_detail
@@ -58,6 +59,10 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
     //ItemClick
     override fun onItemClick(position: Int) {
+        if (System.currentTimeMillis() - currentTime < 2000) {
+            return
+        }
+        currentTime = System.currentTimeMillis()
         playList.setPlayingIndex(position)
         RxBus.getInstance().post(PlayListEvent(playList, position, TYPE_ONLINE_MUSIC))
     }
