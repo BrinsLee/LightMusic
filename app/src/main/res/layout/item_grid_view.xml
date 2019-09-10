@@ -46,6 +46,7 @@
         </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
 
         <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+                android:id="@+id/fm"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/common_margin_100"
                 android:layout_weight="1"
@@ -81,6 +82,7 @@
         </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
 
         <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+                android:id="@+id/collection"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/common_margin_100"
                 android:layout_weight="1"

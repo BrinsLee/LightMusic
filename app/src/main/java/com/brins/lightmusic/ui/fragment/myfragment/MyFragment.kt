@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
@@ -87,6 +88,8 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
         avatar.setOnClickListener(this)
         nickName.setOnClickListener(this)
         localMusic.setOnClickListener(this)
+        fm.setOnClickListener(this)
+        collection.setOnClickListener(this)
 
     }
 
@@ -105,6 +108,7 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
     override fun onClick(v: View) {
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
+            R.id.fm, R.id.collection -> Toast.makeText(context,"未完成，别点了",Toast.LENGTH_SHORT).show()
             R.id.localMusic -> try {
                 (activity as MainActivity).switchFragment(LocalMusicFragment())
                     .addToBackStack(TAG)

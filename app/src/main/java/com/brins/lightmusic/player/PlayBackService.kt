@@ -77,13 +77,13 @@ class PlayBackService : Service(), IPlayback{
     private fun createNotificationChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val channelName = getString(R.string.app_name)
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID,channelName,importance)
-            channel.description = "轻籁后台运行中"
+            channel.description = "轻籁运行中"
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("轻籁")
-                .setContentText("后台运行中").setOngoing(true)
+                .setContentText("运行中").setOngoing(true)
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
             startForeground(NOTIFICATION_ID,builder.build())

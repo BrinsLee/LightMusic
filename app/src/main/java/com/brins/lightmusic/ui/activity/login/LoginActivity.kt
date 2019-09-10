@@ -53,7 +53,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
     }
 
     override fun getLayoutResId(): Int {
-        return if(isLogin)R.layout.activity_login else R.layout.activity_login
+        return if(isLogin)R.layout.activity_login else R.layout.activity_unlogin
     }
 
 
