@@ -36,7 +36,9 @@ import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.string2Bitmap
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
+import kotlinx.android.synthetic.main.fragment_quick_control.*
 import kotlinx.android.synthetic.main.include_play_control.*
+import java.lang.Exception
 import java.util.concurrent.Executors
 
 
@@ -44,6 +46,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     View.OnClickListener {
 
     private var mPlayer: IPlayback? = null
+    private var index = -1
     private var isPlaying = false
     private lateinit var mPresenter: MusicPlayerContract.Presenter
     private val mHamdler: HandlerUtil by lazy { HandlerUtil.getInstance(this) }
@@ -123,6 +126,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     fun setPlayView() {
         current = mPlayList.getCurrentSong()
         musics = mPlayList.getSongs()
+        index = mPlayList.getPlayingIndex()
         if (mImageViewList.size == 0 || mImageViewList.size != musics?.size) {
             mImageViewList.clear()
             for (i in 0 until mPlayList.getNumOfSongs()) {
@@ -158,6 +162,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     override fun onStop() {
         super.onStop()
+        mPresenter.unsubscribe()
         mHandler.removeCallbacks(mProgressCallback)
     }
 
@@ -286,8 +291,9 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         if (mPlayer == null) return
         val hasNext = mPlayList.hasNext(false)
         if (hasNext) {
-            val song = mPlayList.getSongs()[mPlayList.getPlayingIndex() + 1]
-            if (song?.fileUrl == null || song.fileUrl == "") {
+            val song = mPlayList.getCurrentSong()!!
+            if (song.fileUrl == null || song.fileUrl == "") {
+                index = mPlayList.getPlayingIndex()
                 mPresenter.loadMusicDetail(song)
             } else {
                 mPlayer!!.playNext()
@@ -391,7 +397,8 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     //MVP View
 
     override fun onMusicDetail(onlineMusic: Music) {
-
+        mPlayList.setSong(onlineMusic, index)
+        mPlayer!!.play(mPlayList, index)
     }
 
     override fun handleError(error: Throwable) {
@@ -410,7 +417,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     override fun onPlaybackServiceUnbound() {
-        mPlayer!!.unregisterCallback(this)
+//        mPlayer!!.unregisterCallback(this)
         mPlayer = null
     }
 
@@ -455,7 +462,11 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     override fun updatePlayToggle(play: Boolean) {
-        playOrPause.setImageResource(if (play) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+        try {
+            playOrPause.setImageResource(if (play) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+        } catch (e: Exception) {
+            return
+        }
     }
 
     override fun updateFavoriteToggle(favorite: Boolean) {
@@ -476,17 +487,27 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     override fun onComplete(next: Music?) {
-        onSongUpdated(next)
+        if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
+            onPlayNext()
+        } else {
+            onSongUpdated(next)
+        }
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
-        updatePlayToggle(isPlaying)
-        if (isPlaying) {
-            mHandler.removeCallbacks(mProgressCallback)
-            mHandler.post(mProgressCallback)
+        if (playOrPause == null) {
+            return
         } else {
-            mHandler.removeCallbacks(mProgressCallback)
+            updatePlayToggle(isPlaying)
+            if (isPlaying) {
+                mHandler.removeCallbacks(mProgressCallback)
+                mHandler.post(mProgressCallback)
+            } else {
+                mHandler.removeCallbacks(mProgressCallback)
 
+            }
         }
     }
+
+
 }

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/loading_lay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:elevation="@dimen/common_margin_100">
 
         <ImageView
             android:id="@+id/iv_loading_bg"

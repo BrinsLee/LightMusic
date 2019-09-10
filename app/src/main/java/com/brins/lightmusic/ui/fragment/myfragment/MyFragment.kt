@@ -13,10 +13,10 @@ import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import com.brins.lightmusic.ui.activity.MainActivity
-import com.brins.lightmusic.ui.activity.usermusiclist.UserMusicListActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
+import com.brins.lightmusic.ui.activity.usermusiclist.UserMusicListFragment
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
@@ -92,12 +92,19 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
 
 
     override fun onItemClick(position: Int) {
-        UserMusicListActivity.startThisActivity(activity as AppCompatActivity, mPlayList[position])
+//        UserMusicListActivity.startThisActivity(activity as AppCompatActivity, mPlayList[position])
+        try {
+            (activity as MainActivity).switchFragment(UserMusicListFragment(mPlayList[position]))
+                .addToBackStack(TAG)
+                .commit()
+        } catch (e: Exception) {
+            Log.e(TAG, e.message)
+        }
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this,AppConfig.isLogin)
+            R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
             R.id.localMusic -> try {
                 (activity as MainActivity).switchFragment(LocalMusicFragment())
                     .addToBackStack(TAG)
@@ -115,8 +122,8 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("aaaa","$resultCode")
-        when(resultCode){
+        Log.d("aaaa", "$resultCode")
+        when (resultCode) {
             LOGIN_SUCCESS_CODE -> {
                 initUserData()
             }

@@ -15,6 +15,7 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.KeyEvent
 import androidx.media.session.MediaButtonReceiver
 import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver.Companion.HeadsetTimerTask
@@ -119,7 +120,6 @@ class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent) {
-
     }
 
 

@@ -34,5 +34,7 @@
     <declare-styleable name="CommonHeaderView">
         <attr name="chv_title" format="string" />
         <attr name="chv_back" format="boolean"/>
+        <attr name="chv_text_color" format="color"/>
+        <attr name="chv_icon" format="reference"/>
     </declare-styleable>
 </resources>

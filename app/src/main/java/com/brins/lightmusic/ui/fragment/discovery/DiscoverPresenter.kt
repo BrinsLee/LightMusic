@@ -53,7 +53,7 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
     }
 
     override fun loadMusicList(top: Int) {
-        ApiHelper.getPlayListService().getHightQualityList()
+        ApiHelper.getPlayListService().getHightQualityList(top)
             .compose(AsyncTransformer<MusicListResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MusicListResult>() {

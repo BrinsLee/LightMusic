@@ -72,16 +72,18 @@ fun getStringCover(bitmap: Bitmap? = null): String {
 }
 
 
-fun string2Bitmap(bitmapString: String): Bitmap? {
+fun string2Bitmap(bitmapString: String?): Bitmap? {
     var bitmap: Bitmap? = null
-    try {
-        val b = Base64.decode(bitmapString, Base64.DEFAULT)
-        bitmap = BitmapFactory.decodeByteArray(
-            b, 0,
-            b.size
-        )
-    } catch (e: Exception) {
-        e.printStackTrace()
+    if (bitmapString != null){
+        try {
+            val b = Base64.decode(bitmapString, Base64.DEFAULT)
+            bitmap = BitmapFactory.decodeByteArray(
+                b, 0,
+                b.size
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
     return bitmap ?: BitmapFactory.decodeResource(
         BaseApplication.getInstance().applicationContext.resources,

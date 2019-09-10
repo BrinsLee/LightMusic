@@ -13,14 +13,12 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_music_detail.*
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
-import com.brins.lightmusic.event.PlayOnLineMusicEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
-import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 
@@ -75,12 +73,10 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
     }
 
     override fun hideLoading() {
-//        loadingLayout.visibility = View.GONE
+        loadingLayout.visibility = View.GONE
     }
 
-/*    override fun getcontext(): Context {
-        return context!!
-    }*/
+
 
     override fun getLifeActivity(): AppCompatActivity {
         return activity as AppCompatActivity

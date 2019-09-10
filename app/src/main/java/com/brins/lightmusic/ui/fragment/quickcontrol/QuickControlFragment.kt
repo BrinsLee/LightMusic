@@ -1,6 +1,5 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
-import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -53,7 +52,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
-        HeadsetButtonReceiver(this)
         RxBus.getInstance().register(this)
     }
 
@@ -87,28 +85,9 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
     }
 
-/*    private fun playOnlineSong(playList: PlayList, index: Int) {
-        playList.setPlayMode(PlayMode.getDefault())
-        mPlayer!!.play(playList, index)
-        val song = playList.getCurrentSong()
-    }
-
-    private fun onPlayOnlineMusic(onLineMusicEvent: PlayOnLineMusicEvent) {
-        if (mPlayer!!.isPlaying()) {
-            mPlayer!!.pause()
-            ivPlayOrPause.setImageResource(R.drawable.ic_playmusic)
-        }
-        if (!::playList.isInitialized) {
-            playList = PlayList()
-        }
-        val index = playList.getPlayingIndex() + 1
-
-        playList.addSong(music.get(), index)
-        playOnlineSong(playList, index)
-    }*/
-
     override fun onStart() {
         super.onStart()
+        HeadsetButtonReceiver(this)
         MusicPlayerPresenter.instance.subscribe(this)
 
     }
@@ -158,9 +137,8 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         RxBus.getInstance().unregister(this)
     }
 
-
-    override fun onDetach() {
-        super.onDetach()
+    override fun onDestroy() {
+        super.onDestroy()
         if (::mPresenter.isInitialized) {
             mPresenter.unsubscribe()
         }
@@ -230,7 +208,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         if (hasLast) {
             val song = playList.getSongs()[playList.getPlayingIndex() - 1]
             if (song.fileUrl == null || song.fileUrl == "") {
-                index -= 1
+                index = playList.getPlayingIndex() - 1
                 mPresenter.loadMusicDetail(song)
                 return
             }
@@ -243,9 +221,11 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         if (mPlayer == null) return
         val hasNext = playList.hasNext(false)
         if (hasNext) {
-            val song = playList.getSongs()[playList.getPlayingIndex() + 1]
+            val song = playList.getCurrentSong()!!
             if (song.fileUrl == null || song.fileUrl == "") {
-                index += 1
+                Log.d(TAG, "index: $index")
+                index = playList.getPlayingIndex()
+                Log.d(TAG, "index_after: ${playList.getPlayingIndex()}")
                 mPresenter.loadMusicDetail(song)
                 return
             }
@@ -268,7 +248,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         when (type) {
             TYPE_ONLINE_MUSIC -> {
                 if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
-                    mPresenter.loadMusicDetail(next)
+                    playNext()
                 } else {
                     onSongUpdated(next)
                 }
@@ -283,11 +263,15 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
-        updatePlayToggle(isPlaying)
-        if (isPlaying) {
-            ivPlaybarCover.resumeRotateAnimation()
-        } else {
-            ivPlaybarCover.pauseRotateAnimation()
+        if (ivPlayOrPause == null){
+            return
+        }else {
+            updatePlayToggle(isPlaying)
+            if (isPlaying) {
+                ivPlaybarCover.resumeRotateAnimation()
+            } else {
+                ivPlaybarCover.pauseRotateAnimation()
+            }
         }
     }
 
@@ -298,6 +282,8 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun onMusicDetail(onlineMusic: Music) {
+        Log.d(TAG, "index: $index")
+        Log.d(TAG, "name: ${onlineMusic.name}")
         playList.setSong(onlineMusic, index)
         mPlayer!!.play(playList, index)
     }
@@ -318,7 +304,11 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun updatePlayToggle(play: Boolean) {
-        ivPlayOrPause.setImageResource(if (play) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+        try {
+            ivPlayOrPause.setImageResource(if (play) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+        }catch (e : Exception){
+            return
+        }
     }
 
     override fun updateFavoriteToggle(favorite: Boolean) {
@@ -334,7 +324,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
     }
 
     override fun onPlaybackServiceUnbound() {
-        mPlayer!!.unregisterCallback(this)
+//        mPlayer!!.unregisterCallback(this)
     }
 
     override fun onSongSetAsFavorite(song: Music?) {

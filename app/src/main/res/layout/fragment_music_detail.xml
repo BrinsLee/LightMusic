@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_music_detail"
+        android:fitsSystemWindows="true"
         android:id="@+id/rootContraint"
         android:layout_marginBottom="65dp"
         tools:context=".ui.fragment.discovery.MusicDetailFragment">
@@ -58,10 +59,11 @@
     <com.brins.lightmusic.ui.customview.CommonHeaderView
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            app:titleTextColor="@color/white"
+            app:chv_text_color="@color/translucent"
+            app:chv_icon="@drawable/ic_back_black"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/blue"
+            android:background="@color/gery"
             android:alpha="0"
             app:chv_title="">
     </com.brins.lightmusic.ui.customview.CommonHeaderView>

@@ -22,7 +22,9 @@ import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TY
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener, DiscoveryAdapter.OnItemClickListener {
+
+
     private var isFresh: Boolean = false
     private var count: Int = 1
     private lateinit var mPresenter: DiscoveryContract.Presenter
@@ -81,14 +83,23 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
     override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
         isFresh = false
-        songs.reverse()
         when (type) {
             TYPE_HOT -> {
-                musicHotListBean = songs
+                if (songs.size > 6){
+                    musicHotListBean.clear()
+                    musicHotListBean.addAll(songs.subList(songs.size - 6,songs.size))
+                }else{
+                    musicHotListBean = songs
+                }
                 initHotMusicList()
             }
             TYPE_HIGHT -> {
-                musicListBean = songs
+                if (songs.size > 6){
+                    musicListBean.clear()
+                    musicListBean.addAll(songs.subList(songs.size - 6,songs.size))
+                }else{
+                    musicListBean = songs
+                }
                 initMusicList()
             }
         }
@@ -96,20 +107,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     }
 
     private fun initHotMusicList() {
-        musicHotAdapter.setOnItemClickListener(object : DiscoveryAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
-                val id = musicHotListBean[position].id
-                try {
-                    (activity as MainActivity).switchFragment(id, MusicDetailFragment())
-                        .addToBackStack(TAG)
-                        .commit()
-                } catch (e: Exception) {
-                    Log.e(TAG, e.message)
-                }
-            }
-
-        })
-
+        musicHotAdapter.setOnItemClickListener(this)
         recycleMusiclist2.adapter = musicHotAdapter
         recycleMusiclist2.layoutManager = GridLayoutManager(context!!, 3)
     }
@@ -127,50 +125,11 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerBanner.layoutManager = layoutManager
         recyclerBanner.adapter = bannerAdapter
-
-        /*pileLayout.visibility = View.VISIBLE
-        pileLayout.setAdapter(object : PileLayout.Adapter() {
-            override fun getLayoutId(): Int {
-                return R.layout.artist_item
-            }
-
-            override fun getItemCount(): Int {
-                return bannerList.size
-            }
-
-            override fun bindView(view: View, index: Int) {
-                var viewHolder: ViewHolder? = view.tag as ViewHolder?
-                if (viewHolder == null) {
-                    viewHolder = ViewHolder()
-                    viewHolder.imageView = view.findViewById(R.id.iv_recovery)
-                    viewHolder.textView = view.findViewById(R.id.introduce)
-                    view.tag = viewHolder
-                }
-                viewHolder.textView!!.text = bannerList[index].name
-                Glide.with(this@DiscoveryFragment)
-                    .load(bannerList[index].picUrl)
-                    .into(viewHolder.imageView!!)
-            }
-        })*/
-
     }
 
     private fun initMusicList() {
 
-        musicListAdapter.setOnItemClickListener(object : DiscoveryAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
-                val id = musicListBean[position].id
-                try {
-                    (activity as MainActivity).switchFragment(id, MusicDetailFragment())
-                        .addToBackStack(TAG)
-                        .commit()
-                } catch (e: Exception) {
-                    Log.e(TAG, e.message)
-                }
-            }
-
-        })
-
+        musicListAdapter.setOnItemClickListener(this)
         recycleMusiclist.adapter = musicListAdapter
         recycleMusiclist.layoutManager = GridLayoutManager(context!!, 3)
 
@@ -190,7 +149,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
             isFresh = true
             loadingMore.isRefreshing = false
             showLoading()
-//            mPresenter.loadMusicList(count * 12)
+            mPresenter.loadMusicList(count * 6)
         }
     }
 
@@ -202,4 +161,15 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
         return R.layout.fragment_discovery
     }
 
+
+    override fun onItemClick(view: View, position: Int) {
+        val id = musicListBean[position].id
+        try {
+            (activity as MainActivity).switchFragment(id, MusicDetailFragment())
+                .addToBackStack(TAG)
+                .commit()
+        } catch (e: Exception) {
+            Log.e(TAG, e.message)
+        }
+    }
 }

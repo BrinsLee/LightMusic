@@ -134,7 +134,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun unsubscribe() {
         mView?.onPlaybackServiceUnbound()
-        mView = null
 //        unbindPlaybackService()
     }
 }

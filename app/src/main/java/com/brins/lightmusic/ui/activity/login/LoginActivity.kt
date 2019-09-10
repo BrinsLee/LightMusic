@@ -17,11 +17,12 @@ import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.utils.*
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_unlogin.*
 
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
 
     private lateinit var mPresenter: LoginContract.Presenter
+    private var isLogin = false
 
     companion object {
         val IS_LOGIN = "isLogin"
@@ -33,7 +34,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
             login: Boolean
         ) {
             val intent = Intent(fragment.activity, LoginActivity::class.java)
-            intent.putExtra(IS_LOGIN,login)
+            intent.putExtra(IS_LOGIN, login)
             fragment.startActivityForResult(intent, 1)
         }
     }
@@ -52,15 +53,23 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
     }
 
     override fun getLayoutResId(): Int {
-        return R.layout.activity_login
+        return if(isLogin)R.layout.activity_login else R.layout.activity_login
     }
+
+
+    override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
+        super.onCreateBeforeBinding(savedInstanceState)
+        isLogin = intent.getBooleanExtra(IS_LOGIN,false)
+    }
+
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         LoginPresenter.instance.subscribe(this)
-        btn_login.setOnClickListener(this)
+        if (btn_login != null){
+            btn_login.setOnClickListener(this)
+        }
     }
-
 
 
     override fun showLoading() {
@@ -93,10 +102,6 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
         recovery(input_layout)
     }
 
-    override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
-        super.onCreateBeforeBinding(savedInstanceState)
-
-    }
 
     fun saveUserAccount(info: UserLoginResult) {
         AppConfig.userAccount = info.account

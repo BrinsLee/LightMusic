@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/loadingMore"
         android:layout_width="match_parent"
@@ -14,16 +15,10 @@
                 android:layout_height="match_parent"
                 android:clipChildren="false"
                 android:orientation="vertical">
-            <!--        <com.brins.lightmusic.ui.customview.PileLayout
-                            android:id="@+id/pileLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            pile:displayCount="1.8"
-                            pile:interval="10dp"
-                            pile:scaleStep="0.32"
-                            pile:sizeRatio="1.12"/>-->
+            <include
+                    android:id="@+id/loadingLayout"
+                    layout="@layout/loading_layout"
+                    android:visibility="gone"/>
             <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginTop="@dimen/common_margin_20"
                     android:id="@+id/recyclerBanner"
@@ -33,11 +28,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                <include
-                        android:id="@+id/loadingLayout"
-                        layout="@layout/loading_layout"
-                        android:visibility="gone"/>
 
                 <com.brins.lightmusic.ui.customview.FontTextView
                         android:id="@+id/musicTitle"
@@ -57,7 +47,7 @@
                         android:id="@+id/recommend"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_margin="8dp"
-                        android:src="@drawable/ic_arrow_right"
+                        android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -91,7 +81,7 @@
                         android:id="@+id/recommend2"
                         app:layout_constraintTop_toBottomOf="@id/recycleMusiclist"
                         android:layout_margin="8dp"
-                        android:src="@drawable/ic_arrow_right"
+                        android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>

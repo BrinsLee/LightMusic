@@ -35,7 +35,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
     private var mPlayer: MediaPlayer = MediaPlayer()
     private var mPlayList: PlayList = PlayList()
     // Default size 2: for service and UI
-    private val mCallbacks = HashSet<IPlayback.Callback>(2)
+    private val mCallbacks = ArrayList<IPlayback.Callback>(1)
 
     // Player status
     private var isPaused: Boolean = false
@@ -96,13 +96,14 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
                     mPlayer.setDataSource(music?.fileUrl)
                     mPlayer.prepare()
                     mPlayer.start()
+                    notifyComplete(music)
                     notifyPlayStatusChanged(true)
                 } catch (e: Exception) {
                     Log.e(TAG, "play: ", e)
+                    notifyComplete(music)
                     notifyPlayStatusChanged(false)
                     return false
                 }
-                notifyComplete(music)
                 return true
             }
         }
@@ -217,6 +218,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {
+        removeCallbacks()
         mCallbacks.add(callback)
     }
 
@@ -246,7 +248,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
             val hasNext = mPlayList.hasNext(true)
             if (hasNext) {
                 next = mPlayList.next()
-                if (mPlayList.next().fileUrl != null && mPlayList.next().fileUrl != ""){
+                if (next.fileUrl != null && next.fileUrl != ""){
                     play()
                 }
             }

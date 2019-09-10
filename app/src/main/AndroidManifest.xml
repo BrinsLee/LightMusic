@@ -23,7 +23,6 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.usermusiclist.UserMusicListActivity"></activity>
         <activity android:name=".ui.activity.MusicPlayActivity"></activity>
 
         <service
@@ -54,25 +53,13 @@
                 android:launchMode="singleInstance"
                 android:screenOrientation="portrait"></activity>
 
-        <!--<provider
-                android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
-                android:authorities="${applicationId}.TTFileProvider"
-                android:exported="false"
-                android:grantUriPermissions="true">
-            <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_paths" />
-        </provider>
-        <provider
-                android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
-                android:authorities="${applicationId}.TTMultiProvider"
-                android:exported="false" />
--->
         <receiver android:name=".player.broadcast.HeadsetButtonReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            <intent-filter
+                    android:priority="1000">
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>
