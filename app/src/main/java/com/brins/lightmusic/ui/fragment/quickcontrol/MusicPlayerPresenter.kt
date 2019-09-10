@@ -43,7 +43,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
     val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
             mPlaybackService = null
-            mView?.onPlaybackServiceUnbound()
         }
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -135,7 +134,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun unsubscribe() {
         mView?.onPlaybackServiceUnbound()
-
-        unbindPlaybackService()
+        mView = null
+//        unbindPlaybackService()
     }
 }

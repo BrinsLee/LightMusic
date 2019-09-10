@@ -47,8 +47,6 @@ class DiscoveryAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
             //横幅
             if (TYPE_BANNER == type) {
                 val banner = listBean[position] as Banner
-                holder.title.text = banner.song?.name
-                holder.description.text = banner.typeTitle
                 Glide.with(BaseApplication.getInstance().baseContext)
                     .load(banner.picUrl)
                     .into(holder.cover)

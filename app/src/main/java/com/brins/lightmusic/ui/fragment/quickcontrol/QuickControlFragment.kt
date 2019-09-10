@@ -19,7 +19,6 @@ import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.Exception
 
@@ -336,8 +335,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
     override fun onPlaybackServiceUnbound() {
         mPlayer!!.unregisterCallback(this)
-
-
     }
 
     override fun onSongSetAsFavorite(song: Music?) {

@@ -59,8 +59,10 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
         head.setOnBackClickListener(this)
     }
 
-    override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
-        super.onCreateAfterBinding(savedInstanceState)
+
+
+    override fun onStart() {
+        super.onStart()
         if (mUserPlayList != null) {
             head.title = mUserPlayList!!.name
             Glide.with(this).load(mUserPlayList!!.coverImgUrl).into(cover)
@@ -75,11 +77,6 @@ class UserMusicListActivity : BaseActivity(), MusicListContract.View, OnItemClic
         recyclerView.addItemDecoration(SpacesItemDecoration(10))
         recyclerView.adapter = mAdapter
         setListener()
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         showBottomBar(supportFragmentManager)
     }
 

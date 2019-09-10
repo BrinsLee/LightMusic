@@ -35,7 +35,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
     private var mPlayer: MediaPlayer = MediaPlayer()
     private var mPlayList: PlayList = PlayList()
     // Default size 2: for service and UI
-    private val mCallbacks = ArrayList<IPlayback.Callback>(2)
+    private val mCallbacks = HashSet<IPlayback.Callback>(2)
 
     // Player status
     private var isPaused: Boolean = false
@@ -179,7 +179,14 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
     }
 
     override fun isPlaying(): Boolean {
-        return mPlayer.isPlaying
+
+        var isPlay = false
+        try {
+            isPlay = mPlayer.isPlaying
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+        return isPlay
     }
 
     override fun getProgress(): Int {
