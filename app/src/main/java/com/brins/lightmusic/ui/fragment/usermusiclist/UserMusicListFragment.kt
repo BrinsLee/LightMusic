@@ -1,9 +1,8 @@
-package com.brins.lightmusic.ui.activity.usermusiclist
+package com.brins.lightmusic.ui.fragment.usermusiclist
 
 
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -23,7 +22,8 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_user_music_list.*
 import java.util.ArrayList
 
-class UserMusicListFragment(var mUserPlayList: UserPlayListBean) : BaseFragment(),
+class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
+    BaseFragment<MusicListContract.Presenter>(),
     MusicListContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener
@@ -67,14 +67,6 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) : BaseFragment(
         head.setOnBackClickListener(this)
     }
 
-    override fun handleError(error: Throwable) {
-    }
-
-    override fun showLoading() {
-    }
-
-    override fun hideLoading() {
-    }
 
     override fun onMusicListLoad(detailBean: MusicListDetailBean) {
         mPlayList.addSong(detailBean.tracks!!)
@@ -88,11 +80,6 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) : BaseFragment(
         mPresenter = presenter
     }
 
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
-    }
-
-
     override fun onItemClick(position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
             return
@@ -100,7 +87,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) : BaseFragment(
         currentTime = System.currentTimeMillis()
         mPlayList.setPlayingIndex(position)
         RxBus.getInstance().post(PlayListEvent(mPlayList, position, TYPE_ONLINE_MUSIC))
-        Log.d("RxBus:","UserMusicListActivity")
+        Log.d("RxBus:", "UserMusicListActivity")
     }
 
     override fun onBackClick(view: View) {

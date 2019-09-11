@@ -124,6 +124,7 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
     override fun subscribe(view: DiscoveryContract.View) {
         mView = view
         mView?.setPresenter(this)
+        mView?.showLoading()
         loadBanner()
         loadMusicList(6)
         loadHotMusicList(6)

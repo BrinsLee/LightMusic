@@ -52,10 +52,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.brins.lightmusic.ui.customview.FadingScrollView>
 
-    <include
-            android:id="@+id/loadingLayout"
-            layout="@layout/loading_layout"/>
-
     <com.brins.lightmusic.ui.customview.CommonHeaderView
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

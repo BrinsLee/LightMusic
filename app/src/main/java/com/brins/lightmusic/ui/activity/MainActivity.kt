@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
@@ -15,8 +14,10 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.base.BasePresenter
+import com.brins.lightmusic.ui.base.BaseView
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
-import com.brins.lightmusic.ui.fragment.friends.ArtistFragment
+import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
 import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.google.android.material.tabs.TabLayout
@@ -28,7 +29,7 @@ class MainActivity : BaseActivity() {
 
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
-    var currentFragment : BaseFragment? = null
+    var currentFragment : Fragment? = null
     var currentMusicListId : String = ""
 
 
@@ -90,12 +91,12 @@ class MainActivity : BaseActivity() {
 
     }
 
-     fun switchFragment(currentId : String,targetFragment : BaseFragment) : FragmentTransaction{
+     fun switchFragment(currentId : String,targetFragment : Fragment) : FragmentTransaction{
          currentMusicListId = currentId
          return switchFragment(targetFragment)
      }
 
-    fun switchFragment(targetFragment : BaseFragment): FragmentTransaction{
+    fun switchFragment(targetFragment : Fragment): FragmentTransaction{
         val transaction = supportFragmentManager.beginTransaction()
         if(!targetFragment.isAdded){
             if (currentFragment != null){

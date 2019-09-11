@@ -13,8 +13,6 @@ interface LocalMusicContract {
 
 //        fun getcontext() : Context
 
-        fun handleError(error: Throwable)
-
         fun onLocalMusicLoaded(songs: MutableList<LocalMusic>)
 
     }

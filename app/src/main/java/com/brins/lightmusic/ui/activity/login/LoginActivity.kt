@@ -53,20 +53,20 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
     }
 
     override fun getLayoutResId(): Int {
-        return if(isLogin)R.layout.activity_login else R.layout.activity_unlogin
+        return if (isLogin) R.layout.activity_login else R.layout.activity_unlogin
     }
 
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
-        isLogin = intent.getBooleanExtra(IS_LOGIN,false)
+        isLogin = intent.getBooleanExtra(IS_LOGIN, false)
     }
 
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         LoginPresenter.instance.subscribe(this)
-        if (btn_login != null){
+        if (btn_login != null) {
             btn_login.setOnClickListener(this)
         }
     }
@@ -133,12 +133,13 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
         finish()
     }
 
-    override fun setPresenter(presenter: LoginContract.Presenter?) {
-        mPresenter = presenter!!
-
-    }
 
     override fun getLifeActivity(): AppCompatActivity {
         return this
     }
+
+    override fun setPresenter(presenter: LoginContract.Presenter) {
+        mPresenter = presenter
+    }
+
 }

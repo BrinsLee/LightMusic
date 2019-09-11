@@ -1,4 +1,4 @@
-package com.brins.lightmusic.ui.fragment.friends
+package com.brins.lightmusic.ui.fragment.artists
 
 import android.view.LayoutInflater
 import android.view.View

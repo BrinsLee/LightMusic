@@ -10,4 +10,7 @@ interface UserPlayListService {
 
     @GET(AppConfig.USER_PLAYLIST)
     fun getUserPlayList(@Query("uid")id : String): Observable<UserPlayListResult>
+
+    @GET(AppConfig.USER_FM)
+    fun getUserFm(): Observable<UserPlayListResult>
 }

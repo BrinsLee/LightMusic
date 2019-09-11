@@ -45,6 +45,7 @@ import java.util.concurrent.Executors
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback,
     View.OnClickListener {
 
+
     private var mPlayer: IPlayback? = null
     private var index = -1
     private var isPlaying = false
@@ -395,6 +396,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     //MVP View
+
+    override fun showLoading() {
+    }
+
+    override fun hideLoading() {
+    }
 
     override fun onMusicDetail(onlineMusic: Music) {
         mPlayList.setSong(onlineMusic, index)

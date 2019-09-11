@@ -1,4 +1,4 @@
-package com.brins.lightmusic.ui.fragment.friends
+package com.brins.lightmusic.ui.fragment.artists
 
 
 import android.view.View
@@ -15,7 +15,7 @@ import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_artist.*
 
-class ArtistFragment : BaseFragment(), ArtistConstract.View {
+class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstract.View {
 
 
     private lateinit var artistCategory: ArrayList<Category>
@@ -79,21 +79,8 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View {
         })
     }
 
-    override fun handleError(error: Throwable) {
-    }
-
-    override fun showLoading() {
-    }
-
-    override fun hideLoading() {
-    }
-
     override fun setPresenter(presenter: ArtistConstract.Presenter) {
         mPresenter = presenter as ArtistPresenter
-    }
-
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
     }
 
     class ViewHolder {

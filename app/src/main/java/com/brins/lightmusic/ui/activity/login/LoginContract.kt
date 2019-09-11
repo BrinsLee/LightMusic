@@ -7,13 +7,6 @@ import com.brins.lightmusic.ui.base.BaseView
 
 interface LoginContract {
     interface View :BaseView<Presenter>{
-
-        fun handleError(error: Throwable)
-
-        fun showLoading()
-
-        fun hideLoading()
-
         fun onLoginSuccess(respone : UserLoginResult)
 
         fun onLoginFail()

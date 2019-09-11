@@ -9,14 +9,6 @@ import io.reactivex.functions.Consumer
 
 interface VideoContract {
     interface View : BaseView<Presenter>{
-        fun showLoading()
-
-        fun hideLoading()
-
-//        fun getcontext() : Context
-
-        fun handleError(error: Throwable)
-
         fun onVideoLoad(videoLists : List<Mv>)
 
     }

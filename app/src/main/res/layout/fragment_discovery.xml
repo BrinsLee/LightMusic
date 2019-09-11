@@ -15,10 +15,6 @@
                 android:layout_height="match_parent"
                 android:clipChildren="false"
                 android:orientation="vertical">
-            <include
-                    android:id="@+id/loadingLayout"
-                    layout="@layout/loading_layout"
-                    android:visibility="gone"/>
             <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginTop="@dimen/common_margin_20"
                     android:id="@+id/recyclerBanner"

@@ -18,14 +18,6 @@ interface DiscoveryContract {
     }
     interface View : BaseView<Presenter>{
 
-        fun showLoading()
-
-        fun hideLoading()
-
-//        fun getcontext() : Context
-
-        fun handleError(error: Throwable)
-
         fun onMusicListLoad(songs : ArrayList<MusicListBean>,type : Int)
 
         fun onBannerLoad(banners : ArrayList<Banner>)

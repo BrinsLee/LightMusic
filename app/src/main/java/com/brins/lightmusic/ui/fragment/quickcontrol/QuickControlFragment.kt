@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.Exception
 
 
-class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback,
+class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), MusicPlayerContract.View, IPlayback.Callback,
     View.OnClickListener,
     HeadsetButtonReceiver.onHeadsetListener {
 
@@ -169,24 +169,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
     }
 
-    /*fun disappear(){
-        if(playBarLayout == null){
-            return
-        }
-        playBarLayout.visibility = View.GONE
-    }
-
-    fun appear(){
-        if (playBarLayout == null){
-            return
-        }
-        if (playBarLayout.visibility == View.GONE)
-        {
-            playBarLayout.visibility = View.VISIBLE
-        }else{
-            return
-        }
-    }*/
 
     fun onPlayPauseToggle() {
         if (mPlayer == null || !::playList.isInitialized) {
@@ -277,9 +259,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
 
 
     // MVP View
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
-    }
 
     override fun onMusicDetail(onlineMusic: Music) {
         Log.d(TAG, "index: $index")
@@ -288,11 +267,6 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         mPlayer!!.play(playList, index)
     }
 
-/*    override fun onCoverLoad(cover: Bitmap?) {
-        val song = playList.getCurrentSong()!!
-        song.bitmapCover = cover
-        mPresenter.loadMusicDetail(song)
-    }*/
 
     override fun onPlaybackServiceBound(service: PlayBackService) {
         mPlayer = service

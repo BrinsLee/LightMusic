@@ -12,9 +12,9 @@ open class Music(
     var id: String = "",
     @SerializedName("name")
     var name: String,
-    @SerializedName("ar")
+    @SerializedName("ar",alternate = ["artists"])
     var artistBeans: List<ArtistBean>? = null,
-    @SerializedName("al")
+    @SerializedName("al",alternate = ["album"])
     var album: Album,
     @SerializedName("dt")
     var duration: Int,

@@ -7,18 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.brins.lightmusic.ui.customview.LoadingFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment<T> : Fragment() , BaseView<T> {
 
     val TAG = javaClass.simpleName
-    protected var mBindDestroyDisposable: CompositeDisposable? = null
+    protected open var mBindDestroyDisposable: CompositeDisposable? = null
     private var rootView : View? = null
     /*实现懒加载*/
-    protected var mIsViewBinding: Boolean = false
-    protected var mIsVisibleToUser: Boolean = false
-    protected var mHadLoaded: Boolean = false
+    protected open var mIsViewBinding: Boolean = false
+    protected open var mIsVisibleToUser: Boolean = false
+    protected open var mHadLoaded: Boolean = false
+    protected open var loadingLayout: LoadingFragment? = null
+
 
     abstract fun getLayoutResID(): Int
 
@@ -88,5 +92,27 @@ abstract class BaseFragment : Fragment() {
         mIsViewBinding = false
         mIsVisibleToUser = false
         mHadLoaded = false
+    }
+
+    override fun showLoading() {
+        loadingLayout = LoadingFragment.showSelf(fragmentManager)
+    }
+
+    override fun hideLoading() {
+        loadingLayout?.dismiss()
+    }
+
+    override fun getLifeActivity(): AppCompatActivity {
+        return activity as AppCompatActivity
+    }
+
+
+/*    override fun getcontext(): Context {
+        return context!!
+    }*/
+
+
+    override fun handleError(error: Throwable) {
+
     }
 }

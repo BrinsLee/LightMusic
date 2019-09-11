@@ -22,13 +22,15 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 
-class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,LocalMusicContract.View, OnItemClickListener, View.OnClickListener {
+class LocalMusicFragment : BaseFragment<LocalMusicContract.Presenter>(),
+    CommonHeaderView.OnBackClickListener, LocalMusicContract.View, OnItemClickListener,
+    View.OnClickListener {
 
 
-    lateinit var permissionManager : PermissionManager
+    lateinit var permissionManager: PermissionManager
     lateinit var mAdapter: ListAdapter<LocalMusic>
     lateinit var mPresenter: LocalMusicContract.Presenter
-    private var  playList : PlayList = PlayList()
+    private var playList: PlayList = PlayList()
     private var isLoad = false
 
     override fun getLayoutResID(): Int {
@@ -54,9 +56,9 @@ class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,
 
     override fun onResume() {
         super.onResume()
-        if (!isLoad){
+        if (!isLoad) {
             val PERMISSIONS = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-            permissionManager.checkPermissions(0,PERMISSIONS[0])
+            permissionManager.checkPermissions(0, PERMISSIONS[0])
         }
     }
 
@@ -70,27 +72,39 @@ class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,
                 val builder = AlertDialog.Builder(activity!!)
                 builder.setTitle("提示")
                 builder.setMessage("缺少读取权限！")
-                builder.setPositiveButton("设置权限") { _, _ -> PermissionManager.startAppSettings(context!!) }
+                builder.setPositiveButton("设置权限") { _, _ ->
+                    PermissionManager.startAppSettings(
+                        context!!
+                    )
+                }
                 builder.create().show()
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionManager.recheckPermissions(requestCode , permissions , grantResults)
+        permissionManager.recheckPermissions(requestCode, permissions, grantResults)
     }
 
 /*    override fun getcontext(): Context {
         return context!!
     }*/
 
+    override fun setPresenter(presenter: LocalMusicContract.Presenter) {
+        mPresenter = presenter
+    }
+
     override fun handleError(error: Throwable) {
-        Toast.makeText(activity, error.message , Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, error.message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onLocalMusicLoaded(songs: MutableList<LocalMusic>) {
-        if (songs.size == 0){
+        if (songs.size == 0) {
             return
         }
         playList.addSong(songs)
@@ -99,9 +113,6 @@ class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,
         isLoad = true
     }
 
-    override fun setPresenter(presenter: LocalMusicContract.Presenter?) {
-        mPresenter = presenter!!
-    }
 
     override fun getLifeActivity(): AppCompatActivity {
         return activity as AppCompatActivity
@@ -109,7 +120,7 @@ class LocalMusicFragment : BaseFragment(), CommonHeaderView.OnBackClickListener,
 
     override fun onItemClick(position: Int) {
         playList.setPlayingIndex(position)
-        RxBus.getInstance().post(PlayListEvent(playList , position))
+        RxBus.getInstance().post(PlayListEvent(playList, position))
     }
 
     override fun onClick(v: View) {

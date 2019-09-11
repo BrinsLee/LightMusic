@@ -1,14 +1,10 @@
-package com.brins.lightmusic.ui.activity.usermusiclist
+package com.brins.lightmusic.ui.fragment.usermusiclist
 
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
-import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.onlinemusic.MusicBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
-import com.brins.lightmusic.model.onlinemusic.OnlineMusic
-import com.brins.lightmusic.ui.activity.login.LoginPresenter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
@@ -32,31 +28,6 @@ class MusicListPresenter : MusicListContract.Presenter {
     }
 
 
-/*    override fun loadMusicDetail(onlineMusic: Music) {
-        var metaData: MusicBean
-        mView!!.showLoading()
-        ApiHelper.getMusicService().getUrl(onlineMusic.id)
-            .compose(AsyncTransformer<MusicBean>())
-            .autoDisposable(provider)
-            .subscribe(object : DefaultObserver<MusicBean>() {
-                override fun onFail(message: String) {
-                    mView?.hideLoading()
-                }
-
-                override fun onSuccess(response: MusicBean) {
-                    metaData = response
-                    if (metaData.data != null) {
-                        onlineMusic.fileUrl = metaData.data!![0].url
-                        mView!!.onMusicDetail(onlineMusic)
-                        mView?.hideLoading()
-
-                    }
-                }
-
-            })
-    }*/
-
-
     override fun loadMusicList(id: String) {
         mView?.showLoading()
         mMusicListService.getPlayListDetail(id)
@@ -70,6 +41,7 @@ class MusicListPresenter : MusicListContract.Presenter {
                 override fun onSuccess(response: MusicListDetailResult) {
                     if (response.playlist != null) {
                         mView!!.onMusicListLoad(response.playlist!!)
+                        mView?.hideLoading()
                     }
                 }
 

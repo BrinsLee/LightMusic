@@ -13,8 +13,6 @@ interface MusicPlayerContract {
 
     interface View : BaseView<Presenter> {
 
-        fun handleError(error: Throwable)
-
         fun onPlaybackServiceBound(service: PlayBackService)
 
         fun onPlaybackServiceUnbound()

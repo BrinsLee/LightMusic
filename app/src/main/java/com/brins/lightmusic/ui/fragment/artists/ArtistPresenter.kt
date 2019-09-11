@@ -1,4 +1,4 @@
-package com.brins.lightmusic.ui.fragment.friends
+package com.brins.lightmusic.ui.fragment.artists
 
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.BaseApplication
@@ -6,7 +6,6 @@ import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.artist.ArtistBean
-import com.brins.lightmusic.model.artist.Category
 import com.brins.lightmusic.model.artist.CategoryResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
 import com.brins.lightmusic.utils.JsonToObject
@@ -30,6 +29,7 @@ class ArtistPresenter private constructor() : ArtistConstract.Presenter {
     }
 
     override fun loadArtistCategory() {
+        mView?.showLoading()
         val json = getJson(BaseApplication.getInstance().baseContext, "category.json")
         mView?.onArtistCategoryLoad(JsonToObject(json, CategoryResult::class.java))
         loadArtist()
@@ -46,6 +46,7 @@ class ArtistPresenter private constructor() : ArtistConstract.Presenter {
                     } else {
                         onFail("网络连接失败")
                     }
+                    mView?.hideLoading()
                 }
 
                 override fun onFail(message: String) {

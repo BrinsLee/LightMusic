@@ -10,10 +10,6 @@ interface MyContract {
 
         fun onUserMusicListLoad(result : UserPlayListResult)
 
-        fun showLoading()
-
-        fun hideLoading()
-
         fun onLoadFail()
 
     }

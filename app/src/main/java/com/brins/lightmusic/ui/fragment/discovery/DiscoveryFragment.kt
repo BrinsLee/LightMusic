@@ -17,12 +17,14 @@ import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.customview.LoadingFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HOT
 import kotlinx.android.synthetic.main.fragment_discovery.*
 
-class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
+class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), DiscoveryContract.View,
     SwipeRefreshLayout.OnRefreshListener, DiscoveryAdapter.OnItemClickListener {
+
 
 
     private var isFresh: Boolean = false
@@ -60,44 +62,24 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
     }
 
-    override fun showLoading() {
-        loadingLayout.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        loadingLayout.visibility = View.GONE
-    }
-
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
-    }
-
-/*    override fun getcontext(): Context {
-        return context!!
-    }*/
-
-
-    override fun handleError(error: Throwable) {
-
-    }
 
     override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
         isFresh = false
         when (type) {
             TYPE_HOT -> {
-                if (songs.size > 6){
+                if (songs.size > 6) {
                     musicHotListBean.clear()
-                    musicHotListBean.addAll(songs.subList(songs.size - 6,songs.size))
-                }else{
+                    musicHotListBean.addAll(songs.subList(songs.size - 6, songs.size))
+                } else {
                     musicHotListBean = songs
                 }
                 initHotMusicList()
             }
             TYPE_HIGHT -> {
-                if (songs.size > 6){
+                if (songs.size > 6) {
                     musicListBean.clear()
-                    musicListBean.addAll(songs.subList(songs.size - 6,songs.size))
-                }else{
+                    musicListBean.addAll(songs.subList(songs.size - 6, songs.size))
+                } else {
                     musicListBean = songs
                 }
                 initMusicList()
@@ -153,14 +135,14 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
         }
     }
 
-    override fun setPresenter(presenter: DiscoveryContract.Presenter?) {
-        mPresenter = presenter!!
-    }
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_discovery
     }
 
+    override fun setPresenter(presenter: DiscoveryContract.Presenter) {
+        mPresenter = presenter
+    }
 
     override fun onItemClick(view: View, position: Int) {
         val id = musicListBean[position].id

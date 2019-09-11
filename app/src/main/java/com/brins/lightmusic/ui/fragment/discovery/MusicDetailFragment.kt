@@ -20,10 +20,12 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.ui.customview.LoadingFragment
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 
 
-class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickListener,
+class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), DiscoveryContract.View,
+    OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
 
 
@@ -73,22 +75,6 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View, OnItemClickL
 
 
     //MVP VIEW
-    override fun showLoading() {
-        loadingLayout.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        loadingLayout.visibility = View.GONE
-    }
-
-
-
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
-    }
-
-    override fun handleError(error: Throwable) {
-    }
 
     override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
     }

@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
@@ -17,7 +16,7 @@ import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
-import com.brins.lightmusic.ui.activity.usermusiclist.UserMusicListFragment
+import com.brins.lightmusic.ui.fragment.usermusiclist.UserMusicListFragment
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
@@ -30,7 +29,8 @@ import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import java.lang.Exception
 
-class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.OnClickListener {
+class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItemClickListener,
+    View.OnClickListener {
 
 
     private lateinit var mAdapter: TreeRecyclerViewAdapter<UserPlayListBean>
@@ -108,7 +108,11 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
     override fun onClick(v: View) {
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
-            R.id.fm, R.id.collection -> Toast.makeText(context,"未完成，别点了",Toast.LENGTH_SHORT).show()
+            R.id.fm, R.id.collection -> Toast.makeText(
+                context,
+                "未完成，别点了",
+                Toast.LENGTH_SHORT
+            ).show()
             R.id.localMusic -> try {
                 (activity as MainActivity).switchFragment(LocalMusicFragment())
                     .addToBackStack(TAG)
@@ -149,17 +153,12 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
         }
     }
 
-    override fun showLoading() {
-    }
-
-    override fun hideLoading() {
-    }
 
     override fun onLoadFail() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun setPresenter(presenter: MyContract.Presenter?) {
+    override fun setPresenter(presenter: MyContract.Presenter) {
         myPresenter = presenter as MyPresenter
     }
 
@@ -173,7 +172,4 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener, View.On
         }
     }
 
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
-    }
 }
