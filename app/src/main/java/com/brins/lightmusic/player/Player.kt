@@ -1,17 +1,21 @@
 package com.brins.lightmusic.player
 
 import android.content.Context.AUDIO_SERVICE
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.PowerManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
-import java.io.IOException
 import java.util.ArrayList
 
-class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioFocusChangeListener {
+class Player : IPlayback, MediaPlayer.OnCompletionListener,
+    AudioManager.OnAudioFocusChangeListener {
 
     companion object {
         private val TAG = "Player"
@@ -31,9 +35,23 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         }
     }
 
-    private val mAudioManager : AudioManager by lazy { LightMusicApplication.getLightApplication().getSystemService(AUDIO_SERVICE) as AudioManager }
+    private val mAudioManager: AudioManager by lazy {
+        LightMusicApplication.getLightApplication().getSystemService(
+            AUDIO_SERVICE
+        ) as AudioManager
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val mAudioAttributes = AudioAttributes.Builder()
+        .setUsage(AudioAttributes.USAGE_MEDIA)
+        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val mAudioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+        .setAudioAttributes(mAudioAttributes).setAcceptsDelayedFocusGain(true)
+        .setOnAudioFocusChangeListener(this).build()
     private var mPlayer: MediaPlayer = MediaPlayer()
     private var mPlayList: PlayList = PlayList()
+    private var mPlayOnAudioFocus = false
     // Default size 2: for service and UI
     private val mCallbacks = ArrayList<IPlayback.Callback>(1)
 
@@ -42,7 +60,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
 
     init {
         mPlayer.setOnCompletionListener(this)
-        mPlayer.setWakeMode(LightMusicApplication.getLightApplication(), PowerManager.PARTIAL_WAKE_LOCK)
+        mPlayer.setWakeMode(
+            LightMusicApplication.getLightApplication(),
+            PowerManager.PARTIAL_WAKE_LOCK
+        )
     }
 
     /**
@@ -50,29 +71,46 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
      * 音乐焦点改变
      */
     override fun onAudioFocusChange(focusChange: Int) {
-        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT){
-            pause()
-        }else if (focusChange == AudioManager.AUDIOFOCUS_GAIN){
-            play()
-        }else if (focusChange == AudioManager.AUDIOFOCUS_LOSS){
-            mAudioManager.abandonAudioFocus(this)
-            stop()
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                mPlayOnAudioFocus = false
+                pause()
+            }
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                mPlayOnAudioFocus = true
+                pause()
+            }
+            AudioManager.AUDIOFOCUS_LOSS -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    mAudioManager.abandonAudioFocusRequest(mAudioFocusRequest)
+                } else {
+                    mAudioManager.abandonAudioFocus(this)
+                }
+                stop()
+            }
         }
     }
+
+
 
     /**
      * 请求焦点
      */
     private fun requestFocus(): Boolean {
         // Request audio focus for playback
-        val result = mAudioManager.requestAudioFocus(
-            this,
-            // Use the music stream.
-            AudioManager.STREAM_MUSIC,
-            // Request permanent focus.
-            AudioManager.AUDIOFOCUS_GAIN
-        )
-        return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val result = mAudioManager.requestAudioFocus(mAudioFocusRequest)
+            result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        } else {
+            val result = mAudioManager.requestAudioFocus(
+                this,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN
+            )
+            result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        }
     }
 
     /**
@@ -83,7 +121,8 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
     }
 
     override fun play(): Boolean {
-        if (requestFocus()){
+        mPlayOnAudioFocus = requestFocus()
+        if (mPlayOnAudioFocus) {
             if (isPaused) {
                 mPlayer.start()
                 notifyPlayStatusChanged(true)
@@ -163,16 +202,18 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         }
     }
 
+    //focus true isplaying false
     override fun pause(): Boolean {
-        if (mPlayer.isPlaying) {
+        if (mPlayOnAudioFocus && !mPlayer.isPlaying) {
+            mPlayer.start()
+            return false
+        } else if (mPlayer.isPlaying) {
             mPlayer.pause()
             isPaused = true
             notifyPlayStatusChanged(false)
             return true
-        }else{
-            play()
-            return false
         }
+        return false
     }
 
     override fun stop() {
@@ -184,7 +225,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
         var isPlay = false
         try {
             isPlay = mPlayer.isPlaying
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return isPlay
@@ -248,7 +289,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,AudioManager.OnAudioF
             val hasNext = mPlayList.hasNext(true)
             if (hasNext) {
                 next = mPlayList.next()
-                if (next.fileUrl != null && next.fileUrl != ""){
+                if (next.fileUrl != null && next.fileUrl != "") {
                     play()
                 }
             }

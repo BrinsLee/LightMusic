@@ -53,6 +53,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBanner() {
         DiscoverPresenter.instance.subscribe(this@DiscoveryFragment)
+        DiscoverPresenter.instance.initDiscoveryView()
         initLoadingMore()
     }
 

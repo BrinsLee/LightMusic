@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.customview
 
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
@@ -11,14 +12,18 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     fun show(fragmentManager: FragmentManager): BaseDialogFragment {
         try {
-            fragmentManager.executePendingTransactions()
             val fragment = fragmentManager.findFragmentByTag(TAG)
             if (fragment != null && fragment.isAdded) {
                 return fragment as BaseDialogFragment
             }
             val ft = fragmentManager.beginTransaction()
             ft.add(this, TAG)
-            ft.commit()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                ft.commitNow()
+            }else{
+                ft.commit()
+                fragmentManager.executePendingTransactions()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

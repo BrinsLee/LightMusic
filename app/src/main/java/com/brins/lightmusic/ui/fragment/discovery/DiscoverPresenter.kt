@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.discovery
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
@@ -124,11 +125,15 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
     override fun subscribe(view: DiscoveryContract.View) {
         mView = view
         mView?.setPresenter(this)
+    }
+
+    fun initDiscoveryView(){
         mView?.showLoading()
         loadBanner()
         loadMusicList(6)
         loadHotMusicList(6)
     }
+
 
     override fun unsubscribe() {
         mView = null
