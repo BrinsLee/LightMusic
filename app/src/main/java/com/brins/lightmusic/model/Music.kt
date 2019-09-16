@@ -16,7 +16,7 @@ open class Music(
     var artistBeans: List<ArtistBean>? = null,
     @SerializedName("al",alternate = ["album"])
     var album: Album,
-    @SerializedName("dt")
+    @SerializedName("dt",alternate = ["duration"])
     var duration: Int,
 
     var fileName: String = "",

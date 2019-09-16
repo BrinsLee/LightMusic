@@ -1,6 +1,7 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -12,5 +13,5 @@ interface UserPlayListService {
     fun getUserPlayList(@Query("uid")id : String): Observable<UserPlayListResult>
 
     @GET(AppConfig.USER_FM)
-    fun getUserFm(): Observable<UserPlayListResult>
+    fun getUserFm(): Observable<UserFmResult>
 }

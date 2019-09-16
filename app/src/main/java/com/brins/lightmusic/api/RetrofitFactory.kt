@@ -1,5 +1,6 @@
 package com.brins.lightmusic.api
 
+import com.brins.lightmusic.api.service.AddCookiesInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -27,6 +28,8 @@ class RetrofitFactory {
             val builder: OkHttpClient.Builder = OkHttpClient().newBuilder()
             builder.connectTimeout(TIMEOUT_CONNECTED, TimeUnit.SECONDS)
                 .readTimeout(TIMEOUT_READ, TimeUnit.SECONDS)
+                .addInterceptor(AddCookiesInterceptor())
+                .addInterceptor(ReceivedCookiesInterceptor())
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             return builder.build()
         }

@@ -9,7 +9,11 @@ import android.view.View
 import android.widget.Toast
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
+import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.event.PlayListEvent
+import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import com.brins.lightmusic.ui.activity.MainActivity
@@ -33,9 +37,9 @@ import java.lang.Exception
 class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItemClickListener,
     View.OnClickListener {
 
-
     private lateinit var mAdapter: CommonViewAdapter<UserPlayListBean>
     private lateinit var myPresenter: MyPresenter
+    private lateinit var mFmList: PlayList
     private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf(UserPlayListBean())
     private var mAvatar: Bitmap? = null
 
@@ -47,6 +51,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     override fun onLazyLoad() {
         super.onLazyLoad()
         MyPresenter.instance.subscribe(this)
+        setListener()
         initUserData()
     }
 
@@ -82,7 +87,6 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
 
 
     private fun setListener() {
-        mAdapter.setOnItemClickListener(this)
         avatar.setOnClickListener(this)
         nickName.setOnClickListener(this)
         localMusic.setOnClickListener(this)
@@ -106,7 +110,8 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     override fun onClick(v: View) {
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
-            R.id.fm, R.id.collection -> Toast.makeText(
+            R.id.fm -> myPresenter.loadUserFm()
+            R.id.collection -> Toast.makeText(
                 context,
                 "未完成，别点了",
                 Toast.LENGTH_SHORT
@@ -141,6 +146,16 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     }
 
     //MVP View
+
+    override fun onFmLoad(result: UserFmResult) {
+        mFmList = PlayList()
+        mFmList.addSong(result.fmList)
+        mFmList.setPlayingIndex(0)
+        RxBus.getInstance().post(PlayListEvent(mFmList, 0, TYPE_ONLINE_MUSIC))
+        Log.d("RxBus:", "UserMusicListActivity")
+        hideLoading()
+    }
+
     override fun onUserProfileLoad() {
     }
 
@@ -160,8 +175,8 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
                     holder.setText(R.id.textViewArtist, "共${playlist.trackCount}首")
                 }
             }
-            setListener()
             userPlayList.setAdapter(mAdapter)
+            mAdapter.setOnItemClickListener(this)
         }
     }
 

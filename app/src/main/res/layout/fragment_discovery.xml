@@ -42,7 +42,7 @@
                         android:scaleType="centerCrop"
                         android:id="@+id/recommend"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_margin="8dp"
+                        android:layout_marginTop="@dimen/common_margin_10"
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle"
                         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                         android:id="@+id/recycleMusiclist"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/recommend"
+                        app:layout_constraintTop_toBottomOf="@id/musicTitle"
                         android:layout_marginTop="@dimen/common_margin_20"
                         android:layout_marginBottom="@dimen/common_margin_10">
 
@@ -76,7 +76,7 @@
                         android:scaleType="centerCrop"
                         android:id="@+id/recommend2"
                         app:layout_constraintTop_toBottomOf="@id/recycleMusiclist"
-                        android:layout_margin="8dp"
+                        android:layout_marginTop="@dimen/common_margin_10"
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle2"
                         android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
                         android:id="@+id/recycleMusiclist2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/recommend2"
+                        app:layout_constraintTop_toBottomOf="@id/musicTitle2"
                         android:layout_marginTop="@dimen/common_margin_20"
                         android:layout_marginBottom="@dimen/common_margin_10">
 

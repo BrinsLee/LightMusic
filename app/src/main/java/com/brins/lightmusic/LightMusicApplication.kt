@@ -72,7 +72,8 @@ class LightMusicApplication : BaseApplication() {
     }
 
     private fun initUserData() {
-        AppConfig.isLogin = SpUtils.obtain(SP_USER_INFO,this).getBoolean(KEY_IS_LOGIN, false)
+        AppConfig.isLogin = SpUtils.obtain(SP_USER_INFO, this).getBoolean(KEY_IS_LOGIN, false)
+        AppConfig.UserCookie = SpUtils.obtain(SP_USER_INFO, this).getString(KEY_COOKIE,"")
         if (AppConfig.isLogin) {
             DatabaseFactory.getUserInfo().subscribeDbResult({
                 AppConfig.userAccount = it

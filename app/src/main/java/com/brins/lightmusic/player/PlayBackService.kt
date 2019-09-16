@@ -17,9 +17,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.getSystemService
 
 
-
-
-class PlayBackService : Service(), IPlayback{
+class PlayBackService : Service(), IPlayback {
 
     companion object {
         @JvmStatic
@@ -34,7 +32,7 @@ class PlayBackService : Service(), IPlayback{
 
     private val mPlayer: Player by lazy { Player.getInstance() }
     private val mBinder = LocalBinder()
-
+    private lateinit var mNotificationManager: NotificationManager
 
 
     override fun onBind(intent: Intent): IBinder {
@@ -53,6 +51,7 @@ class PlayBackService : Service(), IPlayback{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
+        cancelNotification()
     }
 
     override fun stopService(name: Intent): Boolean {
@@ -65,7 +64,7 @@ class PlayBackService : Service(), IPlayback{
         try {
             val intent = Intent(applicationContext, PlayBackService::class.java)
             startService(intent)
-        }catch (e :Exception){
+        } catch (e: Exception) {
 
         }
     }
@@ -74,21 +73,24 @@ class PlayBackService : Service(), IPlayback{
         return START_STICKY
     }
 
-    private fun createNotificationChannel(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelName = getString(R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID,channelName,importance)
-            channel.description = "轻籁运行中"
+            val channel = NotificationChannel(CHANNEL_ID, channelName, importance)
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            builder.setSmallIcon(R.mipmap.ic_launcher)
+            builder.setSmallIcon(R.drawable.ic_music_note_white_48dp)
                 .setContentTitle("轻籁")
-                .setContentText("运行中").setOngoing(true)
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-            startForeground(NOTIFICATION_ID,builder.build())
+                .setContentText("运行中")
+            mNotificationManager = getSystemService(NotificationManager::class.java)
+            mNotificationManager.createNotificationChannel(channel)
+            startForeground(NOTIFICATION_ID, builder.build())
 
         }
+    }
+
+    private fun cancelNotification() {
+        mNotificationManager.cancelAll() //从状态栏中移除通知
     }
 
     //IPlayback

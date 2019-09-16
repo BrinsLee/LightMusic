@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
+import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -40,12 +41,25 @@ class MyPresenter : MyContract.Presenter {
             })
     }
 
+
     override fun updateUserMusicList() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun loadUserRadio() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun loadUserFm() {
+        mView?.showLoading()
+        ApiHelper.getUserPlayListService().getUserFm().compose(AsyncTransformer<UserFmResult>())
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<UserFmResult>(){
+                override fun onSuccess(response: UserFmResult) {
+                    val result = response
+                    mView?.onFmLoad(result)
+                }
+
+                override fun onFail(message: String) {
+                    mView?.hideLoading()
+                }
+            })
     }
 
     override fun loadRecord() {

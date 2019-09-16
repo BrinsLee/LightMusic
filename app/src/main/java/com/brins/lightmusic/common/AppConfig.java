@@ -157,4 +157,6 @@ public class AppConfig {
      * 用户画像，缓存，方便调用
      */
     public static UserProfileBean userProfile;
+
+    public static String UserCookie = "";
 }

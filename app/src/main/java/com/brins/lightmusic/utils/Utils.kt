@@ -297,6 +297,7 @@ fun <T> Single<T>.subscribeDbResult(
 val SP_USER_INFO: String = "sp_user_info"
 val KEY_IS_LOGIN: String = "key_is_login"
 val KEY_AVATAR_STRING: String = "key_avatar_string"
+val KEY_COOKIE : String = "key_cookie"
 
 val TYPE_ONLINE_MUSIC = 1
 val TYPE_LOCAL_MUSIC = 0
