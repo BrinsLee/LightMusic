@@ -2,27 +2,44 @@ package com.brins.lightmusic.ui.activity.login
 
 import android.animation.Animator
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.common.AppConfig.PASSWORD
 import com.brins.lightmusic.common.AppConfig.USERNAME
+import com.brins.lightmusic.model.userlogin.Item
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
 import com.brins.lightmusic.utils.*
+import com.bumptech.glide.Glide
+import com.google.gson.internal.bind.TreeTypeAdapter
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
 
-class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
+class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
+    OnItemClickListener {
+
 
     private lateinit var mPresenter: LoginContract.Presenter
     private var isLogin = false
+    private var mAvatar: Bitmap? = null
+    private var mList: ArrayList<Item>? = null
+    private var mAdapter: TreeRecyclerViewAdapter<Item>? = null
+
 
     companion object {
         val IS_LOGIN = "isLogin"
@@ -66,9 +83,38 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         LoginPresenter.instance.subscribe(this)
-        if (btn_login != null) {
+        if (isLogin) {
+            if (mAvatar == null) {
+                Glide.with(this)
+                    .load(AppConfig.userProfile.avatarUrl)
+                    .into(avatar)
+            } else {
+                avatar.setImageBitmap(mAvatar)
+            }
+            nickName.text = AppConfig.userProfile.nickname
+            initList()
+        } else {
             btn_login.setOnClickListener(this)
+
         }
+    }
+
+    private fun initList() {
+        mList = arrayListOf()
+        mList!!.add(Item(TYPE_MESSAGE, "我的消息", R.drawable.ic_message))
+        mList!!.add(Item(TYPE_FRIEND, "我的好友", R.drawable.ic_friends))
+        mList!!.add(Item(TYPE_THEME, "更换主题", R.drawable.ic_theme))
+        mList!!.add(Item(TYPE_DONATE, "捐赠", R.drawable.ic_donate))
+        mList!!.add(Item(TYPE_ABOUT, "关于", R.drawable.ic_about))
+        mAdapter = TreeRecyclerViewAdapter(mList!!)
+        mAdapter!!.setOnItemClickListener(this)
+        itemRecycler.adapter = mAdapter
+        itemRecycler.layoutManager = LinearLayoutManager(this)
+        itemRecycler.addItemDecoration(
+            DividerItemDecoration(
+                this, LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
 
@@ -140,6 +186,10 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener {
 
     override fun setPresenter(presenter: LoginContract.Presenter) {
         mPresenter = presenter
+    }
+
+    override fun onItemClick(position: Int) {
+
     }
 
 }

@@ -301,6 +301,12 @@ val KEY_AVATAR_STRING: String = "key_avatar_string"
 val TYPE_ONLINE_MUSIC = 1
 val TYPE_LOCAL_MUSIC = 0
 
+val TYPE_MESSAGE = 0
+val TYPE_FRIEND = 1
+val TYPE_THEME = 3
+val TYPE_DONATE = 4
+val TYPE_ABOUT = 5
+
 fun getJson(context: Context, filename: String): String {
     val stringBuilder = StringBuilder()
     val assetManager = context.assets

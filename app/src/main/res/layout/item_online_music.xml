@@ -1,44 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rootLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_20"
+        android:layout_marginEnd="@dimen/common_margin_20"
+        android:orientation="vertical">
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/count"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginStart="@dimen/common_margin_10"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintBottom_toBottomOf="parent"
-              android:text="0"
-              android:textSize="20sp"
-    />
+    <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="0"
+            android:gravity="start"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              app:layout_constraintTop_toTopOf="parent"
-              android:id="@+id/name"
-              android:layout_marginTop="@dimen/common_margin_20"
-              app:layout_constraintStart_toEndOf="@id/count"
-              android:gravity="center"
-              android:text=""
-              android:textSize="15sp"
-              android:textColor="@color/translucent"
-              android:layout_marginStart="@dimen/common_margin_30"
-    />
+    <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin_30"
+            android:layout_marginTop="@dimen/common_margin_20"
+            android:text=""
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textColor="@color/translucent"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/count"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/artist"
-              app:layout_constraintStart_toEndOf="@id/count"
-              android:textSize="12sp"
-              app:layout_constraintTop_toBottomOf="@id/name"
-              android:layout_marginTop="@dimen/common_margin_5"
-              android:layout_marginBottom="@dimen/common_margin_5"
-              android:layout_marginStart="@dimen/common_margin_30"/>
+    <TextView
+            android:id="@+id/artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin_30"
+            android:layout_marginTop="@dimen/common_margin_5"
+            android:layout_marginBottom="@dimen/common_margin_5"
+            android:textSize="12sp"
+            android:singleLine="true"
+            app:layout_constraintStart_toEndOf="@id/count"
+            app:layout_constraintTop_toBottomOf="@id/name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

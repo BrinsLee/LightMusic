@@ -76,6 +76,7 @@ class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), Discove
 
     //MVP VIEW
 
+
     override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
     }
 

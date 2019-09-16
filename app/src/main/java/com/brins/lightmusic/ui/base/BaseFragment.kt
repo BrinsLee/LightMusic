@@ -21,7 +21,6 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
     protected open var mIsViewBinding: Boolean = false
     protected open var mIsVisibleToUser: Boolean = false
     protected open var mHadLoaded: Boolean = false
-    protected open var loadingLayout: LoadingFragment? = null
 
 
     abstract fun getLayoutResID(): Int
@@ -95,11 +94,11 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
     }
 
     override fun showLoading() {
-        loadingLayout = LoadingFragment.showSelf(fragmentManager)
+        LoadingFragment.showSelf(childFragmentManager)
     }
 
     override fun hideLoading() {
-        loadingLayout?.dismiss()
+        LoadingFragment.dismiss()
     }
 
     override fun getLifeActivity(): AppCompatActivity {

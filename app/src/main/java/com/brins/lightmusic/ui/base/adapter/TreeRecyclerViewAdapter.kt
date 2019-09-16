@@ -11,7 +11,9 @@ import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
+import com.brins.lightmusic.model.userlogin.Item
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
+import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.customview.RoundConstraintLayout
 import com.bumptech.glide.Glide
 import java.lang.reflect.ParameterizedType
@@ -39,6 +41,9 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
             if (list[0] is Music) {
                 className = "OnlineMusic"
             }
+            if (list[0] is Item) {
+                className = "Item"
+            }
         }
         Log.d(TAG, className)
 
@@ -49,8 +54,9 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val id = if (className == "Item")R.layout.item_login_selector else R.layout.item_local_music
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_local_music,
+            id,
             parent,
             false
         )
@@ -77,24 +83,30 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
 
         if (list.size != 0) {
             holder.itemView.tag = position
-            if (className == "UserPlayListBean") {
-                val playlist = (list[position] as UserPlayListBean)
-                Glide.with(BaseApplication.getInstance().baseContext)
-                    .load(playlist.coverImgUrl)
-                    .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
-                holder.tvName.text = playlist.name
-                holder.tvAccount.text = "共${playlist.trackCount}首"
+            when (className) {
+                "UserPlayListBean" -> {
+                    val playlist = (list[position] as UserPlayListBean)
+                    Glide.with(BaseApplication.getInstance().baseContext)
+                        .load(playlist.coverImgUrl)
+                        .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
+                    holder.tvName.text = playlist.name
+                    holder.tvAccount.text = "共${playlist.trackCount}首"
+                }
+                "OnlineMusic" -> {
+                    val playlist = (list[position] as Music)
+                    Glide.with(BaseApplication.getInstance().baseContext)
+                        .load(playlist.album.picUrl)
+                        .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
+                    (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text =
+                        playlist.name
+                    holder.tvAccount.text = playlist.artistBeans!![0].name
+                }
+                "Item" -> {
+                    val playList = (list[position] as Item)
+                    (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover.setImageResource(playList.icon)
+                    (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text = playList.name
+                }
             }
-            else{
-                val playlist = (list[position] as Music)
-                Glide.with(BaseApplication.getInstance().baseContext)
-                    .load(playlist.album.picUrl)
-                    .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
-                (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text =
-                    playlist.name
-                holder.tvAccount.text = playlist.artistBeans!![0].name
-            }
-
         }
 
     }

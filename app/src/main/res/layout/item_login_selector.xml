@@ -4,17 +4,16 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/itemRoot"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_margin_80"
+        android:layout_height="@dimen/common_margin_60"
         android:background="@color/white"
-        android:elevation="3dp"
         android:layout_marginTop="@dimen/common_margin_5"
         app:round_corner="@dimen/common_margin_5">
 
     <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imgCover"
             android:layout_margin="10dp"
-            android:layout_width="@dimen/common_margin_60"
-            android:layout_height="@dimen/common_margin_60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@mipmap/album"
             android:scaleType="centerCrop"
             app:riv_corner_radius="10dp"
@@ -32,16 +31,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_margin_10"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgCover"
-            android:layout_marginTop="@dimen/common_margin_10"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgCover"/>
     <com.brins.lightmusic.ui.customview.FontTextView
             android:id="@+id/textViewArtist"
             android:textSize="12sp"
-            android:text="未知"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_margin_10"
             android:layout_marginTop="@dimen/common_margin_10"
             app:layout_constraintStart_toEndOf="@id/imgCover"
             app:layout_constraintTop_toBottomOf="@id/textViewName"/>
+
 </com.brins.lightmusic.ui.customview.RoundConstraintLayout>

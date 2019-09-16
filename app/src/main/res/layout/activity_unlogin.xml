@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_main"
+        android:background="@color/gery"
     android:layout_height="match_parent"
     tools:context=".ui.activity.login.LoginActivity">
 

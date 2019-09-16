@@ -57,6 +57,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
 
     // Player status
     private var isPaused: Boolean = false
+    private var isPlayingBeforeLoseFocuse = true
 
     init {
         mPlayer.setOnCompletionListener(this)
@@ -74,6 +75,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
         when (focusChange) {
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
                 mPlayOnAudioFocus = false
+                isPlayingBeforeLoseFocuse = mPlayer.isPlaying
                 pause()
             }
             AudioManager.AUDIOFOCUS_GAIN -> {
@@ -204,7 +206,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
 
     //focus true isplaying false
     override fun pause(): Boolean {
-        if (mPlayOnAudioFocus && !mPlayer.isPlaying) {
+        Log.d(TAG,"$isPlayingBeforeLoseFocuse")
+        Log.d(TAG,"$mPlayOnAudioFocus")
+
+        if (mPlayOnAudioFocus && !mPlayer.isPlaying && isPlayingBeforeLoseFocuse) {
             mPlayer.start()
             return false
         } else if (mPlayer.isPlaying) {
