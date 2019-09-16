@@ -1,38 +1,35 @@
 package com.brins.lightmusic.ui.base.adapter
 
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.brins.lightmusic.BaseApplication
-import com.brins.lightmusic.R
-import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.onlinemusic.OnlineMusic
-import com.brins.lightmusic.model.userlogin.Item
-import com.brins.lightmusic.model.userplaylist.UserPlayListBean
-import com.brins.lightmusic.ui.activity.login.LoginActivity
-import com.brins.lightmusic.ui.customview.RoundConstraintLayout
-import com.bumptech.glide.Glide
-import java.lang.reflect.ParameterizedType
+import android.content.Context
 
-class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class CommonViewAdapter<T>(context: Context, var layoutId: Int, var list: ArrayList<T>) :
+    BaseRecyclerAdapter<T>(context, list) {
 
     companion object {
         val TAG: String = "TreeRecyclerViewAdapter"
     }
 
-    private var mItemClickListener: OnItemClickListener? = null
-    private var className = ""
-
     init {
-        declareType()
+        addItemViewDelegate(object : ItemViewDelegate<T> {
+            override fun getItemViewLayoutId(): Int {
+                return layoutId
+            }
+
+            override fun isForViewType(item: T, position: Int): Boolean {
+                return true
+            }
+
+            override fun convert(holder: ViewHolder, t: T, position: Int) {
+                converted(holder, t, position)
+            }
+
+        })
     }
 
-    private fun declareType() {
+    protected abstract fun converted(holder: ViewHolder, t: T, position: Int)
+
+
+   /* private fun declareType() {
         if (list.isNotEmpty()) {
             if (list[0] is UserPlayListBean) {
                 className = "UserPlayListBean"
@@ -54,7 +51,8 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val id = if (className == "Item")R.layout.item_login_selector else R.layout.item_local_music
+        val id =
+            if (className == "Item") R.layout.item_login_selector else R.layout.item_local_music
         val itemView = LayoutInflater.from(parent.context).inflate(
             id,
             parent,
@@ -88,7 +86,7 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
                     val playlist = (list[position] as UserPlayListBean)
                     Glide.with(BaseApplication.getInstance().baseContext)
                         .load(playlist.coverImgUrl)
-                        .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
+                        .into((holder as CommonViewAdapter<*>.SecondViewHolder).imgCover)
                     holder.tvName.text = playlist.name
                     holder.tvAccount.text = "共${playlist.trackCount}首"
                 }
@@ -96,15 +94,17 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
                     val playlist = (list[position] as Music)
                     Glide.with(BaseApplication.getInstance().baseContext)
                         .load(playlist.album.picUrl)
-                        .into((holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover)
-                    (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text =
+                        .into((holder as CommonViewAdapter<*>.SecondViewHolder).imgCover)
+                    (holder as CommonViewAdapter<*>.SecondViewHolder).tvName.text =
                         playlist.name
                     holder.tvAccount.text = playlist.artistBeans!![0].name
                 }
                 "Item" -> {
                     val playList = (list[position] as Item)
-                    (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).imgCover.setImageResource(playList.icon)
-                    (holder as TreeRecyclerViewAdapter<*>.SecondViewHolder).tvName.text = playList.name
+                    (holder as CommonViewAdapter<*>.SecondViewHolder).imgCover.setImageResource(
+                        playList.icon
+                    )
+                    (holder as CommonViewAdapter<*>.SecondViewHolder).tvName.text = playList.name
                 }
             }
         }
@@ -117,5 +117,6 @@ class TreeRecyclerViewAdapter<T>(var list: ArrayList<T>) :
         val imgCover = itemView.findViewById<ImageView>(R.id.imgCover)
         val tvName = itemView.findViewById<TextView>(R.id.textViewName)
         val tvAccount = itemView.findViewById<TextView>(R.id.textViewArtist)
-    }
+    }*/
+
 }

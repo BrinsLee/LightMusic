@@ -14,13 +14,14 @@ import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
+import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
+import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_user_music_list.*
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
     BaseFragment<MusicListContract.Presenter>(),
@@ -33,8 +34,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
     private var mPlayList = PlayList()
     private var currentTime: Long = 0
     private lateinit var mPresenter: MusicListContract.Presenter
-    private var mAdapter: TreeRecyclerViewAdapter<Music> =
-        TreeRecyclerViewAdapter(mPlayList.getSongs() as ArrayList<Music>)
+    private lateinit var mAdapter: CommonViewAdapter<Music>
 
     override fun getLayoutResID(): Int {
         return R.layout.fragment_user_music_list
@@ -47,7 +47,18 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
 
     override fun onStart() {
         super.onStart()
+        mAdapter = object : CommonViewAdapter<Music>(
+            activity!!, R.layout.item_local_music,
+            mPlayList.getSongs() as ArrayList<Music>
+        ) {
+            override fun converted(holder: ViewHolder, t: Music, position: Int) {
+                val playlist = (list[position])
+                holder.setImageResource(R.id.imgCover, playlist.album.picUrl)
+                holder.setText(R.id.textViewName, playlist.name)
+                holder.setText(R.id.textViewArtist, playlist.artistBeans!![0].name)
+            }
 
+        }
         head.title = mUserPlayList.name
         Glide.with(this).load(mUserPlayList.coverImgUrl).into(cover)
         nickName.text = mUserPlayList.creator.nickName

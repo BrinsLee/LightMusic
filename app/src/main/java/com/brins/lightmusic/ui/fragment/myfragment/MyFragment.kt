@@ -19,7 +19,8 @@ import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCC
 import com.brins.lightmusic.ui.fragment.usermusiclist.UserMusicListFragment
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
+import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
+import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
@@ -33,7 +34,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     View.OnClickListener {
 
 
-    private lateinit var mAdapter: TreeRecyclerViewAdapter<UserPlayListBean>
+    private lateinit var mAdapter: CommonViewAdapter<UserPlayListBean>
     private lateinit var myPresenter: MyPresenter
     private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf(UserPlayListBean())
     private var mAvatar: Bitmap? = null
@@ -46,9 +47,6 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     override fun onLazyLoad() {
         super.onLazyLoad()
         MyPresenter.instance.subscribe(this)
-        mAdapter = TreeRecyclerViewAdapter(mPlayList)
-        setListener()
-        userPlayList.setAdapter(mAdapter)
         initUserData()
     }
 
@@ -149,7 +147,21 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     override fun onUserMusicListLoad(result: UserPlayListResult) {
         if (result.playlist != null) {
             mPlayList = result.playlist!!
-            mAdapter.setData(mPlayList)
+            mAdapter = object :
+                CommonViewAdapter<UserPlayListBean>(
+                    activity!!,
+                    R.layout.item_local_music,
+                    mPlayList
+                ) {
+                override fun converted(holder: ViewHolder, t: UserPlayListBean, position: Int) {
+                    val playlist = list[position]
+                    holder.setImageResource(R.id.imgCover, playlist.coverImgUrl)
+                    holder.setText(R.id.textViewName, playlist.name)
+                    holder.setText(R.id.textViewArtist, "共${playlist.trackCount}首")
+                }
+            }
+            setListener()
+            userPlayList.setAdapter(mAdapter)
         }
     }
 

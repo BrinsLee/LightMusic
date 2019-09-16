@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -22,10 +21,10 @@ import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.base.adapter.TreeRecyclerViewAdapter
+import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
+import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
-import com.google.gson.internal.bind.TreeTypeAdapter
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
@@ -38,7 +37,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     private var isLogin = false
     private var mAvatar: Bitmap? = null
     private var mList: ArrayList<Item>? = null
-    private var mAdapter: TreeRecyclerViewAdapter<Item>? = null
+    private var mAdapter: CommonViewAdapter<Item>? = null
 
 
     companion object {
@@ -106,7 +105,15 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         mList!!.add(Item(TYPE_THEME, "更换主题", R.drawable.ic_theme))
         mList!!.add(Item(TYPE_DONATE, "捐赠", R.drawable.ic_donate))
         mList!!.add(Item(TYPE_ABOUT, "关于", R.drawable.ic_about))
-        mAdapter = TreeRecyclerViewAdapter(mList!!)
+        mAdapter = object :
+            CommonViewAdapter<Item>(this@LoginActivity, R.layout.item_login_selector, mList!!) {
+            override fun converted(holder: ViewHolder, t: Item, position: Int) {
+                val playList = (list[position])
+                holder.setImageResource(R.id.imgCover, playList.icon)
+                holder.setText(R.id.textViewName, playList.name)
+
+            }
+        }
         mAdapter!!.setOnItemClickListener(this)
         itemRecycler.adapter = mAdapter
         itemRecycler.layoutManager = LinearLayoutManager(this)
