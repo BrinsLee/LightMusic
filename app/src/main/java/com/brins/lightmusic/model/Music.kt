@@ -8,15 +8,30 @@ import com.brins.lightmusic.model.artist.ArtistBean
 import com.google.gson.annotations.SerializedName
 
 open class Music(
+    /*
+    * id
+    * */
     @SerializedName("id")
     var id: String = "",
+    /*
+    * 音乐名字
+    * */
     @SerializedName("name")
     var name: String,
-    @SerializedName("ar",alternate = ["artists"])
+    /*
+    * 作者
+    * */
+    @SerializedName("ar", alternate = ["artists"])
     var artistBeans: List<ArtistBean>? = null,
-    @SerializedName("al",alternate = ["album"])
+    /*
+    * 专辑
+    * */
+    @SerializedName("al", alternate = ["album"])
     var album: Album,
-    @SerializedName("dt",alternate = ["duration"])
+    /*
+    * 时长
+    * */
+    @SerializedName("dt", alternate = ["duration"])
     var duration: Int,
 
     var fileName: String = "",
@@ -24,7 +39,7 @@ open class Music(
     var fileUrl: String = ""
 
 ) : Parcelable {
-    var bitmapCover : Bitmap? = null
+    var bitmapCover: Bitmap? = null
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,

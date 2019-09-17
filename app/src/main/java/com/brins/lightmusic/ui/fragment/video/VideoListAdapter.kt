@@ -17,6 +17,7 @@ import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.customview.JZVideoPalyerView
 import com.bumptech.glide.Glide
+import org.w3c.dom.Text
 
 class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
     RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
@@ -50,6 +51,8 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
                 .into(holder.videoPlayer.thumbImageView)
             holder.videoPlayer.setUp(metaData.url, mv.name, Jzvd.SCREEN_NORMAL)
             holder.videoPlayer.titleTextView.text = ""
+            holder.subCount.text = mv.subCount.toString()
+            holder.commentCount.text = mv.commentCount.toString()
 
             if (mItemClickListener != null) {
                 holder.videoPlayer.setOnClickListener {
@@ -68,6 +71,7 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
         var title: TextView = view.findViewById(R.id.tv_title)
         var videoPlayer: JZVideoPalyerView = view.findViewById(R.id.video_player)
         var watchCount: TextView = view.findViewById(R.id.tv_watch_count)
+        var subCount: TextView = view.findViewById(R.id.sub)
         var avatar: ImageView = view.findViewById(R.id.iv_avatar)
         var nickName: TextView = view.findViewById(R.id.tv_author)
         var commentCount: TextView = view.findViewById(R.id.tv_comment_count)

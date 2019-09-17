@@ -33,7 +33,7 @@
 
             <com.brins.lightmusic.ui.customview.FontTextView
                     android:textSize="15sp"
-                    android:text="本地音乐"
+                    android:text="@string/local_music"
                     android:textColor="@color/colorAccent"
                     android:id="@+id/tv_local"
                     app:font_type="DIN-Bold"
@@ -69,7 +69,7 @@
 
             <com.brins.lightmusic.ui.customview.FontTextView
                     android:textSize="15sp"
-                    android:text="私人FM"
+                    android:text="@string/fm"
                     android:textColor="@color/colorAccent"
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
@@ -99,14 +99,27 @@
                     android:layout_marginTop="@dimen/common_margin_10"
                     android:layout_marginStart="@dimen/common_margin_30"
                     android:id="@+id/ic_collection"
-                    android:src="@drawable/ic_collection"
+                    android:src="@drawable/ic_calendar"
                     android:scaleType="fitXY"
                     android:layout_width="@dimen/common_margin_50"
                     android:layout_height="@dimen/common_margin_50"/>
 
             <com.brins.lightmusic.ui.customview.FontTextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="1"
+                    app:font_type="DIN-Bold"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintStart_toStartOf="@id/ic_collection"
+                    app:layout_constraintEnd_toEndOf="@id/ic_collection"
+                    app:layout_constraintTop_toTopOf="@id/ic_collection"
+                    app:layout_constraintBottom_toBottomOf="@id/ic_collection"/>
+            <com.brins.lightmusic.ui.customview.FontTextView
                     android:textSize="15sp"
-                    android:text="我的收藏"
+                    android:text="@string/daily"
                     android:textColor="@color/colorAccent"
                     app:font_type="DIN-Bold"
                     android:id="@+id/tv_collection"

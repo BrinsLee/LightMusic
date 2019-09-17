@@ -11,7 +11,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.icu.util.Calendar
 import android.media.MediaMetadataRetriever
+import android.os.Build
+import android.text.format.Time
 import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +77,7 @@ fun getStringCover(bitmap: Bitmap? = null): String {
 
 fun string2Bitmap(bitmapString: String?): Bitmap? {
     var bitmap: Bitmap? = null
-    if (bitmapString != null){
+    if (bitmapString != null) {
         try {
             val b = Base64.decode(bitmapString, Base64.DEFAULT)
             bitmap = BitmapFactory.decodeByteArray(
@@ -297,7 +300,7 @@ fun <T> Single<T>.subscribeDbResult(
 val SP_USER_INFO: String = "sp_user_info"
 val KEY_IS_LOGIN: String = "key_is_login"
 val KEY_AVATAR_STRING: String = "key_avatar_string"
-val KEY_COOKIE : String = "key_cookie"
+val KEY_COOKIE: String = "key_cookie"
 
 val TYPE_ONLINE_MUSIC = 1
 val TYPE_LOCAL_MUSIC = 0
@@ -324,7 +327,17 @@ fun getJson(context: Context, filename: String): String {
 
 fun <T> JsonToObject(json: String, type: Class<T>): T {
     val gson = Gson()
-    return gson.fromJson(json,type)
+    return gson.fromJson(json, type)
+}
+
+fun getCalendarDay(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
+    } else {
+        val time = Time()
+        time.setToNow()
+        time.monthDay.toString()
+    }
 }
 
 

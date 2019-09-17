@@ -28,6 +28,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                <ImageView
+                        android:id="@+id/cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_margin_400"
+                        android:src="@drawable/default_cover"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
                 <com.brins.lightmusic.ui.customview.CommonHeaderView
                         android:id="@+id/head"
                         android:layout_width="match_parent"
@@ -36,45 +44,6 @@
                         app:chv_icon="@drawable/ic_back_black"
                         app:chv_title = ""
                         app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                        android:id="@+id/cover"
-                        android:layout_width="@dimen/common_margin_100"
-                        android:layout_height="@dimen/common_margin_100"
-                        android:layout_marginStart="@dimen/common_margin_20"
-                        android:src="@drawable/default_cover"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                        android:id="@+id/avatar"
-                        android:layout_width="@dimen/common_margin_30"
-                        android:layout_height="@dimen/common_margin_30"
-                        android:layout_marginStart="@dimen/common_margin_20"
-                        android:scaleType="fitCenter"
-                        android:src="@color/gery"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cover"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:riv_corner_radius="50dp" />
-
-                <com.brins.lightmusic.ui.customview.FontTextView
-                        android:id="@+id/nickName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginBottom="@dimen/common_margin_10"
-                        android:ellipsize="end"
-                        android:maxEms="5"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/translucent"
-                        android:textSize="15sp"
-                        app:layout_constraintTop_toBottomOf="@id/avatar"
-                        app:layout_constraintStart_toEndOf="@id/cover" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

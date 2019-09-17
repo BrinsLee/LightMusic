@@ -46,7 +46,7 @@
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="@dimen/common_margin_20"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleMusiclist"
@@ -80,7 +80,7 @@
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="@dimen/common_margin_20"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleMusiclist2"

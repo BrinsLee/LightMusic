@@ -425,7 +425,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     override fun onPlaybackServiceUnbound() {
 //        mPlayer!!.unregisterCallback(this)
-        mPlayer = null
     }
 
     override fun onSongSetAsFavorite(song: Music?) {

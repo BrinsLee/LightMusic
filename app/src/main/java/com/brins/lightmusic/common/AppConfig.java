@@ -23,7 +23,15 @@ public class AppConfig {
      */
     public static final String USER_PLAYLIST = "/user/playlist";
 
+    /**
+     * 私人FM
+     */
     public static final String USER_FM = "/personal_fm";
+
+    /**
+     * 每日推荐
+     */
+    public static final String DAILY_RECOMMEND= "/recommend/songs";
 
 
     /**
@@ -79,7 +87,21 @@ public class AppConfig {
      */
     public static final String LASTESTMUSICVIDEO = "/mv/first";
 
+    /**
+     * Mv播放地址
+     */
     public static final String MVURL = "/mv/url";
+
+    /**
+     * Mv详情
+     */
+    public static final String MVDETAIL = "/mv/detail";
+
+
+    /**
+     * 所有MV
+     */
+    public static final String MVALL = "/mv/all";
     /**
      * 音乐封面
      */

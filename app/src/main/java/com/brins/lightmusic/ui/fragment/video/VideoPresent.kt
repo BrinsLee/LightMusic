@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
+import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.model.musicvideo.MvResult
@@ -20,7 +21,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
     val mvList = mutableListOf<Mv>()
-    override fun loadVideo(limit : Int) {
+    override fun loadVideo(limit: Int) {
         ApiHelper.getMvService().getLatestMusicVideo(limit)
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
@@ -33,7 +34,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
                     if (response.dataBeans != null && response.dataBeans!!.isNotEmpty()) {
                         val num = response.dataBeans!!.size
                         response.dataBeans!!.forEach {
-                            loadUrl(it.id,
+                            loadUrl(it,
                                 Consumer { t ->
                                     if (t.dataBean != null) {
                                         mvList.add(Mv(it, t.dataBean!!))
@@ -51,8 +52,9 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
     }
 
     @SuppressLint("CheckResult")
-    override fun loadUrl(id: String, consumer: Consumer<MvMetaResult>) {
-        ApiHelper.getMvService().getMvMetaData(id).compose(AsyncTransformer<MvMetaResult>())
+    override fun loadUrl(dataBean: LastestMvDataBean, consumer: Consumer<MvMetaResult>) {
+        ApiHelper.getMvService().getMvMetaData(dataBean.id)
+            .compose(AsyncTransformer<MvMetaResult>())
             .subscribe(consumer)
 
     }

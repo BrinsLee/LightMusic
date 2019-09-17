@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -25,6 +26,7 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
+import com.brins.lightmusic.ui.fragment.dailyrecommend.DailyRecommendFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
@@ -80,9 +82,9 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
                 }
                 nickName.text = AppConfig.userProfile.nickname
                 checkToLoad()
-
             }
         }
+        date.text = getCalendarDay()
     }
 
 
@@ -111,18 +113,19 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
             R.id.fm -> myPresenter.loadUserFm()
-            R.id.collection -> Toast.makeText(
-                context,
-                "未完成，别点了",
-                Toast.LENGTH_SHORT
-            ).show()
-            R.id.localMusic -> try {
-                (activity as MainActivity).switchFragment(LocalMusicFragment())
-                    .addToBackStack(TAG)
-                    .commit()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            R.id.collection -> switch(DailyRecommendFragment())
+            R.id.localMusic -> switch(LocalMusicFragment())
+        }
+
+    }
+
+    private fun switch(fragment: Fragment) {
+        try {
+            (activity as MainActivity).switchFragment(fragment)
+                .addToBackStack(TAG)
+                .commit()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

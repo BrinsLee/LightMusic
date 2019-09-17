@@ -15,5 +15,9 @@ class LastestMvDataBean {
     var briefDesc : String = ""
     var sub : Boolean = false
 
+    var subCount : Int = 0
+    var shareCount : Int = 0
+    var likeCount: Int = 0
+    var commentCount : Int = 0
 
 }

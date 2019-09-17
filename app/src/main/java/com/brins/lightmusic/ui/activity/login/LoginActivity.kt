@@ -60,7 +60,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         USERNAME = et_username.text.toString()
         PASSWORD = et_password.text.toString()
         if (USERNAME.isEmpty() || PASSWORD.isEmpty()) {
-            Toast.makeText(this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.username_not_empty), Toast.LENGTH_SHORT).show()
             return
         }
         val request =

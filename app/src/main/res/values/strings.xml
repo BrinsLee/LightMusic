@@ -26,4 +26,10 @@
     <string name="num_songs">首单曲</string>
     <string name="search">search</string>
     <string name="logout">退出登录</string>
+    <string name="username_not_empty">用户名或密码不能为空</string>
+    <string name="fm">私人FM</string>
+    <string name="daily">每日推荐</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

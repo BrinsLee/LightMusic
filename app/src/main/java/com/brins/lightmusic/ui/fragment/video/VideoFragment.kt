@@ -1,28 +1,29 @@
 package com.brins.lightmusic.ui.fragment.video
 
-import android.graphics.Color
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+
+import androidx.fragment.app.Fragment
+
 import cn.jzvd.Jzvd
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.customview.JZVideoPalyerView
-import kotlinx.android.synthetic.main.fragment_video.*
 
 
-class VideoFragment : BaseFragment<VideoContract.Presenter>(), VideoContract.View,
-    OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+
+class VideoFragment : BaseFragment<VideoContract.Presenter>(){
 
 
-    private var mPresenter: VideoContract.Presenter? = null
-    private var isFresh: Boolean = false
-    var count: Int = 1
-    var videoList = mutableListOf<Mv>()
-    val videoAdapter: VideoListAdapter by lazy { VideoListAdapter(videoList, context!!) }
+    val adapter by lazy { MainPagerAdapter(childFragmentManager, list) }
+
+
+    var list = mutableListOf<Fragment>(
+        VideoCategoryFragment(),
+        VideoCategoryFragment(),
+        VideoCategoryFragment(),
+        VideoCategoryFragment()
+    )
+
+
     override fun getLayoutResID(): Int {
         return R.layout.fragment_video
     }
@@ -30,10 +31,10 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>(), VideoContract.Vie
     override fun onLazyLoad() {
         super.onLazyLoad()
         initView()
-        initLoadingMore()
 
     }
 
+/*
     private fun initView() {
         VideoPresent(this).subscribe(this)
         videoAdapter.setOnItemListener(this)
@@ -59,48 +60,20 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>(), VideoContract.Vie
 
         })
     }
+*/
+
+    private fun initView() {
+
+    }
 
     override fun onPause() {
         super.onPause()
         Jzvd.releaseAllVideos()
     }
 
-
-    //ItemClick
-    override fun onItemClick(position: Int) {
-
-    }
-
-    //MVP View
-
-
-    override fun onVideoLoad(videoLists: List<Mv>) {
-        if (isFresh) isFresh = false
-        videoList.addAll(videoLists)
-//        videoAdapter.addData(videoList)
-        videoAdapter.notifyDataSetChanged()
-    }
-
-    private fun initLoadingMore() {
-        loadMore.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
-        loadMore.setDistanceToTriggerSync(700)
-        loadMore.setProgressBackgroundColorSchemeColor(Color.WHITE)
-        loadMore.setSize(SwipeRefreshLayout.DEFAULT)
-        loadMore.setOnRefreshListener(this)
-    }
-
     override fun setPresenter(presenter: VideoContract.Presenter) {
-        mPresenter = presenter
 
     }
 
-    override fun onRefresh() {
-        if (!isFresh) {
-            ++count
-            isFresh = true
-            loadMore.isRefreshing = false
-            showLoading()
-            mPresenter?.loadVideo(count * 15)
-        }
-    }
+
 }

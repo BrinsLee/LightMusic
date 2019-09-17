@@ -1,6 +1,7 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.model.musicvideo.MvResult
 import io.reactivex.Observable
@@ -15,4 +16,10 @@ interface MusicVideoService {
 
     @GET(AppConfig.MVURL)
     fun getMvMetaData(@Query("id") id: String): Observable<MvMetaResult>
+
+    @GET(AppConfig.MVDETAIL)
+    fun getMvDetail(@Query("id") id: String): Observable<LastestMvDataBean>
+
+    @GET(AppConfig.MVALL)
+    fun getMvAll(@Query("area") area: String, @Query("limit") limit: Int): Observable<MvResult>
 }
