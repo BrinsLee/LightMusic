@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.video
 
 
-
 import android.graphics.Color
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cn.jzvd.Jzvd
@@ -9,10 +8,10 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import kotlinx.android.synthetic.main.fragment_video.*
+import kotlinx.android.synthetic.main.fragment_video_category.*
 
-class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(),VideoContract.View,
-    OnItemClickListener, SwipeRefreshLayout.OnRefreshListener  {
+class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(), VideoContract.View,
+    OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     var count: Int = 1
     var videoList = mutableListOf<Mv>()
@@ -50,7 +49,7 @@ class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(),VideoContr
         if (!isFresh) {
             ++count
             isFresh = true
-            loadMore.isRefreshing = false
+            load.isRefreshing = false
             showLoading()
             mPresenter?.loadVideo(count * 15)
         }
@@ -66,10 +65,10 @@ class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(),VideoContr
     }
 
     private fun initLoadingMore() {
-        loadMore.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
-        loadMore.setDistanceToTriggerSync(700)
-        loadMore.setProgressBackgroundColorSchemeColor(Color.WHITE)
-        loadMore.setSize(SwipeRefreshLayout.DEFAULT)
-        loadMore.setOnRefreshListener(this)
+        load.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
+        load.setDistanceToTriggerSync(700)
+        load.setProgressBackgroundColorSchemeColor(Color.WHITE)
+        load.setSize(SwipeRefreshLayout.DEFAULT)
+        load.setOnRefreshListener(this)
     }
 }

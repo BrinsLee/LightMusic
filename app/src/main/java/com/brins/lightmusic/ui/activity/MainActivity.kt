@@ -78,12 +78,12 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                var tv_tab = tab!!.customView!!.findViewById(R.id.tab_item) as TextView
+                val tv_tab = tab!!.customView!!.findViewById(R.id.tab_item) as TextView
                 tv_tab.textSize = 12f
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                var tv_tab = tab!!.customView!!.findViewById(R.id.tab_item) as TextView
+                val tv_tab = tab!!.customView!!.findViewById(R.id.tab_item) as TextView
                 tv_tab.textSize = 18f
             }
 

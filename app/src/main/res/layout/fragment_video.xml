@@ -1,13 +1,20 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/loadMore"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.brins.lightmusic.ui.fragment.video.VideoFragment">
-    <TableLayout
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.tabs.TabLayout
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/mTablayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="30dp"
+            app:tabGravity="center"
+            app:tabMode="fixed"
+            android:layout_gravity="center_horizontal"/>
 
-    </TableLayout>
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/mViewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/mTablayout"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
