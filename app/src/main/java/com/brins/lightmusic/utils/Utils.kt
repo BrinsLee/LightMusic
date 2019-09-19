@@ -302,6 +302,12 @@ val KEY_IS_LOGIN: String = "key_is_login"
 val KEY_AVATAR_STRING: String = "key_avatar_string"
 val KEY_COOKIE: String = "key_cookie"
 
+val MAINLAND = "内地"
+val HONGKONG_TAIWAN = "港台"
+val EUROPE_AMERICA = "欧美"
+val JAPAN = "日本"
+val KOREA = "韩国"
+
 val TYPE_ONLINE_MUSIC = 1
 val TYPE_LOCAL_MUSIC = 0
 

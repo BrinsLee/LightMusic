@@ -2,15 +2,20 @@ package com.brins.lightmusic.ui.fragment.video
 
 
 import android.graphics.Color
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cn.jzvd.Jzvd
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.ui.customview.JZVideoPalyerView
 import kotlinx.android.synthetic.main.fragment_video_category.*
 
-class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(), VideoContract.View,
+class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Presenter>(),
+    VideoContract.View,
     OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     var count: Int = 1
@@ -23,9 +28,9 @@ class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(), VideoCont
 
     override fun onLazyLoad() {
         super.onLazyLoad()
+        VideoPresent(this).subscribe(this)
         initView()
         initLoadingMore()
-
     }
 
     override fun setPresenter(presenter: VideoContract.Presenter) {
@@ -51,12 +56,35 @@ class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(), VideoCont
             isFresh = true
             load.isRefreshing = false
             showLoading()
-            mPresenter?.loadVideo(count * 15)
+            mPresenter?.loadVideo(count * 15,area)
         }
     }
 
 
     private fun initView() {
+        mPresenter!!.loadVideo(area = area)
+        videoAdapter.setOnItemListener(this)
+        videoListView.layoutManager = LinearLayoutManager(context)
+        videoListView.adapter = videoAdapter
+        videoListView.addOnChildAttachStateChangeListener(object :
+            RecyclerView.OnChildAttachStateChangeListener {
+            override fun onChildViewAttachedToWindow(view: View) {
+
+            }
+
+            override fun onChildViewDetachedFromWindow(view: View) {
+                val jz = view.findViewById<JZVideoPalyerView>(R.id.video_player)
+                if (jz?.jzDataSource != null && Jzvd.CURRENT_JZVD != null && jz.jzDataSource.containsTheUrl(
+                        Jzvd.CURRENT_JZVD.jzDataSource.currentUrl
+                    )
+                ) {
+                    if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
+                        Jzvd.releaseAllVideos()
+                    }
+                }
+            }
+
+        })
     }
 
     override fun onPause() {
@@ -71,4 +99,6 @@ class VideoCategoryFragment : BaseFragment<VideoContract.Presenter>(), VideoCont
         load.setSize(SwipeRefreshLayout.DEFAULT)
         load.setOnRefreshListener(this)
     }
+
+
 }

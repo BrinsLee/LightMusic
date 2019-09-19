@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.brins.lightmusic.R
+import com.brins.lightmusic.utils.*
 
 class VideoPagerAdapter(fm: FragmentManager, var list: MutableList<Fragment>) :
     FragmentPagerAdapter(fm) {
-    val tabtitle = arrayOf("内地", "港台", "欧美", "日本", "韩国")
+    val tabtitle = arrayOf(MAINLAND, HONGKONG_TAIWAN, EUROPE_AMERICA, JAPAN, KOREA)
 
     override fun getCount(): Int {
         return list.size

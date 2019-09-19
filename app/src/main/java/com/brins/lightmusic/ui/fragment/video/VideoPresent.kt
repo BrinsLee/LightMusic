@@ -21,8 +21,8 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
     val mvList = mutableListOf<Mv>()
-    override fun loadVideo(limit: Int) {
-        ApiHelper.getMvService().getLatestMusicVideo(limit)
+    override fun loadVideo(limit: Int, area: String) {
+        ApiHelper.getMvService().getMvAll(area, limit)
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
             .subscribe(object : DefaultObserver<MvResult>() {
@@ -62,7 +62,6 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
     override fun subscribe(view: VideoContract.View?) {
         mView?.showLoading()
         mView?.setPresenter(this)
-        loadVideo()
     }
 
     override fun unsubscribe() {

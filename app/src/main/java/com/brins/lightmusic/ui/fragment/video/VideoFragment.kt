@@ -9,6 +9,7 @@ import cn.jzvd.Jzvd
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.utils.*
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_video.*
 
@@ -17,11 +18,11 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>() {
 
 
     var list = mutableListOf<Fragment>(
-        VideoCategoryFragment(),
-        VideoCategoryFragment(),
-        VideoCategoryFragment(),
-        VideoCategoryFragment(),
-        VideoCategoryFragment()
+        VideoCategoryFragment(MAINLAND),
+        VideoCategoryFragment(HONGKONG_TAIWAN),
+        VideoCategoryFragment(EUROPE_AMERICA),
+        VideoCategoryFragment(JAPAN),
+        VideoCategoryFragment(KOREA)
 
     )
     val adapter by lazy { VideoPagerAdapter(childFragmentManager, list) }
@@ -88,10 +89,6 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        Jzvd.releaseAllVideos()
-    }
 
     override fun setPresenter(presenter: VideoContract.Presenter) {
 

@@ -61,6 +61,8 @@ public class AppConfig {
      */
     public static final String ARTISTS = "/top/artists";
 
+    public static final String ARTISTDESC = "/artist/desc?id=6452";
+
     /**
      * 歌手分类
      */

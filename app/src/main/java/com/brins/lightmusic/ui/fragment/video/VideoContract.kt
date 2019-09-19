@@ -15,7 +15,7 @@ interface VideoContract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun loadVideo(limit: Int = 15)
+        fun loadVideo(limit: Int = 15, area: String)
 
         fun loadUrl(dataBean: LastestMvDataBean, consumer: Consumer<MvMetaResult>)
     }
