@@ -5,10 +5,7 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
-import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
-import com.brins.lightmusic.model.musicvideo.Mv
-import com.brins.lightmusic.model.musicvideo.MvMetaResult
-import com.brins.lightmusic.model.musicvideo.MvResult
+import com.brins.lightmusic.model.musicvideo.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Consumer
@@ -17,11 +14,13 @@ import io.reactivex.functions.Consumer
 class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
 
+
     val provider: AndroidLifecycleScopeProvider =
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
     val mvList = mutableListOf<Mv>()
     override fun loadVideo(limit: Int, area: String) {
+        mView?.showLoading()
         ApiHelper.getMvService().getMvAll(area, limit)
             .compose(AsyncTransformer<MvResult>())
             .autoDisposable(provider)
@@ -59,8 +58,23 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
     }
 
-    override fun subscribe(view: VideoContract.View?) {
+    override fun loadVideoComments(id: String) {
         mView?.showLoading()
+        ApiHelper.getMvService().getMvComments(id).compose(AsyncTransformer<MvCommentsResult>())
+            .subscribe(object : DefaultObserver<MvCommentsResult>(){
+                override fun onSuccess(response: MvCommentsResult) {
+                    mView?.hideLoading()
+                    mView?.onVideoCommomLoad(response)
+                }
+
+                override fun onFail(message: String) {
+                    mView?.hideLoading()
+                }
+
+            })
+    }
+
+    override fun subscribe(view: VideoContract.View?) {
         mView?.setPresenter(this)
     }
 

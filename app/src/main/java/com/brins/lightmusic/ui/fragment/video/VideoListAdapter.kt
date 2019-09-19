@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cn.jzvd.Jzvd
@@ -49,18 +50,15 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
             holder.watchCount.text = if (mv.playCount > 1000) "${mv.playCount / 1000}万播放" else {
                 "${mv.playCount}播放"
             }
-            holder.videoPlayer.setAllControlsVisiblity(GONE, GONE, VISIBLE, GONE, VISIBLE, GONE, GONE)
             Glide.with(LightMusicApplication.getLightApplication()).load(mv.cover)
-                .into(holder.videoPlayer.thumbImageView)
+                .into(holder.videoPlayer)
             Glide.with(LightMusicApplication.getLightApplication())
                 .load(mv.cover)
                 .apply(requestOptions)
                 .into(holder.avatar)
-            holder.videoPlayer.setUp(metaData.url, mv.name, Jzvd.SCREEN_NORMAL)
-            holder.videoPlayer.titleTextView.text = ""
 
             if (mItemClickListener != null) {
-                holder.videoPlayer.setOnClickListener {
+                holder.container.setOnClickListener {
                     mItemClickListener!!.onItemClick(position)
                 }
             }
@@ -74,7 +72,8 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.tv_title)
-        var videoPlayer: JZVideoPalyerView = view.findViewById(R.id.video_player)
+        var container : LinearLayout = view.findViewById(R.id.container)
+        var videoPlayer: ImageView = view.findViewById(R.id.video_player)
         var watchCount: TextView = view.findViewById(R.id.tv_watch_count)
         var avatar: RoundedImageView = view.findViewById(R.id.iv_avatar)
         var nickName: TextView = view.findViewById(R.id.tv_author)

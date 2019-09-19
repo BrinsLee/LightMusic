@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/container"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@color/white_70"
         android:orientation="vertical">
@@ -10,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/common_margin_200">
 
-        <com.brins.lightmusic.ui.customview.JZVideoPalyerView
+        <ImageView
                 android:id="@+id/video_player"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

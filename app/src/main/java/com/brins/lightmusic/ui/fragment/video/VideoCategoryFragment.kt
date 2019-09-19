@@ -2,25 +2,27 @@ package com.brins.lightmusic.ui.fragment.video
 
 
 import android.graphics.Color
-import android.view.View
+import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import cn.jzvd.Jzvd
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.model.musicvideo.MvCommentsResult
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.customview.JZVideoPalyerView
 import kotlinx.android.synthetic.main.fragment_video_category.*
 
 class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Presenter>(),
     VideoContract.View,
     OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    var count: Int = 1
-    var videoList = mutableListOf<Mv>()
-    val videoAdapter: VideoListAdapter by lazy { VideoListAdapter(videoList, context!!) }
+
+    private var mPresenter: VideoContract.Presenter? = null
+    private var count: Int = 1
+    private var videoList = mutableListOf<Mv>()
+    private val videoAdapter: VideoListAdapter by lazy { VideoListAdapter(videoList, context!!) }
     private var isFresh: Boolean = false
     override fun getLayoutResID(): Int {
         return R.layout.fragment_video_category
@@ -37,8 +39,6 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
         mPresenter = presenter
     }
 
-    private var mPresenter: VideoContract.Presenter? = null
-
 
     override fun onVideoLoad(videoLists: List<Mv>) {
         if (isFresh) isFresh = false
@@ -47,7 +47,23 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
         videoAdapter.notifyDataSetChanged()
     }
 
+    override fun onVideoCommomLoad(response: MvCommentsResult) {
+    }
+
     override fun onItemClick(position: Int) {
+        val bundle = Bundle()
+        bundle.putParcelable("Mv", videoList[position])
+        switch(VideoDetailFragment(), bundle)
+    }
+
+    private fun switch(fragment: Fragment, bundle: Bundle) {
+        try {
+            (activity as MainActivity).switchFragment(fragment, bundle)
+                .addToBackStack(TAG)
+                .commit()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onRefresh() {
@@ -56,7 +72,7 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
             isFresh = true
             load.isRefreshing = false
             showLoading()
-            mPresenter?.loadVideo(count * 15,area)
+            mPresenter?.loadVideo(count * 15, area)
         }
     }
 
@@ -66,7 +82,7 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
         videoAdapter.setOnItemListener(this)
         videoListView.layoutManager = LinearLayoutManager(context)
         videoListView.adapter = videoAdapter
-        videoListView.addOnChildAttachStateChangeListener(object :
+/*        videoListView.addOnChildAttachStateChangeListener(object :
             RecyclerView.OnChildAttachStateChangeListener {
             override fun onChildViewAttachedToWindow(view: View) {
 
@@ -84,12 +100,7 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
                 }
             }
 
-        })
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Jzvd.releaseAllVideos()
+        })*/
     }
 
     private fun initLoadingMore() {

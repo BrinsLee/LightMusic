@@ -29,8 +29,8 @@ class MainActivity : BaseActivity() {
 
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
-    var currentFragment : Fragment? = null
-    var currentMusicListId : String = ""
+    var currentFragment: Fragment? = null
+    var currentMusicListId: String = ""
 
 
     companion object {
@@ -91,27 +91,35 @@ class MainActivity : BaseActivity() {
 
     }
 
-     fun switchFragment(currentId : String,targetFragment : Fragment) : FragmentTransaction{
-         currentMusicListId = currentId
-         return switchFragment(targetFragment)
-     }
+    fun switchFragment(currentId: String, targetFragment: Fragment): FragmentTransaction {
+        currentMusicListId = currentId
+        return switchFragment(targetFragment)
+    }
 
-    fun switchFragment(targetFragment : Fragment): FragmentTransaction{
+    fun switchFragment(targetFragment: Fragment): FragmentTransaction {
         val transaction = supportFragmentManager.beginTransaction()
-        if(!targetFragment.isAdded){
-            if (currentFragment != null){
+        if (!targetFragment.isAdded) {
+            if (currentFragment != null) {
                 transaction.hide(currentFragment!!)
             }
-            transaction.add(R.id.drawer,targetFragment
-                ,targetFragment::class.java.name)
-        }else{
-            if (currentFragment != null){
+            transaction.add(
+                R.id.drawer, targetFragment
+                , targetFragment::class.java.name
+            )
+        } else {
+            if (currentFragment != null) {
                 transaction.hide(currentFragment!!)
             }
             transaction.show(targetFragment)
         }
         currentFragment = targetFragment
         return transaction
+    }
+
+    fun switchFragment(targetFragment: Fragment, bundle: Bundle): FragmentTransaction {
+        targetFragment.arguments = bundle
+        return switchFragment(targetFragment)
+
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -123,7 +131,7 @@ class MainActivity : BaseActivity() {
                     Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show()
                     firstTime = second
                     return true
-                }else {
+                } else {
                     System.exit(0)
                 }
             }
@@ -133,13 +141,14 @@ class MainActivity : BaseActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.search -> {}
+        when (item.itemId) {
+            R.id.search -> {
+            }
         }
         return super.onOptionsItemSelected(item)
     }

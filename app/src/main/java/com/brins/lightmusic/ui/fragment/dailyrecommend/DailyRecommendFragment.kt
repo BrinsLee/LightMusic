@@ -18,7 +18,8 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_user_music_list.*
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.fragment_daily_recommend.*
 
 class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
     DailyContract.View,
@@ -67,6 +68,15 @@ class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
     fun setListener() {
         mAdapter.setOnItemClickListener(this)
         head.setOnBackClickListener(this)
+        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
+            Log.d("offset", "$p1")
+            if (p1 >= 0) {
+                cover.visibility = View.VISIBLE
+            }
+            if (p1 <= -800) {
+                cover.visibility = View.GONE
+            }
+        })
     }
 
     override fun setPresenter(presenter: DailyContract.Presenter) {

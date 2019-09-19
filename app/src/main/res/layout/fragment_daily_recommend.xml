@@ -9,10 +9,12 @@
         android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/common_margin_250"
             android:background="@android:color/transparent"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:clipChildren="false">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
@@ -22,6 +24,7 @@
                 app:contentScrim="@android:color/transparent"
                 app:expandedTitleMarginEnd="10dp"
                 app:expandedTitleMarginStart="10dp"
+                android:clipChildren="false"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,10 +34,12 @@
                 <ImageView
                         android:id="@+id/cover"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/common_margin_400"
+                        android:layout_height="0dp"
                         android:src="@drawable/default_cover"
                         android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_collapseMode="pin"
+                        app:layout_collapseParallaxMultiplier="0.5"
+                        app:layout_constraintDimensionRatio="900:800"
                         app:layout_constraintTop_toTopOf="parent"/>
                 <com.brins.lightmusic.ui.customview.CommonHeaderView
                         android:id="@+id/head"

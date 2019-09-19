@@ -99,6 +99,10 @@ public class AppConfig {
      */
     public static final String MVDETAIL = "/mv/detail";
 
+    /**
+     * Mv评论
+     */
+    public static final String MVCOMMENTS = "/comment/mv";
 
     /**
      * 所有MV
