@@ -5,11 +5,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.brins.lightmusic.ui.fragment.video.VideoFragment">
+<androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/videoListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/common_margin_30">
 
     </androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
