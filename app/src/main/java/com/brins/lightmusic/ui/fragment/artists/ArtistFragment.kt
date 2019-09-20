@@ -1,21 +1,26 @@
 package com.brins.lightmusic.ui.fragment.artists
 
 
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.artist.Category
 import com.brins.lightmusic.model.artist.CategoryResult
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.customview.PileLayout
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_artist.*
 
-class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstract.View {
+class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstract.View,
+    OnItemClickListener {
 
 
     private lateinit var artistCategory: ArrayList<Category>
@@ -32,6 +37,21 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
         ArtistPresenter.instance.subscribe(this@ArtistFragment)
     }
 
+    override fun onItemClick(position: Int) {
+        val bundle = Bundle()
+        bundle.putParcelable("ARTIST", artistList[position])
+        switch(ArtistDetailFragment(), bundle)
+    }
+
+    private fun switch(fragment: Fragment, bundle: Bundle) {
+        try {
+            (activity as MainActivity).switchFragment(fragment, bundle)
+                .addToBackStack(TAG)
+                .commit()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     //MVP View
     override fun onArtistLoad(artistList: ArrayList<ArtistBean>) {
@@ -40,6 +60,7 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
     }
 
     private fun initRecyclerView() {
+        mAdapter.setOnItemClickListener(this)
         recyclerArtist.layoutManager = LinearLayoutManager(context)
         recyclerArtist.adapter = mAdapter
     }

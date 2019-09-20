@@ -4,12 +4,11 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
+import android.annotation.TargetApi
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Rect
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.icu.util.Calendar
 import android.media.MediaMetadataRetriever
@@ -18,12 +17,15 @@ import android.text.format.Time
 import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.collection.SimpleArrayMap
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
@@ -347,5 +349,12 @@ fun getCalendarDay(): String {
 }
 
 
+fun dp2px(context: Context, value: Float): Int {
+    val scale = context.resources.displayMetrics.density
+    return (value * scale + 0.5f).toInt()
+}
 
-
+fun px2dp(context: Context, value: Float): Int {
+    val scale = context.resources.displayMetrics.density
+    return (value / scale + 0.5f).toInt()
+}

@@ -77,7 +77,12 @@ public class AppConfig {
     /**
      * 歌手MV
      */
-    public static final String ARTISTS_MV = "artists";
+    public static final String ARTISTS_MV = "artists/mv";
+
+    /**
+     * 歌手专辑
+     */
+    public static final String ARTIST_ALBUM = "/artist/album";
     /**
      * 音乐链接
      */

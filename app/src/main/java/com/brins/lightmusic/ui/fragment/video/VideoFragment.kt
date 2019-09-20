@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_video.*
 class VideoFragment : BaseFragment<VideoContract.Presenter>() {
 
 
-    var list = mutableListOf<Fragment>(
+    private var list = mutableListOf<Fragment>(
         VideoCategoryFragment(MAINLAND),
         VideoCategoryFragment(HONGKONG_TAIWAN),
         VideoCategoryFragment(EUROPE_AMERICA),

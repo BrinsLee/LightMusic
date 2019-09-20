@@ -11,10 +11,18 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.brins.lightmusic.R
 import com.brins.lightmusic.utils.*
 
-class VideoPagerAdapter(fm: FragmentManager, var list: MutableList<Fragment>) :
+class VideoPagerAdapter(
+    fm: FragmentManager,
+    var list: MutableList<Fragment>,
+    var tabtitle: Array<String> = arrayOf(
+        MAINLAND,
+        HONGKONG_TAIWAN,
+        EUROPE_AMERICA,
+        JAPAN,
+        KOREA
+    )
+) :
     FragmentPagerAdapter(fm) {
-    val tabtitle = arrayOf(MAINLAND, HONGKONG_TAIWAN, EUROPE_AMERICA, JAPAN, KOREA)
-
     override fun getCount(): Int {
         return list.size
     }
@@ -25,7 +33,7 @@ class VideoPagerAdapter(fm: FragmentManager, var list: MutableList<Fragment>) :
 
     fun getTabView(context: Context, position: Int): View {
         val view = LayoutInflater.from(context).inflate(R.layout.main_tab, null)
-        var tab_item: TextView = view.findViewById(R.id.tab_item)
+        val tab_item: TextView = view.findViewById(R.id.tab_item)
         tab_item.textSize = 15f
         tab_item.setTextColor(Color.WHITE)
         if (position == 0) {

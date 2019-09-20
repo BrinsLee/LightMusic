@@ -62,6 +62,7 @@ class ArtistPresenter private constructor() : ArtistConstract.Presenter {
     }
 
     override fun unsubscribe() {
+        mView = null
     }
 
 }

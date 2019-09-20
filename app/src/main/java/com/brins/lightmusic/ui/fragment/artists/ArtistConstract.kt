@@ -19,5 +19,6 @@ interface ArtistConstract {
         fun loadArtistCategory()
 
         fun loadArtist()
+
     }
 }
