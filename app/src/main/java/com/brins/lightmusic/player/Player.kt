@@ -293,9 +293,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
         } else {
             val hasNext = mPlayList.hasNext(true)
             if (hasNext) {
-                next = mPlayList.next()
+                next = mPlayList.getNext()
                 if (next.fileUrl != null && next.fileUrl != "") {
-                    play()
+                    playNext()
                 }
             }
         }

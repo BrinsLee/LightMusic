@@ -216,6 +216,31 @@ class PlayList() : Parcelable {
         return songs[playingIndex]
     }
 
+    fun getNext(): Music {
+        var newIndex = 0
+        when (playMode) {
+            PlayMode.LOOP, PlayMode.LIST, PlayMode.SINGLE -> {
+                newIndex = playingIndex + 1
+                if (newIndex >= songs.size) {
+                    newIndex = 0
+                }
+            }
+        }
+        return songs[newIndex]
+    }
+
+    fun getLast(): Music {
+        var newIndex = 0
+        when (playMode) {
+            PlayMode.LOOP, PlayMode.LIST, PlayMode.SINGLE -> {
+                newIndex = playingIndex - 1
+                if (newIndex < 0) {
+                    newIndex = songs.size - 1
+                }
+            }
+        }
+        return songs[newIndex]
+    }
     private fun randomPlayIndex(): Int {
         val randomIndex = Random().nextInt(songs.size)
         // Make sure not play the same song twice if there are at least 2 songs
