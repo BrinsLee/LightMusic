@@ -34,9 +34,9 @@ abstract class BaseActivity : AppCompatActivity() {
         val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.decorView.systemUiVisibility = option
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.statusBarColor = resources.getColor(R.color.gery, null)
+            window.statusBarColor = resources.getColor(R.color.alpha, null)
         }else{
-            window.statusBarColor = resources.getColor(R.color.gery)
+            window.statusBarColor = resources.getColor(R.color.alpha)
         }
     }
 

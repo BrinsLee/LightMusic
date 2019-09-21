@@ -8,6 +8,7 @@ class LastestMvDataBean() : Parcelable {
 
     @SerializedName("id")
     var id : String =  ""
+    @SerializedName("cover",alternate = ["imgurl"])
     var cover : String = ""
     var name: String = ""
     var playCount : Int = 0

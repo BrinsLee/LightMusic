@@ -1,20 +1,20 @@
 package com.brins.lightmusic.ui.fragment.artists
 
+import com.brins.lightmusic.model.artist.ArtistSongResult
+import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
 interface ArtistDetailConstract {
     interface View : BaseView<Presenter>{
-        fun onArtistInfoLoad()
 
-        fun onArtistSongLoad()
+        fun onArtistSongLoad(result: ArtistSongResult)
 
-        fun onArtistMvLoad()
+        fun onArtistMvLoad(result: MvResult)
 
         fun onArtistAlbumLoad()
     }
     interface Presenter : BasePresenter<View>{
-        fun loadArtistInfo()
 
         /*
         * 获取歌手单曲

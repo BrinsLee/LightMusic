@@ -13,6 +13,9 @@ import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.base.AppBarStateChangeListener
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.utils.ALBUM
+import com.brins.lightmusic.utils.MV
+import com.brins.lightmusic.utils.SONG
 import com.brins.lightmusic.utils.dp2px
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
@@ -23,9 +26,6 @@ import kotlinx.android.synthetic.main.fragment_artist_detail.cover
 import kotlinx.android.synthetic.main.fragment_artist_detail.head
 import kotlinx.android.synthetic.main.fragment_artist_detail.mTablayout
 import kotlinx.android.synthetic.main.fragment_artist_detail.mViewpager
-
-
-
 
 
 class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
@@ -39,11 +39,7 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
     private var mAnimtorHide: ObjectAnimator? = null
 
 
-    private var list = mutableListOf<Fragment>(
-        ArtistTabFragment(),
-        ArtistTabFragment(),
-        ArtistTabFragment()
-    )
+    private var list = mutableListOf<Fragment>()
     val adapter by lazy { VideoPagerAdapter(childFragmentManager, list, mTitle!!) }
 
 
@@ -78,7 +74,7 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
 
             override fun onOffsetChanged(appBarLayout: AppBarLayout) {
                 val alphaPercent = nest.top.toFloat() / deltaDistance.toFloat()
-                Log.d("offset","$alphaPercent")
+                Log.d("offset", "$alphaPercent")
                 name.alpha = alphaPercent
                 cover.alpha = alphaPercent
             }
@@ -89,7 +85,9 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
     private fun initData() {
         mTitle = arrayOf("单曲(${mArtist!!.musicSize})", "专辑(${mArtist!!.albumSize})", "MV")
         deltaDistance = dp2px(context!!, 250f)
-
+        list.add(ArtistTabFragment(SONG, mArtist!!.id))
+        list.add(ArtistTabFragment(ALBUM, mArtist!!.id))
+        list.add(ArtistTabFragment(MV, mArtist!!.id))
     }
 
     private fun initView() {
@@ -104,12 +102,12 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
 
                 override fun onTabUnselected(p0: TabLayout.Tab?) {
                     val tv_tab = p0!!.customView!!.findViewById(R.id.tab_item) as TextView
-                    tv_tab.setTextColor(Color.WHITE)
+                    tv_tab.setTextColor(Color.GRAY)
                 }
 
                 override fun onTabSelected(p0: TabLayout.Tab?) {
                     val tv_tab = p0!!.customView!!.findViewById(R.id.tab_item) as TextView
-                    tv_tab.setTextColor(Color.GRAY)
+                    tv_tab.setTextColor(Color.BLACK)
                 }
 
             })

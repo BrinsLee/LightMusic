@@ -82,25 +82,6 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
         videoAdapter.setOnItemListener(this)
         videoListView.layoutManager = LinearLayoutManager(context)
         videoListView.adapter = videoAdapter
-/*        videoListView.addOnChildAttachStateChangeListener(object :
-            RecyclerView.OnChildAttachStateChangeListener {
-            override fun onChildViewAttachedToWindow(view: View) {
-
-            }
-
-            override fun onChildViewDetachedFromWindow(view: View) {
-                val jz = view.findViewById<JZVideoPalyerView>(R.id.video_player)
-                if (jz?.jzDataSource != null && Jzvd.CURRENT_JZVD != null && jz.jzDataSource.containsTheUrl(
-                        Jzvd.CURRENT_JZVD.jzDataSource.currentUrl
-                    )
-                ) {
-                    if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
-                        Jzvd.releaseAllVideos()
-                    }
-                }
-            }
-
-        })*/
     }
 
     private fun initLoadingMore() {

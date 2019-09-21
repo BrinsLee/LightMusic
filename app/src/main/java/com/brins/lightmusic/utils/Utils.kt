@@ -310,6 +310,10 @@ val EUROPE_AMERICA = "欧美"
 val JAPAN = "日本"
 val KOREA = "韩国"
 
+val SONG = 10010
+val MV = 10086
+val ALBUM = 10000
+
 val TYPE_ONLINE_MUSIC = 1
 val TYPE_LOCAL_MUSIC = 0
 

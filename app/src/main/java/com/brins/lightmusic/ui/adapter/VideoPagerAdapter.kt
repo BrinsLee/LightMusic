@@ -35,9 +35,9 @@ class VideoPagerAdapter(
         val view = LayoutInflater.from(context).inflate(R.layout.main_tab, null)
         val tab_item: TextView = view.findViewById(R.id.tab_item)
         tab_item.textSize = 15f
-        tab_item.setTextColor(Color.WHITE)
+        tab_item.setTextColor(Color.GRAY)
         if (position == 0) {
-            tab_item.setTextColor(Color.GRAY)
+            tab_item.setTextColor(Color.BLACK)
         }
         tab_item.text = tabtitle[position]
         return view

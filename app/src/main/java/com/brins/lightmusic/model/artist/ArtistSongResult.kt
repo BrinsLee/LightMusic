@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 class ArtistSongResult {
     @SerializedName("hotSongs")
-    var artist : ArrayList<Music>? = null
+    var hot : ArrayList<Music>? = null
 }

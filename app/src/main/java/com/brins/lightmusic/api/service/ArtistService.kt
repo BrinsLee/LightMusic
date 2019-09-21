@@ -1,9 +1,11 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.model.album.AlbumResult
 import com.brins.lightmusic.model.artist.ArtistDetailBean
 import com.brins.lightmusic.model.artist.ArtistResult
 import com.brins.lightmusic.model.artist.ArtistSongResult
+import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -28,8 +30,11 @@ interface ArtistService {
     *  获取歌手MV列表
     * */
     @GET(AppConfig.ARTISTS_MV)
-    fun getArtistMV(@Query("id") id: String): Observable<ArtistResult>
+    fun getArtistMV(@Query("id") id: String, @Query("limit") limit: Int ): Observable<MvResult>
 
+    /*
+    * 获取歌手专辑
+    * */
     @GET(AppConfig.ARTIST_ALBUM)
-    fun getArtistAlbum(@Query("id") id:String): Observable<ArtistSongResult>
+    fun getArtistAlbum(@Query("id") id:String): Observable<AlbumResult>
 }

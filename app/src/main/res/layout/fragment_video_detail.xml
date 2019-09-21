@@ -41,10 +41,10 @@
                 app:layout_constraintTop_toBottomOf="@id/hot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/common_margin_20"
+                android:paddingLeft="@dimen/common_margin_10"
                 android:layout_marginTop="@dimen/common_margin_10"
                 android:paddingTop="@dimen/common_margin_20"
-                android:paddingRight="@dimen/common_margin_20"
+                android:paddingRight="@dimen/common_margin_10"
                 android:background="@drawable/bg_fragment_local"
                 android:nestedScrollingEnabled="true"
                 android:paddingBottom="@dimen/common_margin_10">
