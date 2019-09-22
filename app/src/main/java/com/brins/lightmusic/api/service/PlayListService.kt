@@ -1,6 +1,7 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.model.album.AlbumResult
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
@@ -28,5 +29,7 @@ interface PlayListService {
     @GET(AppConfig.MUSICLIST_HIGHQUALITY)
     fun getHightQualityList(@Query("limit") limit : Int = 6) : Observable<MusicListResult>
 
+    @GET(AppConfig.ALBUM_DETAIL)
+    fun getAlbumDetail(@Query("id") id: String): Observable<AlbumResult>
 
 }

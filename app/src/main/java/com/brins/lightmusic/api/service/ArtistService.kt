@@ -1,9 +1,7 @@
 package com.brins.lightmusic.api.service
 
 import com.brins.lightmusic.common.AppConfig
-import com.brins.lightmusic.model.album.AlbumResult
-import com.brins.lightmusic.model.artist.ArtistDetailBean
-import com.brins.lightmusic.model.artist.ArtistResult
+import com.brins.lightmusic.model.album.AlbumListResult
 import com.brins.lightmusic.model.artist.ArtistSongResult
 import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
@@ -36,5 +34,5 @@ interface ArtistService {
     * 获取歌手专辑
     * */
     @GET(AppConfig.ARTIST_ALBUM)
-    fun getArtistAlbum(@Query("id") id:String): Observable<AlbumResult>
+    fun getArtistAlbum(@Query("id") id:String): Observable<AlbumListResult>
 }

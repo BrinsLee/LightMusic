@@ -35,8 +35,7 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
     private var deltaDistance: Int = 0
     private var mArtist: ArtistBean? = null
     private var mTitle: Array<String>? = null
-    private var mAnimtorShow: ObjectAnimator? = null
-    private var mAnimtorHide: ObjectAnimator? = null
+
 
 
     private var list = mutableListOf<Fragment>()

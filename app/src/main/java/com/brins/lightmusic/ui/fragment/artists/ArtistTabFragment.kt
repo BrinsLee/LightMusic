@@ -1,19 +1,26 @@
 package com.brins.lightmusic.ui.fragment.artists
 
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.album.AlbumBean
+import com.brins.lightmusic.model.album.AlbumListResult
 import com.brins.lightmusic.model.artist.ArtistSongResult
 import com.brins.lightmusic.model.loaclmusic.PlayList
-import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
-import com.brins.lightmusic.model.musicvideo.MvResult
+import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
+import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
+import com.brins.lightmusic.ui.fragment.video.VideoDetailFragment
 import com.brins.lightmusic.utils.ALBUM
 import com.brins.lightmusic.utils.MV
 import com.brins.lightmusic.utils.SONG
@@ -22,9 +29,12 @@ import kotlinx.android.synthetic.main.fragment_artist_tab.*
 
 class ArtistTabFragment(var type: Int = 10010, var id: String) :
     BaseFragment<ArtistDetailConstract.Presenter>(),
-    ArtistDetailConstract.View {
+    ArtistDetailConstract.View, OnItemClickListener {
+
+
     private var playList: PlayList = PlayList()
-    private var MvDataBeans: List<LastestMvDataBean> = listOf()
+    private var mvDataBeans: List<Mv> = listOf()
+    private var albumDataBeans: MutableList<AlbumBean> = mutableListOf()
     private var currentTime: Long = 0
     private var mPresenter: ArtistDetailPresenter? = null
 
@@ -45,17 +55,7 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             }
 
         }
-        mAdapter.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                if (System.currentTimeMillis() - currentTime < 2000) {
-                    return
-                }
-                currentTime = System.currentTimeMillis()
-                playList.setPlayingIndex(position)
-                RxBus.getInstance().post(PlayListEvent(playList, position, TYPE_ONLINE_MUSIC))
-            }
-
-        })
+        mAdapter.setOnItemClickListener(this)
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.addItemDecoration(
@@ -67,29 +67,49 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
     }
 
 
-    override fun onArtistMvLoad(result: MvResult) {
-        MvDataBeans = result.dataBeans!!
-        val mAdapter: CommonViewAdapter<LastestMvDataBean>
-        mAdapter = object : CommonViewAdapter<LastestMvDataBean>(
+    override fun onArtistMvLoad(result: MutableList<Mv>) {
+        mvDataBeans = result
+        val mAdapter: CommonViewAdapter<Mv>
+        mAdapter = object : CommonViewAdapter<Mv>(
             activity!!,
             R.layout.item_video_list,
-            (result.dataBeans as ArrayList<LastestMvDataBean>)
-        ){
-            override fun converted(holder: ViewHolder, t: LastestMvDataBean, position: Int) {
-                holder.setText(R.id.tv_title,t.name)
-                holder.setText(R.id.tv_watch_count, if (t.playCount > 1000) "${t.playCount / 1000}万播放" else "${t.playCount}播放")
-                holder.setText(R.id.tv_author, t.artistName)
-                holder.setImageResource(R.id.iv_avatar,t.cover)
-                holder.setImageResource(R.id.video_player,t.cover)
+            (result as ArrayList<Mv>)
+        ) {
+            override fun converted(holder: ViewHolder, t: Mv, position: Int) {
+                holder.setText(R.id.tv_title, t.dataBean.name)
+                holder.setText(
+                    R.id.tv_watch_count,
+                    if (t.dataBean.playCount > 1000) "${t.dataBean.playCount / 1000}万播放" else "${t.dataBean.playCount}播放"
+                )
+                holder.setText(R.id.tv_author, t.dataBean.artistName)
+                holder.setImageResource(R.id.iv_avatar, t.dataBean.cover)
+                holder.setImageResource(R.id.video_player, t.dataBean.cover)
             }
 
         }
+        mAdapter.setOnItemClickListener(this)
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
     }
 
-    override fun onArtistAlbumLoad() {
+    override fun onArtistAlbumLoad(response: AlbumListResult) {
+        albumDataBeans.addAll(response.hotAlbums!!)
+        val mAdapter: CommonViewAdapter<AlbumBean> = object : CommonViewAdapter<AlbumBean>(
+            activity!!,
+            R.layout.item_local_music,
+            albumDataBeans as ArrayList<AlbumBean>
+        ) {
+            override fun converted(holder: ViewHolder, t: AlbumBean, position: Int) {
+                holder.setImageResource(R.id.imgCover, t.picUrl)
+                holder.setText(R.id.textViewName, t.name)
+                holder.setText(R.id.textViewArtist, t.artist!!.name)
+
+            }
+        }
+        mAdapter.setOnItemClickListener(this)
+        recyclerView.adapter = mAdapter
+        recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
 
@@ -114,5 +134,42 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
     override fun setPresenter(presenter: ArtistDetailConstract.Presenter) {
         mPresenter = presenter as ArtistDetailPresenter
 
+    }
+
+
+    override fun onItemClick(position: Int) {
+        if (System.currentTimeMillis() - currentTime < 2000) {
+            return
+        }
+        when (type) {
+            SONG -> {
+                currentTime = System.currentTimeMillis()
+                playList.setPlayingIndex(position)
+                RxBus.getInstance().post(PlayListEvent(playList, position, TYPE_ONLINE_MUSIC))
+            }
+            ALBUM -> {
+                currentTime = System.currentTimeMillis()
+                val id = albumDataBeans[position].id
+                val bundle = Bundle()
+                bundle.putString(TAG,id)
+                switch(MusicDetailFragment(),bundle)
+            }
+            MV -> {
+                currentTime = System.currentTimeMillis()
+                val bundle = Bundle()
+                bundle.putParcelable("Mv", mvDataBeans[position])
+                switch(VideoDetailFragment(), bundle)
+            }
+        }
+    }
+
+    private fun switch(fragment: Fragment, bundle: Bundle) {
+        try {
+            (activity as MainActivity).switchFragment(fragment, bundle)
+                .addToBackStack(TAG)
+                .commit()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

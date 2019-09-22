@@ -8,6 +8,7 @@ import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.album.AlbumResult
 import com.brins.lightmusic.model.banner.BannerResult
 import com.brins.lightmusic.model.onlinemusic.*
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
@@ -97,6 +98,25 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
             })
     }
 
+    override fun loadAlbumDetail(id: String) {
+        mView?.showLoading()
+        ApiHelper.getPlayListService().getAlbumDetail(id).compose(AsyncTransformer<AlbumResult>())
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<AlbumResult>(){
+                override fun onSuccess(response: AlbumResult) {
+                    if (response.songs != null) {
+                        mView!!.onAlbumDetailLoad(response)
+                        mView?.hideLoading()
+
+                    }
+                }
+
+                override fun onFail(message: String) {
+                    mView?.hideLoading()
+                }
+
+            })
+    }
 
     override fun loadHotMusicList(top: Int) {
         ApiHelper.getPlayListService().getPlayList()

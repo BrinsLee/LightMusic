@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_music_detail.*
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.album.AlbumResult
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -47,16 +48,25 @@ class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), Discove
         toolbar.setOnBackClickListener(this)
         nestScrollView.fadingView = toolbar
         nestScrollView.fadingHeightView = coverMusicList
-        id = (activity as MainActivity).currentMusicListId
         DiscoverPresenter.instance.subscribe(this)
-        mPresenter.loadMusicListDetail(id)
-        musicRecycler.adapter = mAdapter
-        musicRecycler.layoutManager = LinearLayoutManager(context)
-        musicRecycler.addItemDecoration(
-            DividerItemDecoration(
-                context!!, LinearLayoutManager.VERTICAL
+        if (arguments != null){
+            id = arguments!!.getString("DiscoveryFragment","")
+            if (id === ""){
+                id = arguments!!.getString("ArtistTabFragment","")
+                mPresenter.loadAlbumDetail(id)
+
+            }else{
+                mPresenter.loadMusicListDetail(id)
+            }
+            musicRecycler.adapter = mAdapter
+            musicRecycler.layoutManager = LinearLayoutManager(context)
+            musicRecycler.addItemDecoration(
+                DividerItemDecoration(
+                    context!!, LinearLayoutManager.VERTICAL
+                )
             )
-        )
+        }
+
     }
 
     //ItemClick
@@ -76,6 +86,17 @@ class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), Discove
 
     //MVP VIEW
 
+    override fun onAlbumDetailLoad(musics: AlbumResult) {
+        Glide.with(context!!)
+            .load(musics.album!!.picUrl)
+            .into(coverMusicList)
+        toolbar.title = musics.album!!.name
+        playList.addSong(musics.songs!!)
+        mAdapter.setData(playList.getSongs())
+        mAdapter.notifyDataSetChanged()
+
+
+    }
 
     override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
     }

@@ -61,6 +61,9 @@ public class AppConfig {
      */
     public static final String ARTISTS = "/top/artists";
 
+    /**
+     * 歌手描述
+     */
     public static final String ARTISTDESC = "/artist/desc?id=6452";
 
     /**
@@ -83,6 +86,8 @@ public class AppConfig {
      * 歌手专辑
      */
     public static final String ARTIST_ALBUM = "/artist/album";
+
+    public static final String ALBUM_DETAIL = "/album";
     /**
      * 音乐链接
      */

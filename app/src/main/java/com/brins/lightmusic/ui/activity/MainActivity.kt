@@ -31,7 +31,6 @@ class MainActivity : BaseActivity() {
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
     var currentFragment: Fragment? = null
-    var currentMusicListId: String = ""
 
 
     companion object {
@@ -92,10 +91,6 @@ class MainActivity : BaseActivity() {
 
     }
 
-    fun switchFragment(currentId: String, targetFragment: Fragment): FragmentTransaction {
-        currentMusicListId = currentId
-        return switchFragment(targetFragment)
-    }
 
     fun switchFragment(targetFragment: Fragment): FragmentTransaction {
         val transaction = supportFragmentManager.beginTransaction()

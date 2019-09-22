@@ -18,7 +18,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
     val provider: AndroidLifecycleScopeProvider =
         AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
 
-    val mvList = mutableListOf<Mv>()
+    private val mvList = mutableListOf<Mv>()
     override fun loadVideo(limit: Int, area: String) {
         mView?.showLoading()
         ApiHelper.getMvService().getMvAll(area, limit)

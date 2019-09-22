@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.album.AlbumBean
+import com.brins.lightmusic.model.album.AlbumResult
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
@@ -58,6 +61,10 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
     }
 
     //MVP View
+
+    override fun onAlbumDetailLoad(musics: AlbumResult) {
+
+    }
 
     override fun onDetailLoad(detailBean: MusicListDetailBean) {
 
@@ -148,7 +155,9 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
     override fun onItemClick(view: View, position: Int) {
         val id = musicListBean[position].id
         try {
-            (activity as MainActivity).switchFragment(id, MusicDetailFragment())
+            val bundle = Bundle()
+            bundle.putString(TAG,id)
+            (activity as MainActivity).switchFragment(MusicDetailFragment(),bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
