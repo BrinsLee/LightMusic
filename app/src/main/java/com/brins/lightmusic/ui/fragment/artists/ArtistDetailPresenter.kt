@@ -13,6 +13,7 @@ import com.brins.lightmusic.model.musicvideo.MvResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Consumer
+import kotlinx.coroutines.CoroutineScope
 
 class ArtistDetailPresenter : ArtistDetailConstract.Presenter {
 

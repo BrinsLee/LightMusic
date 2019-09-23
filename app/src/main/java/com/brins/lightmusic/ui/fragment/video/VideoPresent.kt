@@ -9,6 +9,9 @@ import com.brins.lightmusic.model.musicvideo.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Consumer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
