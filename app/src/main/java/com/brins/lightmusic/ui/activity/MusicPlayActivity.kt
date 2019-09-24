@@ -32,12 +32,18 @@ import com.brins.lightmusic.ui.customview.CustPagerTransformer
 import com.brins.lightmusic.ui.customview.RoundImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
+import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
+import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.string2Bitmap
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 import kotlinx.android.synthetic.main.include_play_control.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.concurrent.Executors
 
@@ -46,6 +52,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     View.OnClickListener {
 
 
+    private var type = -1
     private var mPlayer: IPlayback? = null
     private var index = -1
     private var isPlaying = false
@@ -103,13 +110,15 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     companion object {
 
         @JvmStatic
-        private var PLAYINDEX = "playindex"
+        private var PLAYINDEX = "play_index"
+        private var MUSIC_TYPE = "music_type"
         @JvmStatic
         var mImageViewList = mutableListOf<ImageView>()
 
-        fun startThisActivity(activity: AppCompatActivity, isPlaying: Boolean) {
+        fun startThisActivity(activity: AppCompatActivity, isPlaying: Boolean, type: Int) {
             val intent = Intent(activity, MusicPlayActivity::class.java)
             intent.putExtra(PLAYINDEX, isPlaying)
+            intent.putExtra(MUSIC_TYPE, type)
             activity.startActivity(intent)
         }
     }
@@ -119,6 +128,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         super.onCreateAfterBinding(savedInstanceState)
         MusicPlayerPresenter.instance.subscribe(this)
         isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
+        type = intent.getIntExtra(MUSIC_TYPE, -1)
         ivCover.setPageTransformer(false, CustPagerTransformer())
         setPlayView()
     }
@@ -130,18 +140,9 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         index = mPlayList.getPlayingIndex()
         if (mImageViewList.size == 0 || mImageViewList.size != musics?.size) {
             mImageViewList.clear()
-            for (i in 0 until mPlayList.getNumOfSongs()) {
-                val imageView = RoundImageView(applicationContext)
-                var bitmap = musics!![i].bitmapCover
-                if (bitmap == null) {
-                    bitmap = string2Bitmap(musics!![i].album.picUrl)
-                }
-                imageView.setImageBitmap(bitmap)
-                imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
-                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                mImageViewList.add(imageView)
-            }
+            initData()
         }
+
         ivCover.currentItem = mPlayList.getPlayingIndex()
         pageAdapter!!.notifyDataSetChanged()
         if (current != null) {
@@ -149,8 +150,19 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         }
     }
 
-    private fun initView() {
-        onSongUpdated(current)
+
+    private fun initData() {
+        for (i in 0 until mPlayList.getNumOfSongs()) {
+            val imageView = RoundImageView(applicationContext)
+            var bitmap = musics!![i].bitmapCover
+            if (bitmap == null) {
+                bitmap = string2Bitmap(musics!![i].album.picUrl)
+            }
+            imageView.setImageBitmap(bitmap)
+            imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            mImageViewList.add(imageView)
+        }
     }
 
     override fun onStart() {
@@ -292,8 +304,9 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         if (mPlayer == null) return
         val hasNext = mPlayList.hasNext(false)
         if (hasNext) {
-            val song = mPlayList.getCurrentSong()!!
+            val song = mPlayList.getNext()
             if (song.fileUrl == null || song.fileUrl == "") {
+                Log.d(TAG, "index: $index")
                 index = mPlayList.getPlayingIndex()
                 mPresenter.loadMusicDetail(song)
             } else {
@@ -493,10 +506,20 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
     override fun onComplete(next: Music?) {
-        if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
-            onPlayNext()
-        } else {
-            onSongUpdated(next)
+        when (type) {
+            TYPE_ONLINE_MUSIC -> {
+                if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
+                    onPlayNext()
+                } else {
+                    onSongUpdated(next)
+                }
+            }
+            TYPE_LOCAL_MUSIC -> {
+                onSongUpdated(next)
+            }
+            else -> {
+                return
+            }
         }
     }
 

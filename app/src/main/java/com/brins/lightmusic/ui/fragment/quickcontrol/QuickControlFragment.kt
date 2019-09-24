@@ -161,8 +161,8 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
                 if (mPlayer != null && ::playList.isInitialized) {
                     MusicPlayActivity.startThisActivity(
                         (activity as AppCompatActivity),
-                        mPlayer!!.isPlaying()
-                    )
+                        mPlayer!!.isPlaying(),
+                        type)
                 }
                 return
             }
