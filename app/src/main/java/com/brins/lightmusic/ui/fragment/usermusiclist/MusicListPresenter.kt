@@ -5,6 +5,7 @@ import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
 import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
+import com.brins.lightmusic.utils.await
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 
@@ -28,25 +29,7 @@ class MusicListPresenter : MusicListContract.Presenter {
     }
 
 
-    override fun loadMusicList(id: String) {
-        mView?.showLoading()
-        mMusicListService.getPlayListDetail(id)
-            .compose(AsyncTransformer<MusicListDetailResult>())
-            .autoDisposable(provider)
-            .subscribe(object : DefaultObserver<MusicListDetailResult>() {
-                override fun onFail(message: String) {
-                    mView?.hideLoading()
-                }
-
-                override fun onSuccess(response: MusicListDetailResult) {
-                    if (response.playlist != null) {
-                        mView!!.onMusicListLoad(response.playlist!!)
-                        mView?.hideLoading()
-                    }
-                }
-
-            })
-    }
+    override suspend fun loadMusicList(id: String) = ApiHelper.getPlayListService().getPlayListDetail(id).await()
 
     override fun subscribe(view: MusicListContract.View) {
         mView = view

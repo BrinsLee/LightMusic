@@ -63,7 +63,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
         Glide.with(this).load(mUserPlayList.coverImgUrl).into(cover)
         nickName.text = mUserPlayList.creator.nickName
         Glide.with(this).load(mUserPlayList.creator.avatarUrl).into(avatar)
-        mPresenter.loadMusicList(mUserPlayList.id)
+//        mPresenter.loadMusicList(mUserPlayList.id)
         recyclerView.setItemViewCacheSize(5)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)

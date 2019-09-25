@@ -6,28 +6,23 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.album.AlbumBean
-import com.brins.lightmusic.model.album.AlbumResult
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
-import com.brins.lightmusic.model.onlinemusic.MusicListDetailBean
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.ui.customview.LoadingFragment
-import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HIGHT
-import com.brins.lightmusic.ui.fragment.discovery.DiscoveryContract.Companion.TYPE_HOT
+import com.brins.lightmusic.utils.launch
 import kotlinx.android.synthetic.main.fragment_discovery.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), DiscoveryContract.View,
     SwipeRefreshLayout.OnRefreshListener, DiscoveryAdapter.OnItemClickListener {
-
 
 
     private var isFresh: Boolean = false
@@ -56,58 +51,27 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBanner() {
         DiscoverPresenter.instance.subscribe(this@DiscoveryFragment)
-        DiscoverPresenter.instance.initDiscoveryView()
+        showLoading()
         initLoadingMore()
+        initBannerList()
+        initMusicList()
+        initHotMusicList()
+    }
+    /*
+    * 获取横幅广告
+    * */
+    private fun initBannerList() {
+        launch({
+            bannerList = getBannerData().bannners!!
+            initBannerView()
+        }, {
+            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+        })
     }
 
-    //MVP View
-
-    override fun onAlbumDetailLoad(musics: AlbumResult) {
-
-    }
-
-    override fun onDetailLoad(detailBean: MusicListDetailBean) {
-
-    }
-
-
-    override fun onMusicListLoad(songs: ArrayList<MusicListBean>, type: Int) {
-        isFresh = false
-        when (type) {
-            TYPE_HOT -> {
-                if (songs.size > 6) {
-                    musicHotListBean.clear()
-                    musicHotListBean.addAll(songs.subList(songs.size - 6, songs.size))
-                } else {
-                    musicHotListBean = songs
-                }
-                initHotMusicList()
-            }
-            TYPE_HIGHT -> {
-                if (songs.size > 6) {
-                    musicListBean.clear()
-                    musicListBean.addAll(songs.subList(songs.size - 6, songs.size))
-                } else {
-                    musicListBean = songs
-                }
-                initMusicList()
-            }
-        }
-
-    }
-
-    private fun initHotMusicList() {
-        musicHotAdapter.setOnItemClickListener(this)
-        recycleMusiclist2.adapter = musicHotAdapter
-        recycleMusiclist2.layoutManager = GridLayoutManager(context!!, 3)
-    }
-
-    override fun onBannerLoad(banners: ArrayList<Banner>) {
-        bannerList = banners
-        initBannerView()
-    }
-
-    override fun onMusicDetail(onlineMusic: Music) {
+    private suspend fun getBannerData() = withContext(Dispatchers.IO) {
+        val banner = mPresenter.loadBanner()
+        banner
     }
 
     private fun initBannerView() {
@@ -117,13 +81,73 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
         recyclerBanner.adapter = bannerAdapter
     }
 
-    private fun initMusicList() {
+    /*
+    * 获取热门歌单
+    * */
+    private fun initHotMusicList(limit: Int = 6) {
+        launch({
+            val musicHotList = getHotMusicList(limit).playlists as ArrayList<MusicListBean>
+            if (musicHotList.size > 6) {
+                musicHotListBean.clear()
+                musicHotListBean.addAll(
+                    musicHotList.subList(
+                        musicHotList.size - 6,
+                        musicHotList.size
+                    )
+                )
+            } else {
+                musicHotListBean = musicHotList
+            }
+            initHotMusicView()
+        }, {
+            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
 
+        })
+    }
+
+    private suspend fun getHotMusicList(limit: Int) = withContext(Dispatchers.IO) {
+        val musiclist = mPresenter.loadHotMusicList(limit)
+        musiclist
+    }
+
+    private fun initHotMusicView() {
+        musicHotAdapter.setOnItemClickListener(this)
+        recycleMusiclist2.adapter = musicHotAdapter
+        recycleMusiclist2.layoutManager = GridLayoutManager(context!!, 3)
+        hideLoading()
+    }
+
+    /*
+    * 获取歌单
+    * */
+    private fun initMusicList(limit: Int = 6) {
+        launch({
+            val musicList = getMusicList(limit).playlists as ArrayList<MusicListBean>
+            if (musicList.size > 6) {
+                musicListBean.clear()
+                musicListBean.addAll(musicList.subList(musicList.size - 6, musicList.size))
+            } else {
+                musicListBean = musicList
+            }
+            initMusicView()
+        }, {
+            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    private suspend fun getMusicList(limit: Int) = withContext(Dispatchers.IO) {
+        val musicList = mPresenter.loadMusicList(limit)
+        musicList
+    }
+
+
+    private fun initMusicView() {
         musicListAdapter.setOnItemClickListener(this)
         recycleMusiclist.adapter = musicListAdapter
         recycleMusiclist.layoutManager = GridLayoutManager(context!!, 3)
-
+        hideLoading()
     }
+
 
     private fun initLoadingMore() {
         loadingMore.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
@@ -139,7 +163,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
             isFresh = true
             loadingMore.isRefreshing = false
             showLoading()
-            mPresenter.loadMusicList(count * 6)
+            initMusicList(count * 6)
         }
     }
 
@@ -156,12 +180,13 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
         val id = musicListBean[position].id
         try {
             val bundle = Bundle()
-            bundle.putString(TAG,id)
-            (activity as MainActivity).switchFragment(MusicDetailFragment(),bundle)
+            bundle.putString(TAG, id)
+            (activity as MainActivity).switchFragment(MusicDetailFragment(), bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             Log.e(TAG, e.message)
         }
     }
+
 }

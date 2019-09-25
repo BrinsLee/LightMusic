@@ -41,8 +41,8 @@ import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.concurrent.Executors
@@ -140,30 +140,37 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         index = mPlayList.getPlayingIndex()
         if (mImageViewList.size == 0 || mImageViewList.size != musics?.size) {
             mImageViewList.clear()
-            initData()
+            pageAdapter!!.notifyDataSetChanged()
+            CoroutineScope(Dispatchers.Main).launch{
+                mImageViewList.addAll(initData())
+                pageAdapter!!.notifyDataSetChanged()
+                ivCover.currentItem = mPlayList.getPlayingIndex()
+            }
         }
 
-        ivCover.currentItem = mPlayList.getPlayingIndex()
-        pageAdapter!!.notifyDataSetChanged()
         if (current != null) {
             setListener()
         }
     }
 
 
-    private fun initData() {
-        for (i in 0 until mPlayList.getNumOfSongs()) {
-            val imageView = RoundImageView(applicationContext)
-            var bitmap = musics!![i].bitmapCover
-            if (bitmap == null) {
-                bitmap = string2Bitmap(musics!![i].album.picUrl)
+    private suspend fun initData() =
+        withContext(Dispatchers.IO){
+            val list = mutableListOf<ImageView>()
+            for (i in 0 until mPlayList.getNumOfSongs()) {
+                val imageView = RoundImageView(applicationContext)
+                var bitmap = musics!![i].bitmapCover
+                if (bitmap == null) {
+                    bitmap = string2Bitmap(musics!![i].album.picUrl)
+                }
+                imageView.setImageBitmap(bitmap)
+                imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
+                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                list.add(imageView)
             }
-            imageView.setImageBitmap(bitmap)
-            imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
-            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-            mImageViewList.add(imageView)
+            list
         }
-    }
+
 
     override fun onStart() {
         super.onStart()

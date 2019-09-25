@@ -45,6 +45,8 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         onCreateBeforeBinding(savedInstanceState)
         var resId = getLayoutResId()
+
+
         if (resId != 0) {
             setContentView(resId)
         }

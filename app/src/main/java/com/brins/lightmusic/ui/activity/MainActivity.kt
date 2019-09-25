@@ -55,9 +55,11 @@ class MainActivity : BaseActivity() {
         showBottomBar(supportFragmentManager)
     }
 
-    override fun onStop() {
+
+    override fun onPause() {
+        super.onPause()
         removeBottomBar(supportFragmentManager)
-        super.onStop()
+
     }
 
     private fun initViewPagerAndTabLay() {

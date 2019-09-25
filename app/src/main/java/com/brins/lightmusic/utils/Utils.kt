@@ -41,9 +41,18 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.*
 import java.lang.Exception
 import java.lang.ref.WeakReference
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 val option = RequestOptions()
     .error(R.drawable.default_cover)
@@ -362,3 +371,29 @@ fun px2dp(context: Context, value: Float): Int {
     val scale = context.resources.displayMetrics.density
     return (value / scale + 0.5f).toInt()
 }
+
+fun launch(block : suspend() -> Unit, error: suspend(Throwable) -> Unit) = CoroutineScope(
+    Dispatchers.Main).launch{
+    try {
+        block()
+    }catch (e: Throwable) {
+        error(e)
+    }
+}
+
+suspend fun <T> Call<T>.await(): T {
+    return suspendCoroutine { continuation ->
+        enqueue(object : Callback<T> {
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                continuation.resumeWithException(t)
+            }
+
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                val body = response.body()
+                if (body != null) continuation.resume(body)
+                else continuation.resumeWithException(RuntimeException("response body is null"))
+            }
+        })
+    }
+}
+
