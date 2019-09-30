@@ -6,8 +6,7 @@
         android:background="@color/gery"
         android:clipChildren="false"
         android:layout_marginBottom="65dp"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
@@ -36,7 +35,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:src="@drawable/default_cover"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitXY"
                         app:layout_collapseMode="pin"
                         app:layout_collapseParallaxMultiplier="0.5"
                         app:layout_constraintDimensionRatio="900:800"
@@ -46,7 +45,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="65dp"
                         app:chv_text_color="@color/translucent"
-                        app:chv_icon="@drawable/ic_back_black"
                         app:chv_title = ""
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,6 +64,7 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recommendContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/common_margin_20"

@@ -1,7 +1,6 @@
 package com.brins.lightmusic.ui.fragment.artists
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +12,9 @@ import com.brins.lightmusic.model.album.AlbumBean
 import com.brins.lightmusic.model.album.AlbumListResult
 import com.brins.lightmusic.model.artist.ArtistSongResult
 import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
 import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
@@ -33,7 +34,7 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
 
 
     private var playList: PlayList = PlayList()
-    private var mvDataBeans: List<Mv> = listOf()
+    private var mvDataBeans: List<LastestMvDataBean> = listOf()
     private var albumDataBeans: MutableList<AlbumBean> = mutableListOf()
     private var currentTime: Long = 0
     private var mPresenter: ArtistDetailPresenter? = null
@@ -67,23 +68,23 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
     }
 
 
-    override fun onArtistMvLoad(result: MutableList<Mv>) {
-        mvDataBeans = result
-        val mAdapter: CommonViewAdapter<Mv>
-        mAdapter = object : CommonViewAdapter<Mv>(
+    override fun onArtistMvLoad(result: MvResult) {
+        mvDataBeans = result.dataBeans!!
+        val mAdapter: CommonViewAdapter<LastestMvDataBean>
+        mAdapter = object : CommonViewAdapter<LastestMvDataBean>(
             activity!!,
             R.layout.item_video_list,
-            (result as ArrayList<Mv>)
+            (mvDataBeans as ArrayList<LastestMvDataBean>)
         ) {
-            override fun converted(holder: ViewHolder, t: Mv, position: Int) {
-                holder.setText(R.id.tv_title, t.dataBean.name)
+            override fun converted(holder: ViewHolder, t: LastestMvDataBean, position: Int) {
+                holder.setText(R.id.tv_title, t.name)
                 holder.setText(
                     R.id.tv_watch_count,
-                    if (t.dataBean.playCount > 1000) "${t.dataBean.playCount / 1000}万播放" else "${t.dataBean.playCount}播放"
+                    if (t.playCount > 1000) "${t.playCount / 1000}万播放" else "${t.playCount}播放"
                 )
-                holder.setText(R.id.tv_author, t.dataBean.artistName)
-                holder.setImageResource(R.id.iv_avatar, t.dataBean.cover)
-                holder.setImageResource(R.id.video_player, t.dataBean.cover)
+                holder.setText(R.id.tv_author, t.artistName)
+                holder.setImageResource(R.id.iv_avatar, t.cover)
+                holder.setImageResource(R.id.video_player, t.cover)
             }
 
         }
@@ -136,6 +137,12 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
 
     }
 
+    override fun onArtistMvDetailLoad(response: Mv) {
+        val bundle = Bundle()
+        bundle.putParcelable("Mv", response)
+        switch(VideoDetailFragment(), bundle)
+    }
+
 
     override fun onItemClick(position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
@@ -151,14 +158,12 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
                 currentTime = System.currentTimeMillis()
                 val id = albumDataBeans[position].id
                 val bundle = Bundle()
-                bundle.putString(TAG,id)
-                switch(MusicDetailFragment(),bundle)
+                bundle.putString(TAG, id)
+                switch(MusicDetailFragment(), bundle)
             }
             MV -> {
                 currentTime = System.currentTimeMillis()
-                val bundle = Bundle()
-                bundle.putParcelable("Mv", mvDataBeans[position])
-                switch(VideoDetailFragment(), bundle)
+                mPresenter?.loadUrl(mvDataBeans[position])
             }
         }
     }

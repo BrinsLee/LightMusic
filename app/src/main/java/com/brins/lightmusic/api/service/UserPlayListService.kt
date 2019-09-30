@@ -5,6 +5,7 @@ import com.brins.lightmusic.model.dailyrecommend.DailyRecommendResult
 import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -17,5 +18,5 @@ interface UserPlayListService {
     fun getUserFm(): Observable<UserFmResult>
 
     @GET(AppConfig.DAILY_RECOMMEND)
-    fun getDailyRecommend(): Observable<DailyRecommendResult>
+    fun getDailyRecommend(): Call<DailyRecommendResult>
 }

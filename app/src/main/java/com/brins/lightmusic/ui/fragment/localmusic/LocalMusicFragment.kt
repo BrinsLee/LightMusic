@@ -52,6 +52,7 @@ class LocalMusicFragment : BaseFragment<LocalMusicContract.Presenter>(),
     private fun setListener() {
         mAdapter.setOnItemClickListener(this)
         toolbar.setOnBackClickListener(this)
+        toolbar.title = getString(R.string.local_music)
     }
 
     override fun onResume() {

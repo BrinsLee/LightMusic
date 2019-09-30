@@ -73,6 +73,10 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
         return rootView
     }
 
+    protected open fun showRetryView(){
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onCreateViewAfterBinding(view)

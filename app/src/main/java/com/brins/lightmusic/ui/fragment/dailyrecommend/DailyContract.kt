@@ -7,10 +7,10 @@ import com.brins.lightmusic.ui.base.BaseView
 interface DailyContract {
 
     interface View : BaseView<Presenter> {
-        fun onMusicLoad(recommendResult: DailyRecommendResult)
+//        fun onMusicLoad(recommendResult: DailyRecommendResult)
     }
 
     interface Presenter : BasePresenter<View> {
-        fun loadDailyRecommend()
+        suspend fun loadDailyRecommend() : DailyRecommendResult
     }
 }

@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.fragment.artists
 import com.brins.lightmusic.model.album.AlbumListResult
 import com.brins.lightmusic.model.artist.ArtistSongResult
 import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
@@ -11,9 +12,11 @@ interface ArtistDetailConstract {
 
         fun onArtistSongLoad(result: ArtistSongResult)
 
-        fun onArtistMvLoad(result: MutableList<Mv>)
+        fun onArtistMvLoad(result: MvResult)
 
         fun onArtistAlbumLoad(response: AlbumListResult)
+
+        fun onArtistMvDetailLoad(response : Mv)
     }
     interface Presenter : BasePresenter<View>{
 

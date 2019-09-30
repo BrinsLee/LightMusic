@@ -62,16 +62,13 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
     }
 
     override fun loadVideoComments(id: String) {
-        mView?.showLoading()
         ApiHelper.getMvService().getMvComments(id).compose(AsyncTransformer<MvCommentsResult>())
             .subscribe(object : DefaultObserver<MvCommentsResult>(){
                 override fun onSuccess(response: MvCommentsResult) {
-                    mView?.hideLoading()
                     mView?.onVideoCommomLoad(response)
                 }
 
                 override fun onFail(message: String) {
-                    mView?.hideLoading()
                 }
 
             })

@@ -8,9 +8,6 @@ import com.brins.lightmusic.ui.base.BaseView
 interface MusicListContract {
     interface View : BaseView<Presenter>{
 
-        fun onMusicListLoad(detailBean : MusicListDetailBean)
-
-        fun onLoadFail()
 
 
     }

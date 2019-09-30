@@ -6,19 +6,16 @@ import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
 interface ArtistConstract {
-    interface View : BaseView<Presenter>{
-
-        fun onArtistLoad(artistList : ArrayList<ArtistBean>)
-
-        fun onArtistCategoryLoad(category : CategoryResult)
+    interface View : BaseView<Presenter> {
 
 
     }
-    interface Presenter : BasePresenter<View>{
 
-        fun loadArtistCategory()
+    interface Presenter : BasePresenter<View> {
 
-        fun loadArtist()
+        suspend fun loadArtistCategory(): CategoryResult
+
+        suspend fun loadArtist(): ArrayList<ArtistBean>
 
     }
 }

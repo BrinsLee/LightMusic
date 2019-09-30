@@ -36,9 +36,7 @@ import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.string2Bitmap
-import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.activity_music_play.*
-import kotlinx.android.synthetic.main.fragment_quick_control.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

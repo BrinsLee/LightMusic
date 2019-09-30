@@ -1,13 +1,18 @@
 package com.brins.lightmusic.ui.fragment.dailyrecommend
 
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.dailyrecommend.DailyRecommendResult
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.AppBarStateChangeListener
@@ -19,9 +24,12 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.dp2px
+import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_daily_recommend.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
     DailyContract.View,
@@ -59,7 +67,7 @@ class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
             }
         }
         head.title = getString(R.string.daily)
-        mPresenter.loadDailyRecommend()
+        loadRecommendData()
         recyclerView.setItemViewCacheSize(5)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -67,6 +75,43 @@ class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
         recyclerView.adapter = mAdapter
         setListener()
 
+    }
+
+    private fun loadRecommendData(){
+        launch({
+            showLoading()
+            val recommendResult = getDailyMusicData()
+            Glide.with(activity!!).load(recommendResult.recommend?.get(0)?.album!!.picUrl)
+                .into(cover)
+            mPlayList.addSong(recommendResult.recommend)
+            mAdapter.notifyDataSetChanged()
+        }, {
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            showRetryView()
+        })
+    }
+
+    override fun showRetryView() {
+        super.showRetryView()
+        val textError = TextView(context)
+        textError.setText(R.string.connect_error)
+        textError.textSize = 20f
+        textError.setTextColor(ContextCompat.getColor(context!!,R.color.translucent))
+        val p : LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        p.gravity = Gravity.CENTER
+        textError.gravity = Gravity.CENTER
+        recommendContainer.addView(textError,p)
+        textError.setOnClickListener{
+            musicList.removeView(textError)
+            loadRecommendData()
+        }
+    }
+
+    private suspend fun getDailyMusicData() = withContext(Dispatchers.IO) {
+        val result = mPresenter.loadDailyRecommend()
+        hideLoading()
+        result
     }
 
     fun setListener() {
@@ -91,12 +136,6 @@ class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
 
     override fun setPresenter(presenter: DailyContract.Presenter) {
         mPresenter = presenter
-    }
-
-    override fun onMusicLoad(recommendResult: DailyRecommendResult) {
-        Glide.with(activity!!).load(recommendResult.recommend?.get(0)?.album!!.picUrl).into(cover)
-        mPlayList.addSong(recommendResult.recommend)
-        mAdapter.notifyDataSetChanged()
     }
 
     override fun onItemClick(position: Int) {

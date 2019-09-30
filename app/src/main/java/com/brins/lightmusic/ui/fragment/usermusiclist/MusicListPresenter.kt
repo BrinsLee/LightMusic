@@ -11,7 +11,6 @@ import com.uber.autodispose.kotlin.autoDisposable
 
 class MusicListPresenter : MusicListContract.Presenter {
 
-    val mMusicListService = ApiHelper.getPlayListService()
 
     private var mView: MusicListContract.View? = null
 

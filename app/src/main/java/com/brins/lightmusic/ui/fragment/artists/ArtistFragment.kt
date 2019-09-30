@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
@@ -16,8 +16,11 @@ import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.customview.PileLayout
+import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_artist.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstract.View,
     OnItemClickListener {
@@ -35,6 +38,27 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
 
     override fun onLazyLoad() {
         ArtistPresenter.instance.subscribe(this@ArtistFragment)
+        launch({
+            showLoading()
+            val artistCategory = getCategoryData()
+            onArtistCategoryLoad(artistCategory)
+            val artistData = getArtistData()
+            onArtistLoad(artistData)
+
+        },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+        })
+    }
+
+    private suspend fun getCategoryData() = withContext(Dispatchers.IO){
+        val result = mPresenter.loadArtistCategory()
+        result
+    }
+
+    private suspend fun getArtistData() = withContext(Dispatchers.IO){
+        val result = mPresenter.loadArtist()
+        result
     }
 
     override fun onItemClick(position: Int) {
@@ -54,9 +78,10 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
     }
 
     //MVP View
-    override fun onArtistLoad(artistList: ArrayList<ArtistBean>) {
+    private fun onArtistLoad(artistList: ArrayList<ArtistBean>) {
         this.artistList = artistList
         initRecyclerView()
+        hideLoading()
     }
 
     private fun initRecyclerView() {
@@ -65,7 +90,7 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
         recyclerArtist.adapter = mAdapter
     }
 
-    override fun onArtistCategoryLoad(category: CategoryResult) {
+    private fun onArtistCategoryLoad(category: CategoryResult) {
         if (category.artists != null && category.artists!!.isNotEmpty()) {
             artistCategory = category.artists!!
             initPileLayout()

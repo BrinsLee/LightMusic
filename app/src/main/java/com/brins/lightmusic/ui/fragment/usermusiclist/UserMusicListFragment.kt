@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.fragment.usermusiclist
 
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -19,8 +20,11 @@ import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
+import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_user_music_list.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.collections.ArrayList
 
 class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
@@ -69,6 +73,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.addItemDecoration(SpacesItemDecoration(10))
         recyclerView.adapter = mAdapter
+        loadUserPlayList()
         setListener()
 
     }
@@ -78,14 +83,33 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
         head.setOnBackClickListener(this)
     }
 
+    private fun loadUserPlayList(){
+        launch({
+            showLoading()
+            val data = getUserPlayList()
+            mPlayList.addSong(data.playlist!!.tracks)
+            mAdapter.notifyDataSetChanged()
+            hideLoading()
+        },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            showRetryView()
+        })
+    }
 
-    override fun onMusicListLoad(detailBean: MusicListDetailBean) {
+    private suspend fun getUserPlayList() = withContext(Dispatchers.IO){
+        val result = mPresenter.loadMusicList(mUserPlayList.id)
+        result
+    }
+    override fun showRetryView() {
+        super.showRetryView()
+    }
+
+    /*    override fun onMusicListLoad(detailBean: MusicListDetailBean) {
         mPlayList.addSong(detailBean.tracks!!)
         mAdapter.notifyDataSetChanged()
-    }
+    }*/
 
-    override fun onLoadFail() {
-    }
 
     override fun setPresenter(presenter: MusicListContract.Presenter) {
         mPresenter = presenter

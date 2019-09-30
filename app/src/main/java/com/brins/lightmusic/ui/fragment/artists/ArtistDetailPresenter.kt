@@ -12,8 +12,6 @@ import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.model.musicvideo.MvResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.functions.Consumer
-import kotlinx.coroutines.CoroutineScope
 
 class ArtistDetailPresenter : ArtistDetailConstract.Presenter {
 
@@ -21,7 +19,6 @@ class ArtistDetailPresenter : ArtistDetailConstract.Presenter {
         AndroidLifecycleScopeProvider.from(mView?.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
     }
     private var mView: ArtistDetailConstract.View? = null
-    private val mvList = mutableListOf<Mv>()
 
     companion object {
         val instance = SingletonHolder.holder
@@ -77,19 +74,8 @@ class ArtistDetailPresenter : ArtistDetailConstract.Presenter {
             .subscribe(object : DefaultObserver<MvResult>() {
                 override fun onSuccess(response: MvResult) {
                     if (response.dataBeans != null && response.dataBeans!!.isNotEmpty()) {
-                        val num = response.dataBeans!!.size
-                        response.dataBeans!!.forEach {
-                            loadUrl(it,
-                                Consumer { t ->
-                                    if (t.dataBean != null) {
-                                        mvList.add(Mv(it,t.dataBean!!))
-                                        if (mvList.size == num){
-                                            mView?.hideLoading()
-                                            mView?.onArtistMvLoad(mvList)
-                                        }
-                                    }
-                                })
-                        }
+                        mView?.hideLoading()
+                        mView?.onArtistMvLoad(response)
                     }
                 }
 
@@ -100,10 +86,24 @@ class ArtistDetailPresenter : ArtistDetailConstract.Presenter {
             })
     }
 
-    fun loadUrl(dataBean: LastestMvDataBean, consumer: Consumer<MvMetaResult>) {
+    fun loadUrl(dataBean: LastestMvDataBean) {
+        mView?.showLoading()
         ApiHelper.getMvService().getMvMetaData(dataBean.id)
             .compose(AsyncTransformer<MvMetaResult>())
-            .subscribe(consumer)
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<MvMetaResult>(){
+                override fun onFail(message: String) {
+                    mView?.hideLoading()
+                }
+
+                override fun onSuccess(response: MvMetaResult) {
+                    if (response.dataBean != null) {
+                            mView?.hideLoading()
+                            mView?.onArtistMvDetailLoad(Mv(dataBean,response.dataBean!!))
+                        }
+                    }
+                }
+            )
 
     }
 

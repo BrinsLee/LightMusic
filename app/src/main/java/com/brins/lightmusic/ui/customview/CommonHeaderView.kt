@@ -31,9 +31,9 @@ class CommonHeaderView @JvmOverloads constructor(
         title = a.getString(R.styleable.CommonHeaderView_chv_title)
         textColor = a.getColor(
             R.styleable.CommonHeaderView_chv_text_color,
-            resources.getColor(R.color.white, null)
+            resources.getColor(R.color.translucent, null)
         )
-        val icon = a.getResourceId(R.styleable.CommonHeaderView_chv_icon, R.drawable.ic_back)
+        val icon = a.getResourceId(R.styleable.CommonHeaderView_chv_icon, R.drawable.ic_back_black)
         headBack.setImageResource(icon)
         a.recycle()
         headBack.setOnClickListener {

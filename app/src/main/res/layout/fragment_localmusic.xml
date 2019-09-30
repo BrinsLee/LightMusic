@@ -22,21 +22,13 @@
                 app:expandedTitleMarginEnd="10dp"
                 app:expandedTitleMarginStart="10dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/id_toolbar_collapse"
+            <com.brins.lightmusic.ui.customview.CommonHeaderView
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:minHeight="?attr/actionBarSize"
-                    app:layout_collapseMode="pin">
-
-                <com.brins.lightmusic.ui.customview.CommonHeaderView
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:chv_back="true"
-                        app:chv_title="@string/local_music"
-                        app:titleTextColor="@color/white" />
-            </androidx.appcompat.widget.Toolbar>
+                    app:chv_back="true"
+                    app:chv_title="@string/local_music"
+                    app:titleTextColor="@color/translucent" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

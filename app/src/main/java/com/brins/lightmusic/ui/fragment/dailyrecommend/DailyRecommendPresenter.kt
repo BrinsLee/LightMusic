@@ -1,18 +1,14 @@
 package com.brins.lightmusic.ui.fragment.dailyrecommend
 
-import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.api.DefaultObserver
-import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.dailyrecommend.DailyRecommendResult
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
+import com.brins.lightmusic.utils.await
 
 class DailyRecommendPresenter : DailyContract.Presenter {
 
-    val provider: AndroidLifecycleScopeProvider by lazy {
+/*    val provider: AndroidLifecycleScopeProvider by lazy {
         AndroidLifecycleScopeProvider.from(mView?.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
-    }
+    }*/
     private var mView: DailyContract.View? = null
 
     companion object {
@@ -23,7 +19,8 @@ class DailyRecommendPresenter : DailyContract.Presenter {
         val holder = DailyRecommendPresenter()
     }
 
-    override fun loadDailyRecommend() {
+    override suspend fun loadDailyRecommend() :DailyRecommendResult = ApiHelper.getUserPlayListService().getDailyRecommend().await()
+    /*{
         mView?.showLoading()
         ApiHelper.getUserPlayListService().getDailyRecommend()
             .compose(AsyncTransformer<DailyRecommendResult>())
@@ -41,7 +38,7 @@ class DailyRecommendPresenter : DailyContract.Presenter {
                 }
 
             })
-    }
+    }*/
 
     override fun subscribe(view: DailyContract.View?) {
         mView = view

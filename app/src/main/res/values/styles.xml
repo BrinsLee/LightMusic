@@ -10,7 +10,8 @@
         <item name="android:windowReenterTransition">@transition/activity_explode</item>
         <item name="android:windowEnterAnimation">@transition/activity_explode</item>
         <item name="android:windowExitTransition">@transition/activity_explode</item>
-
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="AppTheme.Text" parent="TextAppearance.AppCompat" />
@@ -53,4 +54,7 @@
         <item name="android:windowEnterAnimation">@anim/dialog_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_out</item>
     </style>
+
+
+
 </resources>

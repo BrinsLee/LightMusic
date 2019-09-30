@@ -6,6 +6,7 @@ import com.brins.lightmusic.model.artist.ArtistSongResult
 import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,7 +17,7 @@ interface ArtistService {
    * 获取歌手列表
    * */
     @GET(AppConfig.ARTISTS)
-    fun getArtist(@Query("limit") limit: Int = 15): Observable<MusicListResult>
+    fun getArtist(@Query("limit") limit: Int = 15): Call<MusicListResult>
 
     /*
     * 获取歌手音乐列表
