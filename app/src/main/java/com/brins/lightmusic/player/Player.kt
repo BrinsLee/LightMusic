@@ -12,6 +12,10 @@ import androidx.annotation.RequiresApi
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
+import com.brins.lightmusic.utils.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.ArrayList
 
 class Player : IPlayback, MediaPlayer.OnCompletionListener,
@@ -122,28 +126,49 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
         mPlayList = list
     }
 
+    override fun getPlayList(): PlayList {
+        return mPlayList
+    }
+
     override fun play(): Boolean {
         mPlayOnAudioFocus = requestFocus()
+        //暂停后播放
         if (mPlayOnAudioFocus) {
             if (isPaused) {
                 mPlayer.start()
                 notifyPlayStatusChanged(true)
                 return true
             }
+            //播放新音乐
             if (mPlayList.prepare()) {
-                val music = mPlayList.getCurrentSong()
-                try {
-                    mPlayer.reset()
-                    mPlayer.setDataSource(music?.fileUrl)
-                    mPlayer.prepare()
-                    mPlayer.start()
-                    notifyComplete(music)
-                    notifyPlayStatusChanged(true)
-                } catch (e: Exception) {
-                    Log.e(TAG, "play: ", e)
-                    notifyComplete(music)
-                    notifyPlayStatusChanged(false)
-                    return false
+                var music = mPlayList.getCurrentSong()
+                val url = music?.fileUrl
+                if (url.isNullOrEmpty()){
+                    launch({
+                        music = loadMusicDetail(music!!)
+                        try {
+                            mPlayer.reset()
+                            mPlayer.setDataSource(music?.fileUrl)
+                            mPlayer.prepare()
+                            mPlayer.start()
+                            notifyPlayStatusChanged(true, music)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "play: ", e)
+                            notifyPlayStatusChanged(false, music)
+                        }
+                    },{})
+                }else{
+                    try {
+                        mPlayer.reset()
+                        mPlayer.setDataSource(music?.fileUrl)
+                        mPlayer.prepare()
+                        mPlayer.start()
+                        notifyPlayStatusChanged(true, music)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "play: ", e)
+                        notifyPlayStatusChanged(false, music)
+                        return false
+                    }
                 }
                 return true
             }
@@ -151,20 +176,25 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
         return false
     }
 
-    private fun notifyPlayStatusChanged(isPlaying: Boolean) {
+
+    private suspend fun loadMusicDetail(onlineMusic: Music) = withContext(Dispatchers.IO){
+        val result = MusicPlayerPresenter.instance.loadMusicDetail(onlineMusic)
+        result
+    }
+
+    private fun notifyPlayStatusChanged(isPlaying: Boolean,music: Music? = null) {
         for (callback in mCallbacks) {
-            callback.onPlayStatusChanged(isPlaying)
+            callback.onPlayStatusChanged(isPlaying, music)
         }
     }
 
-    override fun play(list: PlayList, startIndex: Int): Boolean {
+    override fun play(startIndex: Int): Boolean {
 
-        if (startIndex < 0 || startIndex >= list.getNumOfSongs()) {
+        if (startIndex < 0 || startIndex >= mPlayList.getNumOfSongs()) {
             return false
         }
         isPaused = false
-        list.setPlayingIndex(startIndex)
-        setPlayList(list)
+        mPlayList.setPlayingIndex(startIndex)
         return play()
     }
 
@@ -180,29 +210,17 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
         isPaused = false
         val song = mPlayList.last()
         play()
-        notifyPlayLast(song)
         return true
     }
 
-    private fun notifyPlayLast(song: Music) {
-        for (callback in mCallbacks) {
-            callback.onSwitchLast(song)
-        }
-    }
 
     override fun playNext(): Boolean {
         isPaused = false
         val song = mPlayList.next()
         play()
-        notifyPlayNext(song)
         return true
     }
 
-    private fun notifyPlayNext(song: Music) {
-        for (callback in mCallbacks) {
-            callback.onSwitchNext(song)
-        }
-    }
 
     //focus true isplaying false
     override fun pause(): Boolean {
@@ -283,29 +301,18 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        var next: Music? = null
         if (mPlayList.getPlayMode() === PlayMode.LIST && mPlayList.getPlayingIndex() === mPlayList.getNumOfSongs() - 1) run {
             // In the end of the list
             // Do nothing, just deliver the callback
         } else if (mPlayList.getPlayMode() === PlayMode.SINGLE) {
-            next = mPlayList.getCurrentSong()
             play()
         } else {
             val hasNext = mPlayList.hasNext(true)
             if (hasNext) {
-                next = mPlayList.getNext()
-                if (next.fileUrl != null && next.fileUrl != "") {
-                    playNext()
-                }
+                playNext()
             }
         }
-        notifyComplete(next)
     }
 
-    private fun notifyComplete(next: Music?) {
-        for (callback in mCallbacks) {
-            callback.onComplete(next)
-        }
-    }
 
 }

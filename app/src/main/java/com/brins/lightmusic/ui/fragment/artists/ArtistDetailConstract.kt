@@ -10,23 +10,18 @@ import com.brins.lightmusic.ui.base.BaseView
 interface ArtistDetailConstract {
     interface View : BaseView<Presenter>{
 
-        fun onArtistSongLoad(result: ArtistSongResult)
 
-        fun onArtistMvLoad(result: MvResult)
 
-        fun onArtistAlbumLoad(response: AlbumListResult)
-
-        fun onArtistMvDetailLoad(response : Mv)
     }
     interface Presenter : BasePresenter<View>{
 
         /*
         * 获取歌手单曲
         * */
-        fun loadArtistSong(id: String)
+        suspend fun loadArtistSong(id: String): ArtistSongResult
 
-        fun loadArtistAlbum(id: String)
+        suspend fun loadArtistAlbum(id: String): AlbumListResult
 
-        fun loadArtistMv(id: String,limit : Int)
+        suspend fun loadArtistMv(id: String,limit : Int): MvResult
     }
 }

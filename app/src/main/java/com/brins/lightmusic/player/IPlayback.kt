@@ -8,9 +8,11 @@ interface IPlayback {
 
     fun setPlayList(list : PlayList)
 
+    fun getPlayList(): PlayList
+
     fun play(): Boolean
 
-    fun play(list: PlayList, startIndex: Int): Boolean
+    fun play(startIndex: Int): Boolean
 
     fun play(song: Music): Boolean
 
@@ -42,12 +44,6 @@ interface IPlayback {
 
     interface Callback {
 
-        fun onSwitchLast(@Nullable last: Music)
-
-        fun onSwitchNext(@Nullable next: Music)
-
-        fun onComplete(@Nullable next: Music?)
-
-        fun onPlayStatusChanged(isPlaying: Boolean)
+        fun onPlayStatusChanged(isPlaying: Boolean, @Nullable music: Music?)
     }
 }

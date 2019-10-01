@@ -47,10 +47,13 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         MusicListPresenter.instance.subscribe(this)
+        if (mPlayList.getNumOfSongs() == 0){
+            initView()
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun initView(){
+
         mAdapter = object : CommonViewAdapter<Music>(
             activity!!, R.layout.item_local_music,
             mPlayList.getSongs() as ArrayList<Music>
@@ -75,7 +78,6 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
         recyclerView.adapter = mAdapter
         loadUserPlayList()
         setListener()
-
     }
 
     fun setListener() {

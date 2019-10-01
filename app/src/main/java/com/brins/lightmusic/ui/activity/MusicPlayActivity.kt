@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -43,21 +44,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
-import java.util.concurrent.Executors
 
 
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback,
     View.OnClickListener {
 
 
-    private var type = -1
-    private var mPlayer: IPlayback? = null
+    private var mPlayer: PlayBackService? = null
     private var index = -1
-    private var isPlaying = false
     private lateinit var mPresenter: MusicPlayerContract.Presenter
     private val mHamdler: HandlerUtil by lazy { HandlerUtil.getInstance(this) }
     private val mUpAlbumRunnable = Runnable { SetBlurredAlbumArt().execute() }
-    private val mPlayList: PlayList by lazy { getCurrentList()!! }
+    private val mPlayList: PlayList by lazy { mPlayer?.getPlayList()!! }
     private var current: Music? = null
     private var cover: Bitmap? = null
     private var musics: MutableList<Music>? = null
@@ -82,7 +80,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     private val MOVE_TO_NEXT = 1
     private val MOVE_TO_LAST = 2
     private var pageAdapter: PagerAdapter? = null
-    val singleThreadExecutor = Executors.newSingleThreadExecutor()
     private var mProgressCallback = object : Runnable {
         override fun run() {
             if (mPlayer != null && mPlayer!!.isPlaying()) {
@@ -108,15 +105,10 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     companion object {
 
         @JvmStatic
-        private var PLAYINDEX = "play_index"
-        private var MUSIC_TYPE = "music_type"
-        @JvmStatic
         var mImageViewList = mutableListOf<ImageView>()
 
-        fun startThisActivity(activity: AppCompatActivity, isPlaying: Boolean, type: Int) {
+        fun startThisActivity(activity: AppCompatActivity) {
             val intent = Intent(activity, MusicPlayActivity::class.java)
-            intent.putExtra(PLAYINDEX, isPlaying)
-            intent.putExtra(MUSIC_TYPE, type)
             activity.startActivity(intent)
         }
     }
@@ -125,8 +117,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         MusicPlayerPresenter.instance.subscribe(this)
-        isPlaying = intent.getBooleanExtra(PLAYINDEX, false)
-        type = intent.getIntExtra(MUSIC_TYPE, -1)
         ivCover.setPageTransformer(false, CustPagerTransformer())
         setPlayView()
     }
@@ -292,32 +282,13 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     private fun onPlayLast() {
         if (mPlayer == null) return
-        val hasLast = mPlayList.hasLast()
-        if (hasLast) {
-            val song = mPlayList.getSongs()[mPlayList.getPlayingIndex() - 1]
-            if (song?.fileUrl == null || song.fileUrl == "") {
-                mPresenter.loadMusicDetail(song)
-
-            } else {
-                mPlayer!!.playLast()
-            }
-        }
+        mPlayer!!.playLast()
         return
     }
 
     private fun onPlayNext() {
         if (mPlayer == null) return
-        val hasNext = mPlayList.hasNext(false)
-        if (hasNext) {
-            val song = mPlayList.getNext()
-            if (song.fileUrl == null || song.fileUrl == "") {
-                Log.d(TAG, "index: $index")
-                index = mPlayList.getPlayingIndex()
-                mPresenter.loadMusicDetail(song)
-            } else {
-                mPlayer!!.playNext()
-            }
-        }
+        mPlayer!!.playNextSong()
         return
     }
 
@@ -325,14 +296,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         if (mPlayer == null) {
             return
         }
-        isPlaying = if (mPlayer!!.isPlaying()) {
+        if (mPlayer!!.isPlaying()) {
             mPlayer!!.pause()
             playOrPause.setImageResource(R.drawable.ic_playmusic)
-            false
         } else {
             mPlayer!!.play()
             playOrPause.setImageResource(R.drawable.ic_pausemusic)
-            true
         }
     }
 
@@ -421,10 +390,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     override fun hideLoading() {
     }
 
-    override fun onMusicDetail(onlineMusic: Music) {
-        mPlayList.setSong(onlineMusic, index)
-        mPlayer!!.play(mPlayList, index)
+
+    private suspend fun loadMusicDetail(onlineMusic: Music) = withContext(Dispatchers.IO){
+        val result = mPresenter.loadMusicDetail(onlineMusic)
+        result
     }
+
 
     override fun handleError(error: Throwable) {
 
@@ -488,6 +459,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     override fun updatePlayToggle(play: Boolean) {
         try {
             playOrPause.setImageResource(if (play) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+            if (play) {
+                mHandler.removeCallbacks(mProgressCallback)
+                mHandler.post(mProgressCallback)
+            } else {
+                mHandler.removeCallbacks(mProgressCallback)
+            }
         } catch (e: Exception) {
             return
         }
@@ -501,45 +478,16 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         mPresenter = presenter
     }
 
-    //IPlayback
-    override fun onSwitchLast(last: Music) {
-        onSongUpdated(last)
-    }
 
-    override fun onSwitchNext(next: Music) {
-        onSongUpdated(next)
-    }
-
-    override fun onComplete(next: Music?) {
-        when (type) {
-            TYPE_ONLINE_MUSIC -> {
-                if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
-                    onPlayNext()
-                } else {
-                    onSongUpdated(next)
-                }
-            }
-            TYPE_LOCAL_MUSIC -> {
-                onSongUpdated(next)
-            }
-            else -> {
-                return
-            }
-        }
-    }
-
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
+    override fun onPlayStatusChanged(isPlaying: Boolean,music: Music?) {
         if (playOrPause == null) {
             return
         } else {
             updatePlayToggle(isPlaying)
-            if (isPlaying) {
-                mHandler.removeCallbacks(mProgressCallback)
-                mHandler.post(mProgressCallback)
-            } else {
-                mHandler.removeCallbacks(mProgressCallback)
-
+            if (music != null){
+                onSongUpdated(music)
             }
+
         }
     }
 

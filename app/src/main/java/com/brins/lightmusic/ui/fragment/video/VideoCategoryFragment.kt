@@ -3,16 +3,26 @@ package com.brins.lightmusic.ui.fragment.video
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
-import com.brins.lightmusic.model.musicvideo.MvCommentsResult
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.utils.launch
+import com.brins.lightmusic.utils.show
 import kotlinx.android.synthetic.main.fragment_video_category.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Presenter>(),
     VideoContract.View,
@@ -28,27 +38,25 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
         return R.layout.fragment_video_category
     }
 
+    override fun onCreateViewAfterBinding(view: View) {
+        super.onCreateViewAfterBinding(view)
+        videoAdapter.setOnItemListener(this)
+        videoListView.layoutManager = LinearLayoutManager(context)
+        videoListView.adapter = videoAdapter
+        initLoadingMore()
+
+    }
+
     override fun onLazyLoad() {
         super.onLazyLoad()
         VideoPresent(this).subscribe(this)
         initView()
-        initLoadingMore()
     }
 
     override fun setPresenter(presenter: VideoContract.Presenter) {
         mPresenter = presenter
     }
 
-
-    override fun onVideoLoad(videoLists: List<Mv>) {
-        if (isFresh) isFresh = false
-        videoList.addAll(videoLists)
-//        videoAdapter.addData(videoList)
-        videoAdapter.notifyDataSetChanged()
-    }
-
-    override fun onVideoCommomLoad(response: MvCommentsResult) {
-    }
 
     override fun onItemClick(position: Int) {
         val bundle = Bundle()
@@ -71,17 +79,54 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
             ++count
             isFresh = true
             load.isRefreshing = false
-            showLoading()
-            mPresenter?.loadVideo(count * 15, area)
+            loadMvData(count * 15)
         }
     }
 
 
     private fun initView() {
-        mPresenter!!.loadVideo(area = area)
-        videoAdapter.setOnItemListener(this)
-        videoListView.layoutManager = LinearLayoutManager(context)
-        videoListView.adapter = videoAdapter
+        loadMvData(0)
+    }
+
+
+    private fun loadMvData(limit :Int){
+        launch({
+            showLoading()
+            videoList.addAll(loadMvData(limit,area))
+            videoAdapter.notifyDataSetChanged()
+            if (isFresh) isFresh = false
+            hideLoading()
+        },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            showRetryView()
+        })
+    }
+
+    private suspend fun loadMvData(limit: Int = 0,area: String) = withContext(Dispatchers.IO){
+        showLoading()
+        if (limit == 0)
+            mPresenter!!.loadVideo(area = area)
+        else
+            mPresenter!!.loadVideo(limit,area)
+    }
+
+    override fun showRetryView() {
+        super.showRetryView()
+        val textError = TextView(context)
+        textError.setText(R.string.connect_error)
+        textError.textSize = 20f
+        textError.setTextColor(ContextCompat.getColor(context!!,R.color.translucent))
+        val p : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT)
+        p.gravity = Gravity.CENTER
+        textError.gravity = Gravity.CENTER
+        recommendContainer.addView(textError,p)
+        textError.setOnClickListener{
+            recommendContainer.removeView(textError)
+            loadMvData(0)
+        }
     }
 
     private fun initLoadingMore() {

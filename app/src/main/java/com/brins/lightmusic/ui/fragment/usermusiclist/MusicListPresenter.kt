@@ -2,14 +2,11 @@ package com.brins.lightmusic.ui.fragment.usermusiclist
 
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.api.DefaultObserver
-import com.brins.lightmusic.common.AsyncTransformer
-import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
 import com.brins.lightmusic.utils.await
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
 
 class MusicListPresenter : MusicListContract.Presenter {
+
 
 
     private var mView: MusicListContract.View? = null

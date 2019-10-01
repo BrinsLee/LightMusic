@@ -7,19 +7,18 @@ import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 import io.reactivex.functions.Consumer
+import retrofit2.Call
 
 interface VideoContract {
     interface View : BaseView<Presenter> {
-        fun onVideoLoad(videoLists: List<Mv>)
 
-        fun onVideoCommomLoad(response: MvCommentsResult)
     }
 
     interface Presenter : BasePresenter<View> {
-        fun loadVideo(limit: Int = 15, area: String)
+        suspend fun loadVideo(limit: Int = 15, area: String): List<Mv>
 
-        fun loadUrl(dataBean: LastestMvDataBean, consumer: Consumer<MvMetaResult>)
+        suspend fun loadUrl(dataBean: LastestMvDataBean): MvMetaResult
 
-        fun loadVideoComments(id : String)
+        suspend fun loadVideoComments(id : String): MvCommentsResult
     }
 }

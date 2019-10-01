@@ -2,9 +2,7 @@ package com.brins.lightmusic.player.broadcast
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
 import android.os.Handler
 import android.os.Message
@@ -12,13 +10,10 @@ import com.brins.lightmusic.LightMusicApplication
 import java.util.*
 import android.content.ComponentName
 import android.content.pm.PackageManager
-import android.media.AudioManager
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.KeyEvent
 import androidx.media.session.MediaButtonReceiver
-import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver.Companion.HeadsetTimerTask
 
 
 class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
@@ -54,8 +49,8 @@ class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
                 try {
                     when (msg.what) {
                         PLAY_OR_PAUSE -> headesetListener.playOrPause()
-                        PLAY_NEXT -> headesetListener.playNext()
-                        PLAY_PREVIOUS -> headesetListener.playPrevious()
+                        PLAY_NEXT -> headesetListener.playNextSong()
+                        PLAY_PREVIOUS -> headesetListener.playPreviousSong()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -125,7 +120,7 @@ class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
 
     interface onHeadsetListener {
         fun playOrPause()
-        fun playNext()
-        fun playPrevious()
+        fun playNextSong()
+        fun playPreviousSong()
     }
 }

@@ -31,7 +31,7 @@ class MediaSessionManager(private val mPlayService : PlayBackService) {
         }
 
         override fun onSkipToNext() {
-            mPlayService.playNext()
+            mPlayService.playNextSong()
         }
 
     }

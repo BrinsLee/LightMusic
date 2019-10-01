@@ -23,17 +23,17 @@ interface ArtistService {
     * 获取歌手音乐列表
     * */
     @GET(AppConfig.ARTISTS_MUSIC)
-    fun getArtistMusic(@Query("id") id: String): Observable<ArtistSongResult>
+    fun getArtistMusic(@Query("id") id: String): Call<ArtistSongResult>
 
     /*
     *  获取歌手MV列表
     * */
     @GET(AppConfig.ARTISTS_MV)
-    fun getArtistMV(@Query("id") id: String, @Query("limit") limit: Int ): Observable<MvResult>
+    fun getArtistMV(@Query("id") id: String, @Query("limit") limit: Int ): Call<MvResult>
 
     /*
     * 获取歌手专辑
     * */
     @GET(AppConfig.ARTIST_ALBUM)
-    fun getArtistAlbum(@Query("id") id:String): Observable<AlbumListResult>
+    fun getArtistAlbum(@Query("id") id:String): Call<AlbumListResult>
 }

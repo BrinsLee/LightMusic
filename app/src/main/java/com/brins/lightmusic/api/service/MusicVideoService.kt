@@ -6,6 +6,7 @@ import com.brins.lightmusic.model.musicvideo.MvCommentsResult
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.model.musicvideo.MvResult
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,14 +17,14 @@ interface MusicVideoService {
     fun getLatestMusicVideo(@Query("limit") limit: Int): Observable<MvResult>
 
     @GET(AppConfig.MVURL)
-    fun getMvMetaData(@Query("id") id: String): Observable<MvMetaResult>
+    fun getMvMetaData(@Query("id") id: String): Call<MvMetaResult>
 
     @GET(AppConfig.MVDETAIL)
     fun getMvDetail(@Query("id") id: String): Observable<LastestMvDataBean>
 
     @GET(AppConfig.MVALL)
-    fun getMvAll(@Query("area") area: String, @Query("limit") limit: Int): Observable<MvResult>
+    fun getMvAll(@Query("area") area: String, @Query("limit") limit: Int): Call<MvResult>
 
     @GET(AppConfig.MVCOMMENTS)
-    fun getMvComments(@Query("id") id : String): Observable<MvCommentsResult>
+    fun getMvComments(@Query("id") id : String): Call<MvCommentsResult>
 }

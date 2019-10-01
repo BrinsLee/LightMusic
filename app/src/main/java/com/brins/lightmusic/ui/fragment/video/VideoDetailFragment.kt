@@ -3,23 +3,23 @@ package com.brins.lightmusic.ui.fragment.video
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jzvd.Jzvd
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.model.musicvideo.MvCommentsBean
-import com.brins.lightmusic.model.musicvideo.MvCommentsResult
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
+import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_user_music_list.*
 import kotlinx.android.synthetic.main.fragment_video_detail.*
-import kotlinx.android.synthetic.main.fragment_video_detail.head
-import kotlinx.android.synthetic.main.fragment_video_detail.recyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
     CommonHeaderView.OnBackClickListener, VideoContract.View {
@@ -39,7 +39,7 @@ class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
         head.setOnBackClickListener(this)
         mCurrentMv = arguments?.getParcelable("Mv")
         if (mCurrentMv != null) {
-            mPresenter?.loadVideoComments(mCurrentMv!!.dataBean.id)
+            loadMvComments()
             head.title = "${mCurrentMv!!.dataBean.artistName} ${mCurrentMv!!.dataBean.name}"
             videoPlayer.setAllControlsVisiblity(GONE, GONE, VISIBLE, GONE, VISIBLE, GONE, GONE)
             Glide.with(context!!).load(mCurrentMv!!.dataBean.cover)
@@ -67,30 +67,39 @@ class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
     }
 
     //MVP View
-    override fun onVideoLoad(videoLists: List<Mv>) {
 
+    private fun loadMvComments(){
+        launch({
+            showLoading()
+            val result = loadComments()
+            if (result?.comments != null){
+                val list = result.comments
+                mCommentAdapter = object : CommonViewAdapter<MvCommentsBean>(
+                    context!!,
+                    R.layout.item_comment,
+                    list!!
+                ) {
+                    override fun converted(holder: ViewHolder, t: MvCommentsBean, position: Int) {
+                        val playlist = (list!![position])
+                        holder.setImageResource(R.id.imgCover, playlist.user!!.avatarUrl)
+                        holder.setText(R.id.textViewName, playlist.user!!.nickname)
+                        holder.setText(R.id.textViewArtist, playlist.content)
+                    }
+
+                }
+            }
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = mCommentAdapter
+            recyclerView.addItemDecoration(SpacesItemDecoration(10))
+            hideLoading()
+            },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+        })
     }
 
-    override fun onVideoCommomLoad(response: MvCommentsResult) {
-        if (response.comments != null) {
-            val list = response.comments
-            mCommentAdapter = object : CommonViewAdapter<MvCommentsBean>(
-                context!!,
-                R.layout.item_comment,
-                response.comments!!
-            ) {
-                override fun converted(holder: ViewHolder, t: MvCommentsBean, position: Int) {
-                    val playlist = (list!![position])
-                    holder.setImageResource(R.id.imgCover, playlist.user!!.avatarUrl)
-                    holder.setText(R.id.textViewName, playlist.user!!.nickname)
-                    holder.setText(R.id.textViewArtist, playlist.content)
-                }
-
-            }
-        }
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = mCommentAdapter
-        recyclerView.addItemDecoration(SpacesItemDecoration(10))
-
+    private suspend fun loadComments() = withContext(Dispatchers.IO){
+        val result = mPresenter?.loadVideoComments(mCurrentMv!!.dataBean.id)
+        result
     }
 }

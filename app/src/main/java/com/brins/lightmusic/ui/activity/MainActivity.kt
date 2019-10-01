@@ -55,13 +55,6 @@ class MainActivity : BaseActivity() {
         showBottomBar(supportFragmentManager)
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        removeBottomBar(supportFragmentManager)
-
-    }
-
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
@@ -118,6 +111,11 @@ class MainActivity : BaseActivity() {
         targetFragment.arguments = bundle
         return switchFragment(targetFragment)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeBottomBar(supportFragmentManager)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {

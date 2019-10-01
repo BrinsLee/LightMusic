@@ -1,27 +1,15 @@
 package com.brins.lightmusic.ui.fragment.video
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.api.DefaultObserver
-import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.musicvideo.*
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.functions.Consumer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
+import com.brins.lightmusic.utils.await
 
 class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
 
 
-
-    val provider: AndroidLifecycleScopeProvider =
-        AndroidLifecycleScopeProvider.from(mView!!.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
-
     private val mvList = mutableListOf<Mv>()
+/*
     override fun loadVideo(limit: Int, area: String) {
         mView?.showLoading()
         ApiHelper.getMvService().getMvAll(area, limit)
@@ -52,27 +40,27 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
                 }
             })
     }
+*/
+
+    override suspend fun loadVideo(limit: Int, area: String): List<Mv> {
+        val mvResult = ApiHelper.getMvService().getMvAll(area, limit).await()
+        if (mvResult.dataBeans != null && mvResult.dataBeans!!.isNotEmpty()) {
+            mvResult.dataBeans!!.forEach {
+                val t =loadUrl(it)
+                if (t.dataBean != null) {
+                    mvList.add(Mv(it, t.dataBean!!))
+                }
+            }
+        }
+        return mvList
+    }
 
     @SuppressLint("CheckResult")
-    override fun loadUrl(dataBean: LastestMvDataBean, consumer: Consumer<MvMetaResult>) {
-        ApiHelper.getMvService().getMvMetaData(dataBean.id)
-            .compose(AsyncTransformer<MvMetaResult>())
-            .subscribe(consumer)
+    override suspend fun loadUrl(dataBean: LastestMvDataBean) = ApiHelper.getMvService().getMvMetaData(dataBean.id).await()
 
-    }
 
-    override fun loadVideoComments(id: String) {
-        ApiHelper.getMvService().getMvComments(id).compose(AsyncTransformer<MvCommentsResult>())
-            .subscribe(object : DefaultObserver<MvCommentsResult>(){
-                override fun onSuccess(response: MvCommentsResult) {
-                    mView?.onVideoCommomLoad(response)
-                }
+    override suspend fun loadVideoComments(id: String) = ApiHelper.getMvService().getMvComments(id).await()
 
-                override fun onFail(message: String) {
-                }
-
-            })
-    }
 
     override fun subscribe(view: VideoContract.View?) {
         mView?.setPresenter(this)

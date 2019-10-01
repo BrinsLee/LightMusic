@@ -15,6 +15,7 @@ import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.MusicBean
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayBackService.Companion.mIsServiceBound
+import com.brins.lightmusic.utils.await
 import com.brins.lightmusic.utils.loadingOnlineCover
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -25,9 +26,6 @@ import io.reactivex.ObservableOnSubscribe
 class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter {
 
 
-    val provider: AndroidLifecycleScopeProvider by lazy {
-        AndroidLifecycleScopeProvider.from(mView?.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
-    }
 
     companion object {
         val instance = SingletonHolder.holder
@@ -57,42 +55,40 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     }
 
-    override fun loadMusicDetail(onlineMusic: Music) {
 
-        Observable.create(ObservableOnSubscribe<Bitmap> {
-            it.onNext(loadingOnlineCover(onlineMusic.album.picUrl))
-        }).compose(AsyncTransformer<Bitmap>())
-            .concatMap { t ->
-                onlineMusic.bitmapCover = t
-                ApiHelper.getMusicService().getUrl(onlineMusic.id)
-                    .compose(AsyncTransformer<MusicBean>())
+/*    Observable.create(ObservableOnSubscribe<Bitmap> {
+        it.onNext(loadingOnlineCover(onlineMusic.album.picUrl))
+    }).compose(AsyncTransformer<Bitmap>())
+    .concatMap { t ->
+        onlineMusic.bitmapCover = t
+        ApiHelper.getMusicService().getUrl(onlineMusic.id)
+            .compose(AsyncTransformer<MusicBean>())
+    }
+    .autoDisposable(provider)
+    .subscribe(object : DefaultObserver<MusicBean>() {
+        override fun onSuccess(response: MusicBean) {
+            val metaData = response
+            if (metaData.data != null) {
+                onlineMusic.fileUrl = metaData.data!![0].url
+                mView!!.onMusicDetail(onlineMusic)
             }
-            .autoDisposable(provider)
-            .subscribe(object : DefaultObserver<MusicBean>() {
-                override fun onSuccess(response: MusicBean) {
-                    val metaData = response
-                    if (metaData.data != null) {
-                        onlineMusic.fileUrl = metaData.data!![0].url
-                        mView!!.onMusicDetail(onlineMusic)
-                    }
-                }
+        }
 
-                override fun onFail(message: String) {
-                }
+        override fun onFail(message: String) {
+        }
 
-            })
+    })*/
+
+    override suspend fun loadMusicDetail(onlineMusic: Music) : Music{
+        onlineMusic.bitmapCover = loadingOnlineCover(onlineMusic.album.picUrl)
+        val metaData = ApiHelper.getMusicService().getUrl(onlineMusic.id).await()
+        if (metaData.data != null) {
+            onlineMusic.fileUrl = metaData.data!![0].url
+        }
+        return onlineMusic
     }
 
 
-/*    @Synchronized
-    fun setContext(context: Context): MusicPlayerPresenter {
-        return if (::mContext.isInitialized) {
-            this
-        } else {
-            this.mContext = context
-            this
-        }
-    }*/
 
     override fun retrieveLastPlayMode() {
 

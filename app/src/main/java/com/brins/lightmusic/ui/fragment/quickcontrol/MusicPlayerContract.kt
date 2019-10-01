@@ -1,6 +1,5 @@
 package com.brins.lightmusic.ui.fragment.quickcontrol
 
-import android.graphics.Bitmap
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.brins.lightmusic.model.Music
@@ -28,7 +27,7 @@ interface MusicPlayerContract {
         fun updateFavoriteToggle(favorite: Boolean)
 
 
-        fun onMusicDetail(onlineMusic: Music)
+//        fun onMusicDetail(onlineMusic: Music)
     }
 
     interface Presenter : BasePresenter<View> {
@@ -52,6 +51,6 @@ interface MusicPlayerContract {
 
 
 
-        fun loadMusicDetail(onlineMusic: Music)
+        suspend fun loadMusicDetail(onlineMusic: Music) : Music
     }
 }

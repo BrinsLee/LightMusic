@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         tools:context="com.brins.lightmusic.ui.fragment.video.VideoFragment">
 <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recommendContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView

@@ -82,11 +82,8 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    protected open fun getCurrentList(): PlayList? {
-        return fragment.getCurrentList()
-    }
 
-    fun bindUntilDestroy(disposable: Disposable?) {
+    private fun bindUntilDestroy(disposable: Disposable?) {
         if (disposable == null) {
             return
         }

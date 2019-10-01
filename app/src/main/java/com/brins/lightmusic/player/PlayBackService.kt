@@ -15,9 +15,12 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import java.lang.Exception
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.getSystemService
+import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver
 
 
-class PlayBackService : Service(), IPlayback {
+class PlayBackService : Service(), IPlayback, HeadsetButtonReceiver.onHeadsetListener {
+
+
 
     companion object {
         @JvmStatic
@@ -46,6 +49,7 @@ class PlayBackService : Service(), IPlayback {
 
     override fun onCreate() {
         super.onCreate()
+        HeadsetButtonReceiver(this)
         mIsServiceBound = true
         MediaSessionManager(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -93,17 +97,45 @@ class PlayBackService : Service(), IPlayback {
         mNotificationManager.cancelAll() //从状态栏中移除通知
     }
 
+    override fun playOrPause() {
+        pause()
+    }
+
+    override fun playPreviousSong() {
+        playLast()
+    }
+
+    override fun playNextSong() {
+        playNext()
+    }
+
+    fun playMusic(){
+        if (getPlayList().getNumOfSongs() == 0){
+            return
+        }
+        val playList = getPlayList()
+        playList.setPlayMode(PlayMode.getDefault())
+        val song = playList.getCurrentSong()
+
+    }
+
+
+
     //IPlayback
     override fun setPlayList(list: PlayList) {
         mPlayer.setPlayList(list)
+    }
+
+    override fun getPlayList(): PlayList {
+        return mPlayer.getPlayList()
     }
 
     override fun play(): Boolean {
         return mPlayer.play()
     }
 
-    override fun play(list: PlayList, startIndex: Int): Boolean {
-        return mPlayer.play(list, startIndex)
+    override fun play(startIndex: Int): Boolean {
+        return mPlayer.play(startIndex)
     }
 
     override fun play(song: Music): Boolean {

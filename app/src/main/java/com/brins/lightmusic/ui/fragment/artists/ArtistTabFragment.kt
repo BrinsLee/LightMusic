@@ -1,6 +1,12 @@
 package com.brins.lightmusic.ui.fragment.artists
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,11 +28,10 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
 import com.brins.lightmusic.ui.fragment.video.VideoDetailFragment
-import com.brins.lightmusic.utils.ALBUM
-import com.brins.lightmusic.utils.MV
-import com.brins.lightmusic.utils.SONG
-import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
+import com.brins.lightmusic.utils.*
 import kotlinx.android.synthetic.main.fragment_artist_tab.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ArtistTabFragment(var type: Int = 10010, var id: String) :
     BaseFragment<ArtistDetailConstract.Presenter>(),
@@ -40,78 +45,6 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
     private var mPresenter: ArtistDetailPresenter? = null
 
 
-    override fun onArtistSongLoad(result: ArtistSongResult) {
-        val mAdapter: CommonViewAdapter<Music>
-        playList.addSong(result.hot)
-        mAdapter = object : CommonViewAdapter<Music>(
-            activity!!, R.layout.item_online_music,
-            result.hot!!
-        ) {
-            override fun converted(holder: ViewHolder, t: Music, position: Int) {
-                val strBuilder = StringBuilder()
-                t.artistBeans?.forEach { strBuilder.append("${it.name} ") }
-                holder.setText(R.id.artist, strBuilder.toString())
-                holder.setText(R.id.name, t.name)
-                holder.setText(R.id.count, "${position + 1}")
-            }
-
-        }
-        mAdapter.setOnItemClickListener(this)
-        recyclerView.adapter = mAdapter
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context!!, LinearLayoutManager.VERTICAL
-            )
-        )
-
-    }
-
-
-    override fun onArtistMvLoad(result: MvResult) {
-        mvDataBeans = result.dataBeans!!
-        val mAdapter: CommonViewAdapter<LastestMvDataBean>
-        mAdapter = object : CommonViewAdapter<LastestMvDataBean>(
-            activity!!,
-            R.layout.item_video_list,
-            (mvDataBeans as ArrayList<LastestMvDataBean>)
-        ) {
-            override fun converted(holder: ViewHolder, t: LastestMvDataBean, position: Int) {
-                holder.setText(R.id.tv_title, t.name)
-                holder.setText(
-                    R.id.tv_watch_count,
-                    if (t.playCount > 1000) "${t.playCount / 1000}万播放" else "${t.playCount}播放"
-                )
-                holder.setText(R.id.tv_author, t.artistName)
-                holder.setImageResource(R.id.iv_avatar, t.cover)
-                holder.setImageResource(R.id.video_player, t.cover)
-            }
-
-        }
-        mAdapter.setOnItemClickListener(this)
-        recyclerView.adapter = mAdapter
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-
-    }
-
-    override fun onArtistAlbumLoad(response: AlbumListResult) {
-        albumDataBeans.addAll(response.hotAlbums!!)
-        val mAdapter: CommonViewAdapter<AlbumBean> = object : CommonViewAdapter<AlbumBean>(
-            activity!!,
-            R.layout.item_local_music,
-            albumDataBeans as ArrayList<AlbumBean>
-        ) {
-            override fun converted(holder: ViewHolder, t: AlbumBean, position: Int) {
-                holder.setImageResource(R.id.imgCover, t.picUrl)
-                holder.setText(R.id.textViewName, t.name)
-                holder.setText(R.id.textViewArtist, t.artist!!.name)
-
-            }
-        }
-        mAdapter.setOnItemClickListener(this)
-        recyclerView.adapter = mAdapter
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-    }
 
 
     override fun getLayoutResID(): Int {
@@ -126,23 +59,128 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
 
     private fun initView() {
         when (type) {
-            SONG -> mPresenter?.loadArtistSong(id)
-            MV -> mPresenter?.loadArtistMv(id, 10)
-            ALBUM -> mPresenter?.loadArtistAlbum(id)
+            SONG -> loadArtistSong()
+            MV -> loadArtistMv()
+            ALBUM -> loadArtistAlbum()
         }
+    }
+
+    private fun loadArtistSong(){
+        launch({
+            showLoading()
+            val result = loadArtistSong(id)
+            val mAdapter: CommonViewAdapter<Music>
+            playList.addSong(result!!.hot)
+            mAdapter = object : CommonViewAdapter<Music>(
+                activity!!, R.layout.item_online_music,
+                result.hot!!
+            ) {
+                override fun converted(holder: ViewHolder, t: Music, position: Int) {
+                    val strBuilder = StringBuilder()
+                    t.artistBeans?.forEach { strBuilder.append("${it.name} ") }
+                    holder.setText(R.id.artist, strBuilder.toString())
+                    holder.setText(R.id.name, t.name)
+                    holder.setText(R.id.count, "${position + 1}")
+                }
+
+            }
+            mAdapter.setOnItemClickListener(this)
+            recyclerView.adapter = mAdapter
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    context!!, LinearLayoutManager.VERTICAL
+                )
+            )
+            hideLoading()
+        },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            showRetryView()
+        })
+    }
+    private suspend fun loadArtistSong(id: String) = withContext(Dispatchers.IO){
+        val result = mPresenter?.loadArtistSong(id)
+        result
+    }
+
+    private fun loadArtistMv(){
+        launch({
+            showLoading()
+            val result = loadArtistMv(id,10)
+            mvDataBeans = result!!.dataBeans!!
+            val mAdapter: CommonViewAdapter<LastestMvDataBean>
+            mAdapter = object : CommonViewAdapter<LastestMvDataBean>(
+                activity!!,
+                R.layout.item_video_list,
+                (mvDataBeans as ArrayList<LastestMvDataBean>)
+            ) {
+                override fun converted(holder: ViewHolder, t: LastestMvDataBean, position: Int) {
+                    holder.setText(R.id.tv_title, t.name)
+                    holder.setText(
+                        R.id.tv_watch_count,
+                        if (t.playCount > 1000) "${t.playCount / 1000}万播放" else "${t.playCount}播放"
+                    )
+                    holder.setText(R.id.tv_author, t.artistName)
+                    holder.setImageResource(R.id.iv_avatar, t.cover)
+                    holder.setImageResource(R.id.video_player, t.cover)
+                }
+
+            }
+            mAdapter.setOnItemClickListener(this)
+            recyclerView.adapter = mAdapter
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            hideLoading()
+        },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            showRetryView()
+        })
+    }
+
+    private suspend fun loadArtistMv(id: String, limit : Int) = withContext(Dispatchers.IO){
+        val result = mPresenter?.loadArtistMv(id, limit)
+        result
+    }
+
+
+    private fun loadArtistAlbum(){
+        launch({
+            showLoading()
+            val response = loadArtistAlbum(id)
+            albumDataBeans.addAll(response!!.hotAlbums!!)
+            val mAdapter: CommonViewAdapter<AlbumBean> = object : CommonViewAdapter<AlbumBean>(
+                activity!!,
+                R.layout.item_local_music,
+                albumDataBeans as ArrayList<AlbumBean>
+            ) {
+                override fun converted(holder: ViewHolder, t: AlbumBean, position: Int) {
+                    holder.setImageResource(R.id.imgCover, t.picUrl)
+                    holder.setText(R.id.textViewName, t.name)
+                    holder.setText(R.id.textViewArtist, t.artist!!.name)
+
+                }
+            }
+            mAdapter.setOnItemClickListener(this)
+            recyclerView.adapter = mAdapter
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            hideLoading()
+        },{
+            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            showRetryView()
+        })
+    }
+
+    private suspend fun loadArtistAlbum(id : String) = withContext(Dispatchers.IO){
+        val result = mPresenter?.loadArtistAlbum(id)
+        result
     }
 
     override fun setPresenter(presenter: ArtistDetailConstract.Presenter) {
         mPresenter = presenter as ArtistDetailPresenter
 
     }
-
-    override fun onArtistMvDetailLoad(response: Mv) {
-        val bundle = Bundle()
-        bundle.putParcelable("Mv", response)
-        switch(VideoDetailFragment(), bundle)
-    }
-
 
     override fun onItemClick(position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
@@ -163,10 +201,19 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             }
             MV -> {
                 currentTime = System.currentTimeMillis()
-                mPresenter?.loadUrl(mvDataBeans[position])
+                launch({
+                    var response : Mv? = null
+                    withContext(Dispatchers.IO){
+                        response = mPresenter?.loadUrl(mvDataBeans[position])
+                    }
+                    val bundle = Bundle()
+                    bundle.putParcelable("Mv", response)
+                    switch(VideoDetailFragment(), bundle)
+                },{})
             }
         }
     }
+
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
         try {
@@ -175,6 +222,22 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override fun showRetryView() {
+        super.showRetryView()
+        val textError = TextView(context)
+        textError.setText(R.string.connect_error)
+        textError.textSize = 20f
+        textError.setTextColor(ContextCompat.getColor(context!!,R.color.translucent))
+        val p : LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        p.gravity = Gravity.CENTER
+        textError.gravity = Gravity.CENTER
+        container.addView(textError,p)
+        textError.setOnClickListener{
+            container.removeView(textError)
+            initView()
         }
     }
 }

@@ -103,7 +103,7 @@ class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
         textError.gravity = Gravity.CENTER
         recommendContainer.addView(textError,p)
         textError.setOnClickListener{
-            musicList.removeView(textError)
+            recommendContainer.removeView(textError)
             loadRecommendData()
         }
     }

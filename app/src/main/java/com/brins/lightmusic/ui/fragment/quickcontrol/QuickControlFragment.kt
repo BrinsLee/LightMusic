@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.quickcontrol
 
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -16,15 +17,17 @@ import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
+import com.brins.lightmusic.utils.launch
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
 import kotlinx.android.synthetic.main.fragment_quick_control.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 
 class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), MusicPlayerContract.View, IPlayback.Callback,
-    View.OnClickListener,
-    HeadsetButtonReceiver.onHeadsetListener {
+    View.OnClickListener{
 
 
     private var index = -1
@@ -64,30 +67,15 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
         type = playListEvent.type
         playList = playListEvent.playlist
         index = playListEvent.playIndex
-        playSong(playList, index)
+//        playSong(playList, index)
+        mPlayer?.setPlayList(playList)
+        mPlayer?.play(index)
         Log.d("RxBus:", "QuickControlFragment")
     }
 
-    private fun playSong(playList: PlayList, index: Int) {
-        playList.setPlayMode(PlayMode.getDefault())
-
-        val song = playList.getCurrentSong()
-        when (type) {
-            TYPE_ONLINE_MUSIC -> {
-                mPresenter.loadMusicDetail(song!!)
-            }
-            TYPE_LOCAL_MUSIC -> {
-                mPlayer!!.play(playList, index)
-            }
-            else -> {
-                return
-            }
-        }
-    }
 
     override fun onStart() {
         super.onStart()
-        HeadsetButtonReceiver(this)
         MusicPlayerPresenter.instance.subscribe(this)
 
     }
@@ -96,20 +84,18 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
         super.onResume()
         if (mPlayer != null) {
             ivPlayOrPause.setImageResource(if (mPlayer!!.isPlaying()) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
-            onPlayStatusChanged(mPlayer!!.isPlaying())
-
+            onPlayStatusChanged(mPlayer!!.isPlaying(),mPlayer!!.getPlayingSong())
         }
         setListener()
     }
 
 
-    //耳机线控回调
-    override fun playOrPause() {
+    fun playOrPause() {
         Log.d(TAG, "headSet_PlayOrPause")
         mPlayer?.pause()
     }
 
-    override fun playNext() {
+    fun playNext() {
         Log.d(TAG, "headSet_PlayNext")
         if (playList.getNumOfSongs() == 1) {
             return
@@ -117,7 +103,7 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
         onPlayNext()
     }
 
-    override fun playPrevious() {
+    fun playPrevious() {
         Log.d(TAG, "headSet_PlayLast")
         if (playList.getNumOfSongs() == 1) {
             return
@@ -152,17 +138,14 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
                 onPlayPauseToggle()
             }
             R.id.ivPlaybarPre -> {
-                onPlayLast()
+                playPrevious()
             }
             R.id.ivPlaybarNext -> {
-                onPlayNext()
+                playNext()
             }
             R.id.playBarLayout -> {
                 if (mPlayer != null && ::playList.isInitialized) {
-                    MusicPlayActivity.startThisActivity(
-                        (activity as AppCompatActivity),
-                        mPlayer!!.isPlaying(),
-                        type)
+                    MusicPlayActivity.startThisActivity((activity as AppCompatActivity))
                 }
                 return
             }
@@ -186,86 +169,29 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
 
     fun onPlayLast() {
         if (mPlayer == null) return
-        val hasLast = playList.hasLast()
-        if (hasLast) {
-            val song = playList.getSongs()[playList.getPlayingIndex() - 1]
-            if (song.fileUrl == null || song.fileUrl == "") {
-                index = playList.getPlayingIndex() - 1
-                mPresenter.loadMusicDetail(song)
-                return
-            }
-            mPlayer!!.playLast()
-        }
+        mPlayer!!.playLast()
         return
     }
 
     fun onPlayNext() {
         if (mPlayer == null) return
-        val hasNext = playList.hasNext(false)
-        if (hasNext) {
-            val song = playList.getCurrentSong()!!
-            if (song.fileUrl == null || song.fileUrl == "") {
-                Log.d(TAG, "index: $index")
-                index = playList.getPlayingIndex()
-                Log.d(TAG, "index_after: ${playList.getPlayingIndex()}")
-                mPresenter.loadMusicDetail(song)
-                return
-            }
-            mPlayer!!.playNext()
-        }
+        mPlayer!!.playNextSong()
         return
     }
 
-
-    // Player Callbacks
-    override fun onSwitchLast(last: Music) {
-        onSongUpdated(last)
-    }
-
-    override fun onSwitchNext(next: Music) {
-        onSongUpdated(next)
-    }
-
-    override fun onComplete(next: Music?) {
-        when (type) {
-            TYPE_ONLINE_MUSIC -> {
-                if (next!!.fileUrl == null || next.fileUrl == "" || next.bitmapCover == null) {
-                    playNext()
-                } else {
-                    onSongUpdated(next)
-                }
-            }
-            TYPE_LOCAL_MUSIC -> {
-                onSongUpdated(next)
-            }
-            else -> {
-                return
-            }
-        }
-    }
-
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
+    override fun onPlayStatusChanged(isPlaying: Boolean, music: Music?) {
         if (ivPlayOrPause == null){
             return
         }else {
             updatePlayToggle(isPlaying)
-            if (isPlaying) {
-                ivPlaybarCover.resumeRotateAnimation()
-            } else {
-                ivPlaybarCover.pauseRotateAnimation()
+            if (music != null){
+                onSongUpdated(music)
             }
         }
     }
 
-
     // MVP View
 
-    override fun onMusicDetail(onlineMusic: Music) {
-        Log.d(TAG, "index: $index")
-        Log.d(TAG, "name: ${onlineMusic.name}")
-        playList.setSong(onlineMusic, index)
-        mPlayer!!.play(playList, index)
-    }
 
 
     override fun onPlaybackServiceBound(service: PlayBackService) {
@@ -280,6 +206,11 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
     override fun updatePlayToggle(play: Boolean) {
         try {
             ivPlayOrPause.setImageResource(if (play) R.drawable.ic_pausemusic else R.drawable.ic_playmusic)
+            if (play) {
+                ivPlaybarCover.resumeRotateAnimation()
+            } else {
+                ivPlaybarCover.pauseRotateAnimation()
+            }
         }catch (e : Exception){
             return
         }
@@ -323,7 +254,6 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
             }
             ivPlaybarCover.setImageBitmap(song.bitmapCover)
             ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
-            ivPlaybarCover.startRotateAnimation()
         } catch (e: Exception) {
             e.printStackTrace()
             return
