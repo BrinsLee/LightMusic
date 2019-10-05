@@ -13,6 +13,7 @@ import android.os.Build
 import android.text.format.Time
 import android.util.Base64
 import android.view.View
+import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
+import com.brins.lightmusic.ui.customview.DimView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -440,3 +442,22 @@ fun CalculateBezierPointForCubic(t: Float,p0: PointF,p1:PointF,p2:PointF,p3:Poin
     return point
 
 }
+
+
+fun createMask(activity: Activity, target: View): DimView {
+    val linearLayout = DimView(activity, view = target)//新建一个LinearLayout
+    linearLayout.layoutParams = LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
+    return linearLayout
+}
+
+fun setMask(ac : Activity, target: View): View{
+    val rect = Rect()
+    val point = Point()
+    target.setLayerType(LAYER_TYPE_SOFTWARE, null)
+    target.getGlobalVisibleRect(rect, point)
+    return createMask(ac, target)
+}
+

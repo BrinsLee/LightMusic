@@ -39,7 +39,7 @@ kapt {  // kapt 配置
     generateStubs = true
 }
 
-kotlin{
+kotlin {
     experimental {
         coroutines 'enable'
     }

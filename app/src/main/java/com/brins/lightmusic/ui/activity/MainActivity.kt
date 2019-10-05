@@ -3,12 +3,12 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.R
@@ -20,17 +20,24 @@ import com.brins.lightmusic.ui.base.BaseView
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
 import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
+import com.brins.lightmusic.ui.fragment.search.SearchFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
+import com.brins.lightmusic.utils.setMask
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
+
 
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
     var currentFragment: Fragment? = null
+    private lateinit var mSearchView : SearchView
+    private var mImm: InputMethodManager? = null
+    val DEFAULT_DIM_AMOUNT = 0.6f
 
 
     companion object {
@@ -136,16 +143,50 @@ class MainActivity : BaseActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        mSearchView = menu.findItem(R.id.search).actionView as SearchView
+        mSearchView.setOnQueryTextListener(this)
+        mSearchView.queryHint = getString(R.string.search_hint)
+        val mask = createDim()
+        mSearchView.setOnSearchClickListener {
+            drawer.addView(mask)
+        }
+        mSearchView.setOnCloseListener {
+            drawer.removeView(mask)
+            false
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.search -> {
-            }
+
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    fun hideInputManager() {
+        if (mSearchView != null) {
+            if (mImm != null) {
+                mImm!!.hideSoftInputFromWindow(mSearchView.windowToken, 0)
+            }
+            mSearchView.clearFocus()
+
+//            SearchHistory.getInstance(this).addSearchString(mSearchView.query.toString())
+        }
+    }
+
+    private fun createDim(): View{
+        return setMask(this,toolbar)
     }
 }
