@@ -16,6 +16,7 @@ object ApiHelper {
     private var mLoginService: LoginService? = null
     private var mUserPlayListService : UserPlayListService? = null
     private var mDiscoveryService : DiscoveryService? = null
+    private var mSearchService : SearchService? = null
 
     fun getMusicService(): MusicService {
         if (mMusicService == null) {
@@ -26,6 +27,17 @@ object ApiHelper {
             }
         }
         return mMusicService!!
+    }
+
+    fun getSearchService(): SearchService {
+        if (mSearchService == null) {
+            synchronized(SearchService::class.java) {
+                if (mSearchService == null) {
+                    mSearchService = RetrofitFactory.newRetrofit(BASEURL).create(SearchService::class.java)
+                }
+            }
+        }
+        return mSearchService!!
     }
 
     fun getPlayListService(): PlayListService {

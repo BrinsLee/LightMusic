@@ -5,9 +5,10 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:background="@color/alpha"
-            app:layout_scrollFlags="scroll|enterAlways" app:titleTextColor="@android:color/white">
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="@android:color/white">
         <com.brins.lightmusic.ui.customview.FontTextView
                 android:id="@+id/tv_title"
                 android:text="@string/app_name"

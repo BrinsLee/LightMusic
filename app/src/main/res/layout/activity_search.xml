@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.activity.SearchActivity">
+    <androidx.appcompat.widget.Toolbar
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/alpha"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="@android:color/white">
+        <androidx.appcompat.widget.SearchView
+                android:id="@+id/mSearchView"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="@dimen/common_margin_10"
+                android:background="@drawable/search_selector"
+                android:layout_height="@dimen/common_margin_50">
+        </androidx.appcompat.widget.SearchView>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ListView
+            android:id="@+id/list_item"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    <com.google.android.material.tabs.TabLayout
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            android:id="@+id/tab_layout"
+            app:tabGravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:tabMode="fixed"
+            app:tabIndicatorHeight="0dp"
+            app:tabTextColor="@color/translucent"
+            app:tabSelectedTextColor="@color/translucent">
+    </com.google.android.material.tabs.TabLayout>
+    <com.brins.lightmusic.ui.customview.MainViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tab_layout"
+            app:layout_constraintBottom_toBottomOf="parent">
+    </com.brins.lightmusic.ui.customview.MainViewPager>
+</androidx.constraintlayout.widget.ConstraintLayout>

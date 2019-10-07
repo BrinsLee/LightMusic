@@ -1,6 +1,10 @@
 package com.brins.lightmusic.ui.fragment.search
 
+import com.brins.lightmusic.api.ApiHelper
+import com.brins.lightmusic.utils.await
+
 class SearchPresenter private constructor(): SearchContract.Presenter {
+
 
 
     companion object {
@@ -10,19 +14,20 @@ class SearchPresenter private constructor(): SearchContract.Presenter {
     private object SingletonHolder {
         val holder = SearchPresenter()
     }
-    override suspend fun searchData(input: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override suspend fun <T> searchData(input: String, type : Int) = ApiHelper.getSearchService().search<T>(input, type).await()
 
     override suspend fun loadSearchHistory() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+
+    override suspend fun loadSearchSuggest(input: String) = ApiHelper.getSearchService().searchSuggest(input).await()
+
     override fun subscribe(view: SearchContract.View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun unsubscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 }

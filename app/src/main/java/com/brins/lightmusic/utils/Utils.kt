@@ -12,6 +12,7 @@ import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.text.format.Time
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
@@ -318,6 +319,8 @@ val EUROPE_AMERICA = "欧美"
 val JAPAN = "日本"
 val KOREA = "韩国"
 
+val SEARCH_KEY = "search_key"
+
 val SONG = 10010
 val MV = 10086
 val ALBUM = 10000
@@ -389,6 +392,7 @@ suspend fun <T> Call<T>.await(): T {
 
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 val body = response.body()
+                Log.d("await",response.message())
                 if (body != null) continuation.resume(body)
                 else continuation.resumeWithException(RuntimeException("response body is null"))
             }

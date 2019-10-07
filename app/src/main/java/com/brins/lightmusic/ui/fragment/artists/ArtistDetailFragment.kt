@@ -1,6 +1,5 @@
 package com.brins.lightmusic.ui.fragment.artists
 
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.util.Log
 import android.view.View

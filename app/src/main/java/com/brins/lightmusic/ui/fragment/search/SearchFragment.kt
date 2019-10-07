@@ -10,10 +10,9 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
+import com.brins.lightmusic.utils.SEARCH_KEY
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.ArrayList
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 
 
 class SearchFragment : BaseFragment<SearchContract.Presenter>(), SearchView.OnQueryTextListener {
@@ -22,7 +21,7 @@ class SearchFragment : BaseFragment<SearchContract.Presenter>(), SearchView.OnQu
 
     private var mPresenter: SearchPresenter? = null
     private var mImm: InputMethodManager? = null
-    private var queryString: String = ""
+    private var queryString: String? = ""
     private var searchResults: ArrayList<Music> = arrayListOf()
 
 
@@ -33,7 +32,9 @@ class SearchFragment : BaseFragment<SearchContract.Presenter>(), SearchView.OnQu
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         mSearchView.setOnQueryTextListener(this)
-
+        queryString = arguments?.getString(SEARCH_KEY)
+        mSearchView.queryHint = queryString
+        
 
     }
 
