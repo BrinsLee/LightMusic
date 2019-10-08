@@ -243,7 +243,7 @@ class PlayList() : Parcelable {
     }
     private fun randomPlayIndex(): Int {
         val randomIndex = Random().nextInt(songs.size)
-        // Make sure not play the same song twice if there are at least 2 songs
+        // Make sure not play the same song twice if there are at least 2 data
         if (songs.size > 1 && randomIndex == playingIndex) {
             randomPlayIndex()
         }

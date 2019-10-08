@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.appcompat.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.fragment.search.SearchFragment
 import com.brins.lightmusic.utils.*

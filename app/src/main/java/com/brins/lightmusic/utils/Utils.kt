@@ -341,7 +341,7 @@ enum class SearchType(val type: Int) {
 
     MUSICLIST(1000),
 
-    MUSICVIDEO(1006)
+    MUSICVIDEO(1004)
 
 }
 

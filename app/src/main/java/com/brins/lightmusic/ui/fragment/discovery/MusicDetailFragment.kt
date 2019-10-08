@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
@@ -96,6 +97,9 @@ class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), Discove
             mAdapter.notifyDataSetChanged()
             hideLoading()
         }, {
+            val i = it
+            Toast.makeText(context,i.message,Toast.LENGTH_SHORT).show()
+            hideLoading()
 
         })
     }
@@ -122,7 +126,7 @@ class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), Discove
     }
 
     override fun onBackClick(view: View) {
-        (activity as MainActivity).onBackPressed()
+        activity!!.onBackPressed()
     }
 
     override fun setPresenter(presenter: DiscoveryContract.Presenter) {

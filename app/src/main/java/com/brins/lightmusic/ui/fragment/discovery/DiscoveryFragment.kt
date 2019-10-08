@@ -150,6 +150,9 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
 
 
     private fun initLoadingMore() {
+        if (loadingMore == null){
+            return
+        }
         loadingMore.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
         loadingMore.setDistanceToTriggerSync(700)
         loadingMore.setProgressBackgroundColorSchemeColor(Color.WHITE)

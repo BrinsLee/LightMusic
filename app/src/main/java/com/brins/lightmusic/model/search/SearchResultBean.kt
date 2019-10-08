@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 class SearchResultBean<T> {
 
-    @SerializedName("songs")
-    var songs : ArrayList<T>? = null
+    @SerializedName("songs",alternate = ["albums","artists","playlists","mvs"])
+    var data : ArrayList<T>? = null
 }

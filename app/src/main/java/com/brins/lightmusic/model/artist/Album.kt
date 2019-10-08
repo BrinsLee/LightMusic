@@ -13,12 +13,15 @@ class Album() : Parcelable {
     var picUrl: String = ""
     @SerializedName("tns")
     var translate : Array<String>? = null
+    @SerializedName("artist")
+    var artist: ArtistBean? = null
 
     constructor(parcel: Parcel) : this() {
-        id = parcel.readString()!!
-        name = parcel.readString()!!
-        picUrl = parcel.readString()!!
+        id = parcel.readString()
+        name = parcel.readString()
+        picUrl = parcel.readString()
         translate = parcel.createStringArray()
+        artist = parcel.readParcelable(ArtistBean::class.java.classLoader)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -26,6 +29,7 @@ class Album() : Parcelable {
         parcel.writeString(name)
         parcel.writeString(picUrl)
         parcel.writeStringArray(translate)
+        parcel.writeParcelable(artist, flags)
     }
 
     override fun describeContents(): Int {
@@ -41,4 +45,5 @@ class Album() : Parcelable {
             return arrayOfNulls(size)
         }
     }
+
 }

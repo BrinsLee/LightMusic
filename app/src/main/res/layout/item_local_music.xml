@@ -5,7 +5,11 @@
         android:id="@+id/itemRoot"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_margin_80"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/white"
+        android:layout_marginStart="@dimen/common_margin_10"
+        android:layout_marginEnd="@dimen/common_margin_10"
         android:elevation="3dp"
         android:layout_marginTop="@dimen/common_margin_5"
         app:round_corner="@dimen/common_margin_5">

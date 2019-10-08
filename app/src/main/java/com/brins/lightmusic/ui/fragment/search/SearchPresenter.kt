@@ -24,9 +24,7 @@ class SearchPresenter private constructor(): SearchContract.Presenter {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun searchAlbumData(input: String, type: Int): SearchResult<Album> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override suspend fun searchAlbumData(input: String, type: Int) = ApiHelper.getSearchService().searchAlbum(input, type).await()
 
     override suspend fun loadSearchSuggest(input: String) = ApiHelper.getSearchService().searchSuggest(input).await()
 

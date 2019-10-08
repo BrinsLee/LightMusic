@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
@@ -22,6 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected var fragment: QuickControlFragment = QuickControlFragment.newInstance()
     protected var firstTime : Long = 0
     protected var mBindDestroyDisposable: CompositeDisposable? = null
+    protected open var currentFragment: Fragment? = null
 
     protected open fun getOffsetView(): View? {
         return null
@@ -60,6 +63,33 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected open fun onCreateBeforeBinding(savedInstanceState: Bundle?) {}
+
+    fun switchFragment(targetFragment: Fragment): FragmentTransaction {
+        val transaction = supportFragmentManager.beginTransaction()
+        if (!targetFragment.isAdded) {
+            if (currentFragment != null) {
+                transaction.hide(currentFragment!!)
+            }
+            transaction.add(
+                R.id.drawer, targetFragment
+                , targetFragment::class.java.name
+            )
+        } else {
+            if (currentFragment != null) {
+                transaction.hide(currentFragment!!)
+            }
+            transaction.show(targetFragment)
+        }
+        currentFragment = targetFragment
+        return transaction
+    }
+
+    fun switchFragment(targetFragment: Fragment, bundle: Bundle): FragmentTransaction {
+        targetFragment.arguments = bundle
+        return switchFragment(targetFragment)
+
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

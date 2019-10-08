@@ -31,7 +31,6 @@ class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {
     override suspend fun loadAlbumDetail(id: String)  = ApiHelper.getPlayListService().getAlbumDetail(id).await()
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun subscribe(view: DiscoveryContract.View) {
         mView = view
         mView?.setPresenter(this)
