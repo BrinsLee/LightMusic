@@ -56,9 +56,9 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
 
     private fun initView() {
         when (type) {
-            SONG -> loadArtistSong()
-            MV -> loadArtistMv()
-            ALBUM -> loadArtistAlbum()
+            SearchType.SONG.type -> loadArtistSong()
+            SearchType.MV.type -> loadArtistMv()
+            SearchType.ALBUM.type -> loadArtistAlbum()
         }
     }
 
@@ -184,19 +184,19 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             return
         }
         when (type) {
-            SONG -> {
+            SearchType.SONG.type -> {
                 currentTime = System.currentTimeMillis()
                 playList.setPlayingIndex(position)
                 RxBus.getInstance().post(PlayListEvent(playList, position, TYPE_ONLINE_MUSIC))
             }
-            ALBUM -> {
+            SearchType.ALBUM.type -> {
                 currentTime = System.currentTimeMillis()
                 val id = albumDataBeans[position].id
                 val bundle = Bundle()
                 bundle.putString(TAG, id)
                 switch(MusicDetailFragment(), bundle)
             }
-            MV -> {
+            SearchType.MV.type -> {
                 currentTime = System.currentTimeMillis()
                 launch({
                     var response : Mv? = null

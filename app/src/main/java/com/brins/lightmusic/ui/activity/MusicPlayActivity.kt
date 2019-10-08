@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -33,8 +32,6 @@ import com.brins.lightmusic.ui.customview.CustPagerTransformer
 import com.brins.lightmusic.ui.customview.RoundImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
-import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
-import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.string2Bitmap
 import kotlinx.android.synthetic.main.activity_music_play.*
@@ -292,7 +289,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         return
     }
 
-    fun onPlayPauseToggle() {
+    private fun onPlayPauseToggle() {
         if (mPlayer == null) {
             return
         }
@@ -352,7 +349,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
     }
 
-    fun initViewPager() {
+    private fun initViewPager() {
         if (pageAdapter == null) {
             pageAdapter = object : PagerAdapter() {
                 override fun isViewFromObject(view: View, ob: Any): Boolean {

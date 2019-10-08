@@ -66,6 +66,9 @@ fun loadingCover(mediaUri: String): String {
 }
 
 fun loadingOnlineCover(url: String): Bitmap {
+    if (url.isEmpty()){
+        return string2Bitmap(null)!!
+    }
     return Glide.with(LightMusicApplication.getLightApplication())
         .asBitmap()
         .load(url)
@@ -321,9 +324,26 @@ val KOREA = "韩国"
 
 val SEARCH_KEY = "search_key"
 
-val SONG = 10010
-val MV = 10086
-val ALBUM = 10000
+
+enum class SearchType(val type: Int) {
+
+    SONG(10010),
+
+    MV(10086),
+
+    ALBUM(10000),
+
+    MUSIC(1),
+
+    ALBUMS(10),
+
+    ARTIST(100),
+
+    MUSICLIST(1000),
+
+    MUSICVIDEO(1006)
+
+}
 
 val TYPE_ONLINE_MUSIC = 1
 val TYPE_LOCAL_MUSIC = 0
@@ -374,11 +394,12 @@ fun px2dp(context: Context, value: Float): Int {
     return (value / scale + 0.5f).toInt()
 }
 
-fun launch(block : suspend() -> Unit, error: suspend(Throwable) -> Unit) = CoroutineScope(
-    Dispatchers.Main).launch{
+fun launch(block: suspend () -> Unit, error: suspend (Throwable) -> Unit) = CoroutineScope(
+    Dispatchers.Main
+).launch {
     try {
         block()
-    }catch (e: Throwable) {
+    } catch (e: Throwable) {
         error(e)
     }
 }
@@ -392,7 +413,7 @@ suspend fun <T> Call<T>.await(): T {
 
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 val body = response.body()
-                Log.d("await",response.message())
+                Log.d("await", response.message())
                 if (body != null) continuation.resume(body)
                 else continuation.resumeWithException(RuntimeException("response body is null"))
             }
@@ -400,12 +421,17 @@ suspend fun <T> Call<T>.await(): T {
     }
 }
 
-class BezierEvaluator(var mFlagPoint : PointF) : TypeEvaluator<PointF>{
-
+class BezierEvaluator(var mFlagPoint: PointF) : TypeEvaluator<PointF> {
 
 
     override fun evaluate(fraction: Float, startValue: PointF, endValue: PointF): PointF {
-        return CalculateBezierPointForCubic(fraction, startValue, mFlagPoint, endValue , PointF(200f,2000f))
+        return CalculateBezierPointForCubic(
+            fraction,
+            startValue,
+            mFlagPoint,
+            endValue,
+            PointF(200f, 2000f)
+        )
     }
 
 }
@@ -419,8 +445,8 @@ class BezierEvaluator(var mFlagPoint : PointF) : TypeEvaluator<PointF>{
  * @param p2 终止点
  * @return t对应的点
  */
-fun CalculateBezierPointForQuadratic(t: Float,p0: PointF,p1:PointF,p2:PointF): PointF{
-    val point =  PointF()
+fun CalculateBezierPointForQuadratic(t: Float, p0: PointF, p1: PointF, p2: PointF): PointF {
+    val point = PointF()
     val temp = 1 - t
     point.x = temp * temp * p0.x + 2 * t * temp * p1.x + t * t * p2.x
     point.y = temp * temp * p0.y + 2 * t * temp * p1.y + t * t * p2.y
@@ -438,11 +464,13 @@ fun CalculateBezierPointForQuadratic(t: Float,p0: PointF,p1:PointF,p2:PointF): P
  * @param p3 终止点
  * @return t对应的点
  */
-fun CalculateBezierPointForCubic(t: Float,p0: PointF,p1:PointF,p2:PointF,p3:PointF) : PointF{
-    val point =  PointF()
+fun CalculateBezierPointForCubic(t: Float, p0: PointF, p1: PointF, p2: PointF, p3: PointF): PointF {
+    val point = PointF()
     val temp = 1 - t
-    point.x = p0.x * temp * temp * temp + 3 * p1.x * t * temp * temp + 3 * p2.x * t * t * temp + p3.x * t * t * t
-    point.y = p0.y * temp * temp * temp + 3 * p1.y * t * temp * temp + 3 * p2.y * t * t * temp + p3.y * t * t * t
+    point.x =
+        p0.x * temp * temp * temp + 3 * p1.x * t * temp * temp + 3 * p2.x * t * t * temp + p3.x * t * t * t
+    point.y =
+        p0.y * temp * temp * temp + 3 * p1.y * t * temp * temp + 3 * p2.y * t * t * temp + p3.y * t * t * t
     return point
 
 }
@@ -457,7 +485,7 @@ fun createMask(activity: Activity, target: View): DimView {
     return linearLayout
 }
 
-fun setMask(ac : Activity, target: View): View{
+fun setMask(ac: Activity, target: View): View {
     val rect = Rect()
     val point = Point()
     target.setLayerType(LAYER_TYPE_SOFTWARE, null)

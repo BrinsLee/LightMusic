@@ -4,12 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.utils.await
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import com.bumptech.glide.Glide
 
 
 class DiscoverPresenter private constructor() : DiscoveryContract.Presenter {

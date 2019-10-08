@@ -12,10 +12,7 @@ import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.base.AppBarStateChangeListener
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.utils.ALBUM
-import com.brins.lightmusic.utils.MV
-import com.brins.lightmusic.utils.SONG
-import com.brins.lightmusic.utils.dp2px
+import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
@@ -83,9 +80,9 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
     private fun initData() {
         mTitle = arrayOf("单曲(${mArtist!!.musicSize})", "专辑(${mArtist!!.albumSize})", "MV")
         deltaDistance = dp2px(context!!, 250f)
-        list.add(ArtistTabFragment(SONG, mArtist!!.id))
-        list.add(ArtistTabFragment(ALBUM, mArtist!!.id))
-        list.add(ArtistTabFragment(MV, mArtist!!.id))
+        list.add(ArtistTabFragment(SearchType.SONG.type, mArtist!!.id))
+        list.add(ArtistTabFragment(SearchType.ALBUM.type, mArtist!!.id))
+        list.add(ArtistTabFragment(SearchType.MV.type, mArtist!!.id))
     }
 
     private fun initView() {

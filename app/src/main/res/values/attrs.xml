@@ -37,4 +37,15 @@
         <attr name="chv_text_color" format="color"/>
         <attr name="chv_icon" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomShadowView">
+        <attr name="shadow_color" format="color" />
+        <attr name="shadow_height" format="dimension" />
+        <attr name="view_id" format="reference" />
+        <attr name="shadow_fuzzy_radius" format="float"/>
+        <attr name="shadow_position">
+            <enum name="up" value="1" />
+            <enum name="down" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

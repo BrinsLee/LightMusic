@@ -13,7 +13,7 @@ import com.brins.lightmusic.utils.*
 
 class VideoPagerAdapter(
     fm: FragmentManager,
-    var list: MutableList<Fragment>,
+    var list: MutableList<out Fragment>,
     var tabtitle: Array<String> = arrayOf(
         MAINLAND,
         HONGKONG_TAIWAN,

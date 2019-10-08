@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/gery"
         tools:context=".ui.activity.SearchActivity">
     <androidx.appcompat.widget.Toolbar
             app:layout_constraintTop_toTopOf="parent"
@@ -22,32 +22,46 @@
                 android:layout_height="@dimen/common_margin_50">
         </androidx.appcompat.widget.SearchView>
     </androidx.appcompat.widget.Toolbar>
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/nest"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bg_fragment_local"
+            android:clipChildren="false"
+            android:descendantFocusability="afterDescendants"
+            android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/mTablayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_margin_30"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabGravity="center"
+                app:tabMode="fixed" />
+
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/mViewpager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/mTablayout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/common_margin_10"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
     <ListView
             android:id="@+id/list_item"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/common_margin_10"
+            android:layout_marginTop="@dimen/common_margin_20"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             />
-
-    <com.google.android.material.tabs.TabLayout
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            android:id="@+id/tab_layout"
-            app:tabGravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            app:tabMode="fixed"
-            app:tabIndicatorHeight="0dp"
-            app:tabTextColor="@color/translucent"
-            app:tabSelectedTextColor="@color/translucent">
-    </com.google.android.material.tabs.TabLayout>
-    <com.brins.lightmusic.ui.customview.MainViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/tab_layout"
-            app:layout_constraintBottom_toBottomOf="parent">
-    </com.brins.lightmusic.ui.customview.MainViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

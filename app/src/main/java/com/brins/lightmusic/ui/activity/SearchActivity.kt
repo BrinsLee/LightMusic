@@ -3,24 +3,26 @@ package com.brins.lightmusic.ui.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.SearchView
 import com.brins.lightmusic.model.search.SearchSuggestResult
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.fragment.search.SearchPresenter
-import com.brins.lightmusic.utils.SEARCH_KEY
-import com.brins.lightmusic.utils.launch
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.appcompat.R
+import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
+import com.brins.lightmusic.ui.fragment.search.SearchFragment
+import com.brins.lightmusic.utils.*
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_search.mTablayout
+import kotlinx.android.synthetic.main.activity_search.mViewpager
 
 
 class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
@@ -31,7 +33,14 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
     private var queryString = ""
     private lateinit var searchSuggest: SearchSuggestResult
     private lateinit var names: Array<String?>
-
+    val adapter by lazy { VideoPagerAdapter(supportFragmentManager, list, mTitle!!) }
+    private var list = mutableListOf<SearchFragment>()
+    private var mTitle: Array<String>? = null
+    private val musicFragment = SearchFragment(SearchType.MUSIC.type)
+    private val albumFragment = SearchFragment(SearchType.ALBUMS.type)
+    private val artistFragment = SearchFragment(SearchType.ARTIST.type)
+    private val musicListFragment = SearchFragment(SearchType.MUSICLIST.type)
+    private val mvFragment = SearchFragment(SearchType.MUSICVIDEO.type)
 
     companion object {
         fun startThis(activity: Activity) {
@@ -46,7 +55,32 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+        initData()
+        initView()
+    }
 
+    private fun initView() {
+        mViewpager.adapter = adapter
+        mTablayout.setupWithViewPager(mViewpager)
+        for (i in 0 until adapter.count) {
+            mTablayout.getTabAt(i)!!.customView = adapter.getTabView(this, i)
+            mTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(p0: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabUnselected(p0: TabLayout.Tab?) {
+                    val tv_tab = p0!!.customView!!.findViewById(com.brins.lightmusic.R.id.tab_item) as TextView
+                    tv_tab.setTextColor(Color.GRAY)
+                }
+
+                override fun onTabSelected(p0: TabLayout.Tab?) {
+                    val tv_tab = p0!!.customView!!.findViewById(com.brins.lightmusic.R.id.tab_item) as TextView
+                    tv_tab.setTextColor(Color.BLACK)
+                }
+
+            })
+        }
         mSearchView.setOnQueryTextListener(this)
         mSearchView.queryHint = getString(com.brins.lightmusic.R.string.search_hint)
         mSearchView.setIconifiedByDefault(false)
@@ -55,7 +89,7 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
             mSearchView.findViewById(R.id.search_mag_icon) as ImageView
         mSearchView.post {
             searchIcon.setImageDrawable(null)
-            searchIcon.setVisibility(View.GONE)
+            searchIcon.visibility = View.GONE
         }
 //        menu.findItem(R.id.menuSearch).expandActionView()
         mSearchView.setOnSearchClickListener {
@@ -74,20 +108,22 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
     }
 
 
-    override fun onStart() {
-        super.onStart()
-//        showBottomBar(supportFragmentManager)
-    }
+    private fun initData() {
+        mTitle = arrayOf("单曲", "专辑", "歌手", "歌单", "MV")
+        list.add(musicFragment)
+        list.add(albumFragment)
+        list.add(artistFragment)
+        list.add(musicListFragment)
+        list.add(mvFragment)
 
-    override fun onDestroy() {
-        super.onDestroy()
-//        removeBottomBar(supportFragmentManager)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         hideInputManager()
-        val bundle = Bundle()
-        bundle.putString(SEARCH_KEY, query)
+        list_item.visibility = View.GONE
+        for (fragment : SearchFragment in list){
+            fragment.keyWords = queryString
+        }
         return true
     }
 
@@ -104,6 +140,7 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
                     for ((i, a) in searchSuggest.result!!.allMatch!!.withIndex()) {
                         names[i] = a.keyword
                     }
+                    list_item.visibility = View.VISIBLE
                     list_item.adapter = ArrayAdapter<String>(
                         this
                         , android.R.layout.simple_list_item_1, names
@@ -147,9 +184,10 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
         if (!::names.isInitialized) {
             return
         }
-        if(position > names.size){
+        if (position > names.size) {
             return
         }
-        mSearchView.setQuery(names[position], false)
+        queryString = names[position]!!
+        mSearchView.setQuery(queryString, true)
     }
 }
