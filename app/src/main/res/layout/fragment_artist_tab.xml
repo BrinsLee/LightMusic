@@ -5,7 +5,6 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_marginTop="@dimen/common_margin_20"
-        android:layout_marginBottom="@dimen/common_margin_60"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.recyclerview.widget.RecyclerView

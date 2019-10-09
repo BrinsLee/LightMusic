@@ -17,20 +17,22 @@
                 android:layout_marginTop="@dimen/common_margin_10"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
                 />-->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragment_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toTopOf="@id/bottom_container">
 
         <include
                 layout="@layout/view_common_toolbar"/>
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 app:tabGravity="center"
-                android:layout_gravity="center_horizontal"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="250dp"
                 android:layout_height="30dp"
                 app:tabMode="fixed"
@@ -42,15 +44,15 @@
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10">
+                app:layout_constraintTop_toBottomOf="@id/tab_layout"
+                app:layout_constraintBottom_toBottomOf="parent">
         </com.brins.lightmusic.ui.customview.MainViewPager>
-        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
-                android:id="@+id/bottom_container"
-                android:layout_width="match_parent"
-                app:round_corner="@dimen/fragment_quick_control_radius"
-                android:layout_height="@dimen/fragment_quick_control_height"
-                app:layout_constraintTop_toBottomOf="@id/fragment_container"
-                android:layout_gravity="bottom"
-        />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            app:round_corner="@dimen/fragment_quick_control_radius"
+            android:layout_height="@dimen/fragment_quick_control_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 </androidx.constraintlayout.widget.ConstraintLayout>

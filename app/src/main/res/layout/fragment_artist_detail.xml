@@ -4,7 +4,6 @@
         android:id="@+id/musicList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="65dp"
         android:background="@color/gery"
         android:fitsSystemWindows="true"
         android:clipChildren="false">

@@ -90,7 +90,7 @@ class MainActivity : BaseActivity(){
                 transaction.hide(currentFragment!!)
             }
             transaction.add(
-                R.id.drawer, targetFragment
+                R.id.fragment_container, targetFragment
                 , targetFragment::class.java.name
             )
         } else {

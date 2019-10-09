@@ -22,7 +22,8 @@ import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 
-class LocalMusicFragment : BaseFragment<LocalMusicContract.Presenter>(),
+class
+LocalMusicFragment : BaseFragment<LocalMusicContract.Presenter>(),
     CommonHeaderView.OnBackClickListener, LocalMusicContract.View, OnItemClickListener,
     View.OnClickListener {
 
