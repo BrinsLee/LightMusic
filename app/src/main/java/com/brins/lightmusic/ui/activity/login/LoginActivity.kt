@@ -23,6 +23,7 @@ import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
+import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_login.*
@@ -30,7 +31,8 @@ import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
 
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
-    OnItemClickListener {
+    OnItemClickListener, CommonHeaderView.OnBackClickListener {
+
 
 
     private lateinit var mPresenter: LoginContract.Presenter
@@ -92,9 +94,10 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
             }
             nickName.text = AppConfig.userProfile.nickname
             initList()
+            headLogin.setOnBackClickListener(this)
         } else {
             btn_login.setOnClickListener(this)
-
+            headUnlogin.setOnBackClickListener(this)
         }
     }
 
@@ -122,6 +125,10 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
                 this, LinearLayoutManager.VERTICAL
             )
         )
+    }
+
+    override fun onBackClick(view: View) {
+        finish()
     }
 
 

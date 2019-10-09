@@ -7,13 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.login.LoginActivity">
 
-    <include
-        android:id="@+id/main_title"
-        layout="@layout/view_common_toolbar"/>
+    <com.brins.lightmusic.ui.customview.CommonHeaderView
+            android:id="@+id/headUnlogin"
+            android:layout_width="match_parent"
+            app:chv_text_color="@color/translucent"
+            app:chv_icon="@drawable/ic_back_black"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/gery"
+            app:chv_title="">
+    </com.brins.lightmusic.ui.customview.CommonHeaderView>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_below="@id/main_title"
+        android:layout_below="@id/headUnlogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_margin_80">
@@ -23,17 +30,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:gravity="center"
-            android:text="Log In"
-            android:textColor="#ffffff"
-            android:textSize="24sp" />
+            android:text="@string/sign_in"
+            android:textColor="@color/translucent"
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="FIND YOURSELF"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
+            android:text="@string/load_more"
+            android:textColor="@color/translucent"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <RelativeLayout
