@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.search
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,6 +15,7 @@ import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.artist.Album
+import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.SearchActivity
@@ -21,6 +23,7 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
+import com.brins.lightmusic.ui.fragment.artists.ArtistDetailFragment
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
 import com.brins.lightmusic.utils.SearchType
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
@@ -37,24 +40,26 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
     private var mPresenter: SearchPresenter? = null
     private var playList: PlayList = PlayList()
     private var albumDataBeans: ArrayList<Album> = arrayListOf()
+    private var artistDataBeans: ArrayList<ArtistBean> = arrayListOf()
     private var layoutId: Int = 0
     var keyWords: String = ""
         set(value) {
             field = value
-            checkLoad()
+            checkDataLoad()
         }
 
 
-    private fun checkLoad() {
+    private fun checkDataLoad() {
         if (mIsViewBinding && mIsVisibleToUser && keyWords.isNotEmpty()) {
             onLazyLoad()
         }
     }
 
 
+
     override fun onLazyLoad() {
         super.onLazyLoad()
-        if (keyWords.isNotEmpty()) {
+        if (mIsViewBinding && keyWords.isNotEmpty()) {
             loadSearchData()
         }
     }
@@ -70,13 +75,38 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
                 layoutId = R.layout.item_local_music
                 searchAlbum()
             }
+
+            SearchType.ARTIST.type -> {
+                layoutId = R.layout.item_local_music
+                searchArtist()
+            }
         }
     }
+
+    private fun searchArtist(){
+        launch({
+            showLoading()
+            val mSearchResult = searchArtistData()
+            if (artistDataBeans.isNotEmpty()){
+                artistDataBeans.clear()
+            }
+            artistDataBeans.addAll(mSearchResult.dataBean?.data!!)
+            initRecyclerView(artistDataBeans)
+        },{
+            hideLoading()
+            showRetryView()
+        })
+    }
+
+
 
     private fun searchAlbum() {
         launch({
             showLoading()
             val mSearchResult = searchAlbumData()
+            if(albumDataBeans.isNotEmpty()){
+                albumDataBeans.clear()
+            }
             albumDataBeans.addAll(mSearchResult.dataBean?.data!!)
             initRecyclerView(albumDataBeans)
         }, {
@@ -125,6 +155,12 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
                     holder.setText(R.id.textViewArtist, t.artist!!.name)
                 }
 
+                if (t is ArtistBean){
+                    holder.setImageResource(R.id.imgCover, t.picUrl)
+                    holder.setText(R.id.textViewName, t.name)
+                    holder.setText(R.id.textViewArtist, "")
+
+                }
             }
         }
         mAdapter.setOnItemClickListener(this)
@@ -140,6 +176,11 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
 
     private suspend fun searchAlbumData() = withContext(Dispatchers.IO) {
         val result = mPresenter!!.searchAlbumData(keyWords, type)
+        result
+    }
+
+    private suspend fun searchArtistData() = withContext(Dispatchers.IO){
+        val result = mPresenter!!.searchArtistData(keyWords)
         result
     }
 
@@ -201,6 +242,13 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
                 val bundle = Bundle()
                 bundle.putString("ArtistTabFragment", id)
                 switch(MusicDetailFragment(), bundle)
+            }
+            SearchType.ARTIST.type -> {
+                currentTime = System.currentTimeMillis()
+                val bundle = Bundle()
+                bundle.putParcelable("ARTIST", artistDataBeans[position])
+                switch(ArtistDetailFragment(),bundle)
+
             }
         }
     }

@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.search
 
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.artist.Album
+import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.search.SearchResult
 import com.brins.lightmusic.utils.await
 
@@ -25,6 +26,8 @@ class SearchPresenter private constructor(): SearchContract.Presenter {
     }
 
     override suspend fun searchAlbumData(input: String, type: Int) = ApiHelper.getSearchService().searchAlbum(input, type).await()
+
+    override suspend fun searchArtistData(input: String) = ApiHelper.getSearchService().searchArtist(input).await()
 
     override suspend fun loadSearchSuggest(input: String) = ApiHelper.getSearchService().searchSuggest(input).await()
 

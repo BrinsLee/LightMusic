@@ -3,6 +3,7 @@ package com.brins.lightmusic.api.service
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.artist.Album
+import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.search.SearchResult
 import com.brins.lightmusic.model.search.SearchSuggestResult
 import retrofit2.Call
@@ -22,6 +23,13 @@ interface SearchService {
      */
     @GET(AppConfig.SEARCH)
     fun searchAlbum(@Query("keywords")keys : String, @Query("type")type: Int = 10): Call<SearchResult<Album>>
+
+    /**
+     * 歌手搜索结果
+     */
+    @GET(AppConfig.SEARCH)
+    fun searchArtist(@Query("keywords")keys : String, @Query("type")type: Int = 100): Call<SearchResult<ArtistBean>>
+
 
     /*
     *搜索建议

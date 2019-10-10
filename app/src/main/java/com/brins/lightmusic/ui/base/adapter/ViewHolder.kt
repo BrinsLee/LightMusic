@@ -62,7 +62,10 @@ class ViewHolder(var mContext: Context, itemView: View) : RecyclerView.ViewHolde
         return itemView
     }
 
-    fun setImageResource(viewId: Int,url: String) {
+    fun setImageResource(viewId: Int,url: String?) {
+        if (url == null){
+            return
+        }
         Glide.with(mContext)
             .load(url)
             .into(getView<ImageView>(viewId))

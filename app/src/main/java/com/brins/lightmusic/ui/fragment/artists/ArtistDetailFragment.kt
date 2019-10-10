@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.ui.activity.MainActivity
+import com.brins.lightmusic.ui.activity.SearchActivity
 import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.base.AppBarStateChangeListener
 import com.brins.lightmusic.ui.base.BaseFragment
@@ -110,7 +111,13 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
     }
 
     override fun onBackClick(view: View) {
-        (activity as MainActivity).onBackPressed()
+        try {
+            (activity as MainActivity).onBackPressed()
+
+        }catch (e : Exception){
+            (activity as SearchActivity).onBackPressed()
+
+        }
 
     }
 }
