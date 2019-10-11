@@ -36,19 +36,27 @@ open class Music(
 
     var fileName: String = "",
 
-    var fileUrl: String = ""
+    var fileUrl: String = "",
+
+    /*
+    * 是否可播放 8：可播放
+    * */
+    @SerializedName("fee")
+    var fee : Int = 8
+
 
 ) : Parcelable {
     var bitmapCover: Bitmap? = null
 
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readString(),
+        parcel.readString(),
         parcel.createTypedArrayList(ArtistBean.CREATOR),
         parcel.readParcelable(Album::class.java.classLoader),
         parcel.readInt(),
-        parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt()
     ) {
         bitmapCover = parcel.readParcelable(Bitmap::class.java.classLoader)
     }
@@ -61,6 +69,7 @@ open class Music(
         parcel.writeInt(duration)
         parcel.writeString(fileName)
         parcel.writeString(fileUrl)
+        parcel.writeInt(fee)
         parcel.writeParcelable(bitmapCover, flags)
     }
 

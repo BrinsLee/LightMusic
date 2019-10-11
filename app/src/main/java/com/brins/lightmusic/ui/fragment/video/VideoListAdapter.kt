@@ -47,7 +47,7 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
             val metaData = MvData[position].metaDataBean
             holder.title.text = mv.name
             holder.nickName.text = mv.artistName
-            holder.watchCount.text = if (mv.playCount > 1000) "${mv.playCount / 1000}万播放" else {
+            holder.watchCount.text = if (mv.playCount > 10000) "${mv.playCount / 10000}万播放" else {
                 "${mv.playCount}播放"
             }
             Glide.with(LightMusicApplication.getLightApplication()).load(mv.cover)

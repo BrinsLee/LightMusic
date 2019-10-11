@@ -3,14 +3,18 @@ package com.brins.lightmusic.ui.fragment.search
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.artist.Album
 import com.brins.lightmusic.model.artist.ArtistBean
+import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
+import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.model.search.SearchResult
+import com.brins.lightmusic.ui.fragment.video.VideoPresent
 import com.brins.lightmusic.utils.await
 
 class SearchPresenter private constructor(): SearchContract.Presenter {
 
-
-
     private var mView: SearchContract.View? = null
+    private val mvList = mutableListOf<Mv>()
+
 
     companion object {
         val instance = SingletonHolder.holder
@@ -30,6 +34,25 @@ class SearchPresenter private constructor(): SearchContract.Presenter {
     override suspend fun searchArtistData(input: String) = ApiHelper.getSearchService().searchArtist(input).await()
 
     override suspend fun loadSearchSuggest(input: String) = ApiHelper.getSearchService().searchSuggest(input).await()
+
+    override suspend fun searchMusicListData(input: String) = ApiHelper.getSearchService().searchMusicList(input).await()
+
+    override suspend fun searchMusicVideoData(input: String): List<Mv>  {
+        mvList.clear()
+        val mvResult = ApiHelper.getSearchService().searchMusicVideo(input).await()
+        if (mvResult.dataBean != null && mvResult.dataBean?.data != null && mvResult.dataBean?.data!!.isNotEmpty()){
+            mvResult.dataBean!!.data!!.forEach {
+                val t =loadUrl(it)
+                if (t.dataBean != null) {
+                    mvList.add(Mv(it, t.dataBean!!))
+                }
+            }
+        }
+        return mvList
+    }
+
+    suspend fun loadUrl(dataBean: LastestMvDataBean) = ApiHelper.getMvService().getMvMetaData(dataBean.id).await()
+
 
     override fun subscribe(view: SearchContract.View?) {
         this.mView = view

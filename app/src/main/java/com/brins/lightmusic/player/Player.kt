@@ -8,7 +8,9 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.PowerManager
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -98,7 +100,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     }
 
 
-
     /**
      * 请求焦点
      */
@@ -142,10 +143,30 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
             //播放新音乐
             if (mPlayList.prepare()) {
                 var music = mPlayList.getCurrentSong()
-                val url = music?.fileUrl
-                if (url.isNullOrEmpty()){
-                    launch({
-                        music = loadMusicDetail(music!!)
+                if (music?.fee != 8) {
+                    Toast.makeText(
+                        BaseApplication.getInstance().baseContext,
+                        "音乐不可用，需要vip。自动播放下一首",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    playNext()
+                } else {
+                    val url = music?.fileUrl
+                    if (url.isNullOrEmpty()) {
+                        launch({
+                            music = loadMusicDetail(music!!)
+                            try {
+                                mPlayer.reset()
+                                mPlayer.setDataSource(music?.fileUrl)
+                                mPlayer.prepare()
+                                mPlayer.start()
+                                notifyPlayStatusChanged(true, music)
+                            } catch (e: Exception) {
+                                Log.e(TAG, "play: ", e)
+                                notifyPlayStatusChanged(false, music)
+                            }
+                        }, {})
+                    } else {
                         try {
                             mPlayer.reset()
                             mPlayer.setDataSource(music?.fileUrl)
@@ -155,34 +176,23 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
                         } catch (e: Exception) {
                             Log.e(TAG, "play: ", e)
                             notifyPlayStatusChanged(false, music)
+                            return false
                         }
-                    },{})
-                }else{
-                    try {
-                        mPlayer.reset()
-                        mPlayer.setDataSource(music?.fileUrl)
-                        mPlayer.prepare()
-                        mPlayer.start()
-                        notifyPlayStatusChanged(true, music)
-                    } catch (e: Exception) {
-                        Log.e(TAG, "play: ", e)
-                        notifyPlayStatusChanged(false, music)
-                        return false
                     }
+                    return true
                 }
-                return true
             }
         }
         return false
     }
 
 
-    private suspend fun loadMusicDetail(onlineMusic: Music) = withContext(Dispatchers.IO){
+    private suspend fun loadMusicDetail(onlineMusic: Music) = withContext(Dispatchers.IO) {
         val result = MusicPlayerPresenter.instance.loadMusicDetail(onlineMusic)
         result
     }
 
-    private fun notifyPlayStatusChanged(isPlaying: Boolean,music: Music? = null) {
+    private fun notifyPlayStatusChanged(isPlaying: Boolean, music: Music? = null) {
         for (callback in mCallbacks) {
             callback.onPlayStatusChanged(isPlaying, music)
         }
@@ -224,8 +234,8 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
 
     //focus true isplaying false
     override fun pause(): Boolean {
-        Log.d(TAG,"$isPlayingBeforeLoseFocuse")
-        Log.d(TAG,"$mPlayOnAudioFocus")
+        Log.d(TAG, "$isPlayingBeforeLoseFocuse")
+        Log.d(TAG, "$mPlayOnAudioFocus")
 
         if (mPlayOnAudioFocus && !mPlayer.isPlaying && isPlayingBeforeLoseFocuse) {
             mPlayer.start()

@@ -17,6 +17,9 @@ import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.artist.Album
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
+import com.brins.lightmusic.model.musicvideo.Mv
+import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.SearchActivity
 import com.brins.lightmusic.ui.base.BaseFragment
@@ -25,6 +28,7 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.fragment.artists.ArtistDetailFragment
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
+import com.brins.lightmusic.ui.fragment.video.VideoDetailFragment
 import com.brins.lightmusic.utils.SearchType
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.launch
@@ -41,7 +45,11 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
     private var playList: PlayList = PlayList()
     private var albumDataBeans: ArrayList<Album> = arrayListOf()
     private var artistDataBeans: ArrayList<ArtistBean> = arrayListOf()
-    private var layoutId: Int = 0
+    private var musicListDataBeans: ArrayList<MusicListBean> = arrayListOf()
+    private var musicVideoDataBeans: ArrayList<Mv> = arrayListOf()
+
+
+    private var layoutId: Int = R.layout.item_local_music
     var keyWords: String = ""
         set(value) {
             field = value
@@ -55,6 +63,11 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
         }
     }
 
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        checkDataLoad()
+    }
 
 
     override fun onLazyLoad() {
@@ -72,39 +85,76 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
             }
 
             SearchType.ALBUMS.type -> {
-                layoutId = R.layout.item_local_music
                 searchAlbum()
             }
 
             SearchType.ARTIST.type -> {
-                layoutId = R.layout.item_local_music
                 searchArtist()
+            }
+
+            SearchType.MUSICLIST.type -> {
+                searchMusicList()
+            }
+            SearchType.MUSICVIDEO.type -> {
+                searchMusicVideo()
             }
         }
     }
 
-    private fun searchArtist(){
+    private fun searchMusicVideo() {
         launch({
             showLoading()
-            val mSearchResult = searchArtistData()
-            if (artistDataBeans.isNotEmpty()){
-                artistDataBeans.clear()
+            val mSearchResult = searchMusicVideoData()
+            if (musicVideoDataBeans.isNotEmpty()) {
+                musicVideoDataBeans.clear()
             }
-            artistDataBeans.addAll(mSearchResult.dataBean?.data!!)
-            initRecyclerView(artistDataBeans)
-        },{
+            musicVideoDataBeans.addAll(mSearchResult)
+            initRecyclerView(musicVideoDataBeans)
+        }, {
             hideLoading()
             showRetryView()
         })
     }
 
 
+    private fun searchMusicList() {
+        launch({
+            showLoading()
+            val mSearchResult = searchMusicListData()
+            if (musicListDataBeans.isNotEmpty()) {
+                musicListDataBeans.clear()
+            }
+            musicListDataBeans.addAll(mSearchResult.dataBean?.data!!)
+            initRecyclerView(musicListDataBeans)
+        }, {
+            hideLoading()
+            showRetryView()
+        })
+    }
+
+
+    private fun searchArtist() {
+        launch({
+            showLoading()
+            val mSearchResult = searchArtistData()
+            if (artistDataBeans.isNotEmpty()) {
+                artistDataBeans.clear()
+            }
+            artistDataBeans.addAll(mSearchResult.dataBean?.data!!)
+            initRecyclerView(artistDataBeans)
+        }, {
+            Log.d("error", it.message)
+            hideLoading()
+            showRetryView()
+        })
+    }
+
 
     private fun searchAlbum() {
         launch({
             showLoading()
             val mSearchResult = searchAlbumData()
-            if(albumDataBeans.isNotEmpty()){
+            if (albumDataBeans.isNotEmpty()) {
                 albumDataBeans.clear()
             }
             albumDataBeans.addAll(mSearchResult.dataBean?.data!!)
@@ -134,12 +184,12 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
     }
 
     private fun <T> initRecyclerView(data: ArrayList<T>?) {
-        if (data == null) {
+        if (data == null && recyclerView == null) {
             return
         }
         val mAdapter = object : CommonViewAdapter<T>(
             activity!!
-            , layoutId, data
+            , layoutId, data!!
         ) {
             override fun converted(holder: ViewHolder, t: T, position: Int) {
                 if (t is Music) {
@@ -155,12 +205,27 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
                     holder.setText(R.id.textViewArtist, t.artist!!.name)
                 }
 
-                if (t is ArtistBean){
+                if (t is ArtistBean) {
                     holder.setImageResource(R.id.imgCover, t.picUrl)
                     holder.setText(R.id.textViewName, t.name)
                     holder.setText(R.id.textViewArtist, "")
-
                 }
+                if (t is MusicListBean) {
+                    holder.setImageResource(R.id.imgCover, t.coverImgUrl)
+                    holder.setText(R.id.textViewName, t.name)
+                    holder.setText(
+                        R.id.textViewArtist,
+                        if (t.playCount > 10000) "${t.playCount / 10000}万播放" else {
+                            "${t.playCount}播放"
+                        }
+                    )
+                }
+                if (t is Mv) {
+                    holder.setImageResource(R.id.imgCover, t.dataBean.cover)
+                    holder.setText(R.id.textViewName, t.dataBean.name)
+                    holder.setText(R.id.textViewArtist, t.dataBean.artistName)
+                }
+
             }
         }
         mAdapter.setOnItemClickListener(this)
@@ -179,8 +244,18 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
         result
     }
 
-    private suspend fun searchArtistData() = withContext(Dispatchers.IO){
+    private suspend fun searchArtistData() = withContext(Dispatchers.IO) {
         val result = mPresenter!!.searchArtistData(keyWords)
+        result
+    }
+
+    private suspend fun searchMusicListData() = withContext(Dispatchers.IO) {
+        val result = mPresenter!!.searchMusicListData(keyWords)
+        result
+    }
+
+    private suspend fun searchMusicVideoData() = withContext(Dispatchers.IO) {
+        val result = mPresenter!!.searchMusicVideoData(keyWords)
         result
     }
 
@@ -247,8 +322,20 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
                 currentTime = System.currentTimeMillis()
                 val bundle = Bundle()
                 bundle.putParcelable("ARTIST", artistDataBeans[position])
-                switch(ArtistDetailFragment(),bundle)
+                switch(ArtistDetailFragment(), bundle)
 
+            }
+            SearchType.MUSICLIST.type -> {
+                currentTime = System.currentTimeMillis()
+                val bundle = Bundle()
+                bundle.putString("DiscoveryFragment", musicListDataBeans[position].id)
+                switch(MusicDetailFragment(), bundle)
+            }
+            SearchType.MUSICVIDEO.type -> {
+                currentTime = System.currentTimeMillis()
+                val bundle = Bundle()
+                bundle.putParcelable("Mv", musicVideoDataBeans[position])
+                switch(VideoDetailFragment(), bundle)
             }
         }
     }

@@ -53,7 +53,7 @@ class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
     }
 
     override fun onBackClick(view: View) {
-        (activity as MainActivity).onBackPressed()
+        activity!!.onBackPressed()
     }
 
     override fun onPause() {
