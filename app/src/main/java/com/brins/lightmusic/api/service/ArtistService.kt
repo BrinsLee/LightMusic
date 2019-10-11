@@ -3,6 +3,7 @@ package com.brins.lightmusic.api.service
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.album.AlbumListResult
 import com.brins.lightmusic.model.artist.ArtistSongResult
+import com.brins.lightmusic.model.artist.CategoryResultData
 import com.brins.lightmusic.model.musicvideo.MvResult
 import com.brins.lightmusic.model.onlinemusic.MusicListResult
 import io.reactivex.Observable
@@ -19,6 +20,12 @@ interface ArtistService {
     @GET(AppConfig.ARTISTS)
     fun getArtist(@Query("limit") limit: Int = 15): Call<MusicListResult>
 
+
+    /*
+  * 获取歌手分类列表
+  * */
+    @GET(AppConfig.ARTISTS_CATEGORY)
+    fun getArtistCategory(@Query("cat") cat: Int = 1001): Call<CategoryResultData>
     /*
     * 获取歌手音乐列表
     * */

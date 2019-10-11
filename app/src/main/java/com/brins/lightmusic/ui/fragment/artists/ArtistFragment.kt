@@ -100,7 +100,13 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
 
     private fun initPileLayout() {
         pileLayout.visibility = View.VISIBLE
-        pileLayout.setAdapter(object : PileLayout.Adapter() {
+        val adapter = object : PileLayout.Adapter() {
+            override fun onItemClick(view: View?, position: Int) {
+                val bundle = Bundle()
+                bundle.putInt("category", artistCategory[position].code)
+                switch(ArtistCatgoryFragment(),bundle)
+            }
+
             override fun getLayoutId(): Int {
                 return R.layout.artist_item
             }
@@ -122,7 +128,8 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
                     .load(artistCategory[index].url)
                     .into(viewHolder.imageView!!)
             }
-        })
+        }
+        pileLayout.setAdapter(adapter)
     }
 
     override fun setPresenter(presenter: ArtistConstract.Presenter) {

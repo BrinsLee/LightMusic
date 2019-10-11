@@ -1,13 +1,8 @@
 package com.brins.lightmusic.ui.fragment.search
 
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.model.artist.Album
-import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
 import com.brins.lightmusic.model.musicvideo.Mv
-import com.brins.lightmusic.model.onlinemusic.MusicListBean
-import com.brins.lightmusic.model.search.SearchResult
-import com.brins.lightmusic.ui.fragment.video.VideoPresent
 import com.brins.lightmusic.utils.await
 
 class SearchPresenter private constructor(): SearchContract.Presenter {

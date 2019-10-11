@@ -521,7 +521,6 @@ public class PileLayout extends ViewGroup {
         /**
          * item点击，可重载
          */
-        public void onItemClick(View view, int position) {
-        }
+        public abstract void onItemClick(View view, int position);
     }
 }

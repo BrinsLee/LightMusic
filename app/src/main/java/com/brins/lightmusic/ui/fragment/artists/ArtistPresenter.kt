@@ -4,12 +4,16 @@ import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.artist.CategoryResult
+import com.brins.lightmusic.model.artist.CategoryResultData
 import com.brins.lightmusic.utils.JsonToObject
 import com.brins.lightmusic.utils.await
 import com.brins.lightmusic.utils.getJson
 
 class ArtistPresenter private constructor() : ArtistConstract.Presenter {
 
+
+
+    override suspend fun loadArtistCategory(type: Int): CategoryResultData = ApiHelper.getArtistService().getArtistCategory(type).await()
 
     override suspend fun loadArtist(): ArrayList<ArtistBean> = ApiHelper.getArtistService().getArtist().await().artistBeans as ArrayList<ArtistBean>
 
