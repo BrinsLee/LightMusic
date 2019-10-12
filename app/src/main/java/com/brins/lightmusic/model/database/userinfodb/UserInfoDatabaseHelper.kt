@@ -28,12 +28,12 @@ class UserInfoDatabaseHelper(context: Context) {
         return appDatabase.dao().getUserProfile()
     }
 
-    fun deleteUserAccount(account : UserAccountBean){
+    fun deleteUserAccount(account : UserAccountBean): Single<Int>{
         val id = account.mId
-        appDatabase.dao().deleteUserAccount(id)
+        return appDatabase.dao().deleteUserAccount(id)
     }
-    fun deleteUserProfile(account : UserProfileBean){
+    fun deleteUserProfile(account : UserProfileBean): Single<Int>{
         val id = account.mId
-        appDatabase.dao().deleteUserProfile(id)
+        return appDatabase.dao().deleteUserProfile(id)
     }
 }

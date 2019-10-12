@@ -1,6 +1,7 @@
 package com.brins.lightmusic.model.database
 
 import com.brins.lightmusic.BaseApplication
+import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.database.userinfodb.UserInfoDatabaseHelper
 import com.brins.lightmusic.model.userlogin.UserAccountBean
 import com.brins.lightmusic.model.userlogin.UserLoginResult
@@ -36,5 +37,13 @@ object DatabaseFactory {
 
     fun getUserProfile():Single<UserProfileBean>{
         return getUserInfoDB().getUserProfile()
+    }
+
+    fun deleteUserInfo(): Single<Int>{
+        return getUserInfoDB().deleteUserAccount(AppConfig.userAccount)
+    }
+
+    fun deleteUserProfile(): Single<Int>{
+        return getUserInfoDB().deleteUserProfile(AppConfig.userProfile)
     }
 }

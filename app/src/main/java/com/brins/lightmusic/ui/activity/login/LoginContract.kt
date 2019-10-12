@@ -10,8 +10,14 @@ interface LoginContract {
         fun onLoginSuccess(respone : UserLoginResult)
 
         fun onLoginFail()
+
+        fun onLogoutSuccess()
+
+        fun onLogoutFail()
     }
     interface Presenter : BasePresenter<View>{
         fun startLogin(request : UserLoginRequest)
+
+        fun logout()
     }
 }

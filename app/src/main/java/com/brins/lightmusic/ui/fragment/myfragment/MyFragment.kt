@@ -21,6 +21,7 @@ import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
+import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGOUT_SUCCESS_CODE
 import com.brins.lightmusic.ui.fragment.usermusiclist.UserMusicListFragment
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
@@ -42,7 +43,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     private lateinit var mAdapter: CommonViewAdapter<UserPlayListBean>
     private lateinit var myPresenter: MyPresenter
     private lateinit var mFmList: PlayList
-    private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf(UserPlayListBean())
+    private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf()
     private var mAvatar: Bitmap? = null
 
 
@@ -144,8 +145,20 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
             LOGIN_FAIL_CODE -> {
 
             }
+            LOGOUT_SUCCESS_CODE -> {
+                clearUserData()
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun clearUserData() {
+        avatar.setImageResource(R.drawable.ic_avatar)
+        nickName.text = getString(R.string.login)
+        if (mPlayList.isNotEmpty()){
+            mPlayList.clear()
+            mAdapter.notifyDataSetChanged()
+        }
     }
 
     //MVP View
@@ -193,7 +206,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     }
 
     private fun checkToLoad() {
-        if (mPlayList.size == 1 && mPlayList[0].id == "") {
+        if (mPlayList.isEmpty()) {
             if (::myPresenter.isInitialized) {
                 myPresenter.loadUserMusicList(AppConfig.userAccount.id)
             } else {

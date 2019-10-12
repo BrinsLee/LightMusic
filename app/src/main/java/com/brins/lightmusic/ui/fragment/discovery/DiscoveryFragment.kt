@@ -2,12 +2,10 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -48,7 +46,6 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
         getBanner()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun getBanner() {
         DiscoverPresenter.instance.subscribe(this@DiscoveryFragment)
         showLoading()
@@ -167,6 +164,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
             loadingMore.isRefreshing = false
             showLoading()
             initMusicList(count * 6)
+            initHotMusicList(count * 6)
         }
     }
 

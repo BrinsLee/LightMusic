@@ -38,7 +38,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="parent"/>
-                <ImageView
+<!--                <ImageView
                         android:scaleType="centerCrop"
                         android:id="@+id/recommend"
                         app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/common_margin_20"/>
+                        android:layout_height="@dimen/common_margin_20"/>-->
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleMusiclist"
@@ -72,7 +72,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@id/recycleMusiclist"/>
-                <ImageView
+<!--                <ImageView
                         android:scaleType="centerCrop"
                         android:id="@+id/recommend2"
                         app:layout_constraintTop_toBottomOf="@id/recycleMusiclist"
@@ -80,7 +80,7 @@
                         android:src="@drawable/ic_chevron_right"
                         app:layout_constraintStart_toEndOf="@id/musicTitle2"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/common_margin_20"/>
+                        android:layout_height="@dimen/common_margin_20"/>-->
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleMusiclist2"

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lib_common.utils.SpUtils
+import com.brins.lightmusic.BuildConfig
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.common.AppConfig.PASSWORD
@@ -33,8 +34,6 @@ import kotlinx.android.synthetic.main.activity_unlogin.*
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     OnItemClickListener, CommonHeaderView.OnBackClickListener {
 
-
-
     private lateinit var mPresenter: LoginContract.Presenter
     private var isLogin = false
     private var mAvatar: Bitmap? = null
@@ -46,6 +45,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         val IS_LOGIN = "isLogin"
         val LOGIN_SUCCESS_CODE = 1002
         val LOGIN_FAIL_CODE = 1001
+        val LOGOUT_SUCCESS_CODE = 1003
 
         fun startThisActivity(
             fragment: Fragment,
@@ -58,16 +58,28 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     }
 
 
-    override fun onClick(v: View?) {
-        USERNAME = et_username.text.toString()
-        PASSWORD = et_password.text.toString()
-        if (USERNAME.isEmpty() || PASSWORD.isEmpty()) {
-            Toast.makeText(this, getString(R.string.username_not_empty), Toast.LENGTH_SHORT).show()
-            return
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btn_login -> {
+                USERNAME = et_username.text.toString()
+                PASSWORD = et_password.text.toString()
+                if (USERNAME.isEmpty() || PASSWORD.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.username_not_empty), Toast.LENGTH_SHORT)
+                        .show()
+                    return
+                }
+                val request =
+                    UserLoginRequest(
+                        LoginPresenter.Companion.LOGIN_TYPE.TYPE_EMAIL,
+                        USERNAME,
+                        PASSWORD
+                    )
+                mPresenter.startLogin(request)
+            }
+            R.id.logout -> {
+                mPresenter.logout()
+            }
         }
-        val request =
-            UserLoginRequest(LoginPresenter.Companion.LOGIN_TYPE.TYPE_EMAIL, USERNAME, PASSWORD)
-        mPresenter.startLogin(request)
     }
 
     override fun getLayoutResId(): Int {
@@ -95,6 +107,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
             nickName.text = AppConfig.userProfile.nickname
             initList()
             headLogin.setOnBackClickListener(this)
+            logout.setOnClickListener(this)
         } else {
             btn_login.setOnClickListener(this)
             headUnlogin.setOnBackClickListener(this)
@@ -103,11 +116,12 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
 
     private fun initList() {
         mList = arrayListOf()
-        mList!!.add(Item(TYPE_MESSAGE, "我的消息", R.drawable.ic_message))
+/*      mList!!.add(Item(TYPE_MESSAGE, "我的消息", R.drawable.ic_message))
         mList!!.add(Item(TYPE_FRIEND, "我的好友", R.drawable.ic_friends))
         mList!!.add(Item(TYPE_THEME, "更换主题", R.drawable.ic_theme))
         mList!!.add(Item(TYPE_DONATE, "捐赠", R.drawable.ic_donate))
-        mList!!.add(Item(TYPE_ABOUT, "关于", R.drawable.ic_about))
+*/
+        mList!!.add(Item(TYPE_ABOUT, "版本：${BuildConfig.VERSION_NAME}", R.drawable.ic_about))
         mAdapter = object :
             CommonViewAdapter<Item>(this@LoginActivity, R.layout.item_login_selector, mList!!) {
             override fun converted(holder: ViewHolder, t: Item, position: Int) {
@@ -163,12 +177,21 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     }
 
 
-    fun saveUserAccount(info: UserLoginResult) {
+    private fun saveUserAccount(info: UserLoginResult) {
         AppConfig.userAccount = info.account
         AppConfig.userProfile = info.profile
         SpUtils.obtain(SP_USER_INFO, this).save(KEY_IS_LOGIN, true)
         AppConfig.isLogin = true
         setResult(LOGIN_SUCCESS_CODE)
+        finish()
+    }
+
+    private fun clearUserAccount() {
+        AppConfig.userAccount = null
+        AppConfig.userProfile = null
+        SpUtils.obtain(SP_USER_INFO, this).save(KEY_IS_LOGIN, false)
+        AppConfig.isLogin = false
+        setResult(LOGOUT_SUCCESS_CODE)
         finish()
     }
 
@@ -191,6 +214,16 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         hideLoading()
         setResult(LOGIN_FAIL_CODE)
         finish()
+    }
+
+    override fun onLogoutSuccess() {
+        clearUserAccount()
+        Log.d(TAG, "logout success :")
+
+    }
+
+    override fun onLogoutFail() {
+        Toast.makeText(this, "退出登录失败", Toast.LENGTH_SHORT).show()
     }
 
 
