@@ -44,7 +44,6 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
 
         if (MvData.isNotEmpty()) {
             val mv = MvData[position].dataBean
-            val metaData = MvData[position].metaDataBean
             holder.title.text = mv.name
             holder.nickName.text = mv.artistName
             holder.watchCount.text = if (mv.playCount > 10000) "${mv.playCount / 10000}万播放" else {

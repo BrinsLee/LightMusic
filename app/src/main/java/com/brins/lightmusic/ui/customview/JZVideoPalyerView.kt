@@ -5,7 +5,7 @@ import cn.jzvd.JzvdStd
 import com.brins.lightmusic.R
 
 
-class JZVideoPalyerView @JvmOverloads constructor(
+class JZVideoPalyerView constructor(
     context: Context,
     attrs: android.util.AttributeSet
 ) : JzvdStd(context, attrs) {

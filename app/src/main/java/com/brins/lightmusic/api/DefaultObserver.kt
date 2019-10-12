@@ -74,7 +74,6 @@ abstract class DefaultObserver<T> : Observer<T> {
             ExceptionReason.PARSE_ERROR -> show(R.string.parse_error)
 
             ExceptionReason.UNKNOWN_ERROR -> show(R.string.unknown_error)
-            else -> show(R.string.unknown_error)
         }
     }
 

@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Scroller
 import androidx.viewpager.widget.ViewPager
 
-class MainViewPager @JvmOverloads constructor(context: Context, attrs: AttributeSet) : ViewPager(context, attrs) {
+class MainViewPager constructor(context: Context, attrs: AttributeSet) : ViewPager(context, attrs) {
 
     private var isCanScroll = true
     private var mDownPosX = 0f

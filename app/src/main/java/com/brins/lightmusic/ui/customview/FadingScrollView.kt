@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.widget.NestedScrollView
 
-class FadingScrollView @JvmOverloads constructor(context: Context , attributeSet: AttributeSet): NestedScrollView(context,attributeSet) {
+class FadingScrollView constructor(context: Context , attributeSet: AttributeSet): NestedScrollView(context,attributeSet) {
 
     val TAG = "FadingScrollView"
     var fadingView : View? = null

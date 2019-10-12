@@ -5,9 +5,9 @@ import com.brins.lightmusic.common.AppConfig.BASEURL
 
 object ApiHelper {
 
-    val LOG_TAG_NETWORK_LOGIN = "network_login"
+/*    val LOG_TAG_NETWORK_LOGIN = "network_login"
     val LOG_TAG_NETWORK_USERINFO = "network_userinfo"
-    val LOG_TAG_NETWORK_API = "network_api"
+    val LOG_TAG_NETWORK_API = "network_api"*/
 
     private var mMusicService: MusicService? = null
     private var mPlayListService: PlayListService? = null

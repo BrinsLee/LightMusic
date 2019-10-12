@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.brins.lightmusic.R
 import kotlinx.android.synthetic.main.view_common_header.view.*
 
@@ -31,7 +32,7 @@ class CommonHeaderView @JvmOverloads constructor(
         title = a.getString(R.styleable.CommonHeaderView_chv_title)
         textColor = a.getColor(
             R.styleable.CommonHeaderView_chv_text_color,
-            resources.getColor(R.color.translucent, null)
+            ContextCompat. getColor(context,R.color.translucent)
         )
         val icon = a.getResourceId(R.styleable.CommonHeaderView_chv_icon, R.drawable.ic_back_black)
         headBack.setImageResource(icon)

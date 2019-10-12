@@ -148,7 +148,7 @@ class PlayList() : Parcelable {
             val iterator = songs.iterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
-                if (song!!.fileName == item.fileName) {
+                if (song.fileName == item.fileName) {
                     iterator.remove()
                     numOfSongs = songs.size
                     return true
@@ -225,6 +225,7 @@ class PlayList() : Parcelable {
                     newIndex = 0
                 }
             }
+            else -> {}
         }
         return songs[newIndex]
     }
@@ -238,6 +239,7 @@ class PlayList() : Parcelable {
                     newIndex = songs.size - 1
                 }
             }
+            else -> {}
         }
         return songs[newIndex]
     }

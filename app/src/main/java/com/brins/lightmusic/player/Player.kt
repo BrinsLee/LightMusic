@@ -159,7 +159,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
                         }
 
                     }, {
-                        val a = it.message
                         Toast.makeText(
                             BaseApplication.getInstance().baseContext,
                             "付费音乐，已自动播放下一首",
@@ -218,7 +217,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     override fun playLast(): Boolean {
 
         isPaused = false
-        val song = mPlayList.last()
+        mPlayList.last()
         play()
         return true
     }
@@ -226,7 +225,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
 
     override fun playNext(): Boolean {
         isPaused = false
-        val song = mPlayList.next()
+        mPlayList.next()
         play()
         return true
     }

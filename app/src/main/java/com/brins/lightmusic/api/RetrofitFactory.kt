@@ -15,16 +15,16 @@ class RetrofitFactory {
         private val TIMEOUT_READ: Long = 15
         private val TIMEOUT_WRITE = 60
 
-        fun newRetrofit(baseUrl: String, logTag: String = ""): Retrofit {
+        fun newRetrofit(baseUrl: String): Retrofit {
             val retrofit = Retrofit.Builder().baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(getClient(logTag))
+                .client(getClient())
                 .build()
             return retrofit
         }
 
-        fun getClient(logTag: String): OkHttpClient {
+        private fun getClient(): OkHttpClient {
             val builder: OkHttpClient.Builder = OkHttpClient().newBuilder()
             builder.connectTimeout(TIMEOUT_CONNECTED, TimeUnit.SECONDS)
                 .readTimeout(TIMEOUT_READ, TimeUnit.SECONDS)

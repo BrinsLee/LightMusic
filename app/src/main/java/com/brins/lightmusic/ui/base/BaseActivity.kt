@@ -1,19 +1,13 @@
 package com.brins.lightmusic.ui.base
 
-import android.graphics.Color
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
-import com.jaeger.library.StatusBarUtil
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -53,7 +47,6 @@ abstract class BaseActivity : AppCompatActivity() {
         if (resId != 0) {
             setContentView(resId)
         }
-        StatusBarUtil.setTranslucentForImageView(this, 0, getOffsetView())
         onCreateAfterBinding(savedInstanceState)
 
     }

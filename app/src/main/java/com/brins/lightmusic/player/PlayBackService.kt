@@ -115,7 +115,6 @@ class PlayBackService : Service(), IPlayback, HeadsetButtonReceiver.onHeadsetLis
         }
         val playList = getPlayList()
         playList.setPlayMode(PlayMode.getDefault())
-        val song = playList.getCurrentSong()
 
     }
 
