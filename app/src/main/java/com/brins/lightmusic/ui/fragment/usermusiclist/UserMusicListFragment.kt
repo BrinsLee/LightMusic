@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -47,7 +48,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         MusicListPresenter.instance.subscribe(this)
-        if (mPlayList.getNumOfSongs() == 0){
+        if (mPlayList.getNumOfSongs() == 0 && AppConfig.isLogin){
             initView()
         }
     }
@@ -93,7 +94,7 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
             mAdapter.notifyDataSetChanged()
             hideLoading()
         },{
-            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.login_first), Toast.LENGTH_SHORT).show()
             hideLoading()
             showRetryView()
         })

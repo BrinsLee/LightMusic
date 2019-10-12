@@ -33,7 +33,7 @@ public class AppConfig {
     /**
      * 每日推荐
      */
-    public static final String DAILY_RECOMMEND= "/recommend/data";
+    public static final String DAILY_RECOMMEND= "/recommend/songs";
 
 
     /**

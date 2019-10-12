@@ -143,30 +143,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
             //播放新音乐
             if (mPlayList.prepare()) {
                 var music = mPlayList.getCurrentSong()
-                if (music?.fee != 8) {
-                    Toast.makeText(
-                        BaseApplication.getInstance().baseContext,
-                        "音乐不可用，需要vip。自动播放下一首",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    playNext()
-                } else {
-                    val url = music?.fileUrl
-                    if (url.isNullOrEmpty()) {
-                        launch({
-                            music = loadMusicDetail(music!!)
-                            try {
-                                mPlayer.reset()
-                                mPlayer.setDataSource(music?.fileUrl)
-                                mPlayer.prepare()
-                                mPlayer.start()
-                                notifyPlayStatusChanged(true, music)
-                            } catch (e: Exception) {
-                                Log.e(TAG, "play: ", e)
-                                notifyPlayStatusChanged(false, music)
-                            }
-                        }, {})
-                    } else {
+                val url = music?.fileUrl
+                if (url.isNullOrEmpty()) {
+                    launch({
+                        music = loadMusicDetail(music!!)
                         try {
                             mPlayer.reset()
                             mPlayer.setDataSource(music?.fileUrl)
@@ -176,11 +156,31 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
                         } catch (e: Exception) {
                             Log.e(TAG, "play: ", e)
                             notifyPlayStatusChanged(false, music)
-                            return false
                         }
+
+                    }, {
+                        val a = it.message
+                        Toast.makeText(
+                            BaseApplication.getInstance().baseContext,
+                            "付费音乐，已自动播放下一首",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        playNext()
+                    })
+                } else {
+                    try {
+                        mPlayer.reset()
+                        mPlayer.setDataSource(music?.fileUrl)
+                        mPlayer.prepare()
+                        mPlayer.start()
+                        notifyPlayStatusChanged(true, music)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "play: ", e)
+                        notifyPlayStatusChanged(false, music)
+                        return false
                     }
-                    return true
                 }
+                return true
             }
         }
         return false
