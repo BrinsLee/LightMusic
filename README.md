@@ -56,3 +56,35 @@ Light Music （轻籁)
 		<em>歌手页</em>
 	</p>
 </p>
+<br>
+<br>
+<p align ="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_search_autofill.jpg" alt="Sample"  width="400" height="800">
+	<p align="left">
+		<em>搜索提示</em>
+	</p>
+</p>
+<br>
+<br>
+<p align ="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_search_song.jpg" alt="Sample"  width="400" height="800">
+	<p align="left">
+		<em>搜索单曲</em>
+	</p>
+</p>
+<br>
+<br>
+<p align ="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_search_album.jpg" alt="Sample"  width="400" height="800">
+	<p align="left">
+		<em>搜索专辑页</em>
+	</p>
+</p>
+<br>
+<br>
+<p align ="left">
+	<img src="https://github.com/BrinsLee/LightMusic/blob/master/image/img_search_musiclist.jpg" alt="Sample"  width="400" height="800">
+	<p align="left">
+		<em>搜索歌单页</em>
+	</p>
+</p>
