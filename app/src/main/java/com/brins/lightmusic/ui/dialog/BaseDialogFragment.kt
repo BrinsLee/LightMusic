@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.dialog
 
+import android.content.DialogInterface
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import java.lang.Exception
@@ -7,7 +8,7 @@ import java.util.*
 
 class BaseDialogFragment : DialogFragment() {
 
-    companion object{
+    companion object {
         private val sWaitShowDialogMap = HashMap<Int, LinkedList<BaseDialogFragment>>()
         private val sShowingDialogMap = HashMap<Int, BaseDialogFragment>()
         val DEFAULT_DIM_AMOUNT = 0.6f
@@ -17,8 +18,8 @@ class BaseDialogFragment : DialogFragment() {
     val TAG = this::class.java.simpleName
     private var mMapKey: Int = 0
 
-    fun show(fragment : FragmentManager): BaseDialogFragment{
-            return show(fragment ,true)
+    fun show(fragment: FragmentManager): BaseDialogFragment {
+        return show(fragment, true)
     }
 
     private fun show(fragmentManager: FragmentManager, isCheck: Boolean): BaseDialogFragment {
@@ -30,14 +31,14 @@ class BaseDialogFragment : DialogFragment() {
                 return fragment as BaseDialogFragment
             }
             var isCanShow = true
-            if (isCheck){
+            if (isCheck) {
                 val showingDialog = sShowingDialogMap.get(mMapKey)
-                if (showingDialog != null && showingDialog.isAdded){
+                if (showingDialog != null && showingDialog.isAdded) {
                     isCanShow = false
                     var linkedList = sWaitShowDialogMap[mMapKey]
-                    if (linkedList == null){
+                    if (linkedList == null) {
                         linkedList = LinkedList()
-                        sWaitShowDialogMap.put(mMapKey,linkedList)
+                        sWaitShowDialogMap.put(mMapKey, linkedList)
                     }
                     linkedList.add(this)
                 }
@@ -48,9 +49,21 @@ class BaseDialogFragment : DialogFragment() {
                 ft.commitAllowingStateLoss()
                 sShowingDialogMap[mMapKey] = this
             }
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return this
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        sShowingDialogMap.remove(mMapKey)
+        val linkedList = sWaitShowDialogMap.get(mMapKey)
+        if (linkedList != null && !linkedList.isEmpty()) {
+            val dialogFragment = linkedList.poll()
+            if (dialogFragment != null) {
+                dialogFragment.show(fragmentManager!!, false)
+            }
+        }
     }
 }
