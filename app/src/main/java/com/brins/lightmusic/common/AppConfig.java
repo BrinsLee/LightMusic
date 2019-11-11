@@ -5,6 +5,8 @@ import android.content.Context;
 import com.brins.lightmusic.model.userlogin.UserAccountBean;
 import com.brins.lightmusic.model.userlogin.UserProfileBean;
 
+import org.jetbrains.annotations.Nullable;
+
 public class AppConfig {
     public static boolean isLogin = false;
     public static final String BASEURL = "https://fc827649.ngrok.io";
@@ -152,6 +154,19 @@ public class AppConfig {
 
     public static String USERNAME = "";
     public static String PASSWORD = "";
+
+    public static final String ACTION_PRV = "com.brins.lightmusic.ACTION.PLAY_LAST";
+    public static final String ACTION_NEXT = "com.brins.lightmusic.ACTION.PLAY_NEXT";
+    public static final String ACTION_PAUSE = "com.brins.lightmusic.ACTION.PAUSE";
+    public static final String ACTION_PLAY = "com.brins.lightmusic.ACTION.PLAY";
+
+    public static final int CODE_MAIN = 0;
+    public static final int CODE_CLOSE = 1;
+    public static final int CODE_PRV = 2;
+    public static final int CODE_PAUSE = 3;
+    public static final int CODE_PLAY = 4;
+    public static final int CODE_NEXT = 5;
+
 
     /**
      * 包名相关常量

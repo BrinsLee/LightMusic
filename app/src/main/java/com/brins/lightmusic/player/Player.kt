@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
+import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.event.NotificationUpadteEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
@@ -192,6 +194,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     }
 
     private fun notifyPlayStatusChanged(isPlaying: Boolean, music: Music? = null) {
+        RxBus.getInstance().post(NotificationUpadteEvent())
         for (callback in mCallbacks) {
             callback.onPlayStatusChanged(isPlaying, music)
         }
