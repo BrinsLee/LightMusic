@@ -7,7 +7,7 @@ import com.brins.lightmusic.model.userlogin.UserProfileBean;
 
 public class AppConfig {
     public static boolean isLogin = false;
-    public static final String BASEURL = "https://0068d9ae.ngrok.io";
+    public static final String BASEURL = "https://fc827649.ngrok.io";
 
 
     /**
@@ -131,6 +131,8 @@ public class AppConfig {
      * 可选参数 : type : 如果传 'mobile' 则返回移动端数据
      */
     public static final String SEARCH_SUGGEST = "/search/suggest";
+
+    public static final String ALIPAY = "fkx00199c1ypi0c9bzss8a8";
 
     /**
      * 搜索

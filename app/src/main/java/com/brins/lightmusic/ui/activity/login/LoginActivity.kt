@@ -15,8 +15,7 @@ import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.BuildConfig
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
-import com.brins.lightmusic.common.AppConfig.PASSWORD
-import com.brins.lightmusic.common.AppConfig.USERNAME
+import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.model.userlogin.Item
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
@@ -27,6 +26,8 @@ import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
+import com.canking.minipay.Config
+import com.canking.minipay.MiniPayUtils
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
@@ -77,6 +78,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
                 mPresenter.startLogin(request)
             }
             R.id.logout -> {
+                //todo 确定弹框
                 mPresenter.logout()
             }
         }
@@ -122,6 +124,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         mList!!.add(Item(TYPE_DONATE, "捐赠", R.drawable.ic_donate))
 */
         mList!!.add(Item(TYPE_ABOUT, "版本：${BuildConfig.VERSION_NAME}", R.drawable.ic_about))
+        mList!!.add(Item(TYPE_DONATE, "请作者喝咖啡", R.drawable.ic_donate))
         mAdapter = object :
             CommonViewAdapter<Item>(this@LoginActivity, R.layout.item_login_selector, mList!!) {
             override fun converted(holder: ViewHolder, t: Item, position: Int) {
@@ -236,7 +239,12 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     }
 
     override fun onItemClick(position: Int) {
-
+        when (position) {
+            1 -> MiniPayUtils.setupPay(
+                this,
+                Config.Builder(ALIPAY, R.drawable.ic_ali_pay, R.drawable.ic_wechat_pay).build()
+            )
+        }
     }
 
 }
