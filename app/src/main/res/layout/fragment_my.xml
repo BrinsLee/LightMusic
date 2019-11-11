@@ -78,14 +78,15 @@
 
                 <include layout="@layout/item_grid_view" />
 
-                <com.brins.lightmusic.ui.customview.UserPlayListView
+                <include layout="@layout/item_recycler_head" />
+
+                <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/userPlayList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/common_margin_10"
-                        app:layout_constraintTop_toBottomOf="@id/head">
+                        app:layout_constraintTop_toBottomOf="@id/rootli">
 
-                </com.brins.lightmusic.ui.customview.UserPlayListView>
+                </androidx.recyclerview.widget.RecyclerView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

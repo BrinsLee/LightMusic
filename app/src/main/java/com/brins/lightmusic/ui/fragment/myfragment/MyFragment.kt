@@ -6,8 +6,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -35,6 +35,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.item_grid_view.*
+import kotlinx.android.synthetic.main.item_recycler_head.*
 import java.lang.Exception
 
 class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItemClickListener,
@@ -45,6 +46,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     private lateinit var mFmList: PlayList
     private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf()
     private var mAvatar: Bitmap? = null
+    private var isListOpen = false
 
 
     override fun getLayoutResID(): Int {
@@ -95,6 +97,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
         localMusic.setOnClickListener(this)
         fm.setOnClickListener(this)
         collection.setOnClickListener(this)
+        rootli.setOnClickListener(this)
 
     }
 
@@ -116,8 +119,20 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
             R.id.fm -> myPresenter.loadUserFm()
             R.id.collection -> switch(DailyRecommendFragment())
             R.id.localMusic -> switch(LocalMusicFragment())
+            R.id.rootli -> openMusicList()
         }
 
+    }
+
+    private fun openMusicList() {
+        isListOpen = !isListOpen
+        if (isListOpen) {
+            userPlayList.visibility = View.VISIBLE
+            status.setImageResource(R.drawable.ic_chevron_down)
+        } else {
+            userPlayList.visibility = View.INVISIBLE
+            status.setImageResource(R.drawable.ic_chevron_right)
+        }
     }
 
     private fun switch(fragment: Fragment) {
@@ -155,7 +170,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     private fun clearUserData() {
         avatar.setImageResource(R.drawable.ic_avatar)
         nickName.text = getString(R.string.login)
-        if (mPlayList.isNotEmpty()){
+        if (mPlayList.isNotEmpty()) {
             mPlayList.clear()
             mAdapter.notifyDataSetChanged()
         }
@@ -191,7 +206,8 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
                     holder.setText(R.id.textViewArtist, "共${playlist.trackCount}首")
                 }
             }
-            userPlayList.setAdapter(mAdapter)
+            userPlayList.adapter = mAdapter
+            userPlayList.layoutManager = LinearLayoutManager(context)
             mAdapter.setOnItemClickListener(this)
         }
     }
