@@ -66,7 +66,7 @@ fun loadingCover(mediaUri: String): String {
 }
 
 fun loadingOnlineCover(url: String): Bitmap {
-    if (url.isEmpty()){
+    if (url.isEmpty()) {
         return string2Bitmap(null)!!
     }
     return Glide.with(LightMusicApplication.getLightApplication())
@@ -400,7 +400,11 @@ fun launch(block: suspend () -> Unit, error: suspend (Throwable) -> Unit) = Coro
     try {
         block()
     } catch (e: Throwable) {
-        error(e)
+        try {
+            error(e)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 

@@ -2,6 +2,8 @@ package com.brins.lightmusic.ui.fragment.video
 
 
 import android.graphics.Color
+import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
@@ -31,12 +33,10 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>() {
         return R.layout.fragment_video
     }
 
-    override fun onLazyLoad() {
-        super.onLazyLoad()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
-
     }
-
 
     private fun initView() {
         mViewpager.adapter = adapter
@@ -49,13 +49,13 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>() {
                 }
 
                 override fun onTabUnselected(p0: TabLayout.Tab?) {
-                    val tv_tab = p0!!.customView!!.findViewById(R.id.tab_item) as TextView
-                    tv_tab.setTextColor(Color.GRAY)
+                    val tv_tab = p0?.customView?.findViewById(R.id.tab_item) as? TextView
+                    tv_tab?.setTextColor(Color.GRAY)
                 }
 
                 override fun onTabSelected(p0: TabLayout.Tab?) {
-                    val tv_tab = p0!!.customView!!.findViewById(R.id.tab_item) as TextView
-                    tv_tab.setTextColor(Color.BLACK)
+                    val tv_tab = p0?.customView?.findViewById(R.id.tab_item) as? TextView
+                    tv_tab?.setTextColor(Color.BLACK)
                 }
 
             })

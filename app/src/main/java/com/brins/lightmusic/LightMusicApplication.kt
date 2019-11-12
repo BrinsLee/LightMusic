@@ -34,7 +34,7 @@ class LightMusicApplication : BaseApplication() {
 
 
     private fun initRxJava() {
-        RxJavaPlugins.setErrorHandler { throwable -> Log.e("RxJava", "RX error handler") }
+        RxJavaPlugins.setErrorHandler { Log.e("RxJava", "RX error handler") }
     }
 
     private fun initUserData() {
