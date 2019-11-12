@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.customview
 
+import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import com.brins.lightmusic.R
@@ -10,26 +11,21 @@ class LoadingFragment : BaseDialogFragment() {
         return R.layout.loading_layout
     }
 
-
     companion object {
-        private var logoutDialog : LoadingFragment? = null
-
         @Synchronized
-        fun showSelf(manager: FragmentManager?) {
-            if (manager == null){
-                return
-            }
-            if (logoutDialog == null){
-                logoutDialog = LoadingFragment()
-            }
-            logoutDialog!!.show(manager)
+        fun showSelf(manager: FragmentManager): LoadingFragment {
+            val logoutDialog = LoadingFragment()
+            logoutDialog.show(manager)
+            return logoutDialog
         }
 
-        fun dismiss(){
-            logoutDialog?.dismiss()
-        }
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        retainInstance = true
+        super.onCreate(savedInstanceState)
+    }
 
     override fun isCanceledOnTouchOutside(): Boolean {
         return true

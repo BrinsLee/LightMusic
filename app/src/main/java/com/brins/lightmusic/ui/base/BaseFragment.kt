@@ -6,26 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.ui.customview.LoadingFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFragment<T> : Fragment() , BaseView<T> {
+abstract class BaseFragment<T> : Fragment(), BaseView<T> {
 
     val TAG = javaClass.simpleName
     protected open var mBindDestroyDisposable: CompositeDisposable? = null
-    private var rootView : View? = null
+    private var rootView: View? = null
     /*实现懒加载*/
     protected open var mIsViewBinding: Boolean = false
     protected open var mIsVisibleToUser: Boolean = false
     protected open var mHadLoaded: Boolean = false
+    protected open var loadingFragment: LoadingFragment? = null
 
 
     abstract fun getLayoutResID(): Int
 
-    protected open fun onCreateViewAfterBinding(view : View){
+    protected open fun onCreateViewAfterBinding(view: View) {
         mIsViewBinding = true
         checkLoad()
     }
@@ -44,7 +44,7 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
     }
 
     private fun bindUntilDestroy(disposable: Disposable?) {
-        if (disposable == null){
+        if (disposable == null) {
             return
         }
         if (mBindDestroyDisposable == null) {
@@ -65,15 +65,17 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        if (rootView == null){
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        if (rootView == null) {
             rootView = inflater.inflate(getLayoutResID(), container, false)
         }
         return rootView
     }
 
-    protected open fun showRetryView(){
+    protected open fun showRetryView() {
 
     }
 
@@ -84,7 +86,7 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (mBindDestroyDisposable != null){
+        if (mBindDestroyDisposable != null) {
             mBindDestroyDisposable!!.clear()
         }
         (rootView?.parent as ViewGroup).removeView(rootView)
@@ -98,11 +100,15 @@ abstract class BaseFragment<T> : Fragment() , BaseView<T> {
     }
 
     override fun showLoading() {
-        LoadingFragment.showSelf(childFragmentManager)
+        if (loadingFragment == null)
+            loadingFragment = LoadingFragment.showSelf(childFragmentManager)
     }
 
     override fun hideLoading() {
-        LoadingFragment.dismiss()
+        if (loadingFragment != null) {
+            loadingFragment!!.dismissAllowingStateLoss()
+            loadingFragment = null
+        }
     }
 
     override fun getLifeActivity(): AppCompatActivity {
