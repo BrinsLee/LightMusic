@@ -1,15 +1,12 @@
 package com.brins.lightmusic.common;
 
 import android.content.Context;
-
 import com.brins.lightmusic.model.userlogin.UserAccountBean;
 import com.brins.lightmusic.model.userlogin.UserProfileBean;
 
-import org.jetbrains.annotations.Nullable;
-
 public class AppConfig {
     public static boolean isLogin = false;
-    public static final String BASEURL = "https://fc827649.ngrok.io";
+    public static final String BASEURL = "";
 
 
     /**
