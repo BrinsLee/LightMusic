@@ -25,7 +25,7 @@ class DiscoveryAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
     private var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick(view: View, id: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -59,7 +59,7 @@ class DiscoveryAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
                 Glide.with(BaseApplication.getInstance().baseContext)
                     .load(musicList.coverImgUrl)
                     .into(holder.cover)
-                holder.itemView.tag = position
+                holder.itemView.tag = musicList.id
             }
         }
     }
@@ -71,7 +71,7 @@ class DiscoveryAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
     override fun onClick(v: View) {
         if (onItemClickListener != null) {
             //注意这里使用getTag方法获取position
-            onItemClickListener!!.onItemClick(v, v.tag as Int)
+            onItemClickListener!!.onItemClick(v, v.tag as String)
         }
     }
 

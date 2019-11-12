@@ -177,8 +177,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
         mPresenter = presenter
     }
 
-    override fun onItemClick(view: View, position: Int) {
-        val id = musicListBean[position].id
+    override fun onItemClick(view: View, id: String) {
         try {
             val bundle = Bundle()
             bundle.putString(TAG, id)
