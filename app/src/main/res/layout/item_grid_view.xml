@@ -1,135 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
-            android:id="@+id/head"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <com.brins.lightmusic.ui.customview.RoundConstraintLayout
-                android:id="@+id/localMusic"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/common_margin_100"
-                android:layout_weight="1"
-                app:round_corner="@dimen/common_margin_10"
-                android:layout_marginTop="@dimen/common_margin_20"
-                android:layout_marginStart="@dimen/common_margin_30"
-                android:layout_marginEnd="@dimen/common_margin_10"
-                android:background="@drawable/background_item_list">
+            android:id="@+id/localMusic"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_margin_80"
+            android:layout_marginStart="@dimen/common_margin_30"
+            android:layout_marginEnd="@dimen/common_margin_10"
+            android:layout_weight="1"
+            app:round_corner="@dimen/common_margin_10">
 
 
             <ImageView
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    android:layout_marginStart="@dimen/common_margin_30"
-                    android:id="@+id/ic_local"
-                    android:src="@drawable/ic_local_music"
-                    android:scaleType="fitXY"
-                    android:layout_width="@dimen/common_margin_50"
-                    android:layout_height="@dimen/common_margin_50"/>
+                android:id="@+id/ic_local"
+                android:layout_width="@dimen/common_margin_40"
+                android:layout_height="@dimen/common_margin_40"
+                android:layout_marginTop="@dimen/common_margin_10"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_local_music"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.brins.lightmusic.ui.customview.FontTextView
-                    android:textSize="15sp"
-                    android:text="@string/local_music"
-                    android:textColor="@color/colorAccent"
-                    android:id="@+id/tv_local"
-                    app:font_type="DIN-Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/ic_local"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                android:id="@+id/tv_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/local_music"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:font_type="DIN-Bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="5dp"
+                 />
         </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
 
         <com.brins.lightmusic.ui.customview.RoundConstraintLayout
-                android:id="@+id/fm"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/common_margin_100"
-                android:layout_weight="1"
-                app:round_corner="@dimen/common_margin_10"
-                android:layout_marginTop="@dimen/common_margin_20"
-                android:layout_marginStart="@dimen/common_margin_10"
-                android:layout_marginEnd="@dimen/common_margin_10"
-                android:background="@drawable/background_item_list">
+            android:id="@+id/fm"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_margin_80"
+            android:layout_marginStart="@dimen/common_margin_10"
+            android:layout_marginEnd="@dimen/common_margin_10"
+            android:layout_weight="1"
+            app:round_corner="@dimen/common_margin_10">
 
             <ImageView
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    android:layout_marginStart="@dimen/common_margin_30"
-                    android:id="@+id/icon"
-                    android:src="@drawable/ic_fm"
-                    android:scaleType="centerCrop"
-                    android:layout_width="@dimen/common_margin_50"
-                    android:layout_height="@dimen/common_margin_50"/>
+                android:id="@+id/icon"
+                android:layout_width="@dimen/common_margin_40"
+                android:layout_height="@dimen/common_margin_40"
+                android:layout_marginTop="@dimen/common_margin_10"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_fm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.brins.lightmusic.ui.customview.FontTextView
-                    android:textSize="15sp"
-                    android:text="@string/fm"
-                    android:textColor="@color/colorAccent"
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:font_type="DIN-Bold"
-                    app:layout_constraintTop_toBottomOf="@id/icon"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fm"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:font_type="DIN-Bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="5dp"/>
         </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
 
         <com.brins.lightmusic.ui.customview.RoundConstraintLayout
-                android:id="@+id/collection"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/common_margin_100"
-                android:layout_weight="1"
-                app:round_corner="@dimen/common_margin_10"
-                android:layout_marginTop="@dimen/common_margin_20"
-                android:layout_marginStart="@dimen/common_margin_10"
-                android:layout_marginEnd="@dimen/common_margin_30"
-                android:background="@drawable/background_item_list">
+            android:id="@+id/recommend"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_margin_80"
+            android:layout_marginStart="@dimen/common_margin_10"
+            android:layout_marginEnd="@dimen/common_margin_10"
+            android:layout_weight="1"
+            app:round_corner="@dimen/common_margin_10">
 
 
             <ImageView
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    android:layout_marginStart="@dimen/common_margin_30"
-                    android:id="@+id/ic_collection"
-                    android:src="@drawable/ic_calendar"
-                    android:scaleType="fitXY"
-                    android:layout_width="@dimen/common_margin_50"
-                    android:layout_height="@dimen/common_margin_50"/>
+                android:id="@+id/ic_recommend"
+                android:layout_width="@dimen/common_margin_40"
+                android:layout_height="@dimen/common_margin_40"
+                android:layout_marginTop="@dimen/common_margin_10"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.brins.lightmusic.ui.customview.FontTextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:text="1"
-                    app:font_type="DIN-Bold"
-                    android:layout_marginTop="5dp"
-                    app:layout_constraintStart_toStartOf="@id/ic_collection"
-                    app:layout_constraintEnd_toEndOf="@id/ic_collection"
-                    app:layout_constraintTop_toTopOf="@id/ic_collection"
-                    app:layout_constraintBottom_toBottomOf="@id/ic_collection"/>
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:font_type="DIN-Bold"
+                app:layout_constraintBottom_toBottomOf="@id/ic_recommend"
+                app:layout_constraintEnd_toEndOf="@id/ic_recommend"
+                app:layout_constraintStart_toStartOf="@id/ic_recommend"
+                app:layout_constraintTop_toTopOf="@id/ic_recommend" />
+
             <com.brins.lightmusic.ui.customview.FontTextView
-                    android:textSize="15sp"
-                    android:text="@string/daily"
-                    android:textColor="@color/colorAccent"
-                    app:font_type="DIN-Bold"
-                    android:id="@+id/tv_collection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/ic_collection"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_10"
-                    app:layout_constraintEnd_toEndOf="parent"
-            />
+                android:id="@+id/tv_recommend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/daily"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:font_type="DIN-Bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="5dp"/>
+        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+
+        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+            android:id="@+id/collectMusic"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_margin_80"
+            android:layout_marginStart="@dimen/common_margin_10"
+            android:layout_marginEnd="@dimen/common_margin_30"
+            android:layout_weight="1"
+            app:round_corner="@dimen/common_margin_10">
+
+
+            <ImageView
+                android:id="@+id/ic_collect"
+                android:layout_width="@dimen/common_margin_40"
+                android:layout_height="@dimen/common_margin_40"
+                android:layout_marginTop="@dimen/common_margin_10"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_local_music"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.brins.lightmusic.ui.customview.FontTextView
+                android:id="@+id/tv_collect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_collection"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:font_type="DIN-Bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="5dp"/>
         </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
 
     </LinearLayout>

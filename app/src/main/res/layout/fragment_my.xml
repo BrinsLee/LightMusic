@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +14,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/common_margin_200"
+            android:layout_height="@dimen/common_margin_150"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true">
 
@@ -35,11 +36,11 @@
                         android:id="@+id/avatar"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="20dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_avatar"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:riv_corner_radius="50dp" />
 
@@ -47,8 +48,7 @@
                         android:id="@+id/nickName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="25dp"
-                        android:layout_marginBottom="@dimen/common_margin_50"
+                        android:layout_marginBottom="@dimen/common_margin_30"
                         android:ellipsize="end"
                         android:maxEms="5"
                         android:maxLines="1"
@@ -57,8 +57,9 @@
                         android:textColor="@color/translucent"
                         android:textSize="15sp"
                         app:font_type="DIN-Bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/avatar"
+                        app:layout_constraintStart_toStartOf="@id/avatar"
+                        app:layout_constraintEnd_toEndOf="@id/avatar"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -75,7 +76,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="-60dp">
+                android:layout_marginTop="0dp">
 
                 <include layout="@layout/item_grid_view" />
 

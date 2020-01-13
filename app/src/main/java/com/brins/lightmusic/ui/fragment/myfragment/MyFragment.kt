@@ -17,12 +17,10 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGOUT_SUCCESS_CODE
-import com.brins.lightmusic.ui.fragment.usermusiclist.UserMusicListFragment
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
@@ -36,7 +34,6 @@ import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import kotlinx.android.synthetic.main.item_recycler_head.*
-import java.lang.Exception
 import javax.inject.Inject
 
 class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
@@ -101,7 +98,7 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
         nickName.setOnClickListener(this)
         localMusic.setOnClickListener(this)
         fm.setOnClickListener(this)
-        collection.setOnClickListener(this)
+        recommend.setOnClickListener(this)
         rootli.setOnClickListener(this)
 
     }
@@ -122,7 +119,7 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
             R.id.fm -> mPresenter.loadUserFm()
-            R.id.collection -> switch(DailyRecommendFragment())
+            R.id.recommend -> switch(DailyRecommendFragment())
             R.id.localMusic -> switch(LocalMusicFragment())
             R.id.rootli -> openMusicList()
         }
