@@ -23,13 +23,17 @@ import com.brins.lightmusic.utils.show
 import kotlinx.android.synthetic.main.fragment_video_category.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Presenter>(),
+class VideoCategoryFragment(var area: String) : BaseFragment(),
     VideoContract.View,
     OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
-
-    private var mPresenter: VideoContract.Presenter? = null
+    @Inject
+    lateinit var mPresenter : VideoPresent
     private var count: Int = 1
     private var videoList = mutableListOf<Mv>()
     private val videoAdapter: VideoListAdapter by lazy { VideoListAdapter(videoList, context!!) }
@@ -49,12 +53,8 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        VideoPresent(this).subscribe(this)
+        mPresenter.subscribe(this)
         initView()
-    }
-
-    override fun setPresenter(presenter: VideoContract.Presenter) {
-        mPresenter = presenter
     }
 
 
@@ -65,13 +65,13 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
     }
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        try {
+        /*try {
             (activity as MainActivity).switchFragment(fragment, bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
 
     override fun onRefresh() {
@@ -106,9 +106,9 @@ class VideoCategoryFragment(var area: String) : BaseFragment<VideoContract.Prese
     private suspend fun loadMvData(limit: Int = 0,area: String) = withContext(Dispatchers.IO){
         showLoading()
         if (limit == 0)
-            mPresenter!!.loadVideo(area = area)
+            mPresenter.loadVideo(area = area)
         else
-            mPresenter!!.loadVideo(limit,area)
+            mPresenter.loadVideo(limit,area)
     }
 
     override fun showRetryView() {

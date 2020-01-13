@@ -10,7 +10,7 @@ import io.reactivex.functions.Consumer
 import retrofit2.Call
 
 interface VideoContract {
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
     }
 

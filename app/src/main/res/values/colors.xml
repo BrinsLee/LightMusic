@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1d9dfc</color>
-    <color name="colorPrimaryDark">#2B159D</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#000000</color>
     <color name="alpha">#00323232</color>
 
@@ -35,4 +35,7 @@
     <color name="gery_80">#FDBBBF</color>
     <color name="mask">#63000000</color>
 
+    <color name="btn_presss">#767676</color>
+    <color name="normal_text_color">#000000</color>
+    <color name="default_btn_text">#8F8D8D</color>
 </resources>

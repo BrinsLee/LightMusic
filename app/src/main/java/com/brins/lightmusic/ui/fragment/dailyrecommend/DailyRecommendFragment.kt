@@ -30,15 +30,19 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_daily_recommend.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
+class DailyRecommendFragment : BaseFragment(),
     DailyContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
-
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
+    @Inject
+    lateinit var mPresenter: DailyRecommendPresenter
     private var mPlayList = PlayList()
     private var currentTime: Long = 0
-    private lateinit var mPresenter: DailyContract.Presenter
     private lateinit var mAdapter: CommonViewAdapter<Music>
     private var deltaDistance: Int = 0
 
@@ -134,9 +138,6 @@ class DailyRecommendFragment : BaseFragment<DailyContract.Presenter>(),
         })
     }
 
-    override fun setPresenter(presenter: DailyContract.Presenter) {
-        mPresenter = presenter
-    }
 
     override fun onItemClick(position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {

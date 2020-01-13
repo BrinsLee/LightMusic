@@ -6,7 +6,7 @@ import com.brins.lightmusic.model.userlogin.UserProfileBean;
 
 public class AppConfig {
     public static boolean isLogin = false;
-    public static final String BASEURL = "";
+    public static final String BASEURL = "http://118.31.65.24";
 
 
     /**

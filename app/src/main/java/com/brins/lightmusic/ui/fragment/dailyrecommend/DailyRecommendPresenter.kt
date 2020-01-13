@@ -3,8 +3,9 @@ package com.brins.lightmusic.ui.fragment.dailyrecommend
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.dailyrecommend.DailyRecommendResult
 import com.brins.lightmusic.utils.await
+import javax.inject.Inject
 
-class DailyRecommendPresenter : DailyContract.Presenter {
+class DailyRecommendPresenter @Inject constructor() : DailyContract.Presenter {
 
 /*    val provider: AndroidLifecycleScopeProvider by lazy {
         AndroidLifecycleScopeProvider.from(mView?.getLifeActivity(), Lifecycle.Event.ON_DESTROY)
@@ -42,7 +43,6 @@ class DailyRecommendPresenter : DailyContract.Presenter {
 
     override fun subscribe(view: DailyContract.View?) {
         mView = view
-        mView?.setPresenter(this)
     }
 
     override fun unsubscribe() {

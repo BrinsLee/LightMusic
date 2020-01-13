@@ -18,14 +18,11 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import java.lang.Exception
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.getSystemService
 import com.brins.lightmusic.RxBus
-import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.event.NotificationUpadteEvent
 import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver
-import com.brins.lightmusic.ui.activity.MainActivity
+import com.brins.lightmusic.ui.activity.SplashActivity
 import com.hwangjr.rxbus.annotation.Subscribe
 
 
@@ -99,7 +96,7 @@ class PlayBackService : Service(), IPlayback, HeadsetButtonReceiver.onHeadsetLis
             val importance = NotificationManager.IMPORTANCE_MIN
             val channel = NotificationChannel(CHANNEL_ID, channelName, importance)
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, SplashActivity::class.java)
             val intentGo =
                 PendingIntent.getActivity(
                     this,

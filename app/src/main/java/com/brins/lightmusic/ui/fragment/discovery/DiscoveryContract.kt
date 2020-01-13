@@ -10,7 +10,7 @@ import com.brins.lightmusic.ui.base.BaseView
 interface DiscoveryContract {
 
 
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
     }
 

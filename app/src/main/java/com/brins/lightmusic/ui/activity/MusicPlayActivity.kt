@@ -26,6 +26,7 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
+import com.brins.lightmusic.ui.activity.login.LoginPresenter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
@@ -41,15 +42,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback,
+class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
+    IPlayback.Callback,
     View.OnClickListener {
+    override fun initInject() {
+        getActivityComponent().inject(this)
+    }
 
+    @Inject
+    lateinit var mPresenter: MusicPlayerPresenter
 
     private var mPlayer: PlayBackService? = null
     private var index = -1
-    private lateinit var mPresenter: MusicPlayerContract.Presenter
+    //    private lateinit var mPresenter: MusicPlayerContract.Presenter
     private val mHamdler: HandlerUtil by lazy { HandlerUtil.getInstance(this) }
     private val mUpAlbumRunnable = Runnable { SetBlurredAlbumArt().execute() }
     private val mPlayList: PlayList by lazy { mPlayer?.getPlayList()!! }
@@ -126,7 +134,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         if (mImageViewList.size == 0 || mImageViewList.size != musics?.size) {
             mImageViewList.clear()
             pageAdapter!!.notifyDataSetChanged()
-            CoroutineScope(Dispatchers.Main).launch{
+            CoroutineScope(Dispatchers.Main).launch {
                 mImageViewList.addAll(initData())
                 pageAdapter!!.notifyDataSetChanged()
                 ivCover.currentItem = mPlayList.getPlayingIndex()
@@ -140,7 +148,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
 
 
     private suspend fun initData() =
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             val list = mutableListOf<ImageView>()
             for (i in 0 until mPlayList.getNumOfSongs()) {
                 val imageView = RoundImageView(applicationContext)
@@ -388,8 +396,8 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
     }
 
 
-    private suspend fun loadMusicDetail(onlineMusic: Music) = withContext(Dispatchers.IO){
-        val result = mPresenter.loadMusicDetail(onlineMusic)
+    private suspend fun loadMusicDetail(onlineMusic: Music) = withContext(Dispatchers.IO) {
+        val result = (mPresenter as? MusicPlayerPresenter)?.loadMusicDetail(onlineMusic)
         result
     }
 
@@ -471,17 +479,12 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Ca
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun setPresenter(presenter: MusicPlayerContract.Presenter) {
-        mPresenter = presenter
-    }
-
-
-    override fun onPlayStatusChanged(isPlaying: Boolean,music: Music?) {
+    override fun onPlayStatusChanged(isPlaying: Boolean, music: Music?) {
         if (playOrPause == null) {
             return
         } else {
             updatePlayToggle(isPlaying)
-            if (music != null){
+            if (music != null) {
                 onSongUpdated(music)
             }
 

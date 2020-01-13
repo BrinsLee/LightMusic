@@ -20,6 +20,8 @@ import com.brins.lightmusic.model.userlogin.Item
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.base.BasePresenter
+import com.brins.lightmusic.ui.base.BaseView
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
@@ -31,11 +33,19 @@ import com.canking.minipay.MiniPayUtils
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
+import javax.inject.Inject
 
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     OnItemClickListener, CommonHeaderView.OnBackClickListener {
 
-    private lateinit var mPresenter: LoginContract.Presenter
+
+    override fun initInject() {
+        getActivityComponent().inject(this)
+
+    }
+    @Inject
+    lateinit var mPresenter : LoginPresenter
+
     private var isLogin = false
     private var mAvatar: Bitmap? = null
     private var mList: ArrayList<Item>? = null
@@ -75,11 +85,11 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
                         USERNAME,
                         PASSWORD
                     )
-                mPresenter.startLogin(request)
+                (mPresenter as? LoginPresenter)?.startLogin(request)
             }
             R.id.logout -> {
                 //todo 确定弹框
-                mPresenter.logout()
+                (mPresenter as? LoginPresenter)?.logout()
             }
         }
     }
@@ -91,13 +101,14 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
+        setTranslucent(this)
         isLogin = intent.getBooleanExtra(IS_LOGIN, false)
     }
 
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        LoginPresenter.instance.subscribe(this)
+        mPresenter.subscribe(this)
         if (isLogin) {
             if (mAvatar == null) {
                 Glide.with(this)
@@ -234,9 +245,6 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         return this
     }
 
-    override fun setPresenter(presenter: LoginContract.Presenter) {
-        mPresenter = presenter
-    }
 
     override fun onItemClick(position: Int) {
         when (position) {

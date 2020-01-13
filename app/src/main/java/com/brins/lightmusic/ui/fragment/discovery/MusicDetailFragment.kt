@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_music_detail.*
@@ -20,14 +19,18 @@ import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 
-class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), DiscoveryContract.View,
+class MusicDetailFragment : BaseFragment(), DiscoveryContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
-
-    private lateinit var mPresenter: DiscoveryContract.Presenter
+    @Inject
+    lateinit var mPresenter: DiscoverPresenter
     var id: String = ""
     lateinit var mAdapter: MusicDetailAdapter
     private var playList: PlayList = PlayList()
@@ -129,7 +132,4 @@ class MusicDetailFragment : BaseFragment<DiscoveryContract.Presenter>(), Discove
         activity!!.onBackPressed()
     }
 
-    override fun setPresenter(presenter: DiscoveryContract.Presenter) {
-        mPresenter = presenter
-    }
 }

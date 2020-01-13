@@ -11,14 +11,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import com.brins.lightmusic.model.search.SearchSuggestResult
-import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.fragment.search.SearchPresenter
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import androidx.appcompat.R
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.appcompat.app.AppCompatActivity
+import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.fragment.search.SearchFragment
 import com.brins.lightmusic.utils.*
@@ -27,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_search.mTablayout
 import kotlinx.android.synthetic.main.activity_search.mViewpager
 
 
-class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
+class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
     AdapterView.OnItemClickListener {
 
 
@@ -51,8 +49,9 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
         }
     }
 
-    override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
-        super.onCreateAfterBinding(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -103,10 +102,6 @@ class SearchActivity : BaseActivity(), SearchView.OnQueryTextListener,
         }
         list_item.onItemClickListener = this
 
-    }
-
-    override fun getLayoutResId(): Int {
-        return com.brins.lightmusic.R.layout.activity_search
     }
 
 

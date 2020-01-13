@@ -8,8 +8,9 @@ import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
+import javax.inject.Inject
 
-class MyPresenter : MyContract.Presenter {
+class MyPresenter @Inject constructor(): MyContract.Presenter {
 
     private var mView: MyContract.View? = null
 
@@ -42,6 +43,7 @@ class MyPresenter : MyContract.Presenter {
     }
 
 
+
     override fun updateUserMusicList() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -68,7 +70,6 @@ class MyPresenter : MyContract.Presenter {
 
     override fun subscribe(view: MyContract.View) {
         mView = view
-        mView!!.setPresenter(this)
     }
 
     override fun unsubscribe() {

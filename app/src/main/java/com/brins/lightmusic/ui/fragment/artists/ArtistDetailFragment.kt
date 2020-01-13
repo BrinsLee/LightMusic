@@ -25,8 +25,11 @@ import kotlinx.android.synthetic.main.fragment_artist_detail.mTablayout
 import kotlinx.android.synthetic.main.fragment_artist_detail.mViewpager
 
 
-class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
+class ArtistDetailFragment : BaseFragment(),
     CommonHeaderView.OnBackClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
 
     private var deltaDistance: Int = 0
@@ -43,8 +46,6 @@ class ArtistDetailFragment : BaseFragment<ArtistDetailConstract.Presenter>(),
         return R.layout.fragment_artist_detail
     }
 
-    override fun setPresenter(presenter: ArtistDetailConstract.Presenter) {
-    }
 
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)

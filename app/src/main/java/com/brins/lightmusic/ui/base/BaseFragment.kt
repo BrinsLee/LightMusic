@@ -7,11 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.brins.lightmusic.LightMusicApplication
+import com.brins.lightmusic.di.component.DaggerFragmentComponent
+import com.brins.lightmusic.di.component.FragmentComponent
+import com.brins.lightmusic.di.module.FragmentModule
 import com.brins.lightmusic.ui.customview.LoadingFragment
+import com.brins.lightmusic.utils.StarterCommon
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
 
-abstract class BaseFragment<T> : Fragment(), BaseView<T> {
+abstract class BaseFragment : Fragment(), BaseView {
 
     val TAG = javaClass.simpleName
     protected open var mBindDestroyDisposable: CompositeDisposable? = null
@@ -20,13 +26,16 @@ abstract class BaseFragment<T> : Fragment(), BaseView<T> {
     protected open var mIsViewBinding: Boolean = false
     protected open var mIsVisibleToUser: Boolean = false
     protected open var mHadLoaded: Boolean = false
-    protected open var loadingFragment: LoadingFragment? = null
-
+    protected var mStarterCommon: StarterCommon? = null
 
     abstract fun getLayoutResID(): Int
 
+    protected abstract fun initInject()
+
+
     protected open fun onCreateViewAfterBinding(view: View) {
         mIsViewBinding = true
+        mStarterCommon = StarterCommon(activity)
         checkLoad()
     }
 
@@ -65,6 +74,17 @@ abstract class BaseFragment<T> : Fragment(), BaseView<T> {
         }
     }
 
+    protected fun getFragmentComponent(): FragmentComponent {
+        return DaggerFragmentComponent.builder()
+            .appComponent(LightMusicApplication.getAppComponent())
+            .fragmentModule(getFragmentModule())
+            .build()
+    }
+
+    protected fun getFragmentModule(): FragmentModule {
+        return FragmentModule(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,6 +92,7 @@ abstract class BaseFragment<T> : Fragment(), BaseView<T> {
         if (rootView == null) {
             rootView = inflater.inflate(getLayoutResID(), container, false)
         }
+        initInject()
         return rootView
     }
 
@@ -86,28 +107,25 @@ abstract class BaseFragment<T> : Fragment(), BaseView<T> {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        mIsViewBinding = false
+        mIsVisibleToUser = false
+        mHadLoaded = false
         if (mBindDestroyDisposable != null) {
             mBindDestroyDisposable!!.clear()
         }
         (rootView?.parent as ViewGroup).removeView(rootView)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mIsViewBinding = false
-        mIsVisibleToUser = false
-        mHadLoaded = false
-    }
 
     override fun showLoading() {
-        if (loadingFragment == null)
-            loadingFragment = LoadingFragment.showSelf(childFragmentManager)
+        if (mStarterCommon != null) {
+            mStarterCommon!!.showUnBackProgressLoading("")
+        }
     }
 
     override fun hideLoading() {
-        if (loadingFragment != null) {
-            loadingFragment!!.dismissAllowingStateLoss()
-            loadingFragment = null
+        if (mStarterCommon != null) {
+            mStarterCommon!!.dismissUnBackProgressLoading()
         }
     }
 
@@ -123,5 +141,11 @@ abstract class BaseFragment<T> : Fragment(), BaseView<T> {
 
     override fun handleError(error: Throwable) {
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mStarterCommon?.onDestroy()
+        mStarterCommon = null
     }
 }

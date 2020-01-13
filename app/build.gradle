@@ -101,8 +101,8 @@ dependencies {
 //lottie
     implementation 'com.airbnb.android:lottie:2.7.0'
 // butterknife
-    /*implementation 'com.jakewharton:butterknife:10.0.0'
-    kapt 'com.jakewharton:butterknife-compiler:10.0.0'*/
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
 
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
 //AndroidVideoCache
@@ -112,6 +112,11 @@ dependencies {
 //RxBus
     implementation 'com.hwangjr.rxbus:rxbus:1.0.6'
 //StatusBar
+    // dagger 2 的配置
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    implementation 'com.google.dagger:dagger:2.4'
+    kapt 'com.google.dagger:dagger-compiler:2.4'
+    implementation 'org.glassfish:javax.annotation:10.0-b28'
 
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'

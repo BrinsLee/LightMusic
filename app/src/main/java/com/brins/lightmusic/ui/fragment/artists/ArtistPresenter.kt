@@ -8,14 +8,16 @@ import com.brins.lightmusic.model.artist.CategoryResultData
 import com.brins.lightmusic.utils.JsonToObject
 import com.brins.lightmusic.utils.await
 import com.brins.lightmusic.utils.getJson
+import javax.inject.Inject
 
-class ArtistPresenter private constructor() : ArtistConstract.Presenter {
+class ArtistPresenter @Inject constructor() : ArtistConstract.Presenter {
 
 
+    override suspend fun loadArtistCategory(type: Int): CategoryResultData =
+        ApiHelper.getArtistService().getArtistCategory(type).await()
 
-    override suspend fun loadArtistCategory(type: Int): CategoryResultData = ApiHelper.getArtistService().getArtistCategory(type).await()
-
-    override suspend fun loadArtist(): ArrayList<ArtistBean> = ApiHelper.getArtistService().getArtist().await().artistBeans as ArrayList<ArtistBean>
+    override suspend fun loadArtist(): ArrayList<ArtistBean> =
+        ApiHelper.getArtistService().getArtist().await().artistBeans as ArrayList<ArtistBean>
 
     override suspend fun loadArtistCategory(): CategoryResult {
         val json = getJson(BaseApplication.getInstance().baseContext, "category.json")
@@ -41,29 +43,28 @@ class ArtistPresenter private constructor() : ArtistConstract.Presenter {
     }
 */
 
-   /* override fun loadArtist() {
-        ApiHelper.getArtistService().getArtist()
-            .compose(AsyncTransformer<MusicListResult>())
-            .autoDisposable(provider)
-            .subscribe(object : DefaultObserver<MusicListResult>() {
-                override fun onSuccess(response: MusicListResult) {
-                    if (response.artistBeans != null && response.artistBeans?.size != 0) {
-                        mView!!.onArtistLoad(response.artistBeans as ArrayList<ArtistBean>)
-                    } else {
-                        onFail("网络连接失败")
-                    }
-                    mView?.hideLoading()
-                }
+    /* override fun loadArtist() {
+         ApiHelper.getArtistService().getArtist()
+             .compose(AsyncTransformer<MusicListResult>())
+             .autoDisposable(provider)
+             .subscribe(object : DefaultObserver<MusicListResult>() {
+                 override fun onSuccess(response: MusicListResult) {
+                     if (response.artistBeans != null && response.artistBeans?.size != 0) {
+                         mView!!.onArtistLoad(response.artistBeans as ArrayList<ArtistBean>)
+                     } else {
+                         onFail("网络连接失败")
+                     }
+                     mView?.hideLoading()
+                 }
 
-                override fun onFail(message: String) {
-                    mView?.hideLoading()
-                }
-            })
-    }*/
+                 override fun onFail(message: String) {
+                     mView?.hideLoading()
+                 }
+             })
+     }*/
 
     override fun subscribe(view: ArtistConstract.View?) {
         mView = view
-        mView!!.setPresenter(this)
     }
 
     override fun unsubscribe() {

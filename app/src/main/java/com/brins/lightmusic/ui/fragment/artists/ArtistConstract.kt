@@ -7,7 +7,7 @@ import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
 interface ArtistConstract {
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
 
     }

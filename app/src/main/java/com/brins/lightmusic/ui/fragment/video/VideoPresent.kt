@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.musicvideo.*
 import com.brins.lightmusic.utils.await
+import javax.inject.Inject
 
-class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
+class VideoPresent @Inject constructor() : VideoContract.Presenter {
 
-
+    var mView: VideoContract.View? = null
     private val mvList = mutableListOf<Mv>()
 /*
     override fun loadVideo(limit: Int, area: String) {
@@ -46,7 +47,7 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
         val mvResult = ApiHelper.getMvService().getMvAll(area, limit).await()
         if (mvResult.dataBeans != null && mvResult.dataBeans!!.isNotEmpty()) {
             mvResult.dataBeans!!.forEach {
-                val t =loadUrl(it)
+                val t = loadUrl(it)
                 if (t.dataBean != null) {
                     mvList.add(Mv(it, t.dataBean!!))
                 }
@@ -56,14 +57,16 @@ class VideoPresent(var mView: VideoContract.View?) : VideoContract.Presenter {
     }
 
     @SuppressLint("CheckResult")
-    override suspend fun loadUrl(dataBean: LastestMvDataBean) = ApiHelper.getMvService().getMvMetaData(dataBean.id).await()
+    override suspend fun loadUrl(dataBean: LastestMvDataBean) =
+        ApiHelper.getMvService().getMvMetaData(dataBean.id).await()
 
 
-    override suspend fun loadVideoComments(id: String) = ApiHelper.getMvService().getMvComments(id).await()
+    override suspend fun loadVideoComments(id: String) =
+        ApiHelper.getMvService().getMvComments(id).await()
 
 
     override fun subscribe(view: VideoContract.View?) {
-        mView?.setPresenter(this)
+        mView = view
     }
 
     override fun unsubscribe() {

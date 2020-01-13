@@ -6,7 +6,7 @@ import com.brins.lightmusic.ui.base.BasePresenter
 import com.brins.lightmusic.ui.base.BaseView
 
 interface MyContract {
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
         fun onUserProfileLoad()
 
         fun onFmLoad(result: UserFmResult)

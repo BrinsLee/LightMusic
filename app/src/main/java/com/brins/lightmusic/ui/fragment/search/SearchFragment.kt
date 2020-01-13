@@ -35,13 +35,17 @@ import com.brins.lightmusic.utils.launch
 import kotlinx.android.synthetic.main.fragment_artist_tab.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 
-class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>(),
+class SearchFragment(val type: Int = 1) : BaseFragment(),
     SearchContract.View, OnItemClickListener {
-
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
+    @Inject
+    lateinit var mPresenter: SearchPresenter
     private var currentTime: Long = 0
-    private var mPresenter: SearchPresenter? = null
     private var playList: PlayList = PlayList()
     private var albumDataBeans: ArrayList<Album> = arrayListOf()
     private var artistDataBeans: ArrayList<ArtistBean> = arrayListOf()
@@ -235,27 +239,27 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
     }
 
     private suspend fun searchMusicData() = withContext(Dispatchers.IO) {
-        val result = mPresenter!!.searchMusicData(keyWords, type)
+        val result = mPresenter.searchMusicData(keyWords, type)
         result
     }
 
     private suspend fun searchAlbumData() = withContext(Dispatchers.IO) {
-        val result = mPresenter!!.searchAlbumData(keyWords, type)
+        val result = mPresenter.searchAlbumData(keyWords, type)
         result
     }
 
     private suspend fun searchArtistData() = withContext(Dispatchers.IO) {
-        val result = mPresenter!!.searchArtistData(keyWords)
+        val result = mPresenter.searchArtistData(keyWords)
         result
     }
 
     private suspend fun searchMusicListData() = withContext(Dispatchers.IO) {
-        val result = mPresenter!!.searchMusicListData(keyWords)
+        val result = mPresenter.searchMusicListData(keyWords)
         result
     }
 
     private suspend fun searchMusicVideoData() = withContext(Dispatchers.IO) {
-        val result = mPresenter!!.searchMusicVideoData(keyWords)
+        val result = mPresenter.searchMusicVideoData(keyWords)
         result
     }
 
@@ -278,9 +282,6 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
         }
     }
 
-    override fun setPresenter(presenter: SearchContract.Presenter) {
-        mPresenter = presenter as SearchPresenter
-    }
 
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
@@ -294,7 +295,7 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
 
     override fun onDestroy() {
         super.onDestroy()
-        mPresenter?.unsubscribe()
+        mPresenter.unsubscribe()
     }
 
     private fun finish() {
@@ -341,13 +342,13 @@ class SearchFragment(val type: Int = 1) : BaseFragment<SearchContract.Presenter>
     }
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        try {
+/*        try {
             (activity as SearchActivity).switchFragment(fragment, bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
 
 }

@@ -14,7 +14,7 @@ import com.brins.lightmusic.ui.base.BaseView
 
 interface SearchContract {
 
-    interface View: BaseView<Presenter>
+    interface View: BaseView
 
     interface Presenter: BasePresenter<View>{
         suspend fun searchMusicData(input : String, type: Int = 1): SearchResult<Music>

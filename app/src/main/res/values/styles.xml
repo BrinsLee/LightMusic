@@ -6,12 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowReenterTransition">@transition/activity_explode</item>
-        <item name="android:windowEnterAnimation">@transition/activity_explode</item>
-        <item name="android:windowExitTransition">@transition/activity_explode</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="AppTheme.Text" parent="TextAppearance.AppCompat" />
@@ -56,5 +50,11 @@
     </style>
 
 
+    <style name="ProgressLoadingTheme" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="colorAccent">@color/white</item>
+    </style>
 
 </resources>

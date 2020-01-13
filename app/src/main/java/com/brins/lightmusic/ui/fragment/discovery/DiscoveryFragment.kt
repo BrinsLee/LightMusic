@@ -2,8 +2,6 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 
 import android.graphics.Color
-import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,20 +10,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.launch
 import kotlinx.android.synthetic.main.fragment_discovery.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), DiscoveryContract.View,
+class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     SwipeRefreshLayout.OnRefreshListener, DiscoveryAdapter.OnItemClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
-
+    @Inject
+    lateinit var mPresenter: DiscoverPresenter
     private var isFresh: Boolean = false
     private var count: Int = 1
-    private lateinit var mPresenter: DiscoveryContract.Presenter
     private lateinit var bannerList: ArrayList<Banner>
     private lateinit var musicListBean: ArrayList<MusicListBean>
     private lateinit var musicHotListBean: ArrayList<MusicListBean>
@@ -54,6 +55,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
         initMusicList()
         initHotMusicList()
     }
+
     /*
     * 获取横幅广告
     * */
@@ -97,7 +99,8 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
             }
             initHotMusicView()
         }, {
-            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+            if (context != null)
+                Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
 
         })
     }
@@ -147,7 +150,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
 
 
     private fun initLoadingMore() {
-        if (loadingMore == null){
+        if (loadingMore == null) {
             return
         }
         loadingMore.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
@@ -173,12 +176,9 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
         return R.layout.fragment_discovery
     }
 
-    override fun setPresenter(presenter: DiscoveryContract.Presenter) {
-        mPresenter = presenter
-    }
 
     override fun onItemClick(view: View, id: String) {
-        try {
+        /*try {
             val bundle = Bundle()
             bundle.putString(TAG, id)
             (activity as MainActivity).switchFragment(MusicDetailFragment(), bundle)
@@ -186,7 +186,7 @@ class DiscoveryFragment : BaseFragment<DiscoveryContract.Presenter>(), Discovery
                 .commit()
         } catch (e: Exception) {
             Log.e(TAG, e.message)
-        }
+        }*/
     }
 
 }

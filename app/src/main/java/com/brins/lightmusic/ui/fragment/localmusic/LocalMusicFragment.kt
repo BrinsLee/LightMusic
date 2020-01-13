@@ -23,14 +23,16 @@ import com.brins.lightmusic.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 
 class
-LocalMusicFragment : BaseFragment<LocalMusicContract.Presenter>(),
+LocalMusicFragment : BaseFragment(),
     CommonHeaderView.OnBackClickListener, LocalMusicContract.View, OnItemClickListener,
     View.OnClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
 
     lateinit var permissionManager: PermissionManager
     lateinit var mAdapter: ListAdapter<LocalMusic>
-    lateinit var mPresenter: LocalMusicContract.Presenter
     private var playList: PlayList = PlayList()
     private var isLoad = false
 
@@ -97,9 +99,7 @@ LocalMusicFragment : BaseFragment<LocalMusicContract.Presenter>(),
         return context!!
     }*/
 
-    override fun setPresenter(presenter: LocalMusicContract.Presenter) {
-        mPresenter = presenter
-    }
+
 
     override fun handleError(error: Throwable) {
         Toast.makeText(activity, error.message, Toast.LENGTH_SHORT).show()

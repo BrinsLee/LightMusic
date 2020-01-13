@@ -5,11 +5,13 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.icu.util.Calendar
 import android.media.MediaMetadataRetriever
 import android.os.Build
+import android.text.TextUtils
 import android.text.format.Time
 import android.util.Base64
 import android.util.Log
@@ -30,6 +32,7 @@ import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.customview.DimView
+import com.brins.lightmusic.ui.customview.ProgressLoading
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -497,3 +500,102 @@ fun setMask(ac: Activity, target: View): View {
     return createMask(ac, target)
 }
 
+fun setTranslucent(activity: Activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // 设置状态栏透明
+        val window = activity.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        //            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // 设置根布局的参数
+        /*            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);*/
+        val decorView = window.decorView
+        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        decorView.systemUiVisibility = option
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+
+    }
+}
+
+class StarterCommon(var activity: Activity?) {
+    private var mProgressLoading: ProgressLoading? = null
+    private var mUnBackProgressLoading: ProgressLoading? = null
+    var isProgressShow: Boolean = false
+        private set
+
+
+    fun onDestroy() {
+        mProgressLoading = null
+        mUnBackProgressLoading = null
+        activity = null
+    }
+
+    private fun isFinishing(): Boolean {
+        return activity == null || activity!!.isFinishing
+    }
+
+
+    fun showProgressLoading(resId: Int) {
+        if (!isFinishing()) {
+            showProgressLoading(activity!!.getString(resId))
+        }
+    }
+
+    fun showProgressLoading(text: String) {
+        if (mProgressLoading == null) {
+            mProgressLoading = ProgressLoading(activity!!, R.style.ProgressLoadingTheme)
+            mProgressLoading!!.setCanceledOnTouchOutside(true)
+            mProgressLoading!!.setOnCancelListener(DialogInterface.OnCancelListener {
+                isProgressShow = false
+            })
+        }
+        if (!TextUtils.isEmpty(text)) {
+            mProgressLoading!!.mText = text
+        } else {
+            mProgressLoading!!.mText = ""
+        }
+        isProgressShow = true
+        mProgressLoading!!.show()
+    }
+
+    fun dismissProgressLoading() {
+        if (mProgressLoading != null && !isFinishing()) {
+            isProgressShow = false
+            mProgressLoading!!.dismiss()
+        }
+    }
+
+    fun showUnBackProgressLoading(resId: Int) {
+        showUnBackProgressLoading(activity!!.getString(resId))
+    }
+
+    // 按返回键不可撤销的
+    fun showUnBackProgressLoading(text: String) {
+        if (mUnBackProgressLoading == null) {
+            mUnBackProgressLoading =
+                object : ProgressLoading(activity!!, R.style.ProgressLoadingTheme) {
+                    override fun onBackPressed() {
+                        super.onBackPressed()
+                    }
+                }
+        }
+        if (!TextUtils.isEmpty(text)) {
+            mUnBackProgressLoading!!.mText = text
+        } else {
+            mUnBackProgressLoading!!.mText = ""
+        }
+
+        mUnBackProgressLoading!!.show()
+    }
+
+    fun dismissUnBackProgressLoading() {
+        if (mUnBackProgressLoading != null && !isFinishing()) {
+            mUnBackProgressLoading!!.dismiss()
+        }
+    }
+}

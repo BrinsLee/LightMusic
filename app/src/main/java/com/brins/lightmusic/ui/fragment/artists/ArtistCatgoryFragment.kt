@@ -17,12 +17,16 @@ import kotlinx.android.synthetic.main.fragment_artist_category.recyclerView
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ArtistCatgoryFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstract.View,
+class ArtistCatgoryFragment : BaseFragment(), ArtistConstract.View,
     OnItemClickListener, CommonHeaderView.OnBackClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
-
-    private lateinit var mPresenter: ArtistPresenter
+    @Inject
+    lateinit var mPresenter: ArtistPresenter
     private var type: Int = 0
     private var mList = arrayListOf<ArtistBean>()
 
@@ -41,12 +45,12 @@ class ArtistCatgoryFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistC
         return R.layout.fragment_artist_category
     }
 
-    override fun setPresenter(presenter: ArtistConstract.Presenter) {
+/*    override fun setPresenter(presenter: ArtistConstract.Presenter) {
         mPresenter = presenter as ArtistPresenter
         if (type != 0) {
             getCategory()
         }
-    }
+    }*/
 
     override fun onItemClick(position: Int) {
         val bundle = Bundle()
@@ -60,13 +64,13 @@ class ArtistCatgoryFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistC
     }
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        try {
+        /*try {
             (activity as MainActivity).switchFragment(fragment, bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
 
     private fun getCategory() {
@@ -82,7 +86,7 @@ class ArtistCatgoryFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistC
     }
 
     private fun initRecyclerView(data: ArrayList<ArtistBean>) {
-        if (data == null && recyclerView == null) {
+        if (recyclerView == null) {
             return
         } else {
             val mAdapter = object :

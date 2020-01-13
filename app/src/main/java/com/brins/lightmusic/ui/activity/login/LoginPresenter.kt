@@ -8,12 +8,15 @@ import com.brins.lightmusic.model.database.DatabaseFactory
 import com.brins.lightmusic.model.userlogin.LogoutResult
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
+import com.brins.lightmusic.ui.base.BasePresenter
+import com.brins.lightmusic.ui.base.BaseView
 import com.brins.lightmusic.utils.subscribeDbResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class LoginPresenter() : LoginContract.Presenter {
+class LoginPresenter @Inject constructor() : LoginContract.Presenter{
 
 
     val provider: AndroidLifecycleScopeProvider by lazy {
@@ -25,18 +28,12 @@ class LoginPresenter() : LoginContract.Presenter {
     private var mView: LoginContract.View? = null
 
     companion object {
-        val instance = SingletonHolder.holder
-
         enum class LOGIN_TYPE {
             TYPE_WECHAT,
             TYPE_QQ,
             TYPE_PHONE,
             TYPE_EMAIL
         }
-    }
-
-    private object SingletonHolder {
-        val holder = LoginPresenter()
     }
 
     override fun startLogin(request: UserLoginRequest) {
@@ -121,7 +118,6 @@ class LoginPresenter() : LoginContract.Presenter {
 
     override fun subscribe(view: LoginContract.View?) {
         mView = view
-        mView!!.setPresenter(this)
     }
 
     override fun unsubscribe() {

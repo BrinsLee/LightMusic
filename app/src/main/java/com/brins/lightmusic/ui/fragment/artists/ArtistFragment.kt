@@ -21,14 +21,18 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_artist.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstract.View,
+class ArtistFragment : BaseFragment(), ArtistConstract.View,
     OnItemClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
-
+    @Inject
+    lateinit var mPresenter: ArtistPresenter
     private lateinit var artistCategory: ArrayList<Category>
     private lateinit var artistList: ArrayList<ArtistBean>
-    private lateinit var mPresenter: ArtistPresenter
     private val mAdapter: ArtistAdapter by lazy { ArtistAdapter(artistList) }
 
     override fun getLayoutResID(): Int {
@@ -45,18 +49,19 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
             val artistData = getArtistData()
             onArtistLoad(artistData)
 
-        },{
-            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+        }, {
+            if (context != null)
+                Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
             hideLoading()
         })
     }
 
-    private suspend fun getCategoryData() = withContext(Dispatchers.IO){
+    private suspend fun getCategoryData() = withContext(Dispatchers.IO) {
         val result = mPresenter.loadArtistCategory()
         result
     }
 
-    private suspend fun getArtistData() = withContext(Dispatchers.IO){
+    private suspend fun getArtistData() = withContext(Dispatchers.IO) {
         val result = mPresenter.loadArtist()
         result
     }
@@ -68,13 +73,13 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
     }
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        try {
+        /*try {
             (activity as MainActivity).switchFragment(fragment, bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
 
     //MVP View
@@ -104,7 +109,7 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
             override fun onItemClick(view: View?, position: Int) {
                 val bundle = Bundle()
                 bundle.putInt("category", artistCategory[position].code)
-                switch(ArtistCatgoryFragment(),bundle)
+                switch(ArtistCatgoryFragment(), bundle)
             }
 
             override fun getLayoutId(): Int {
@@ -132,9 +137,6 @@ class ArtistFragment : BaseFragment<ArtistConstract.Presenter>(), ArtistConstrac
         pileLayout.setAdapter(adapter)
     }
 
-    override fun setPresenter(presenter: ArtistConstract.Presenter) {
-        mPresenter = presenter as ArtistPresenter
-    }
 
     class ViewHolder {
         var imageView: ImageView? = null

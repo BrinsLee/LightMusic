@@ -2,11 +2,9 @@ package com.brins.lightmusic.ui.base
 
 import androidx.appcompat.app.AppCompatActivity
 
-interface BaseView<T> {
+interface BaseView {
 
     fun getLifeActivity(): AppCompatActivity
-
-    fun setPresenter(presenter: T)
 
     fun showLoading()
 

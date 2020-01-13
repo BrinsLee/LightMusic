@@ -3,11 +3,15 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
@@ -15,16 +19,16 @@ import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
 import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
+import com.brins.lightmusic.utils.setTranslucent
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
 
 
+class MainActivity : AppCompatActivity() {
 
 
-class MainActivity : BaseActivity(){
-
-
+    private var currentPage = 0
     var list = mutableListOf<Fragment>()
     val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
 
@@ -37,18 +41,18 @@ class MainActivity : BaseActivity(){
         }
     }
 
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_main
-    }
-
-    override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
-        super.onCreateAfterBinding(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ButterKnife.bind(this)
+        setTranslucent(this)
         initViewPagerAndTabLay()
     }
 
+
     override fun onStart() {
         super.onStart()
-        showBottomBar(supportFragmentManager)
+//        showBottomBar(supportFragmentManager)
     }
 
     private fun initViewPagerAndTabLay() {
@@ -59,29 +63,47 @@ class MainActivity : BaseActivity(){
         list.add(VideoFragment())
         list.add(ArtistFragment())
         view_pager.adapter = adapter
-        tab_layout.setupWithViewPager(view_pager)
-
-        for (i in 0 until adapter.count) {
-            tab_layout.getTabAt(i)!!.customView = adapter.getTabView(this, i)
-        }
-        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                val tv_tab = tab!!.customView!!.findViewById(R.id.tab_item) as TextView
-                tv_tab.textSize = 12f
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val tv_tab = tab!!.customView!!.findViewById(R.id.tab_item) as TextView
-                tv_tab.textSize = 18f
-            }
-
-        })
-
+        view_pager.offscreenPageLimit = 3
+        changeTab(0)
     }
 
+    private fun changeTab(position: Int) {
+        tab_main_btn.isSelected = false
+        tab_main_tv.isSelected = false
+        tab_discovery_btn.isSelected = false
+        tab_discovery_tv.isSelected = false
+        tab_video_btn.isSelected = false
+        tab_video_tv.isSelected = false
+        tab_singer_btn.isSelected = false
+        tab_singer_tv.isSelected = false
+        currentPage = position
+
+        when (position) {
+            0 -> {
+                tab_main_btn.isSelected = true
+                tab_main_tv.isSelected = true
+                tv_title.text = getString(R.string.app_name)
+            }
+            1 -> {
+                tab_discovery_tv.isSelected = true
+                tab_discovery_btn.isSelected = true
+                tv_title.text = getString(R.string.discovery_tab)
+            }
+            2 -> {
+                tab_video_btn.isSelected = true
+                tab_video_tv.isSelected = true
+                tv_title.text = getString(R.string.video_tab)
+
+            }
+            3 -> {
+                tab_singer_btn.isSelected = true
+                tab_singer_tv.isSelected = true
+                tv_title.text = getString(R.string.singers)
+            }
+        }
+        view_pager.currentItem = position
+
+    }
 
 /*    fun switchFragment(targetFragment: Fragment): FragmentTransaction {
         val transaction = supportFragmentManager.beginTransaction()
@@ -111,17 +133,19 @@ class MainActivity : BaseActivity(){
 
     override fun onDestroy() {
         super.onDestroy()
+/*
         removeBottomBar(supportFragmentManager)
+*/
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
 
         when (keyCode) {
             KeyEvent.KEYCODE_BACK -> {
-                var second = System.currentTimeMillis()
-                if (second - firstTime > 2000) {
+                var mClickTime: Long = 0
+                if (SystemClock.elapsedRealtime() - mClickTime > 1000) {
                     Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show()
-                    firstTime = second
+                    mClickTime = SystemClock.elapsedRealtime()
                     return true
                 } else {
                     System.exit(0)
@@ -138,7 +162,6 @@ class MainActivity : BaseActivity(){
     }
 
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.search -> {
@@ -146,6 +169,37 @@ class MainActivity : BaseActivity(){
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @OnClick(
+        R.id.tab_main_btn,
+        R.id.tab_main_tv,
+        R.id.tab_discovery_btn,
+        R.id.tab_discovery_tv,
+        R.id.tab_video_btn,
+        R.id.tab_video_tv,
+        R.id.tab_singer_btn,
+        R.id.tab_singer_tv
+    )
+    fun onClick(view: View) {
+        when (view.id) {
+            R.id.tab_main_btn,
+            R.id.tab_main_tv -> {
+                changeTab(0)
+            }
+            R.id.tab_discovery_btn,
+            R.id.tab_discovery_tv -> {
+                changeTab(1)
+            }
+            R.id.tab_video_btn,
+            R.id.tab_video_tv -> {
+                changeTab(2)
+            }
+            R.id.tab_singer_btn,
+            R.id.tab_singer_tv -> {
+                changeTab(3)
+            }
+        }
     }
 
 }

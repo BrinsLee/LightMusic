@@ -2,7 +2,6 @@ package com.brins.lightmusic.ui.fragment.quickcontrol
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -12,29 +11,28 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
-import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver
 import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.utils.TYPE_LOCAL_MUSIC
-import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
-import com.brins.lightmusic.utils.launch
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
 import kotlinx.android.synthetic.main.fragment_quick_control.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), MusicPlayerContract.View, IPlayback.Callback,
+class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback,
     View.OnClickListener{
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
 
+    @Inject
+    lateinit var mPresenter: MusicPlayerPresenter
     private var index = -1
     private var mPlayer: PlayBackService? = null
     private var type = -1
     private lateinit var playList: PlayList
-    private lateinit var mPresenter: MusicPlayerContract.Presenter
     override fun getLayoutResID(): Int {
         return R.layout.fragment_quick_control
     }
@@ -125,9 +123,7 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::mPresenter.isInitialized) {
-            mPresenter.unsubscribe()
-        }
+        mPresenter.unsubscribe()
     }
 
     // Click Events
@@ -220,9 +216,6 @@ class QuickControlFragment : BaseFragment<MusicPlayerContract.Presenter>(), Musi
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun setPresenter(presenter: MusicPlayerContract.Presenter) {
-        mPresenter = presenter
-    }
 
     override fun handleError(error: Throwable) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

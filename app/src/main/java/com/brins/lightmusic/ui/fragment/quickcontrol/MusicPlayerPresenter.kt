@@ -4,27 +4,18 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.Bitmap
 import android.os.IBinder
-import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.api.ApiHelper
-import com.brins.lightmusic.api.DefaultObserver
-import com.brins.lightmusic.common.AsyncTransformer
 import com.brins.lightmusic.model.Music
-import com.brins.lightmusic.model.onlinemusic.MusicBean
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayBackService.Companion.mIsServiceBound
 import com.brins.lightmusic.utils.await
 import com.brins.lightmusic.utils.loadingOnlineCover
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
+import javax.inject.Inject
 
-
-class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter {
-
+class MusicPlayerPresenter @Inject constructor() :
+    MusicPlayerContract.Presenter {
 
 
     companion object {
@@ -79,7 +70,7 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     })*/
 
-    override suspend fun loadMusicDetail(onlineMusic: Music) : Music{
+    override suspend fun loadMusicDetail(onlineMusic: Music): Music {
         onlineMusic.bitmapCover = loadingOnlineCover(onlineMusic.album.picUrl)
         val metaData = ApiHelper.getMusicService().getUrl(onlineMusic.id).await()
         if (metaData.data != null) {
@@ -87,7 +78,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
         }
         return onlineMusic
     }
-
 
 
     override fun retrieveLastPlayMode() {
@@ -119,7 +109,6 @@ class MusicPlayerPresenter private constructor() : MusicPlayerContract.Presenter
 
     override fun subscribe(view: MusicPlayerContract.View?) {
         mView = view
-        mView!!.setPresenter(this)
         bindPlaybackService()
         retrieveLastPlayMode()
         if (mPlaybackService != null && mPlaybackService!!.getPlayingSong() != null) {

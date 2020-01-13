@@ -37,4 +37,8 @@
     <string name="sign_in">登录</string>
     <string name="load_more">获取更多内容</string>
     <string name="login_first">如果未登录，请先登录</string>
+    <string name="main_tab">首页</string>
+    <string name="discovery_tab">发现</string>
+    <string name="video_tab">视频</string>
+    <string name="singers">歌手</string>
 </resources>

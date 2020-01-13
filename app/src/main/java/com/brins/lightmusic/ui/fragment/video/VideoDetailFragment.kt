@@ -20,12 +20,16 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_video_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
+class VideoDetailFragment : BaseFragment(),
     CommonHeaderView.OnBackClickListener, VideoContract.View {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
-
-    private var mPresenter: VideoContract.Presenter? = null
+    @Inject
+    lateinit var mPresenter: VideoPresent
     private var mCurrentMv: Mv? = null
     private lateinit var mCommentAdapter: CommonViewAdapter<MvCommentsBean>
 
@@ -35,7 +39,7 @@ class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
 
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
-        VideoPresent(this).subscribe(this)
+        mPresenter.subscribe(this)
         head.setOnBackClickListener(this)
         mCurrentMv = arguments?.getParcelable("Mv")
         if (mCurrentMv != null) {
@@ -62,17 +66,13 @@ class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
     }
 
 
-    override fun setPresenter(presenter: VideoContract.Presenter) {
-        mPresenter = presenter
-    }
-
     //MVP View
 
-    private fun loadMvComments(){
+    private fun loadMvComments() {
         launch({
             showLoading()
             val result = loadComments()
-            if (result?.comments != null){
+            if (result.comments != null) {
                 val list = result.comments
                 mCommentAdapter = object : CommonViewAdapter<MvCommentsBean>(
                     context!!,
@@ -92,14 +92,15 @@ class VideoDetailFragment : BaseFragment<VideoContract.Presenter>(),
             recyclerView.adapter = mCommentAdapter
             recyclerView.addItemDecoration(SpacesItemDecoration(10))
             hideLoading()
-            },{
-            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+        }, {
+            if (context != null)
+                Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
             hideLoading()
         })
     }
 
-    private suspend fun loadComments() = withContext(Dispatchers.IO){
-        val result = mPresenter?.loadVideoComments(mCurrentMv!!.dataBean.id)
+    private suspend fun loadComments() = withContext(Dispatchers.IO) {
+        val result = mPresenter.loadVideoComments(mCurrentMv!!.dataBean.id)
         result
     }
 }

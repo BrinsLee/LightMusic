@@ -26,19 +26,24 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_user_music_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
-    BaseFragment<MusicListContract.Presenter>(),
+    BaseFragment(),
     MusicListContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener
 /*SwipeRefreshLayout.OnRefreshListener */ {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
 
+    @Inject
+    lateinit var mPresenter: MusicListPresenter
     private var mPlayList = PlayList()
     private var currentTime: Long = 0
-    private lateinit var mPresenter: MusicListContract.Presenter
     private lateinit var mAdapter: CommonViewAdapter<Music>
 
     override fun getLayoutResID(): Int {
@@ -114,9 +119,6 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
     }*/
 
 
-    override fun setPresenter(presenter: MusicListContract.Presenter) {
-        mPresenter = presenter
-    }
 
     override fun onItemClick(position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {

@@ -6,15 +6,21 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
+import com.brins.lightmusic.di.component.ActivityComponent
+import com.brins.lightmusic.di.component.DaggerActivityComponent
+import com.brins.lightmusic.di.module.ActivityModule
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(),BaseView {
 
     protected var TAG = this.javaClass.simpleName
+/*    @Inject
+    protected lateinit var mPresenter: BasePresenter<BaseView>*/
     protected var fragment: QuickControlFragment = QuickControlFragment.newInstance()
     protected var firstTime : Long = 0
     protected var mBindDestroyDisposable: CompositeDisposable? = null
@@ -24,29 +30,29 @@ abstract class BaseActivity : AppCompatActivity() {
         return null
     }
 
-    /*
-*设置状态栏透明
-* */
-/*    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.decorView.systemUiVisibility = option
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.statusBarColor = Color.parseColor("#00323232")
-        }
-    }*/
+    override fun showLoading() {
+    }
+
+    override fun hideLoading() {
+
+    }
+
+    override fun getLifeActivity(): AppCompatActivity {
+        return this
+    }
 
     protected abstract fun getLayoutResId(): Int
+
+    protected abstract fun initInject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onCreateBeforeBinding(savedInstanceState)
         var resId = getLayoutResId()
-
-
         if (resId != 0) {
             setContentView(resId)
         }
+        initInject()
         onCreateAfterBinding(savedInstanceState)
 
     }
@@ -56,6 +62,17 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected open fun onCreateBeforeBinding(savedInstanceState: Bundle?) {}
+
+    protected fun getActivityComponent(): ActivityComponent {
+        return DaggerActivityComponent.builder()
+            .appComponent(LightMusicApplication.getAppComponent())
+            .activityModule(getActivityModule())
+            .build()
+    }
+
+    protected fun getActivityModule(): ActivityModule {
+        return ActivityModule(this)
+    }
 
     fun switchFragment(targetFragment: Fragment): FragmentTransaction {
         val transaction = supportFragmentManager.beginTransaction()

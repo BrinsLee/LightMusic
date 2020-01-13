@@ -4,12 +4,14 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Message
+import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lib_common.utils.WeakHandler
+import com.brins.lightmusic.utils.setTranslucent
 
 
-class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
+class SplashActivity : AppCompatActivity() ,WeakHandler.IHandler {
 
     private var mForceGoMain: Boolean = false
     private val AD_TIME_OUT : Long = 2000
@@ -18,18 +20,14 @@ class SplashActivity : BaseActivity() ,WeakHandler.IHandler {
     private var mHasLoaded: Boolean = false
     private val mHandler = WeakHandler(this)
 
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_splash
-    }
 
-    override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
-        super.onCreateAfterBinding(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splash)
+        setTranslucent(this)
         mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, AD_TIME_OUT)
-//        loadSplashAd()
-
     }
-
-/*
+    /*
     private fun loadSplashAd() {
         val adSlot = AdSlot.Builder()
             .setCodeId("801121648")

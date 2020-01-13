@@ -7,7 +7,7 @@ import com.brins.lightmusic.ui.base.BaseView
 
 interface LocalMusicContract {
 
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
         fun getLoaderManager() : LoaderManager
 

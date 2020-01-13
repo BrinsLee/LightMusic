@@ -37,12 +37,17 @@ import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import kotlinx.android.synthetic.main.item_recycler_head.*
 import java.lang.Exception
+import javax.inject.Inject
 
-class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItemClickListener,
+class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
     View.OnClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
+    @Inject
+    lateinit var mPresenter: MyPresenter
     private lateinit var mAdapter: CommonViewAdapter<UserPlayListBean>
-    private lateinit var myPresenter: MyPresenter
     private lateinit var mFmList: PlayList
     private var mPlayList: ArrayList<UserPlayListBean> = arrayListOf()
     private var mAvatar: Bitmap? = null
@@ -55,7 +60,7 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        MyPresenter.instance.subscribe(this)
+        mPresenter.subscribe(this)
         setListener()
         initUserData()
     }
@@ -104,19 +109,19 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
 
     override fun onItemClick(position: Int) {
 //        UserMusicListActivity.startThisActivity(activity as AppCompatActivity, mPlayList[position])
-        try {
+        /*try {
             (activity as MainActivity).switchFragment(UserMusicListFragment(mPlayList[position]))
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             Log.e(TAG, e.message)
-        }
+        }*/
     }
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.avatar, R.id.nickName -> LoginActivity.startThisActivity(this, AppConfig.isLogin)
-            R.id.fm -> myPresenter.loadUserFm()
+            R.id.fm -> mPresenter.loadUserFm()
             R.id.collection -> switch(DailyRecommendFragment())
             R.id.localMusic -> switch(LocalMusicFragment())
             R.id.rootli -> openMusicList()
@@ -136,13 +141,13 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
     }
 
     private fun switch(fragment: Fragment) {
-        try {
+/*        try {
             (activity as MainActivity).switchFragment(fragment)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
 
     override fun onDestroy() {
@@ -217,17 +222,10 @@ class MyFragment : BaseFragment<MyContract.Presenter>(), MyContract.View, OnItem
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun setPresenter(presenter: MyContract.Presenter) {
-        myPresenter = presenter as MyPresenter
-    }
 
     private fun checkToLoad() {
         if (mPlayList.isEmpty()) {
-            if (::myPresenter.isInitialized) {
-                myPresenter.loadUserMusicList(AppConfig.userAccount.id)
-            } else {
-                MyPresenter.instance.subscribe(this)
-            }
+            mPresenter.loadUserMusicList(AppConfig.userAccount.id)
         }
     }
 

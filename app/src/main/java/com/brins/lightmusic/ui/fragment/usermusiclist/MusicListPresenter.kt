@@ -4,8 +4,9 @@ import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.utils.await
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import javax.inject.Inject
 
-class MusicListPresenter : MusicListContract.Presenter {
+class MusicListPresenter @Inject constructor(): MusicListContract.Presenter {
 
 
 
@@ -29,7 +30,6 @@ class MusicListPresenter : MusicListContract.Presenter {
 
     override fun subscribe(view: MusicListContract.View) {
         mView = view
-        mView?.setPresenter(this)
     }
 
     override fun unsubscribe() {

@@ -12,7 +12,7 @@ open class Music(
     * id
     * */
     @SerializedName("id")
-    var id: String = "",
+    val id: String = "",
     /*
     * 音乐名字
     * */

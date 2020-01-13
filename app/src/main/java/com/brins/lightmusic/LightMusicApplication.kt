@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.di.component.AppComponent
+import com.brins.lightmusic.di.component.DaggerAppComponent
+import com.brins.lightmusic.di.module.AppModule
 import com.brins.lightmusic.model.database.DatabaseFactory
 import com.brins.lightmusic.utils.*
 import io.reactivex.plugins.RxJavaPlugins
@@ -17,6 +20,12 @@ class LightMusicApplication : BaseApplication() {
         fun getLightApplication(): LightMusicApplication {
             return sInstance as LightMusicApplication
         }
+
+        fun getAppComponent(): AppComponent {
+            return DaggerAppComponent.builder()
+                .appModule(AppModule(getLightApplication()))
+                .build()
+        }
     }
 
 
@@ -29,7 +38,7 @@ class LightMusicApplication : BaseApplication() {
     }
 
     fun isMainProcess(context: Context): Boolean {
-        return AppConfig.Package.MAIN_PROCESS_NAME.equals(getCurrProcessName(context))
+        return AppConfig.Package.MAIN_PROCESS_NAME == getCurrProcessName(context)
     }
 
 

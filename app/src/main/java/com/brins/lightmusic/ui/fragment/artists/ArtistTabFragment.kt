@@ -18,7 +18,6 @@ import com.brins.lightmusic.model.album.AlbumBean
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
 import com.brins.lightmusic.model.musicvideo.Mv
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
@@ -29,19 +28,22 @@ import com.brins.lightmusic.utils.*
 import kotlinx.android.synthetic.main.fragment_artist_tab.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 class ArtistTabFragment(var type: Int = 10010, var id: String) :
-    BaseFragment<ArtistDetailConstract.Presenter>(),
+    BaseFragment(),
     ArtistDetailConstract.View, OnItemClickListener {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
 
+    @Inject
+    lateinit var mPresenter: ArtistDetailPresenter
     private var playList: PlayList = PlayList()
     private var mvDataBeans: List<LastestMvDataBean> = listOf()
     private var albumDataBeans: MutableList<AlbumBean> = mutableListOf()
     private var currentTime: Long = 0
-    private var mPresenter: ArtistDetailPresenter? = null
-
-
 
 
     override fun getLayoutResID(): Int {
@@ -50,7 +52,7 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        ArtistDetailPresenter.instance.subscribe(this)
+        mPresenter.subscribe(this)
         initView()
     }
 
@@ -62,12 +64,12 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
         }
     }
 
-    private fun loadArtistSong(){
+    private fun loadArtistSong() {
         launch({
             showLoading()
             val result = loadArtistSong(id)
             val mAdapter: CommonViewAdapter<Music>
-            playList.addSong(result!!.hot)
+            playList.addSong(result.hot)
             mAdapter = object : CommonViewAdapter<Music>(
                 activity!!, R.layout.item_online_music,
                 result.hot!!
@@ -90,22 +92,23 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
                 )
             )
             hideLoading()
-        },{
+        }, {
             Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
             hideLoading()
             showRetryView()
         })
     }
-    private suspend fun loadArtistSong(id: String) = withContext(Dispatchers.IO){
-        val result = mPresenter?.loadArtistSong(id)
+
+    private suspend fun loadArtistSong(id: String) = withContext(Dispatchers.IO) {
+        val result = mPresenter.loadArtistSong(id)
         result
     }
 
-    private fun loadArtistMv(){
+    private fun loadArtistMv() {
         launch({
             showLoading()
-            val result = loadArtistMv(id,10)
-            mvDataBeans = result!!.dataBeans!!
+            val result = loadArtistMv(id, 10)
+            mvDataBeans = result.dataBeans!!
             val mAdapter: CommonViewAdapter<LastestMvDataBean>
             mAdapter = object : CommonViewAdapter<LastestMvDataBean>(
                 activity!!,
@@ -128,24 +131,25 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             recyclerView.adapter = mAdapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
             hideLoading()
-        },{
-            Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
+        }, {
+            if (context != null)
+                Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
             hideLoading()
             showRetryView()
         })
     }
 
-    private suspend fun loadArtistMv(id: String, limit : Int) = withContext(Dispatchers.IO){
-        val result = mPresenter?.loadArtistMv(id, limit)
+    private suspend fun loadArtistMv(id: String, limit: Int) = withContext(Dispatchers.IO) {
+        val result = mPresenter.loadArtistMv(id, limit)
         result
     }
 
 
-    private fun loadArtistAlbum(){
+    private fun loadArtistAlbum() {
         launch({
             showLoading()
             val response = loadArtistAlbum(id)
-            albumDataBeans.addAll(response!!.hotAlbums!!)
+            albumDataBeans.addAll(response.hotAlbums!!)
             val mAdapter: CommonViewAdapter<AlbumBean> = object : CommonViewAdapter<AlbumBean>(
                 activity!!,
                 R.layout.item_local_music,
@@ -162,22 +166,18 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             recyclerView.adapter = mAdapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
             hideLoading()
-        },{
+        }, {
             Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()
             hideLoading()
             showRetryView()
         })
     }
 
-    private suspend fun loadArtistAlbum(id : String) = withContext(Dispatchers.IO){
-        val result = mPresenter?.loadArtistAlbum(id)
+    private suspend fun loadArtistAlbum(id: String) = withContext(Dispatchers.IO) {
+        val result = mPresenter.loadArtistAlbum(id)
         result
     }
 
-    override fun setPresenter(presenter: ArtistDetailConstract.Presenter) {
-        mPresenter = presenter as ArtistDetailPresenter
-
-    }
 
     override fun onItemClick(position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
@@ -199,27 +199,27 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             SearchType.MV.type -> {
                 currentTime = System.currentTimeMillis()
                 launch({
-                    var response : Mv? = null
-                    withContext(Dispatchers.IO){
-                        response = mPresenter?.loadUrl(mvDataBeans[position])
+                    var response: Mv? = null
+                    withContext(Dispatchers.IO) {
+                        response = mPresenter.loadUrl(mvDataBeans[position])
                     }
                     val bundle = Bundle()
                     bundle.putParcelable("Mv", response)
                     switch(VideoDetailFragment(), bundle)
-                },{})
+                }, {})
             }
         }
     }
 
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        try {
-            (activity as MainActivity).switchFragment(fragment, bundle)
-                .addToBackStack(TAG)
-                .commit()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        /* try {
+             (activity as MainActivity).switchFragment(fragment, bundle)
+                 .addToBackStack(TAG)
+                 .commit()
+         } catch (e: Exception) {
+             e.printStackTrace()
+         }*/
     }
 
     override fun showRetryView() {
@@ -227,12 +227,15 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
         val textError = TextView(context)
         textError.setText(R.string.connect_error)
         textError.textSize = 20f
-        textError.setTextColor(ContextCompat.getColor(context!!,R.color.translucent))
-        val p : LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        textError.setTextColor(ContextCompat.getColor(context!!, R.color.translucent))
+        val p: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         p.gravity = Gravity.CENTER
         textError.gravity = Gravity.CENTER
-        container.addView(textError,p)
-        textError.setOnClickListener{
+        container.addView(textError, p)
+        textError.setOnClickListener {
             container.removeView(textError)
             initView()
         }

@@ -20,9 +20,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.ArrayList
+import javax.inject.Inject
 
-
-class LocalMusicPresenter private constructor() : LocalMusicContract.Presenter
+class LocalMusicPresenter @Inject constructor() : LocalMusicContract.Presenter
     , LoaderManager.LoaderCallbacks<Cursor> {
 
 
@@ -56,9 +56,6 @@ class LocalMusicPresenter private constructor() : LocalMusicContract.Presenter
         MediaStore.Audio.Media.DATA
     )
 
-    init {
-        mView?.setPresenter(this)
-    }
 
     override fun loadLocalMusic() {
         mView?.getLoaderManager()!!.initLoader(URL_LOAD_LOCAL_MUSIC, null, this)

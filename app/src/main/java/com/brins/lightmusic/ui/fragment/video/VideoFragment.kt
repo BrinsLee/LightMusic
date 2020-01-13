@@ -16,7 +16,10 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_video.*
 
 
-class VideoFragment : BaseFragment<VideoContract.Presenter>() {
+class VideoFragment : BaseFragment() {
+    override fun initInject() {
+        getFragmentComponent().inject(this)
+    }
 
 
     private var list = mutableListOf<Fragment>(
@@ -60,11 +63,6 @@ class VideoFragment : BaseFragment<VideoContract.Presenter>() {
 
             })
         }
-    }
-
-
-    override fun setPresenter(presenter: VideoContract.Presenter) {
-
     }
 
 

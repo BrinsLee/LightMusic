@@ -13,6 +13,8 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+
 import com.brins.lightmusic.R;
 
 
@@ -31,19 +33,19 @@ public class RoundConstraintLayout extends ConstraintLayout {
 
     public RoundConstraintLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.RoundConstraintLayout);
         mRadius = a.getDimensionPixelSize(R.styleable.RoundConstraintLayout_round_corner, ROUND_RADIUS_DEFAULT);
         a.recycle();
     }
 
-    private void init() {
+    private void init(Context context) {
         setWillNotDraw(false);
         mMaskPaint = new Paint();
         mMaskPaint.setAntiAlias(true);
         mMaskPaint.setFilterBitmap(true);
-        mMaskPaint.setColor(getResources().getColor(R.color.white,null));
+        mMaskPaint.setColor(ContextCompat.getColor(context, R.color.white));
     }
 
     private void updateMask() {
