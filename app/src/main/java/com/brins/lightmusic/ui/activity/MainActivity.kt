@@ -29,8 +29,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private var currentPage = 0
-    var list = mutableListOf<Fragment>()
-    val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
+    private var list = mutableListOf<Fragment>()
+    private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
+    private var currentFragment: Fragment? = null
 
 
     companion object {
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-/*    fun switchFragment(targetFragment: Fragment): FragmentTransaction {
+    fun switchFragment(targetFragment: Fragment): FragmentTransaction {
         val transaction = supportFragmentManager.beginTransaction()
         if (!targetFragment.isAdded) {
             if (currentFragment != null) {
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         targetFragment.arguments = bundle
         return switchFragment(targetFragment)
 
-    }*/
+    }
 
     override fun onDestroy() {
         super.onDestroy()

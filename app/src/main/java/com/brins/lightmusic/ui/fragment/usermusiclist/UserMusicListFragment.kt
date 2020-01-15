@@ -1,6 +1,7 @@
 package com.brins.lightmusic.ui.fragment.usermusiclist
 
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -19,10 +20,10 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.utils.SpacesItemDecoration
-import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
-import com.brins.lightmusic.utils.launch
+import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.fragment_user_music_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -53,12 +54,12 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         MusicListPresenter.instance.subscribe(this)
-        if (mPlayList.getNumOfSongs() == 0 && AppConfig.isLogin){
+        if (mPlayList.getNumOfSongs() == 0 && AppConfig.isLogin) {
             initView()
         }
     }
 
-    private fun initView(){
+    private fun initView() {
 
         mAdapter = object : CommonViewAdapter<Music>(
             activity!!, R.layout.item_local_music,
@@ -73,7 +74,15 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
 
         }
         head.title = mUserPlayList.name
-        Glide.with(this).load(mUserPlayList.coverImgUrl).into(cover)
+        ImageLoadreUtils.getInstance().loadImage(context,
+            ImageLoader.Builder().url(mUserPlayList.coverImgUrl).bulid()
+            , object : SimpleTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    cover.setImageBitmap(resource)
+                    coverBg.setImageBitmap(resource)
+                }
+
+            })
         nickName.text = mUserPlayList.creator.nickName
         Glide.with(this).load(mUserPlayList.creator.avatarUrl).into(avatar)
 //        mPresenter.loadMusicList(mUserPlayList.id)
@@ -91,24 +100,25 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
         head.setOnBackClickListener(this)
     }
 
-    private fun loadUserPlayList(){
+    private fun loadUserPlayList() {
         launch({
             showLoading()
             val data = getUserPlayList()
             mPlayList.addSong(data.playlist!!.tracks)
             mAdapter.notifyDataSetChanged()
             hideLoading()
-        },{
+        }, {
             Toast.makeText(context, getString(R.string.login_first), Toast.LENGTH_SHORT).show()
             hideLoading()
             showRetryView()
         })
     }
 
-    private suspend fun getUserPlayList() = withContext(Dispatchers.IO){
+    private suspend fun getUserPlayList() = withContext(Dispatchers.IO) {
         val result = mPresenter.loadMusicList(mUserPlayList.id)
         result
     }
+
     override fun showRetryView() {
         super.showRetryView()
     }
@@ -117,7 +127,6 @@ class UserMusicListFragment(var mUserPlayList: UserPlayListBean) :
         mPlayList.addSong(detailBean.tracks!!)
         mAdapter.notifyDataSetChanged()
     }*/
-
 
 
     override fun onItemClick(position: Int) {

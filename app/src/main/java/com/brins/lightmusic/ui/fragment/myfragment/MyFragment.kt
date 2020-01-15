@@ -6,8 +6,11 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
@@ -17,6 +20,7 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
@@ -25,10 +29,15 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
+import com.brins.lightmusic.ui.customview.CustomStaggeredGridLayoutManager
+import com.brins.lightmusic.ui.customview.SpaceItemDecoration
 import com.brins.lightmusic.ui.fragment.dailyrecommend.DailyRecommendFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
+import com.brins.lightmusic.ui.fragment.usermusiclist.UserMusicListFragment
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.fragment_my.*
@@ -42,6 +51,7 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
         getFragmentComponent().inject(this)
     }
 
+    private lateinit var customStaggeredGridLayoutManager: CustomStaggeredGridLayoutManager
     @Inject
     lateinit var mPresenter: MyPresenter
     private lateinit var mAdapter: CommonViewAdapter<UserPlayListBean>
@@ -106,13 +116,13 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
 
     override fun onItemClick(position: Int) {
 //        UserMusicListActivity.startThisActivity(activity as AppCompatActivity, mPlayList[position])
-        /*try {
+        try {
             (activity as MainActivity).switchFragment(UserMusicListFragment(mPlayList[position]))
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             Log.e(TAG, e.message)
-        }*/
+        }
     }
 
     override fun onClick(v: View) {
@@ -203,13 +213,32 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
                 ) {
                 override fun converted(holder: ViewHolder, t: UserPlayListBean, position: Int) {
                     val playlist = list[position]
-                    holder.setImageResource(R.id.imgCover, playlist.coverImgUrl)
+                    val width = (ScreenUtils.getScreenWidth(context) - dp2px(context, 25f)) / 2
+                    val layoutparams = holder.getView<ImageView>(R.id.imgCover).layoutParams
+                    layoutparams.width = width
+                    layoutparams.height = width
+                    holder.getView<ImageView>(R.id.imgCover).layoutParams = layoutparams
+                    ImageLoadreUtils.getInstance().loadImage(
+                        context,
+                        ImageLoader.Builder().url(playlist.coverImgUrl).assignWidth(width).assignHeight(
+                            width
+                        )
+                            .scaleModeType(ImageLoadreUtils.SCALE_MODE_CENTER_CROP).imgView(
+                                holder.getView(
+                                    R.id.imgCover
+                                )
+                            ).bulid()
+                    )
                     holder.setText(R.id.textViewName, playlist.name)
                     holder.setText(R.id.textViewArtist, "共${playlist.trackCount}首")
                 }
             }
+            customStaggeredGridLayoutManager =
+                CustomStaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            customStaggeredGridLayoutManager.setScrollEnabled(false)
+            userPlayList.isNestedScrollingEnabled = false
+            userPlayList.layoutManager = customStaggeredGridLayoutManager
             userPlayList.adapter = mAdapter
-            userPlayList.layoutManager = LinearLayoutManager(context)
             mAdapter.setOnItemClickListener(this)
         }
     }
