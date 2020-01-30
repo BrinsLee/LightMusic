@@ -4,47 +4,59 @@
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_margin_20"
-        android:layout_marginEnd="@dimen/common_margin_20"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/common_margin_10"
+        android:paddingBottom="@dimen/common_margin_10">
 
     <TextView
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="0"
+            android:text=""
             android:gravity="start"
             android:textSize="20sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+            android:id="@+id/item_cover"
+            android:src="@drawable/default_cover"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/common_margin_10"
+            android:layout_width="@dimen/common_margin_50"
+            android:layout_height="@dimen/common_margin_50"
+
+            />
 
     <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin_30"
-            android:layout_marginTop="@dimen/common_margin_20"
+            android:layout_marginStart="15dp"
             android:text=""
             android:ellipsize="end"
             android:singleLine="true"
             android:gravity="center"
             android:textColor="@color/translucent"
             android:textSize="15sp"
-            app:layout_constraintStart_toEndOf="@id/count"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/item_cover"
+            app:layout_constraintTop_toTopOf="@id/item_cover" />
 
     <TextView
             android:id="@+id/artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin_30"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="@dimen/common_margin_5"
             android:layout_marginBottom="@dimen/common_margin_5"
             android:textSize="12sp"
             android:singleLine="true"
-            app:layout_constraintStart_toEndOf="@id/count"
-            app:layout_constraintTop_toBottomOf="@id/name" />
+            app:layout_constraintStart_toEndOf="@id/item_cover"
+            app:layout_constraintBottom_toBottomOf="@id/item_cover" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

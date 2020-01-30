@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.fragment.myfragment
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -7,9 +8,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
@@ -20,7 +19,6 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
@@ -30,14 +28,11 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CustomStaggeredGridLayoutManager
-import com.brins.lightmusic.ui.customview.SpaceItemDecoration
 import com.brins.lightmusic.ui.fragment.dailyrecommend.DailyRecommendFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
-import com.brins.lightmusic.ui.fragment.usermusiclist.UserMusicListFragment
+import com.brins.lightmusic.ui.fragment.usermusiclist.UserPlayListActivity
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.fragment_my.*
@@ -114,15 +109,17 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
     }
 
 
-    override fun onItemClick(position: Int) {
-//        UserMusicListActivity.startThisActivity(activity as AppCompatActivity, mPlayList[position])
-        try {
+    override fun onItemClick(view: View?, position: Int) {
+        view?.let {
+            UserPlayListActivity.startThis(view.findViewById(R.id.imgCover) as ImageView, mPlayList[position], activity as Activity)
+        }
+        /*try {
             (activity as MainActivity).switchFragment(UserMusicListFragment(mPlayList[position]))
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             Log.e(TAG, e.message)
-        }
+        }*/
     }
 
     override fun onClick(v: View) {

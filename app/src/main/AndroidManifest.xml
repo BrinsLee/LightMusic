@@ -23,7 +23,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.SearchActivity"></activity>
+        <activity android:name=".ui.fragment.discovery.MusicDetailActivity"></activity>
+        <activity android:name=".ui.fragment.usermusiclist.UserPlayListActivity" />
+        <activity android:name=".ui.activity.SearchActivity" />
         <activity android:name=".ui.activity.MusicPlayActivity" />
 
         <service

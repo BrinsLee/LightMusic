@@ -5,14 +5,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_music_detail"
         android:id="@+id/rootContraint"
         tools:context=".ui.fragment.discovery.MusicDetailFragment">
 
+    <ImageView
+            android:id="@+id/coverBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_music_detail"
+            android:scaleType="fitXY"
+            />
     <com.brins.lightmusic.ui.customview.FadingScrollView
             android:id="@+id/nestScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -33,7 +40,7 @@
                     android:src="@drawable/default_cover"
                     app:riv_corner_radius_bottom_left="@dimen/common_margin_150"
                     app:riv_corner_radius_bottom_right="@dimen/common_margin_150"
-            />
+                    />
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/musicRecycler"

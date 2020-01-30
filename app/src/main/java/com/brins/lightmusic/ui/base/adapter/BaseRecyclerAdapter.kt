@@ -38,7 +38,7 @@ open class BaseRecyclerAdapter<T>(var context: Context, var lists: ArrayList<T>)
     fun setListener(parent: ViewGroup, holder: ViewHolder, viewType: Int) {
         if (mOnItemClickListener != null) {
             holder.getConvertView().setOnClickListener {
-                mOnItemClickListener!!.onItemClick(it.tag as Int)
+                mOnItemClickListener!!.onItemClick(it, it.tag as Int)
             }
 
         }

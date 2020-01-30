@@ -13,14 +13,14 @@ import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import java.lang.StringBuilder
 
-class MusicDetailAdapter (var context: Context, var list: MutableList<Music>) :
+class MusicDetailAdapter(var context: Context, var list: MutableList<Music>) :
     RecyclerView.Adapter<MusicDetailAdapter.ViewHolder>() {
 
 
     private var mItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_online_music,parent,false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_online_music, parent, false)
         val myViewHolder = ViewHolder(view)
         return myViewHolder
     }
@@ -30,16 +30,16 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<Music>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (list.isNotEmpty()){
+        if (list.isNotEmpty()) {
             val musicDetail = list[position]
             val strBuilder = StringBuilder()
             musicDetail.artistBeans?.forEach { strBuilder.append("${it.name} ") }
             holder.artist.text = strBuilder.toString()
             holder.name.text = musicDetail.name
             holder.count.text = "$position"
-            if (mItemClickListener != null){
+            if (mItemClickListener != null) {
                 holder.layout.setOnClickListener {
-                    mItemClickListener!!.onItemClick(position)
+                    mItemClickListener!!.onItemClick(it, position)
                 }
 
             }
@@ -51,7 +51,7 @@ class MusicDetailAdapter (var context: Context, var list: MutableList<Music>) :
         list = data
     }
 
-    class ViewHolder (var view : View): RecyclerView.ViewHolder(view){
+    class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val layout = view.findViewById<ConstraintLayout>(R.id.rootLayout)
         val name = view.findViewById<TextView>(R.id.name)
         val artist = view.findViewById<TextView>(R.id.artist)

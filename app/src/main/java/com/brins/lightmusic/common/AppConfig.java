@@ -143,6 +143,7 @@ public class AppConfig {
      */
     public static final String SEARCH = "/search";
 
+    public static final String SHARE_ANIMATION_IMAGE_NAME = "image";
 
     public static final String RECOMMEND_MV = "/personalized/mv";
 

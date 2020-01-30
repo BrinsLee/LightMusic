@@ -19,9 +19,11 @@ import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
 import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
+import com.brins.lightmusic.utils.setColorTranslucent
 import com.brins.lightmusic.utils.setTranslucent
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottombar.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
 
 
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     private var list = mutableListOf<Fragment>()
     private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
     private var currentFragment: Fragment? = null
+    private var mClickTime: Long = 0
+
 
 
     companion object {
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
-        setTranslucent(this)
+        setColorTranslucent(this)
         initViewPagerAndTabLay()
     }
 
@@ -143,7 +147,6 @@ class MainActivity : AppCompatActivity() {
 
         when (keyCode) {
             KeyEvent.KEYCODE_BACK -> {
-                var mClickTime: Long = 0
                 if (SystemClock.elapsedRealtime() - mClickTime > 1000) {
                     Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show()
                     mClickTime = SystemClock.elapsedRealtime()

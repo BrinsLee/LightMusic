@@ -26,7 +26,7 @@ class ArtistAdapter(var list: ArrayList<ArtistBean>) :
             view.setOnClickListener {
                 val position = viewHolder.adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    mItemClickListener!!.onItemClick(position)
+                    mItemClickListener!!.onItemClick(view, position)
                 }
             }
         }

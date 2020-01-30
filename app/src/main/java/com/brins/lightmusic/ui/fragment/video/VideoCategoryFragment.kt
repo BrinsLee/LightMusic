@@ -58,7 +58,7 @@ class VideoCategoryFragment(var area: String) : BaseFragment(),
     }
 
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?,position: Int) {
         val bundle = Bundle()
         bundle.putParcelable("Mv", videoList[position])
         switch(VideoDetailFragment(), bundle)

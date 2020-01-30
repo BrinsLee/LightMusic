@@ -2,6 +2,7 @@ package com.brins.lightmusic.ui.fragment.artists
 
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -179,7 +180,7 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
     }
 
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?, position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
             return
         }

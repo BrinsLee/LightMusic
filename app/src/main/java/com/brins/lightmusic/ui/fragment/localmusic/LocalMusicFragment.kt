@@ -48,7 +48,7 @@ LocalMusicFragment : BaseFragment(),
         recyclerView.adapter = mAdapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addItemDecoration(SpacesItemDecoration(10))
+        recyclerView.addItemDecoration(SpacesItemDecoration(context!!,10,R.color.gery))
         requestpermission()
     }
 
@@ -120,7 +120,7 @@ LocalMusicFragment : BaseFragment(),
         return activity as AppCompatActivity
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?,position: Int) {
         playList.setPlayingIndex(position)
         RxBus.getInstance().post(PlayListEvent(playList, position))
     }

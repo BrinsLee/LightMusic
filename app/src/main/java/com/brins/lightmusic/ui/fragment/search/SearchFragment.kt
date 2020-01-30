@@ -302,7 +302,7 @@ class SearchFragment(val type: Int = 1) : BaseFragment(),
         (activity as MainActivity).onBackPressed()
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?,position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
             return
         }

@@ -58,7 +58,7 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
 
             if (mItemClickListener != null) {
                 holder.container.setOnClickListener {
-                    mItemClickListener!!.onItemClick(position)
+                    mItemClickListener!!.onItemClick(it, position)
                 }
             }
         }
@@ -71,7 +71,7 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.tv_title)
-        var container : LinearLayout = view.findViewById(R.id.container)
+        var container: LinearLayout = view.findViewById(R.id.container)
         var videoPlayer: ImageView = view.findViewById(R.id.video_player)
         var watchCount: TextView = view.findViewById(R.id.tv_watch_count)
         var avatar: RoundedImageView = view.findViewById(R.id.iv_avatar)

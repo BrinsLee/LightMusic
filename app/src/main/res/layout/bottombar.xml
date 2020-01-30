@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:clipChildren="false"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+            android:id="@+id/tab_main_btn"
+            android:layout_width="@dimen/common_margin_20"
+            android:layout_height="@dimen/common_margin_20"
+            android:scaleType="centerInside"
+            android:background="@drawable/tab_main_selected"
+            android:clickable="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintEnd_toStartOf="@id/tab_discovery_btn"/>
+
+
+    <TextView
+            android:id="@+id/tab_main_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:clickable="false"
+            android:text="@string/main_tab"
+            android:textColor="@drawable/tab_main_text_selected"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="@id/tab_main_btn"
+            app:layout_constraintStart_toStartOf="@id/tab_main_btn"
+            app:layout_constraintTop_toBottomOf="@id/tab_main_btn" />
+
+    <ImageButton
+            android:id="@+id/tab_discovery_btn"
+            android:layout_width="@dimen/common_margin_20"
+            android:layout_height="@dimen/common_margin_20"
+            android:scaleType="centerInside"
+            android:background="@drawable/tab_find_selected"
+            android:clickable="false"
+            app:layout_constraintStart_toEndOf="@id/tab_main_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintEnd_toStartOf="@id/tab_video_btn"
+            android:layout_marginEnd="@dimen/common_margin_30"
+            />
+
+
+    <TextView
+            android:id="@+id/tab_discovery_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:clickable="false"
+            android:text="@string/discovery_tab"
+            android:textColor="@drawable/tab_main_text_selected"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="@id/tab_discovery_btn"
+            app:layout_constraintStart_toStartOf="@id/tab_discovery_btn"
+            app:layout_constraintTop_toBottomOf="@id/tab_discovery_btn" />
+
+    <ImageButton
+            android:id="@+id/tab_video_btn"
+            android:layout_width="@dimen/common_margin_20"
+            android:layout_height="@dimen/common_margin_20"
+            android:scaleType="centerInside"
+            android:background="@drawable/tab_activity_selected"
+            android:clickable="false"
+            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintStart_toEndOf="@id/tab_discovery_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tab_singer_btn"
+            android:layout_marginStart="@dimen/common_margin_30"
+            />
+
+
+    <TextView
+            android:id="@+id/tab_video_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:clickable="false"
+            android:text="@string/video_tab"
+            android:textColor="@drawable/tab_main_text_selected"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="@id/tab_video_btn"
+            app:layout_constraintStart_toStartOf="@id/tab_video_btn"
+            app:layout_constraintTop_toBottomOf="@id/tab_video_btn" />
+
+    <ImageButton
+            android:id="@+id/tab_singer_btn"
+            android:layout_width="@dimen/common_margin_20"
+            android:layout_height="@dimen/common_margin_20"
+            android:scaleType="centerInside"
+            android:background="@drawable/tab_my_selected"
+            android:clickable="false"
+            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintStart_toEndOf="@id/tab_video_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+    <TextView
+            android:id="@+id/tab_singer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:clickable="false"
+            android:text="@string/singers"
+            android:textColor="@drawable/tab_main_text_selected"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="@id/tab_singer_btn"
+            app:layout_constraintStart_toStartOf="@id/tab_singer_btn"
+            app:layout_constraintTop_toBottomOf="@id/tab_singer_btn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

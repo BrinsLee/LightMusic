@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.FutureTarget;
@@ -43,6 +44,9 @@ public class GlideImageLoader implements BaseImageLoaderStrategy {
 
         if (imageLoader.getPlaceHolder() != 0) {
             options.placeholder(imageLoader.getPlaceHolder());
+        }
+        if (imageLoader.getFormat() != null) {
+            options.format(imageLoader.getFormat());
         }
 //        if (imageLoader.getBitmapTransformation() != null) {
 //            options.bitmapTransform(imageLoader.getBitmapTransformation());
@@ -90,12 +94,13 @@ public class GlideImageLoader implements BaseImageLoaderStrategy {
         if (imageLoader.getPlaceHolder() != 0) {
             options.placeholder(imageLoader.getPlaceHolder());
         }
-//        if (imageLoader.getBitmapTransformation() != null) {
-//            options.bitmapTransform(imageLoader.getBitmapTransformation());
-//        }
+        if (imageLoader.getFormat() != null) {
+            options.format(imageLoader.getFormat());
+        }
 //        options.skipMemoryCache(false);
         options.diskCacheStrategy(DiskCacheStrategy.ALL);
-        if (imageLoader.getUrl() != null){
+
+        if (imageLoader.getUrl() != null) {
             Glide.with(context).asBitmap().load(imageLoader.getUrl()).apply(options)
                     .into(simpleTarget);
         }
@@ -138,7 +143,7 @@ public class GlideImageLoader implements BaseImageLoaderStrategy {
 //        }
 //        options.skipMemoryCache(false);
         options.diskCacheStrategy(DiskCacheStrategy.ALL);
-        if (imageLoader.getUrl() != null){
+        if (imageLoader.getUrl() != null) {
             return Glide.with(context).asBitmap().load(imageLoader.getUrl()).apply(options).submit();
         }
         return null;

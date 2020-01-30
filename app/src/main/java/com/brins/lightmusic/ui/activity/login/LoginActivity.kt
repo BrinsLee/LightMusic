@@ -101,7 +101,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
-        setTranslucent(this)
+        setColorTranslucent(this)
         isLogin = intent.getBooleanExtra(IS_LOGIN, false)
     }
 
@@ -246,7 +246,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     }
 
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?,position: Int) {
         when (position) {
             1 -> MiniPayUtils.setupPay(
                 this,

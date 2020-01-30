@@ -66,7 +66,7 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View,
         result
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?, position: Int) {
         val bundle = Bundle()
         bundle.putParcelable("ARTIST", artistList[position])
         switch(ArtistDetailFragment(), bundle)

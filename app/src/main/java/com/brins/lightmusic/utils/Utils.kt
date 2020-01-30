@@ -6,11 +6,16 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.icu.util.Calendar
 import android.media.MediaMetadataRetriever
 import android.os.Build
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import android.text.TextUtils
 import android.text.format.Time
 import android.util.Base64
@@ -26,11 +31,14 @@ import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.collection.SimpleArrayMap
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
+import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.ui.customview.DimView
 import com.brins.lightmusic.ui.customview.ProgressLoading
 import com.bumptech.glide.Glide
@@ -222,8 +230,10 @@ fun show(strId: Int) {
 }
 
 
-class SpacesItemDecoration(var space: Int) : RecyclerView.ItemDecoration() {
+class SpacesItemDecoration(var mContext: Context, var space: Int, var drawableId: Int) :
+    RecyclerView.ItemDecoration() {
 
+    val mDrawable = ContextCompat.getDrawable(this.mContext, drawableId)
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -232,7 +242,26 @@ class SpacesItemDecoration(var space: Int) : RecyclerView.ItemDecoration() {
     ) {
         outRect.left = space
         outRect.right = space
-        outRect.bottom = 4 * space
+        outRect.bottom = space
+    }
+
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        for (i in 0 until parent.childCount) {
+            drawHorizontalDecoration(c, parent.getChildAt(i))
+        }
+    }
+
+    private fun drawHorizontalDecoration(c: Canvas, childAt: View) {
+        val rect = Rect(0, 0, 0, 0)
+        rect.top = childAt.bottom
+        mDrawable?.let {
+            rect.bottom = rect.top + space
+            rect.left = childAt.left
+            rect.right = childAt.right
+            it.bounds = rect
+            it.draw(c)
+        }
+
     }
 }
 
@@ -515,10 +544,27 @@ fun setTranslucent(activity: Activity) {
         decorView.systemUiVisibility = option
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = Color.TRANSPARENT
+    }
+}
+
+fun setColorTranslucent(activity: Activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // 设置状态栏透明
+        val window = activity.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        //            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // 设置根布局的参数
+        /*            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);*/
+        val decorView = window.decorView
+        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        decorView.systemUiVisibility = option
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = Color.TRANSPARENT
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
-
     }
 }
 
@@ -598,4 +644,70 @@ class StarterCommon(var activity: Activity?) {
             mUnBackProgressLoading!!.dismiss()
         }
     }
+}
+
+/**
+ * @param view              共享的控件
+ * @param sharedElementName 共享名字
+ */
+fun ActivityTransitionAnimation(
+    context: Activity,
+    intent: Intent,
+    view: View, sharedElementName: String = AppConfig.SHARE_ANIMATION_IMAGE_NAME
+
+) {
+    val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+        context,
+        view,
+        sharedElementName
+    )
+    context.startActivity(intent, optionsCompat.toBundle())
+}
+
+fun ActivityTransitionAnimation(
+    context: Activity,
+    intent: Intent,
+    view: View, sharedElementName: String,
+    requestCode: Int
+) {
+    view.transitionName = sharedElementName
+    val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+        context,
+        view,
+        AppConfig.SHARE_ANIMATION_IMAGE_NAME
+    )
+    context.startActivityForResult(intent, requestCode, optionsCompat.toBundle())
+}
+
+//高斯模糊
+fun rsBlur(context: Context, source: Bitmap, radius: Float): Bitmap {
+
+    var inputBmp = source
+    //(1)
+    val renderScript = RenderScript.create(context)
+
+    Log.i("Render", "scale size:" + inputBmp.width + "*" + inputBmp.height)
+
+    // Allocate memory for Renderscript to work with
+    //(2)
+    val input = Allocation.createFromBitmap(renderScript, inputBmp)
+    val output = Allocation.createTyped(renderScript, input.type)
+    //(3)
+    // Load up an instance of the specific script that we want to use.
+    val scriptIntrinsicBlur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
+    //(4)
+    scriptIntrinsicBlur.setInput(input)
+    //(5)
+    // Set the blur radius
+    scriptIntrinsicBlur.setRadius(radius)
+    //(6)
+    // Start the ScriptIntrinisicBlur
+    scriptIntrinsicBlur.forEach(output)
+    //(7)
+    // Copy the output to the blurred bitmap
+    output.copyTo(inputBmp)
+    //(8)
+    renderScript.destroy()
+
+    return inputBmp
 }

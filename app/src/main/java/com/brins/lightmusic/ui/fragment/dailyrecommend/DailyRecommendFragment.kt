@@ -39,6 +39,7 @@ class DailyRecommendFragment : BaseFragment(),
     override fun initInject() {
         getFragmentComponent().inject(this)
     }
+
     @Inject
     lateinit var mPresenter: DailyRecommendPresenter
     private var mPlayList = PlayList()
@@ -75,13 +76,13 @@ class DailyRecommendFragment : BaseFragment(),
         recyclerView.setItemViewCacheSize(5)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addItemDecoration(SpacesItemDecoration(10))
+        recyclerView.addItemDecoration(SpacesItemDecoration(context!!, 10, R.color.gery))
         recyclerView.adapter = mAdapter
         setListener()
 
     }
 
-    private fun loadRecommendData(){
+    private fun loadRecommendData() {
         launch({
             showLoading()
             val recommendResult = getDailyMusicData()
@@ -101,12 +102,15 @@ class DailyRecommendFragment : BaseFragment(),
         val textError = TextView(context)
         textError.setText(R.string.connect_error)
         textError.textSize = 20f
-        textError.setTextColor(ContextCompat.getColor(context!!,R.color.translucent))
-        val p : LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        textError.setTextColor(ContextCompat.getColor(context!!, R.color.translucent))
+        val p: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         p.gravity = Gravity.CENTER
         textError.gravity = Gravity.CENTER
-        recommendContainer.addView(textError,p)
-        textError.setOnClickListener{
+        recommendContainer.addView(textError, p)
+        textError.setOnClickListener {
             recommendContainer.removeView(textError)
             loadRecommendData()
         }
@@ -139,7 +143,7 @@ class DailyRecommendFragment : BaseFragment(),
     }
 
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(view: View?, position: Int) {
         if (System.currentTimeMillis() - currentTime < 2000) {
             return
         }

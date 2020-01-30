@@ -2,14 +2,19 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 
 import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.banner.Banner
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.launch
 import kotlinx.android.synthetic.main.fragment_discovery.*
@@ -74,9 +79,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     }
 
     private fun initBannerView() {
-        val layoutManager = LinearLayoutManager(context)
-        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerBanner.layoutManager = layoutManager
+        LinearSnapHelper().attachToRecyclerView(recyclerBanner)
         recyclerBanner.adapter = bannerAdapter
     }
 
@@ -178,15 +183,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
 
     override fun onItemClick(view: View, id: String) {
-        /*try {
-            val bundle = Bundle()
-            bundle.putString(TAG, id)
-            (activity as MainActivity).switchFragment(MusicDetailFragment(), bundle)
-                .addToBackStack(TAG)
-                .commit()
-        } catch (e: Exception) {
-            Log.e(TAG, e.message)
-        }*/
+        MusicDetailActivity.startThis((activity as AppCompatActivity), TAG, id)
     }
 
 }

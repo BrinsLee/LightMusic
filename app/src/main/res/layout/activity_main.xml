@@ -5,6 +5,7 @@
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
         android:background="@color/colorPrimaryDark"
         tools:context=".ui.activity.MainActivity">
 
@@ -16,122 +17,26 @@
             app:layout_constraintBottom_toTopOf="@id/bottom_container"
             app:layout_constraintTop_toTopOf="parent">
 
-        <include
-                layout="@layout/view_common_toolbar" />
+        <include layout="@layout/view_common_toolbar" />
 
         <com.brins.lightmusic.ui.customview.NonSwipeableViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolbar">
-        </com.brins.lightmusic.ui.customview.NonSwipeableViewPager>
+                app:layout_constraintTop_toBottomOf="@id/toolbar"></com.brins.lightmusic.ui.customview.NonSwipeableViewPager>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bottom_container"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+    <include layout="@layout/bottombar" />
+    <com.brins.lightmusic.ui.customview.RoundCoverImageView
+            android:layout_width="@dimen/common_margin_60"
+            android:layout_height="@dimen/common_margin_60"
+            app:riv_corner_radius="@dimen/common_margin_50"
+            android:id="@+id/bottom_cover"
+            android:src="@drawable/default_cover"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:paddingTop="10dp">
-
-        <ImageButton
-                android:id="@+id/tab_main_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_main_selected"
-                android:clickable="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tab_discovery_btn"/>
-
-
-        <TextView
-                android:id="@+id/tab_main_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:clickable="false"
-                android:text="@string/main_tab"
-                android:textColor="@drawable/tab_main_text_selected"
-                android:textSize="10dp"
-                app:layout_constraintEnd_toEndOf="@id/tab_main_btn"
-                app:layout_constraintStart_toStartOf="@id/tab_main_btn"
-                app:layout_constraintTop_toBottomOf="@id/tab_main_btn" />
-
-        <ImageButton
-                android:id="@+id/tab_discovery_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_find_selected"
-                android:clickable="false"
-                app:layout_constraintStart_toEndOf="@id/tab_main_btn"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tab_video_btn"
-                />
-
-
-        <TextView
-                android:id="@+id/tab_discovery_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:clickable="false"
-                android:text="@string/discovery_tab"
-                android:textColor="@drawable/tab_main_text_selected"
-                android:textSize="10dp"
-                app:layout_constraintEnd_toEndOf="@id/tab_discovery_btn"
-                app:layout_constraintStart_toStartOf="@id/tab_discovery_btn"
-                app:layout_constraintTop_toBottomOf="@id/tab_discovery_btn" />
-
-        <ImageButton
-                android:id="@+id/tab_video_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_activity_selected"
-                android:clickable="false"
-                app:layout_constraintStart_toEndOf="@id/tab_discovery_btn"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tab_singer_btn"
-                />
-
-
-        <TextView
-                android:id="@+id/tab_video_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:clickable="false"
-                android:text="@string/video_tab"
-                android:textColor="@drawable/tab_main_text_selected"
-                android:textSize="10dp"
-                app:layout_constraintEnd_toEndOf="@id/tab_video_btn"
-                app:layout_constraintStart_toStartOf="@id/tab_video_btn"
-                app:layout_constraintTop_toBottomOf="@id/tab_video_btn" />
-
-        <ImageButton
-                android:id="@+id/tab_singer_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_my_selected"
-                android:clickable="false"
-                app:layout_constraintStart_toEndOf="@id/tab_video_btn"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-
-        <TextView
-                android:id="@+id/tab_singer_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:clickable="false"
-                android:text="@string/singers"
-                android:textColor="@drawable/tab_main_text_selected"
-                android:textSize="10dp"
-                app:layout_constraintEnd_toEndOf="@id/tab_singer_btn"
-                app:layout_constraintStart_toStartOf="@id/tab_singer_btn"
-                app:layout_constraintTop_toBottomOf="@id/tab_singer_btn" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/common_margin_5"
+            />
 </androidx.constraintlayout.widget.ConstraintLayout>

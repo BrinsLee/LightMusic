@@ -42,7 +42,7 @@ public class ListAdapter<T> extends RecyclerView.Adapter<ListAdapter.viewHolder>
                 int position = holder.getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     mLastItemClickPosition = position;
-                    mItemClickListener.onItemClick(position);
+                    mItemClickListener.onItemClick(itemView,position);
                 }
             });
         }

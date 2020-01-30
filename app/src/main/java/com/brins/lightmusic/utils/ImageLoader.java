@@ -3,10 +3,13 @@ package com.brins.lightmusic.utils;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.request.RequestListener;
 
 import java.io.File;
+
+import static android.graphics.ImageFormat.RGB_565;
 
 public class ImageLoader {
     private String url; //需要解析的 url
@@ -17,6 +20,7 @@ public class ImageLoader {
     private int assignWidth;//指定宽
     private int assignHeight;//指定高
     private int scaleModeType;//缩放模式
+    private DecodeFormat format;//图片质量
     private Transformation bitmapTransformation;
     private boolean isRound;
     private RequestListener requestListener;
@@ -34,6 +38,7 @@ public class ImageLoader {
         this.file = builder.file;
         this.isRound = builder.isRound;
         this.requestListener = builder.mRequestListener;
+        this.format = builder.format;
 
     }
 
@@ -63,6 +68,10 @@ public class ImageLoader {
 
     public int getErrorHolder() {
         return errorHolder;
+    }
+
+    public DecodeFormat getFormat() {
+        return format;
     }
 
     public Transformation getBitmapTransformation() {
@@ -95,6 +104,7 @@ public class ImageLoader {
         private Transformation<Bitmap>[] bitmapTransformations;
         private boolean isRound;
         private RequestListener mRequestListener;
+        private DecodeFormat format;
 
         public Builder() {
             this.url = "";
@@ -166,6 +176,13 @@ public class ImageLoader {
             this.file = file;
             return this;
         }
+
+        //图片质量
+        public Builder format(DecodeFormat format) {
+            this.format = format;
+            return this;
+        }
+
 
 
         public ImageLoader bulid() {
