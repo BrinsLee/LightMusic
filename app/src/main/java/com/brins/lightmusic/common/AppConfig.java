@@ -8,16 +8,21 @@ public class AppConfig {
     public static boolean isLogin = false;
     public static final String BASEURL = "http://118.31.65.24";
 
+    public static final int PHONE_NUMBER_LENGTH = 11;
 
     /**
      * 登录
      */
     public static final String LOGIN_EMAIL = "/login";
+    public static final String LOGIN_CELLPHONE = "/login/cellphone";
     public static final String USER = "/user/detail";
+    public static final String CHECK_CODE = "/captcha/sent";
     public static final String DEFAULT_ID = "490583871";
-
+    public static final String VERIFY_CODE = "/captcha/verify";
     public static final String LOGOUT = "/logout";
 
+
+    public static final String UMAPPKEY = "5e33c33c4ca357e8100000fa";
 
     /**
      * 用户歌单

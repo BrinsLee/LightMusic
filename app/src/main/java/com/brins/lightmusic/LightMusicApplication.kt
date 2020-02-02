@@ -9,6 +9,8 @@ import com.brins.lightmusic.di.component.DaggerAppComponent
 import com.brins.lightmusic.di.module.AppModule
 import com.brins.lightmusic.model.database.DatabaseFactory
 import com.brins.lightmusic.utils.*
+import com.umeng.analytics.MobclickAgent
+import com.umeng.commonsdk.UMConfigure
 import io.reactivex.plugins.RxJavaPlugins
 
 
@@ -35,6 +37,28 @@ class LightMusicApplication : BaseApplication() {
             initRxJava()
             initUserData()
         }
+    }
+
+    private fun initUmeng() {
+        if (BuildConfig.DEBUG) {
+            UMConfigure.setLogEnabled(true)
+        }
+        UMConfigure.init(
+            this,
+            AppConfig.UMAPPKEY,
+            "",
+            UMConfigure.DEVICE_TYPE_PHONE,
+            ""
+        )
+
+/*        PlatformConfig.setWeixin(Constant.WEIXIN_APPKEY, Constant.WEIXIN_APPSCECRE)
+        PlatformConfig.setSinaWeibo(
+            Constant.WEIBO_APPKEY,
+            Constant.WEIBO_APPSCECRE,
+            "http://sns.whalecloud.com"
+        )
+        PlatformConfig.setQQZone(Constant.QQ_APPKEY, Constant.QQ_APPSCECRE)*/
+        MobclickAgent.setCatchUncaughtExceptions(true)
     }
 
     fun isMainProcess(context: Context): Boolean {

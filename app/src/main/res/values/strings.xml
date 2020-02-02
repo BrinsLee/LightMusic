@@ -11,7 +11,7 @@
     <string name="subscribe">关注</string>
     <string name="author">作者</string>
     <string name="exit">再按一次退出程序</string>
-    <string name="connect_error">网络连接失败，请重试</string>
+    <string name="connect_error">网络连接失败，请重试，如未登录，请先登录</string>
     <string name="connect_timeout">网络连接超时，请重试</string>
     <string name="bad_network">网络状态不良</string>
     <string name="parse_error">数据解析错误</string>
@@ -42,4 +42,13 @@
     <string name="video_tab">视频</string>
     <string name="singers">歌手</string>
     <string name="my_collection">我的收藏</string>
+    <string name="use_phone">使用手机号登录</string>
+    <string name="use_email">使用账号密码登录</string>
+    <string name="send_code">发送验证码</string>
+    <string name="phone_num">手机号</string>
+    <string name="code">验证码</string>
+    <string name="email">邮箱</string>
+    <string name="password">密码</string>
+    <string name="get_code_success">验证码发送成功</string>
+    <string name="phone_format_err">手机号格式错误</string>
 </resources>

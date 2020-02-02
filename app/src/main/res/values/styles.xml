@@ -57,4 +57,9 @@
         <item name="colorAccent">@color/white</item>
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/white</item> <!--颜色-->
+        <item name="android:textSize">15sp</item> <!--字体大小-->
+    </style>
+
 </resources>

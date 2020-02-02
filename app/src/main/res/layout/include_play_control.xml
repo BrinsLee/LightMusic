@@ -8,11 +8,10 @@
             android:id="@+id/preSong"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/common_margin_20"
             android:src="@drawable/ic_premusic"
             app:layout_constraintEnd_toStartOf="@+id/playOrPause"
-            app:layout_constraintTop_toBottomOf="@id/musicArtist"/>
+            app:layout_constraintBottom_toBottomOf="@id/playOrPause"/>
 
     <ImageView
             android:id="@+id/playOrPause"
@@ -20,17 +19,17 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/musicArtist"
-            android:layout_marginTop="@dimen/common_margin_10"
+            app:layout_constraintTop_toBottomOf="@id/layout_progress"
+            android:layout_marginTop="@dimen/common_margin_30"
             android:src="@drawable/ic_playmusic"/>
 
     <ImageView
             android:id="@+id/nextSong"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="@dimen/common_margin_20"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_nextmusic"
             app:layout_constraintStart_toEndOf="@+id/playOrPause"
-            app:layout_constraintTop_toBottomOf="@id/musicArtist"/>
+            app:layout_constraintBottom_toBottomOf="@id/playOrPause"/>
 </merge>

@@ -15,7 +15,11 @@ import com.brins.lightmusic.model.artist.CategoryResult
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.ui.customview.CornersTransform
 import com.brins.lightmusic.ui.customview.PileLayout
+import com.brins.lightmusic.utils.ImageLoader
+import com.brins.lightmusic.utils.ImageLoadreUtils
+import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_artist.*
@@ -73,13 +77,13 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View,
     }
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        /*try {
+        try {
             (activity as MainActivity).switchFragment(fragment, bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }*/
+        }
     }
 
     //MVP View
@@ -92,6 +96,7 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View,
     private fun initRecyclerView() {
         mAdapter.setOnItemClickListener(this)
         recyclerArtist.layoutManager = LinearLayoutManager(context)
+        recyclerArtist.addItemDecoration(SpacesItemDecoration(context!!, 3, R.color.white))
         recyclerArtist.adapter = mAdapter
     }
 
@@ -129,9 +134,16 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View,
                     view.tag = viewHolder
                 }
                 viewHolder.textView!!.text = artistCategory[index].name
-                Glide.with(this@ArtistFragment)
-                    .load(artistCategory[index].url)
-                    .into(viewHolder.imageView!!)
+                ImageLoadreUtils.getInstance().loadImage(
+                    context, ImageLoader.Builder()
+                        .assignHeight(500).assignWidth(500).bitmapTransformation(
+                            CornersTransform(20f)
+                        ).url(artistCategory[index].url).imgView(
+                            viewHolder.imageView!!
+                        ).scaleModeType(
+                            ImageLoadreUtils.SCALE_MODE_CENTER_CROP
+                        ).bulid()
+                )
             }
         }
         pileLayout.setAdapter(adapter)

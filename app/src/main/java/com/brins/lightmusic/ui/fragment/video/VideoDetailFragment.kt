@@ -90,7 +90,7 @@ class VideoDetailFragment : BaseFragment(),
             }
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = mCommentAdapter
-            recyclerView.addItemDecoration(SpacesItemDecoration(context!!, 10, R.color.gery))
+            recyclerView.addItemDecoration(SpacesItemDecoration(context!!, 2, R.color.gery))
             hideLoading()
         }, {
             if (context != null)

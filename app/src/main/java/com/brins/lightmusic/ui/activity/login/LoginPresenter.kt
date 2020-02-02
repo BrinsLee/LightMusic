@@ -1,5 +1,6 @@
 package com.brins.lightmusic.ui.activity.login
 
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.api.DefaultObserver
@@ -8,8 +9,6 @@ import com.brins.lightmusic.model.database.DatabaseFactory
 import com.brins.lightmusic.model.userlogin.LogoutResult
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
-import com.brins.lightmusic.ui.base.BasePresenter
-import com.brins.lightmusic.ui.base.BaseView
 import com.brins.lightmusic.utils.subscribeDbResult
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -36,6 +35,22 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter{
         }
     }
 
+    override fun getCheckCode(phone: String) {
+        mLoginService.getCheckCode(phone).compose(AsyncTransformer<String>())
+            .subscribe(object : DefaultObserver<String>(){
+                override fun onSuccess(response: String) {
+                    val s = response
+                    Log.d("checkCode",s)
+                    mView?.onCodeSendSuccess()
+                }
+
+                override fun onFail(message: String) {
+                    mView?.onCodeSendFail(message)
+                }
+
+            })
+    }
+
     override fun startLogin(request: UserLoginRequest) {
         mView?.showLoading()
         when (request.type) {
@@ -48,7 +63,7 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter{
     }
 
     override fun logout() {
-        mLoginService.Logout().compose(AsyncTransformer<LogoutResult>())
+        mLoginService.logout().compose(AsyncTransformer<LogoutResult>())
             .subscribe(object : DefaultObserver<LogoutResult>() {
                 override fun onSuccess(response: LogoutResult) {
                     if (response.code == 200) {
@@ -72,7 +87,7 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter{
     }
 
     private fun emailLogin(request: UserLoginRequest) {
-        mLoginService.Login_email(request.username, request.password)
+        mLoginService.loginEmail(request.username, request.password)
             .delay(1, TimeUnit.SECONDS)
             .compose(AsyncTransformer<UserLoginResult>())
             .autoDisposable(provider)
@@ -88,7 +103,19 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter{
     }
 
     private fun phoneLogin(request: UserLoginRequest) {
+        mLoginService.loginCellphone(request.username, request.password)
+            .delay(1, TimeUnit.SECONDS)
+            .compose(AsyncTransformer<UserLoginResult>())
+            .autoDisposable(provider)
+            .subscribe(object : DefaultObserver<UserLoginResult>() {
+                override fun onSuccess(response: UserLoginResult) {
+                    storeUserInfo(response)
+                }
 
+                override fun onFail(message: String) {
+                    mView?.onLoginFail()
+                }
+            })
     }
 
     private fun storeUserInfo(result: UserLoginResult) {

@@ -21,13 +21,12 @@ import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.utils.SpacesItemDecoration
-import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
-import com.brins.lightmusic.utils.dp2px
-import com.brins.lightmusic.utils.launch
+import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_unlogin.*
 import kotlinx.android.synthetic.main.fragment_daily_recommend.*
+import kotlinx.android.synthetic.main.fragment_daily_recommend.toolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -47,6 +46,7 @@ class DailyRecommendFragment : BaseFragment(),
     private lateinit var mAdapter: CommonViewAdapter<Music>
     private var deltaDistance: Int = 0
 
+
     override fun getLayoutResID(): Int {
         return R.layout.fragment_daily_recommend
     }
@@ -54,6 +54,7 @@ class DailyRecommendFragment : BaseFragment(),
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         DailyRecommendPresenter.instance.subscribe(this)
+        toolbar.setPadding(0, getStatusBarHeight(context!!), 0, 0)
         deltaDistance = dp2px(context!!, 250f)
     }
 
@@ -61,14 +62,14 @@ class DailyRecommendFragment : BaseFragment(),
         super.onStart()
         mAdapter = object : CommonViewAdapter<Music>(
             activity!!,
-            R.layout.item_local_music,
+            R.layout.item_online_music,
             mPlayList.getSongs() as ArrayList<Music>
         ) {
             override fun converted(holder: ViewHolder, t: Music, position: Int) {
                 val playlist = (list[position])
-                holder.setImageResource(R.id.imgCover, playlist.album.picUrl)
-                holder.setText(R.id.textViewName, playlist.name)
-                holder.setText(R.id.textViewArtist, playlist.artistBeans!![0].name)
+                holder.setImageResource(R.id.item_cover, playlist.album.picUrl)
+                holder.setText(R.id.name, playlist.name)
+                holder.setText(R.id.artist, playlist.artistBeans!![0].name)
             }
         }
         head.title = getString(R.string.daily)
@@ -76,7 +77,7 @@ class DailyRecommendFragment : BaseFragment(),
         recyclerView.setItemViewCacheSize(5)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addItemDecoration(SpacesItemDecoration(context!!, 10, R.color.gery))
+        recyclerView.addItemDecoration(SpacesItemDecoration(context!!, 2, R.color.gery))
         recyclerView.adapter = mAdapter
         setListener()
 
@@ -125,7 +126,6 @@ class DailyRecommendFragment : BaseFragment(),
     fun setListener() {
         mAdapter.setOnItemClickListener(this)
         head.setOnBackClickListener(this)
-
         appBar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
             override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
                 if (state == State.COLLAPSED) {

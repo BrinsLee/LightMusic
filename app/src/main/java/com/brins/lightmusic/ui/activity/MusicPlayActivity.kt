@@ -34,6 +34,7 @@ import com.brins.lightmusic.ui.customview.RoundImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.utils.formatDuration
+import com.brins.lightmusic.utils.setTranslucent
 import com.brins.lightmusic.utils.string2Bitmap
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
@@ -121,9 +122,9 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        MusicPlayerPresenter.instance.subscribe(this)
+        mPresenter.subscribe(this)
+        setTranslucent(this)
         ivCover.setPageTransformer(false, CustPagerTransformer())
-        setPlayView()
     }
 
 
@@ -131,6 +132,8 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
         current = mPlayList.getCurrentSong()
         musics = mPlayList.getSongs()
         index = mPlayList.getPlayingIndex()
+        if (pageAdapter == null)
+            initViewPager()
         if (mImageViewList.size == 0 || mImageViewList.size != musics?.size) {
             mImageViewList.clear()
             pageAdapter!!.notifyDataSetChanged()
@@ -415,6 +418,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
     override fun onPlaybackServiceBound(service: PlayBackService) {
         mPlayer = service
         mPlayer!!.registerCallback(this)
+        setPlayView()
     }
 
     override fun onPlaybackServiceUnbound() {
@@ -441,6 +445,10 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
             cover = string2Bitmap(song.album.picUrl)
         }
         initViewPager()
+        if (mImageViewList.isNotEmpty()){
+            mImageViewList[mPlayList.getPlayingIndex()].setImageBitmap(cover)
+            pageAdapter?.notifyDataSetChanged()
+        }
         mHamdler.postDelayed(mUpAlbumRunnable, 200)
         musicTitle.text = song.name
         musicArtist.text = song.artistBeans!![0].name

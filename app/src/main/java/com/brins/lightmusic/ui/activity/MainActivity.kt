@@ -3,42 +3,74 @@ package com.brins.lightmusic.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.os.SystemClock
+import android.util.Log
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.lightmusic.R
+import com.brins.lightmusic.event.PlayListEvent
+import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.player.IPlayback
+import com.brins.lightmusic.player.PlayBackService
+import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
 import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
+import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
+import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
+import com.brins.lightmusic.utils.getStatusBarHeight
 import com.brins.lightmusic.utils.setColorTranslucent
 import com.brins.lightmusic.utils.setTranslucent
-import com.google.android.material.tabs.TabLayout
+import com.brins.lightmusic.utils.string2Bitmap
+import com.hwangjr.rxbus.annotation.Subscribe
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottombar.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
+import java.lang.Exception
+import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback {
 
 
     private var currentPage = 0
     private var list = mutableListOf<Fragment>()
     private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
-    private var currentFragment: Fragment? = null
     private var mClickTime: Long = 0
+    @Inject
+    lateinit var mPresenter: MusicPlayerPresenter
+    private var index = -1
+    private var mPlayer: PlayBackService? = null
+    private var type = -1
+    private lateinit var playList: PlayList
+    private val mHandler = Handler()
+    private var mProgressCallback = object : Runnable {
+        override fun run() {
+            if (mPlayer != null && mPlayer!!.isPlaying()) {
+                val progress =
+                    cover_container.getMax() * mPlayer!!.getProgress() / getCurrentSongDuration()
+                if (progress >= 0 && progress <= cover_container.getMax()) {
+                    cover_container.setProgress(progress)
+                    mHandler.postDelayed(this, UPDATE_PROGRESS_INTERVAL)
+                }
+            }
+        }
 
+    }
 
 
     companion object {
+        private val UPDATE_PROGRESS_INTERVAL: Long = 1000
+        private val UPDATE_MUSIC_INTERVAL: Long = 500
         fun startThisActivity(activity: AppCompatActivity) {
             val intent = Intent(activity, MainActivity::class.java)
             activity.startActivity(intent)
@@ -46,18 +78,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_main
+    }
+
+    override fun initInject() {
+        getActivityComponent().inject(this)
+    }
+
+    override fun handleError(error: Throwable) {
+    }
+
+    override fun isSubscribe(): Boolean {
+        return true
+    }
+
+    override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
+        super.onCreateAfterBinding(savedInstanceState)
         ButterKnife.bind(this)
-        setColorTranslucent(this)
+        setTranslucent(this)
+        toolbar.setPadding(0, getStatusBarHeight(this), 0, 0)
         initViewPagerAndTabLay()
+        mPresenter.subscribe(this)
     }
 
 
     override fun onStart() {
         super.onStart()
-//        showBottomBar(supportFragmentManager)
+        if (mPlayer != null && mPlayer!!.isPlaying()) {
+            mHandler.removeCallbacks(mProgressCallback)
+            mHandler.post(mProgressCallback)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mPresenter.unsubscribe()
+        mHandler.removeCallbacks(mProgressCallback)
     }
 
     private fun initViewPagerAndTabLay() {
@@ -133,14 +190,33 @@ class MainActivity : AppCompatActivity() {
     fun switchFragment(targetFragment: Fragment, bundle: Bundle): FragmentTransaction {
         targetFragment.arguments = bundle
         return switchFragment(targetFragment)
-
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-/*
-        removeBottomBar(supportFragmentManager)
-*/
+
+    fun handleBackPress() {
+        val fragments = supportFragmentManager.fragments
+        if (fragments.size > 0) {
+            if (supportFragmentManager.backStackEntryCount > 0) {
+                supportFragmentManager.popBackStack()
+            }
+
+        }
+    }
+
+    fun getCurrentList(): PlayList {
+        return playList
+    }
+
+
+    @Subscribe
+    fun onPlayMusic(playListEvent: PlayListEvent) {
+        type = playListEvent.type
+        playList = playListEvent.playlist
+        index = playListEvent.playIndex
+//        playSong(playList, index)
+        mPlayer?.setPlayList(playList)
+        mPlayer?.play(index)
+        Log.d("RxBus:", "QuickControlFragment")
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -183,7 +259,8 @@ class MainActivity : AppCompatActivity() {
         R.id.tab_video_btn,
         R.id.tab_video_tv,
         R.id.tab_singer_btn,
-        R.id.tab_singer_tv
+        R.id.tab_singer_tv,
+        R.id.cover_container
     )
     fun onClick(view: View) {
         when (view.id) {
@@ -203,7 +280,93 @@ class MainActivity : AppCompatActivity() {
             R.id.tab_singer_tv -> {
                 changeTab(3)
             }
+            R.id.cover_container -> {
+                if (mPlayer != null && ::playList.isInitialized) {
+                    MusicPlayActivity.startThisActivity(this@MainActivity)
+                }
+                return
+            }
         }
     }
 
+
+    override fun onPlaybackServiceBound(service: PlayBackService) {
+        mPlayer = service
+        mPlayer!!.registerCallback(this)
+    }
+
+    override fun onPlaybackServiceUnbound() {
+//        mPlayer!!.unregisterCallback(this)
+    }
+
+    override fun onSongSetAsFavorite(song: Music?) {
+
+    }
+
+    override fun onSongUpdated(song: Music?) {
+        if (song == null) {
+            cover_container.setProgress(0)
+            cover_container.cancelRotateAnimation()
+            mHandler.removeCallbacks(mProgressCallback)
+            return
+        }
+        try {
+            if (song.bitmapCover == null) {
+                val bitmap = string2Bitmap(song.album.picUrl)
+                song.bitmapCover = bitmap
+
+            }
+            cover_container.setImageBitmap(song.bitmapCover)
+            cover_container.setProgress(initProgress(mPlayer!!.getProgress()))
+            if (mPlayer!!.isPlaying()) {
+                cover_container.startRotateAnimation()
+                mHandler.post(mProgressCallback)
+            } else {
+                cover_container.pauseRotateAnimation()
+                mHandler.removeCallbacks(mProgressCallback)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return
+        }
+    }
+
+    override fun updatePlayMode(playMode: PlayMode) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updatePlayToggle(play: Boolean) {
+        if (cover_container == null) {
+            return
+        }
+        if (play) {
+            cover_container.resumeRotateAnimation()
+        } else {
+            cover_container.pauseRotateAnimation()
+        }
+    }
+
+    override fun updateFavoriteToggle(favorite: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPlayStatusChanged(isPlaying: Boolean, music: Music?) {
+        updatePlayToggle(isPlaying)
+        if (music != null) {
+            onSongUpdated(music)
+        }
+    }
+
+    private fun initProgress(progress: Int): Int {
+        return cover_container.getMax() * progress / getCurrentSongDuration()
+    }
+
+    private fun getCurrentSongDuration(): Int {
+        val currentSong = mPlayer!!.getPlayingSong()
+        var duration = 0
+        if (currentSong != null) {
+            duration = currentSong.duration
+        }
+        return duration
+    }
 }

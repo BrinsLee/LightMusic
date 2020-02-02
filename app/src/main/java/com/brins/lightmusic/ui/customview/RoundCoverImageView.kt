@@ -3,20 +3,75 @@ package com.brins.lightmusic.ui.customview
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.animation.LinearInterpolator
 import com.makeramen.roundedimageview.RoundedImageView
+import android.view.LayoutInflater
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.airbnb.lottie.LottieProperty.POLYSTAR_INNER_ROUNDEDNESS
+import com.airbnb.lottie.LottieProperty.STROKE_WIDTH
+import com.brins.lightmusic.R
+import com.makeramen.roundedimageview.RoundedDrawable.DEFAULT_BORDER_COLOR
 
-class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs : AttributeSet? = null): RoundedImageView(context , attrs) {
+
+class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    ConstraintLayout(context, attrs) {
+    /*    private var centerY = 0
+        private var centerX = 0
+        private var circleRadius: Float = 0f*/
     private var mRotateAnimator: ObjectAnimator
     private var mLastAnimationValue: Long = 0
+    private lateinit var mImageView: RoundedImageView
+    private lateinit var mProgress : RoundCoverProgress
+    private var mMax = 360
+
+/*    private val mBorderRect = RectF()
+    private val mBorderPaint = Paint()
+    private var mBorderColor = DEFAULT_BORDER_COLOR
+    private var mBorderWidth = DEFAULT_BORDER_WIDTH
+    private val mBorderPaint1 = Paint()
+    private val mBorderRect1 = RectF()
+
+    var newAngle: Float = 50f // 画弧线的角度
+
+
+    companion object {
+        private var DEFAULT_BORDER_WIDTH = 10f
+        private var DEFAULT_BORDER_COLOR = Color.parseColor("#29a2fb")
+    }*/
+
     init {
-        mRotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
+        val view = LayoutInflater.from(context).inflate(R.layout.view_bottom_cover, this)
+        mImageView = view.findViewById(R.id.bottom_cover)
+        mProgress = view.findViewById(R.id.cover_progress)
+        mRotateAnimator = ObjectAnimator.ofFloat(mImageView, "rotation", 0f, 360f)
         mRotateAnimator.duration = 7200
         mRotateAnimator.interpolator = LinearInterpolator()
         mRotateAnimator.repeatMode = ValueAnimator.RESTART
         mRotateAnimator.repeatCount = ValueAnimator.INFINITE
+/*        mBorderPaint1.strokeWidth = POLYSTAR_INNER_ROUNDEDNESS
+        mBorderPaint1.style = Paint.Style.STROKE
+        mBorderPaint1.color = mBorderColor
+        mBorderPaint1.isAntiAlias = true*/
     }
+
+
+/*    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        circleRadius = mImageView.width / 2f
+        mBorderWidth = circleRadius / 12f
+        centerX = mImageView.width / 2
+        centerY = mImageView.height / 2
+        mBorderRect1.set(
+            centerX - circleRadius, centerY - circleRadius, centerX + circleRadius,
+            centerY + circleRadius
+        )
+
+        canvas.drawArc(mBorderRect1, -90f, 100f, false, mBorderPaint1)
+
+    }*/
 
     fun startRotateAnimation() {
         mRotateAnimator.cancel()
@@ -36,5 +91,19 @@ class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs : At
     fun resumeRotateAnimation() {
         mRotateAnimator.start()
         mRotateAnimator.currentPlayTime = mLastAnimationValue
+    }
+
+    fun setImageBitmap(bitmapCover: Bitmap?) {
+        if (::mImageView.isInitialized) {
+            mImageView.setImageBitmap(bitmapCover)
+        }
+    }
+
+    fun getMax(): Int {
+        return mMax
+    }
+
+    fun setProgress(initProgress: Int) {
+        mProgress.newAngle = initProgress.toFloat()
     }
 }

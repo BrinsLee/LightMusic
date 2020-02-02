@@ -5,7 +5,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gery"
-        android:fitsSystemWindows="true"
         android:clipChildren="false">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -23,8 +22,8 @@
                 android:background="@android:color/transparent"
                 android:clipChildren="false"
                 app:contentScrim="@android:color/transparent"
-                app:expandedTitleMarginEnd="10dp"
-                app:expandedTitleMarginStart="10dp"
+                app:expandedTitleMarginEnd="@dimen/common_margin_20"
+                app:expandedTitleMarginStart="@dimen/common_margin_20"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,10 +50,28 @@
                         android:layout_marginBottom="@dimen/common_margin_20"
                         android:textColor="@color/translucent"
                         android:textSize="20sp"
+                        android:visibility="gone"
                         app:font_type="DIN-Bold"
                         app:stroke="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@id/cover" />
+
+                <ImageView
+                        android:id="@+id/bg_mask"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:scaleType="fitXY"
+                        app:layout_constraintTop_toTopOf="@id/cover"
+                        app:layout_constraintBottom_toBottomOf="@id/cover"
+                        android:src="@drawable/bg_mask" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:title="">
 
                 <com.brins.lightmusic.ui.customview.CommonHeaderView
                         android:id="@+id/head"
@@ -63,10 +80,9 @@
                         app:chv_icon="@drawable/ic_back_black"
                         app:chv_text_color="@color/translucent"
                         app:chv_title=""
+                        android:visibility="gone"
                         app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

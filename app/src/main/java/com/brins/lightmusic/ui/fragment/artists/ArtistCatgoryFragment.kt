@@ -36,8 +36,10 @@ class ArtistCatgoryFragment : BaseFragment(), ArtistConstract.View,
         if (arguments != null) {
             type = arguments?.getInt("category", 0)!!
         }
-        ArtistPresenter.instance.subscribe(this)
         toolbar.setOnBackClickListener(this)
+        if (type != 0) {
+            getCategory()
+        }
 
     }
 
@@ -45,12 +47,7 @@ class ArtistCatgoryFragment : BaseFragment(), ArtistConstract.View,
         return R.layout.fragment_artist_category
     }
 
-/*    override fun setPresenter(presenter: ArtistConstract.Presenter) {
-        mPresenter = presenter as ArtistPresenter
-        if (type != 0) {
-            getCategory()
-        }
-    }*/
+
 
     override fun onItemClick(view: View?, position: Int) {
         val bundle = Bundle()
@@ -90,12 +87,12 @@ class ArtistCatgoryFragment : BaseFragment(), ArtistConstract.View,
             return
         } else {
             val mAdapter = object :
-                CommonViewAdapter<ArtistBean>(activity!!, R.layout.item_local_music, data) {
+                CommonViewAdapter<ArtistBean>(activity!!, R.layout.item_online_music, data) {
                 override fun converted(holder: ViewHolder, t: ArtistBean, position: Int) {
-                    holder.setImageResource(R.id.imgCover, t.picUrl)
-                    holder.setText(R.id.textViewName, t.name)
+                    holder.setImageResource(R.id.item_cover, t.picUrl)
+                    holder.setText(R.id.name, t.name)
                     holder.setText(
-                        R.id.textViewArtist,
+                        R.id.artist,
                         "${t.musicSize} ${context.getString(R.string.num_songs)}"
                     )
                 }

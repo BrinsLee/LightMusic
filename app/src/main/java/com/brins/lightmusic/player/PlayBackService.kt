@@ -59,8 +59,9 @@ class PlayBackService : Service(), IPlayback, HeadsetButtonReceiver.onHeadsetLis
         RxBus.getInstance().register(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             updateNotification()
+            cancelNotification()
+
         }
-        cancelNotification()
         val filter = IntentFilter()
         filter.addAction(ACTION_PLAY)
         filter.addAction(ACTION_PAUSE)

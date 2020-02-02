@@ -19,6 +19,7 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
+import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_FAIL_CODE
 import com.brins.lightmusic.ui.activity.login.LoginActivity.Companion.LOGIN_SUCCESS_CODE
@@ -145,13 +146,13 @@ class MyFragment : BaseFragment(), MyContract.View, OnItemClickListener,
     }
 
     private fun switch(fragment: Fragment) {
-/*        try {
+        try {
             (activity as MainActivity).switchFragment(fragment)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }*/
+        }
     }
 
     override fun onDestroy() {

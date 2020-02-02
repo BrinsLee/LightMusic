@@ -1,7 +1,6 @@
 package com.brins.lightmusic.api.service
 
-import com.brins.lightmusic.common.AppConfig.LOGIN_EMAIL
-import com.brins.lightmusic.common.AppConfig.LOGOUT
+import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.model.userlogin.LogoutResult
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import io.reactivex.Observable
@@ -14,8 +13,17 @@ interface LoginService {
 * 登录网络接口
 * */
     @GET(LOGIN_EMAIL)
-    fun Login_email(@Query("email")email : String, @Query("password")password :String): Observable<UserLoginResult>
+    fun loginEmail(@Query("email") email: String, @Query("password") password: String): Observable<UserLoginResult>
 
     @GET(LOGOUT)
-    fun Logout(): Observable<LogoutResult>
+    fun logout(): Observable<LogoutResult>
+
+    @GET(CHECK_CODE)
+    fun getCheckCode(@Query("phone") phone: String): Observable<String>
+
+    @GET(VERIFY_CODE)
+    fun verifyCode(@Query("phone") phone: String, @Query("captcha") code: String): Observable<UserLoginResult>
+
+    @GET(LOGIN_CELLPHONE)
+    fun loginCellphone(@Query("phone") phone: String, @Query("password") password: String): Observable<UserLoginResult>
 }

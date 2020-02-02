@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
+import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.di.component.ActivityComponent
 import com.brins.lightmusic.di.component.DaggerActivityComponent
 import com.brins.lightmusic.di.module.ActivityModule
@@ -16,13 +17,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 
-abstract class BaseActivity : AppCompatActivity(),BaseView {
+abstract class BaseActivity : AppCompatActivity(), BaseView {
 
     protected var TAG = this.javaClass.simpleName
-/*    @Inject
-    protected lateinit var mPresenter: BasePresenter<BaseView>*/
-    protected var fragment: QuickControlFragment = QuickControlFragment.newInstance()
-    protected var firstTime : Long = 0
+    /*    @Inject
+        protected lateinit var mPresenter: BasePresenter<BaseView>*/
+    protected var firstTime: Long = 0
     protected var mBindDestroyDisposable: CompositeDisposable? = null
     protected open var currentFragment: Fragment? = null
 
@@ -45,6 +45,10 @@ abstract class BaseActivity : AppCompatActivity(),BaseView {
 
     protected abstract fun initInject()
 
+    protected open fun isSubscribe(): Boolean {
+        return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onCreateBeforeBinding(savedInstanceState)
@@ -53,6 +57,9 @@ abstract class BaseActivity : AppCompatActivity(),BaseView {
             setContentView(resId)
         }
         initInject()
+        if (isSubscribe()){
+            RxBus.getInstance().register(this)
+        }
         onCreateAfterBinding(savedInstanceState)
 
     }
@@ -74,7 +81,7 @@ abstract class BaseActivity : AppCompatActivity(),BaseView {
         return ActivityModule(this)
     }
 
-    fun switchFragment(targetFragment: Fragment): FragmentTransaction {
+    /*fun switchFragment(targetFragment: Fragment): FragmentTransaction {
         val transaction = supportFragmentManager.beginTransaction()
         if (!targetFragment.isAdded) {
             if (currentFragment != null) {
@@ -98,7 +105,7 @@ abstract class BaseActivity : AppCompatActivity(),BaseView {
         targetFragment.arguments = bundle
         return switchFragment(targetFragment)
 
-    }
+    }*/
 
 
     override fun onDestroy() {
@@ -106,9 +113,12 @@ abstract class BaseActivity : AppCompatActivity(),BaseView {
         if (mBindDestroyDisposable != null) {
             mBindDestroyDisposable!!.clear()
         }
+        if (isSubscribe()){
+            RxBus.getInstance().unregister(this)
+        }
     }
 
-    protected open fun showBottomBar(fragmentManager: FragmentManager) {
+/*    protected open fun showBottomBar(fragmentManager: FragmentManager) {
         val ft = fragmentManager.beginTransaction()
         if (!fragment.isAdded) {
             ft.add(R.id.bottom_container, fragment).commit()
@@ -120,7 +130,7 @@ abstract class BaseActivity : AppCompatActivity(),BaseView {
         if (fragment.isAdded) {
             ft.remove(fragment).commit()
         }
-    }
+    }*/
 
 
     private fun bindUntilDestroy(disposable: Disposable?) {

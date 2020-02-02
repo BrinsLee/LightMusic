@@ -20,6 +20,8 @@ class MusicPlayerPresenter @Inject constructor() :
 
     companion object {
         val instance = SingletonHolder.holder
+        private var mPlaybackService: PlayBackService? = null
+
     }
 
     private object SingletonHolder {
@@ -27,7 +29,6 @@ class MusicPlayerPresenter @Inject constructor() :
     }
 
     private var mView: MusicPlayerContract.View? = null
-    private var mPlaybackService: PlayBackService? = null
 
     val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {

@@ -14,9 +14,15 @@ interface LoginContract {
         fun onLogoutSuccess()
 
         fun onLogoutFail()
+
+        fun onCodeSendSuccess()
+
+        fun onCodeSendFail(error : String)
     }
     interface Presenter : BasePresenter<View>{
         fun startLogin(request : UserLoginRequest)
+
+        fun getCheckCode(phone : String)
 
         fun logout()
     }

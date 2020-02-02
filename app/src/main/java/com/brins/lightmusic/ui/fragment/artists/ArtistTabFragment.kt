@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +30,7 @@ import com.brins.lightmusic.utils.*
 import kotlinx.android.synthetic.main.fragment_artist_tab.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import javax.inject.Inject
 
 class ArtistTabFragment(var type: Int = 10010, var id: String) :
@@ -78,9 +80,11 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
                 override fun converted(holder: ViewHolder, t: Music, position: Int) {
                     val strBuilder = StringBuilder()
                     t.artistBeans?.forEach { strBuilder.append("${it.name} ") }
-                    holder.setText(R.id.artist, strBuilder.toString())
                     holder.setText(R.id.name, t.name)
-                    holder.setText(R.id.count, "${position + 1}")
+                    holder.setText(R.id.artist, strBuilder.toString())
+                    holder.getView<ImageView>(R.id.item_cover).visibility = View.GONE
+/*                    holder.getView<TextView>(R.id.count).visibility = View.VISIBLE
+                    holder.setText(R.id.count, "${position + 1}")*/
                 }
 
             }
@@ -88,8 +92,8 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             recyclerView.adapter = mAdapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
             recyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    context!!, LinearLayoutManager.VERTICAL
+                SpacesItemDecoration(
+                    context!!, 2, R.color.gery
                 )
             )
             hideLoading()
@@ -153,19 +157,20 @@ class ArtistTabFragment(var type: Int = 10010, var id: String) :
             albumDataBeans.addAll(response.hotAlbums!!)
             val mAdapter: CommonViewAdapter<AlbumBean> = object : CommonViewAdapter<AlbumBean>(
                 activity!!,
-                R.layout.item_local_music,
+                R.layout.item_online_music,
                 albumDataBeans as ArrayList<AlbumBean>
             ) {
                 override fun converted(holder: ViewHolder, t: AlbumBean, position: Int) {
-                    holder.setImageResource(R.id.imgCover, t.picUrl)
-                    holder.setText(R.id.textViewName, t.name)
-                    holder.setText(R.id.textViewArtist, t.artist!!.name)
+                    holder.setImageResource(R.id.item_cover, t.picUrl)
+                    holder.setText(R.id.name, t.name)
+                    holder.setText(R.id.artist, t.artist!!.name)
 
                 }
             }
             mAdapter.setOnItemClickListener(this)
             recyclerView.adapter = mAdapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
+            recyclerView.addItemDecoration(SpacesItemDecoration(context!!, 2, R.color.gery))
             hideLoading()
         }, {
             Toast.makeText(context, R.string.connect_error, Toast.LENGTH_SHORT).show()

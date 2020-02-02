@@ -245,7 +245,7 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
                 song.bitmapCover = bitmap
 
             }
-            ivPlaybarCover.setImageBitmap(song.bitmapCover)
+//            ivPlaybarCover.setImageBitmap(song.bitmapCover)
             ivPlayOrPause.setImageResource(R.drawable.ic_pausemusic)
         } catch (e: Exception) {
             e.printStackTrace()

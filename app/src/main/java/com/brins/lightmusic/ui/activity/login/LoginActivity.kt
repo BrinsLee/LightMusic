@@ -4,10 +4,14 @@ import android.animation.Animator
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +30,7 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.ui.customview.TimeCountDown
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.canking.minipay.Config
@@ -43,13 +48,18 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         getActivityComponent().inject(this)
 
     }
+
+    private lateinit var timeCountDown: TimeCountDown
+    private var phoneNumber: String = ""
     @Inject
-    lateinit var mPresenter : LoginPresenter
+    lateinit var mPresenter: LoginPresenter
 
     private var isLogin = false
     private var mAvatar: Bitmap? = null
     private var mList: ArrayList<Item>? = null
     private var mAdapter: CommonViewAdapter<Item>? = null
+    private var mLoginType = EMAIL_LOGIN
+    private var canClickGetCode = true
 
 
     companion object {
@@ -57,6 +67,9 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         val LOGIN_SUCCESS_CODE = 1002
         val LOGIN_FAIL_CODE = 1001
         val LOGOUT_SUCCESS_CODE = 1003
+        val EMAIL_LOGIN = 1004
+        val PHONE_LOGIN = 1005
+
 
         fun startThisActivity(
             fragment: Fragment,
@@ -75,21 +88,60 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
                 USERNAME = et_username.text.toString()
                 PASSWORD = et_password.text.toString()
                 if (USERNAME.isEmpty() || PASSWORD.isEmpty()) {
-                    Toast.makeText(this, getString(R.string.username_not_empty), Toast.LENGTH_SHORT)
-                        .show()
+                    CustomToast.makeText(this, getString(R.string.username_not_empty), Toast.LENGTH_SHORT,CustomToast.TYPE_FAILURE)
+                    return
+                }
+                if (mLoginType == PHONE_LOGIN && !sendCheckVerifyCode()) {
                     return
                 }
                 val request =
-                    UserLoginRequest(
-                        LoginPresenter.Companion.LOGIN_TYPE.TYPE_EMAIL,
-                        USERNAME,
-                        PASSWORD
-                    )
+                    if (mLoginType == EMAIL_LOGIN)
+                        UserLoginRequest(
+                            LoginPresenter.Companion.LOGIN_TYPE.TYPE_EMAIL,
+                            USERNAME,
+                            PASSWORD
+                        ) else
+                        UserLoginRequest(
+                            LoginPresenter.Companion.LOGIN_TYPE.TYPE_PHONE,
+                            USERNAME,
+                            PASSWORD
+                        )
+
                 (mPresenter as? LoginPresenter)?.startLogin(request)
             }
             R.id.logout -> {
                 //todo 确定弹框
                 (mPresenter as? LoginPresenter)?.logout()
+            }
+            R.id.login_type -> {
+                switchLoginType()
+            }
+            R.id.getCode_tv -> {
+                getCheckCode()
+            }
+        }
+    }
+
+    private fun getCheckCode() {
+        if (!canClickGetCode) {
+            return
+        }
+        sendCheckVerifyCode()
+    }
+
+    private fun switchLoginType() {
+        when (mLoginType) {
+            EMAIL_LOGIN -> {
+                mLoginType = PHONE_LOGIN
+                upper_iv.setImageResource(R.drawable.ic_phone)
+                et_username.hint = getString(R.string.phone_num)
+                login_type.text = getString(R.string.use_email)
+            }
+            PHONE_LOGIN -> {
+                mLoginType = EMAIL_LOGIN
+                upper_iv.setImageResource(R.drawable.ic_email)
+                et_username.hint = getString(R.string.email)
+                login_type.text = getString(R.string.use_phone)
             }
         }
     }
@@ -101,7 +153,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
-        setColorTranslucent(this)
+        setTranslucent(this)
         isLogin = intent.getBooleanExtra(IS_LOGIN, false)
     }
 
@@ -109,6 +161,7 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         mPresenter.subscribe(this)
+        setTranslucent(this)
         if (isLogin) {
             if (mAvatar == null) {
                 Glide.with(this)
@@ -122,9 +175,56 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
             headLogin.setOnBackClickListener(this)
             logout.setOnClickListener(this)
         } else {
+            getCode_tv.setOnClickListener(this)
+            login_type.setOnClickListener(this)
             btn_login.setOnClickListener(this)
             headUnlogin.setOnBackClickListener(this)
+            et_username.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable) {
+                    if (s.length == AppConfig.PHONE_NUMBER_LENGTH) {
+                        getCode_tv.setTextColor(
+                            ContextCompat.getColor(
+                                this@LoginActivity,
+                                R.color.blue
+                            )
+                        )
+                        getCode_tv.isClickable = true
+                    } else {
+                        getCode_tv.setTextColor(
+                            ContextCompat.getColor(
+                                this@LoginActivity,
+                                R.color.default_btn_text
+                            )
+                        )
+                        getCode_tv.isClickable = false
+                    }
+
+                    if (s.length > 0) {
+                        cancel_input_btn.visibility = View.VISIBLE
+                    } else {
+                        cancel_input_btn.visibility = View.GONE
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+            })
         }
+    }
+
+
+    fun onCancelInput(view: View) {
+        et_username.setText("")
+        cancel_input_btn.setVisibility(View.GONE)
     }
 
     private fun initList() {
@@ -209,6 +309,25 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
         finish()
     }
 
+    private fun sendCheckVerifyCode(): Boolean {
+        phoneNumber = et_username.text.toString().trim { it <= ' ' }
+        val match = isMobileSimple(phoneNumber)
+        if (!match) {
+            CustomToast.makeText(
+                this@LoginActivity,
+                getString(R.string.phone_format_err),
+                Toast.LENGTH_SHORT,
+                CustomToast.TYPE_FAILURE
+            )
+            return false
+        }
+        return true
+/*
+        timeCountDown = TimeCountDown(60 * 1000, 1000, getCode_tv, this@LoginActivity)
+        mPresenter.getCheckCode(phoneNumber)
+        timeCountDown.start()*/
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -237,16 +356,29 @@ class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     }
 
     override fun onLogoutFail() {
-        Toast.makeText(this, "退出登录失败", Toast.LENGTH_SHORT).show()
+        CustomToast.makeText(this,"退出登录失败",Toast.LENGTH_SHORT,CustomToast.TYPE_FAILURE)
     }
 
+    override fun onCodeSendSuccess() {
+        CustomToast.makeText(
+            this,
+            R.string.get_code_success,
+            Toast.LENGTH_SHORT,
+            CustomToast.TYPE_SUCCESS
+        )
+    }
+
+    override fun onCodeSendFail(error: String) {
+        CustomToast.makeText(this, error, Toast.LENGTH_SHORT, CustomToast.TYPE_FAILURE)
+
+    }
 
     override fun getLifeActivity(): AppCompatActivity {
         return this
     }
 
 
-    override fun onItemClick(view: View?,position: Int) {
+    override fun onItemClick(view: View?, position: Int) {
         when (position) {
             1 -> MiniPayUtils.setupPay(
                 this,

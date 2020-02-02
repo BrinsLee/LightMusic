@@ -5,7 +5,6 @@
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
         android:background="@color/colorPrimaryDark"
         tools:context=".ui.activity.MainActivity">
 
@@ -24,19 +23,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"></com.brins.lightmusic.ui.customview.NonSwipeableViewPager>
+                app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        </com.brins.lightmusic.ui.customview.NonSwipeableViewPager>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/bottombar" />
     <com.brins.lightmusic.ui.customview.RoundCoverImageView
-            android:layout_width="@dimen/common_margin_60"
-            android:layout_height="@dimen/common_margin_60"
-            app:riv_corner_radius="@dimen/common_margin_50"
-            android:id="@+id/bottom_cover"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/cover_container"
             android:src="@drawable/default_cover"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="@dimen/common_margin_5"
             />
 </androidx.constraintlayout.widget.ConstraintLayout>

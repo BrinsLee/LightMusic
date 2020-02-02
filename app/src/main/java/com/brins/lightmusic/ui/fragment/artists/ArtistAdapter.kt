@@ -20,7 +20,7 @@ class ArtistAdapter(var list: ArrayList<ArtistBean>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_local_music, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_online_music, parent, false)
         val viewHolder = viewHolder(view)
         if (mItemClickListener != null) {
             view.setOnClickListener {
@@ -57,9 +57,9 @@ class ArtistAdapter(var list: ArrayList<ArtistBean>) :
         var imgCover: ImageView
 
         init {
-            textViewName = view.findViewById(R.id.textViewName)
-            textViewArtist = view.findViewById(R.id.textViewArtist)
-            imgCover = view.findViewById(R.id.imgCover)
+            textViewName = view.findViewById(R.id.name)
+            textViewArtist = view.findViewById(R.id.artist)
+            imgCover = view.findViewById(R.id.item_cover)
 
         }
     }

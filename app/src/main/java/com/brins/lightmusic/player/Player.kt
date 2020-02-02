@@ -294,7 +294,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {
-        removeCallbacks()
         mCallbacks.add(callback)
     }
 

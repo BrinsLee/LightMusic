@@ -65,13 +65,13 @@ class VideoCategoryFragment(var area: String) : BaseFragment(),
     }
 
     private fun switch(fragment: Fragment, bundle: Bundle) {
-        /*try {
+        try {
             (activity as MainActivity).switchFragment(fragment, bundle)
                 .addToBackStack(TAG)
                 .commit()
         } catch (e: Exception) {
             e.printStackTrace()
-        }*/
+        }
     }
 
     override fun onRefresh() {

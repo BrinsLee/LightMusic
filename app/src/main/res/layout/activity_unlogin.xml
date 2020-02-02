@@ -1,52 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/gery"
-    android:layout_height="match_parent"
-    tools:context=".ui.activity.login.LoginActivity">
+        tools:context=".ui.activity.login.LoginActivity">
 
     <com.brins.lightmusic.ui.customview.CommonHeaderView
             android:id="@+id/headUnlogin"
             android:layout_width="match_parent"
-            app:chv_text_color="@color/translucent"
-            app:chv_icon="@drawable/ic_back_black"
             android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
             android:background="@color/gery"
-            app:chv_title="">
-    </com.brins.lightmusic.ui.customview.CommonHeaderView>
+            app:chv_icon="@drawable/ic_back_black"
+            app:chv_text_color="@color/translucent"
+            app:chv_title=""
+            app:layout_constraintTop_toTopOf="parent"></com.brins.lightmusic.ui.customview.CommonHeaderView>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_below="@id/headUnlogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin_80">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headUnlogin"
+            android:layout_marginTop="@dimen/common_margin_80"
+            android:orientation="vertical">
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:gravity="center"
-            android:text="@string/sign_in"
-            android:textColor="@color/translucent"
-            android:textSize="30sp" />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:gravity="center"
+                android:text="@string/sign_in"
+                android:textColor="@color/translucent"
+                android:textSize="30sp" />
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/load_more"
-            android:textColor="@color/translucent"
-            android:textSize="20sp" />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/load_more"
+                android:textColor="@color/translucent"
+                android:textSize="20sp" />
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
 
         <!--<include
             android:id="@+id/input_layout"
@@ -57,96 +56,137 @@
                 android:id="@+id/input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_margin_150"
-                android:layout_margin="50dp"
+                android:layout_margin="@dimen/common_margin_20"
                 android:background="@drawable/radius_drawable_bg"
                 android:orientation="vertical"
-                android:padding="10dip" >
+                android:padding="5dp">
 
             <LinearLayout
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="@dimen/common_margin_20"
                     android:id="@+id/input_layout_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_margin_20"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                        android:id="@+id/upper_iv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_email" />
+                        android:src="@drawable/ic_email"
+                        android:layout_marginEnd="@dimen/common_margin_10"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_username"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dip"
+                        android:layout_weight="5"
+                        android:autofillHints="username"
                         android:background="#00000000"
-                        android:hint="账号/用户名/邮箱"
+                        android:hint="@string/email"
                         android:padding="5dip"
-                        android:textSize="16sp"
-                        android:autofillHints="username" />
+                        android:textSize="16sp" />
+
+                <ImageButton
+                        android:id="@+id/cancel_input_btn"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:onClick="onCancelInput"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:clickable="true"
+                        android:visibility="gone"
+                        android:src="@drawable/cancel_input_icon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
             </LinearLayout>
 
             <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginBottom="5dip"
                     android:layout_marginTop="5dip"
+                    android:layout_marginBottom="5dip"
                     android:background="#eeeeee" />
 
             <LinearLayout
-                    app:layout_constraintTop_toBottomOf="@id/input_layout_name"
-                    android:layout_marginTop="@dimen/common_margin_20"
                     android:id="@+id/input_layout_psw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_margin_30"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/input_layout_name">
 
                 <ImageView
+                        android:id="@+id/down_iv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_pwd" />
+                        android:src="@drawable/ic_pwd"
+                        android:layout_marginEnd="@dimen/common_margin_10"
+                        />
 
                 <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_password"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dip"
+                        android:autofillHints="password"
                         android:background="#00000000"
-                        android:hint="密码"
+                        android:hint="@string/password"
                         android:inputType="textPassword"
                         android:padding="5dip"
+                        android:textSize="16sp" />
+
+                <TextView
+                        android:id="@+id/getCode_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:text="@string/send_code"
+                        android:textColor="@color/default_btn_text"
                         android:textSize="16sp"
-                        android:autofillHints="password" />
+                        android:visibility="gone"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <include
-            android:id="@+id/layout_progress"
-            android:layout_width="match_parent"
-            android:layout_height="130dip"
-            layout="@layout/view_progress"
-            android:visibility="gone" />
+                android:id="@+id/layout_progress"
+                layout="@layout/view_progress"
+                android:layout_width="match_parent"
+                android:layout_height="130dip"
+                android:visibility="gone" />
 
         <TextView
-            android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/input_layout"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="15dip"
-            android:background="@drawable/text_bg"
-            android:gravity="center"
-            android:paddingBottom="2dip"
-            android:paddingLeft="15dip"
-            android:paddingRight="15dip"
-            android:paddingTop="2dip"
-            android:text="Login"
-            android:textColor="@color/translucent"
-            android:textSize="20sp" />
+                android:id="@+id/login_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_layout"
+                android:layout_centerHorizontal="true"
+                android:text="@string/use_phone"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+
+                />
+
+        <TextView
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/login_type"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/common_margin_30"
+                android:background="@drawable/text_bg"
+                android:gravity="center"
+                android:paddingLeft="15dip"
+                android:paddingTop="2dip"
+                android:paddingRight="15dip"
+                android:paddingBottom="2dip"
+                android:text="Login"
+                android:textColor="@color/translucent"
+                android:textSize="20sp" />
     </RelativeLayout>
 
 </RelativeLayout>
