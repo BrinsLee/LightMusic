@@ -38,5 +38,5 @@ class UserAccountBean {
      * vip版本
      * */
     @ColumnInfo(name = "vipTypeVersion")
-    var viptypeVersion: Int = 0
+    var viptypeVersion: Long = 0
 }

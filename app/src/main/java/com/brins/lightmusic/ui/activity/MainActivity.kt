@@ -23,12 +23,13 @@ import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
-import com.brins.lightmusic.ui.fragment.myfragment.MyFragment
+import com.brins.lightmusic.ui.fragment.mainfragment.MyFragment
+import com.brins.lightmusic.ui.fragment.minefragment.MineFragment
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.ui.fragment.video.VideoFragment
 import com.brins.lightmusic.utils.getStatusBarHeight
-import com.brins.lightmusic.utils.setColorTranslucent
+import com.brins.lightmusic.utils.setTextDark
 import com.brins.lightmusic.utils.setTranslucent
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
@@ -97,6 +98,7 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
         super.onCreateAfterBinding(savedInstanceState)
         ButterKnife.bind(this)
         setTranslucent(this)
+        setTextDark(this.window, true)
         toolbar.setPadding(0, getStatusBarHeight(this), 0, 0)
         initViewPagerAndTabLay()
         mPresenter.subscribe(this)
@@ -123,7 +125,7 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
         list.add(MyFragment())
         list.add(DiscoveryFragment())
         list.add(VideoFragment())
-        list.add(ArtistFragment())
+        list.add(MineFragment())
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = 3
         changeTab(0)
@@ -160,7 +162,7 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
             3 -> {
                 tab_singer_btn.isSelected = true
                 tab_singer_tv.isSelected = true
-                tv_title.text = getString(R.string.singers)
+                tv_title.text = getString(R.string.mine)
             }
         }
         view_pager.currentItem = position

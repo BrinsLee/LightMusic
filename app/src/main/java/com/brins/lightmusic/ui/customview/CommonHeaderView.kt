@@ -22,8 +22,13 @@ class CommonHeaderView @JvmOverloads constructor(
         set(value) {
             setHeadTitle(value)
         }
+
     @ColorRes
     var textColor = R.color.white
+        set(value) {
+            field = value
+            headTitle.setTextColor(field)
+        }
 
 
     init {
@@ -32,7 +37,7 @@ class CommonHeaderView @JvmOverloads constructor(
         title = a.getString(R.styleable.CommonHeaderView_chv_title)
         textColor = a.getColor(
             R.styleable.CommonHeaderView_chv_text_color,
-            ContextCompat. getColor(context,R.color.translucent)
+            ContextCompat.getColor(context, R.color.translucent)
         )
         val icon = a.getResourceId(R.styleable.CommonHeaderView_chv_icon, R.drawable.ic_back_black)
         headBack.setImageResource(icon)
@@ -41,6 +46,10 @@ class CommonHeaderView @JvmOverloads constructor(
             onBackClick(it)
         }
         initView(title)
+    }
+
+    fun setBackResource(icon: Int) {
+        headBack.setImageResource(icon)
     }
 
 

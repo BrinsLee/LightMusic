@@ -5,93 +5,38 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false">
-
-        <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/common_margin_150"
-                android:background="@android:color/transparent"
-                android:fitsSystemWindows="true">
-
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    app:contentScrim="@android:color/transparent"
-                    app:expandedTitleMarginEnd="10dp"
-                    app:expandedTitleMarginStart="10dp"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                    <com.makeramen.roundedimageview.RoundedImageView
-                            android:id="@+id/avatar"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:layout_marginStart="20dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/ic_avatar"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:riv_corner_radius="50dp" />
-
-                    <com.brins.lightmusic.ui.customview.FontTextView
-                            android:id="@+id/nickName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/common_margin_30"
-                            android:ellipsize="end"
-                            android:maxEms="5"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="@string/login"
-                            android:textColor="@color/translucent"
-                            android:textSize="15sp"
-                            app:font_type="DIN-Bold"
-                            app:layout_constraintEnd_toEndOf="@id/avatar"
-                            app:layout_constraintStart_toStartOf="@id/avatar"
-                            app:layout_constraintTop_toBottomOf="@id/avatar" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_fragment_local"
-                android:clipChildren="false"
-                app:layout_behavior= "@string/appbar_scrolling_view_behavior">
+                android:clipChildren="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="0dp">
 
-                <include layout="@layout/item_grid_view" />
+                <LinearLayout
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/bannerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/shape_rect_r8_white_background"
+                        android:orientation="horizontal">
 
-                <include layout="@layout/item_recycler_head" />
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/userPlayList"
+                        android:id="@+id/recommendList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/common_margin_5"
                         android:layout_marginEnd="@dimen/common_margin_5"
-                        app:layout_constraintTop_toBottomOf="@id/rootli">
+                        app:layout_constraintTop_toBottomOf="@id/bannerLayout">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

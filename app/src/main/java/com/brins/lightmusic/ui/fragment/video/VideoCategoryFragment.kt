@@ -42,8 +42,8 @@ class VideoCategoryFragment(var area: String) : BaseFragment(),
         return R.layout.fragment_video_category
     }
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
+        super.onCreateViewAfterBinding()
         videoAdapter.setOnItemListener(this)
         videoListView.layoutManager = LinearLayoutManager(context)
         videoListView.adapter = videoAdapter

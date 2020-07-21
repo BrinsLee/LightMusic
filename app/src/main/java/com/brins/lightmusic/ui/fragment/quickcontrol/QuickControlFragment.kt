@@ -51,8 +51,8 @@ class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback
         }
     }
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
+        super.onCreateViewAfterBinding()
         RxBus.getInstance().register(this)
     }
 

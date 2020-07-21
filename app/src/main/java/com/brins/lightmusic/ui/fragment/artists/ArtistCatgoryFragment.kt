@@ -30,8 +30,8 @@ class ArtistCatgoryFragment : BaseFragment(), ArtistConstract.View,
     private var type: Int = 0
     private var mList = arrayListOf<ArtistBean>()
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
+        super.onCreateViewAfterBinding()
         ArtistPresenter.instance.subscribe(this)
         if (arguments != null) {
             type = arguments?.getInt("category", 0)!!

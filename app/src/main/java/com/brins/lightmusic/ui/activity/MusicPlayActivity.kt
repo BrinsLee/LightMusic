@@ -23,11 +23,13 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
+import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.activity.login.LoginPresenter
 import com.brins.lightmusic.ui.base.BaseActivity
+import com.brins.lightmusic.ui.customview.CommentPopup
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CustPagerTransformer
 import com.brins.lightmusic.ui.customview.RoundImageView
@@ -35,6 +37,7 @@ import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.setTranslucent
+import com.brins.lightmusic.utils.showRecommentList
 import com.brins.lightmusic.utils.string2Bitmap
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
@@ -53,6 +56,8 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
         getActivityComponent().inject(this)
     }
 
+    private lateinit var commentPop: CommentPopup
+    private lateinit var result: MusicCommentResult
     @Inject
     lateinit var mPresenter: MusicPlayerPresenter
 
@@ -219,6 +224,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
         playOrPause.setOnClickListener(this)
         preSong.setOnClickListener(this)
         nextSong.setOnClickListener(this)
+        comment.setOnClickListener(this)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -284,6 +290,19 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
             }
             preSong -> {
                 onPlayLast()
+            }
+            comment -> {
+                current?.let {
+                    if(!::result.isInitialized){
+                        CoroutineScope(Dispatchers.Main).launch {
+                            result = fetchMusicComment(it.id)
+                            if (result.hotComments != null)
+                                commentPop = showRecommentList(this@MusicPlayActivity, result.hotComments!!)
+                        }
+                    }else{
+                        commentPop.show()
+                    }
+                }
             }
         }
     }
@@ -404,6 +423,11 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
         result
     }
 
+    private suspend fun fetchMusicComment(id: String) = withContext(Dispatchers.IO) {
+        val result = mPresenter.fetchMusicComment(id)
+        result
+    }
+
 
     override fun handleError(error: Throwable) {
 
@@ -445,7 +469,7 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
             cover = string2Bitmap(song.album.picUrl)
         }
         initViewPager()
-        if (mImageViewList.isNotEmpty()){
+        if (mImageViewList.isNotEmpty()) {
             mImageViewList[mPlayList.getPlayingIndex()].setImageBitmap(cover)
             pageAdapter?.notifyDataSetChanged()
         }

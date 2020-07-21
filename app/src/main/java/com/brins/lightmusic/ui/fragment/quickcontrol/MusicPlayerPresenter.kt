@@ -8,6 +8,7 @@ import android.os.IBinder
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.api.ApiHelper
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayBackService.Companion.mIsServiceBound
 import com.brins.lightmusic.utils.await
@@ -80,6 +81,11 @@ class MusicPlayerPresenter @Inject constructor() :
         return onlineMusic
     }
 
+
+    override suspend fun fetchMusicComment(id: String): MusicCommentResult {
+        val comments = ApiHelper.getMusicService().fetchMusicComment(id).await()
+        return comments
+    }
 
     override fun retrieveLastPlayMode() {
 

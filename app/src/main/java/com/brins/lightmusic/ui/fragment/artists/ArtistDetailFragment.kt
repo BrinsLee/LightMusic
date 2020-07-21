@@ -52,11 +52,16 @@ class ArtistDetailFragment : BaseFragment(),
     }
 
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
+        super.onCreateViewAfterBinding()
         setListener()
         mArtist = arguments?.getParcelable("ARTIST")
         if (mArtist != null) {
+            ImageLoadreUtils.getInstance().loadImage(
+                context, ImageLoader.Builder()
+                    .url(mArtist!!.picUrl).bitmapTransformation(
+                        CornersTransform(10f)).imgView(avatar).bulid()
+            )
             ImageLoadreUtils.getInstance().loadImage(
                 context,
                 ImageLoader.Builder().url(mArtist!!.picUrl).assignWidth(500).assignHeight(500).bitmapTransformation(

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp">
+
+    <ImageView
+            android:id="@+id/user_avatar_iv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_avatar" />
+
+    <TextView
+            android:id="@+id/user_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:ellipsize="end"
+            android:maxWidth="200dp"
+            android:singleLine="true"
+            android:text="饼干"
+            android:textColor="@color/default_btn_text"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@id/user_avatar_iv" />
+
+
+    <TextView
+            android:id="@+id/recommen_content_tv"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="2dp"
+            android:text="喜欢你的作品"
+            android:textColor="@color/normal_text_color"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/user_avatar_iv"
+            app:layout_constraintTop_toBottomOf="@+id/user_name_tv" />
+
+    <TextView
+            android:id="@+id/reply_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:30"
+            android:textColor="@color/default_btn_text"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

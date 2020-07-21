@@ -15,7 +15,9 @@
             app:chv_icon="@drawable/ic_back_black"
             app:chv_text_color="@color/translucent"
             app:chv_title=""
-            app:layout_constraintTop_toTopOf="parent"></com.brins.lightmusic.ui.customview.CommonHeaderView>
+            app:layout_constraintTop_toTopOf="parent">
+
+    </com.brins.lightmusic.ui.customview.CommonHeaderView>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -178,14 +180,14 @@
                 android:layout_below="@+id/login_type"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="@dimen/common_margin_30"
-                android:background="@drawable/text_bg"
+                android:background="@drawable/shape_rect_r20_background_primary"
                 android:gravity="center"
                 android:paddingLeft="15dip"
                 android:paddingTop="2dip"
                 android:paddingRight="15dip"
                 android:paddingBottom="2dip"
                 android:text="Login"
-                android:textColor="@color/translucent"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
     </RelativeLayout>
 

@@ -1,6 +1,7 @@
 package com.brins.lightmusic.common;
 
 import android.content.Context;
+
 import com.brins.lightmusic.model.userlogin.UserAccountBean;
 import com.brins.lightmusic.model.userlogin.UserProfileBean;
 
@@ -37,7 +38,7 @@ public class AppConfig {
     /**
      * 每日推荐
      */
-    public static final String DAILY_RECOMMEND= "/recommend/songs";
+    public static final String DAILY_RECOMMEND = "/recommend/songs";
 
 
     /**
@@ -99,6 +100,11 @@ public class AppConfig {
      */
     public static final String SONG = "/song/url";
 
+    /**
+     * 歌曲评论
+     */
+    public static final String MUSIC_COMMENT = "/comment/music";
+
 
     /**
      * 最新MV
@@ -141,9 +147,9 @@ public class AppConfig {
     /**
      * 搜索
      * 必选参数 : keywords : 关键词
-     *
+     * <p>
      * 可选参数 : limit : 返回数量 , 默认为 30 offset : 偏移数量，用于分页 , 如 : 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
-     *
+     * <p>
      * type: 搜索类型；默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
      */
     public static final String SEARCH = "/search";

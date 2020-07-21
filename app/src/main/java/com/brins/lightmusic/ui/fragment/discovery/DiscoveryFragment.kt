@@ -118,7 +118,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     private fun initHotMusicView() {
         musicHotAdapter.setOnItemClickListener(this)
         recycleMusiclist2.adapter = musicHotAdapter
-        recycleMusiclist2.layoutManager = GridLayoutManager(context!!, 3)
+        val manager = LinearLayoutManager(context!!)
+        manager.orientation = LinearLayoutManager.HORIZONTAL
+        recycleMusiclist2.layoutManager = manager
         hideLoading()
     }
 
@@ -140,6 +142,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
         })
     }
 
+
     private suspend fun getMusicList(limit: Int) = withContext(Dispatchers.IO) {
         val musicList = mPresenter.loadMusicList(limit)
         musicList
@@ -149,7 +152,9 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     private fun initMusicView() {
         musicListAdapter.setOnItemClickListener(this)
         recycleMusiclist.adapter = musicListAdapter
-        recycleMusiclist.layoutManager = GridLayoutManager(context!!, 3)
+        val manager = LinearLayoutManager(context!!)
+        manager.orientation = LinearLayoutManager.HORIZONTAL
+        recycleMusiclist.layoutManager = manager
         hideLoading()
     }
 

@@ -32,4 +32,14 @@
             android:src="@drawable/ic_nextmusic"
             app:layout_constraintStart_toEndOf="@+id/playOrPause"
             app:layout_constraintBottom_toBottomOf="@id/playOrPause"/>
+
+    <ImageView
+            android:id="@+id/comment"
+            android:layout_width="@dimen/common_margin_30"
+            android:layout_height="@dimen/common_margin_30"
+            android:layout_marginStart="@dimen/common_margin_20"
+            app:layout_constraintTop_toTopOf="@id/nextSong"
+            android:src="@drawable/ic_comment"
+            app:layout_constraintStart_toEndOf="@id/nextSong"
+            app:layout_constraintBottom_toBottomOf="@id/nextSong"/>
 </merge>

@@ -52,6 +52,7 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
     private var mScrollY = 0
     private var h = 0
     private lateinit var mUserPlayList: UserPlayListBean
+
     @Inject
     lateinit var mPresenter: MusicListPresenter
     private var mPlayList = PlayList()
@@ -103,7 +104,8 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
                 holder.setText(R.id.artist, playlist.artistBeans!![0].name)
                 ImageLoadreUtils.getInstance().loadImage(
                     this@UserPlayListActivity,
-                    ImageLoader.Builder().url(t.album.picUrl).assignWidth(100).assignHeight(100).imgView(holder.getView(R.id.item_cover)).bitmapTransformation(
+                    ImageLoader.Builder().url(t.album.picUrl).assignWidth(100).assignHeight(100)
+                        .imgView(holder.getView(R.id.item_cover)).bitmapTransformation(
                         CornersTransform(20f)
                     ).bulid()
                 )
@@ -119,9 +121,10 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
         )
         ImageLoadreUtils.getInstance().loadImage(
             this,
-            ImageLoader.Builder().url(mUserPlayList.coverImgUrl).assignWidth(500).assignHeight(500).bitmapTransformation(
-                CornersTransform(20f)
-            ).bulid(), object : SimpleTarget<Bitmap>() {
+            ImageLoader.Builder().url(mUserPlayList.coverImgUrl).assignWidth(500).assignHeight(500)
+                .bitmapTransformation(
+                    CornersTransform(20f)
+                ).bulid(), object : SimpleTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     val result = rsBlur(this@UserPlayListActivity, resource, 25f)
                     coverBg.setImageBitmap(result)
@@ -146,6 +149,8 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
                 mScrollY += scrollY - oldScrollY
                 if (mScrollY <= 0) {
                     head.setBackgroundResource(android.R.color.transparent)
+                    head.textColor = getColor(R.color.white)
+                    head.setBackResource(R.drawable.ic_back)
                     //                tv_title.setText("")
                 } else if (mScrollY in 1 until h) {
                     val fraction = mScrollY * 1f / h
@@ -159,6 +164,9 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
                     )
                 } else if (mScrollY >= h) {
                     head.setBackgroundResource(R.color.colorPrimary)
+                    head.textColor = getColor(R.color.translucent)
+                    head.setBackResource(R.drawable.ic_back_black)
+
                 }
             }
         }

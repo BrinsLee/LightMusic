@@ -1,1 +1,2 @@
+include ':recyclerlib'
 include ':app', ':lib_common'

@@ -283,8 +283,8 @@ class SearchFragment(val type: Int = 1) : BaseFragment(),
     }
 
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
+        super.onCreateViewAfterBinding()
         SearchPresenter.instance.subscribe(this)
     }
 

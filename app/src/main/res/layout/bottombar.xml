@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:clickable="false"
-            android:text="@string/singers"
+            android:text="@string/mine"
             android:textColor="@drawable/tab_main_text_selected"
             android:textSize="10dp"
             app:layout_constraintEnd_toEndOf="@id/tab_singer_btn"

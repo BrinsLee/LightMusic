@@ -4,10 +4,7 @@ import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.model.artist.ArtistResult
 import com.brins.lightmusic.model.musicvideo.MvMetaResult
 import com.brins.lightmusic.model.musicvideo.MvResult
-import com.brins.lightmusic.model.onlinemusic.MusicBean
-import com.brins.lightmusic.model.onlinemusic.MusicListDetailResult
-import com.brins.lightmusic.model.onlinemusic.MusicListResult
-import com.brins.lightmusic.model.onlinemusic.MusicMetaDataBean
+import com.brins.lightmusic.model.onlinemusic.*
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
@@ -25,6 +22,9 @@ interface MusicService {
 
     @GET(SONG)
     fun getUrl(@Query("id") id: String): Call<MusicBean>
+
+    @GET(MUSIC_COMMENT)
+    fun fetchMusicComment(@Query("id")id : String): Call<MusicCommentResult>
 
 
 

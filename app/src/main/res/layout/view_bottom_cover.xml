@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="@dimen/common_margin_60"
+            android:layout_height="@dimen/common_margin_60"
+            android:id="@+id/bottom_cover"
+            android:src="@drawable/default_cover"
+            app:riv_corner_radius="@dimen/common_margin_50"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    <com.brins.lightmusic.ui.customview.RoundCoverProgress
+            android:id="@+id/cover_progress"
+            android:layout_width="@dimen/common_margin_60"
+            android:layout_height="@dimen/common_margin_60"
+            app:layout_constraintTop_toTopOf="@id/bottom_cover"
+            app:layout_constraintStart_toStartOf="@id/bottom_cover"
+            app:layout_constraintEnd_toEndOf="@id/bottom_cover"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_cover"
+            />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

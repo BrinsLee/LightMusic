@@ -11,15 +11,17 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.lang.StringBuilder
 
-class MusicDetailAdapter(var context: Context, var list: MutableList<Music>) :
-    RecyclerView.Adapter<MusicDetailAdapter.ViewHolder>() {
+class MusicDetailAdapter(list: MutableList<Music>) :
+    BaseQuickAdapter<Music, BaseViewHolder>(R.layout.item_online_music, list) {
 
 
     private var mItemClickListener: OnItemClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    /*override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_online_music, parent, false)
         val myViewHolder = ViewHolder(view)
         return myViewHolder
@@ -56,10 +58,24 @@ class MusicDetailAdapter(var context: Context, var list: MutableList<Music>) :
         val name = view.findViewById<TextView>(R.id.name)
         val artist = view.findViewById<TextView>(R.id.artist)
         val count = view.findViewById<TextView>(R.id.count)
-    }
+    }*/
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         mItemClickListener = listener
+    }
+
+    override fun convert(helper: BaseViewHolder, item: Music) {
+        val strBuilder = StringBuilder()
+        item.artistBeans?.forEach { strBuilder.append("${it.name} ") }
+        helper.setText(R.id.artist, strBuilder)
+        helper.setText(R.id.name, item.name)
+        helper.setText(R.id.count, "${helper.layoutPosition}")
+        if (mItemClickListener != null) {
+            helper.getView<ConstraintLayout>(R.id.rootLayout).setOnClickListener {
+                mItemClickListener!!.onItemClick(it, helper.layoutPosition)
+            }
+
+        }
     }
 
 }

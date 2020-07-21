@@ -28,6 +28,7 @@
     <string name="logout">退出登录</string>
     <string name="username_not_empty">用户名或密码不能为空</string>
     <string name="fm">私人FM</string>
+    <string name="recent">最近播放</string>
     <string name="daily">每日推荐</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -41,6 +42,7 @@
     <string name="discovery_tab">发现</string>
     <string name="video_tab">视频</string>
     <string name="singers">歌手</string>
+    <string name="mine">我的</string>
     <string name="my_collection">我的收藏</string>
     <string name="use_phone">使用手机号登录</string>
     <string name="use_email">使用账号密码登录</string>
@@ -51,4 +53,7 @@
     <string name="password">密码</string>
     <string name="get_code_success">验证码发送成功</string>
     <string name="phone_format_err">手机号格式错误</string>
+    <string name="send_comment">发送</string>
+    <string name="comment_yestoday_tip">昨天</string>
+    <string name="login_now">立即登录，获取更多内容</string>
 </resources>

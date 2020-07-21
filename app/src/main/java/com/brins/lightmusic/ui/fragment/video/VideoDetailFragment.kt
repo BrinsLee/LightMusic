@@ -37,8 +37,8 @@ class VideoDetailFragment : BaseFragment(),
         return R.layout.fragment_video_detail
     }
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
+        super.onCreateViewAfterBinding()
         mPresenter.subscribe(this)
         head.setOnBackClickListener(this)
         mCurrentMv = arguments?.getParcelable("Mv")

@@ -8,12 +8,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.palette.graphics.Palette
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -23,6 +25,10 @@ import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.event.NotificationUpadteEvent
 import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver
 import com.brins.lightmusic.ui.activity.SplashActivity
+import com.brins.lightmusic.utils.ScreenUtils
+import com.brins.lightmusic.utils.createLinearGradientBitmap
+import com.brins.lightmusic.utils.dp2px
+import com.brins.lightmusic.utils.handleBimap
 import com.hwangjr.rxbus.annotation.Subscribe
 
 
@@ -60,7 +66,6 @@ class PlayBackService : Service(), IPlayback, HeadsetButtonReceiver.onHeadsetLis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             updateNotification()
             cancelNotification()
-
         }
         val filter = IntentFilter()
         filter.addAction(ACTION_PLAY)
@@ -280,15 +285,17 @@ class PlayBackService : Service(), IPlayback, HeadsetButtonReceiver.onHeadsetLis
 
     private fun updateNotification() {
         remoteView = RemoteViews(packageName, R.layout.view_notification)
-        if (getPlayList().getCurrentSong()?.bitmapCover == null)
+        if (getPlayList().getCurrentSong()?.bitmapCover == null) {
             remoteView.setImageViewResource(
                 R.id.widget_album,
                 R.drawable.default_cover
             )
-        else remoteView.setImageViewBitmap(
-            R.id.widget_album,
-            getPlayList().getCurrentSong()?.bitmapCover
-        )
+        } else {
+            remoteView.setImageViewBitmap(
+                R.id.widget_album,
+                getPlayList().getCurrentSong()?.bitmapCover
+            )
+        }
         remoteView.setTextViewText(
             R.id.widget_title,
             if (getPlayList().getCurrentSong()?.name.isNullOrEmpty()) "无音乐" else getPlayList().getCurrentSong()?.name

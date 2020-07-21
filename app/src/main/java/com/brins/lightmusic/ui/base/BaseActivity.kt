@@ -4,15 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.brins.lightmusic.LightMusicApplication
-import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
 import com.brins.lightmusic.di.component.ActivityComponent
 import com.brins.lightmusic.di.component.DaggerActivityComponent
 import com.brins.lightmusic.di.module.ActivityModule
-import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

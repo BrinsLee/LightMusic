@@ -42,6 +42,17 @@
                         app:layout_constraintDimensionRatio="900:800"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                        android:layout_width="@dimen/common_margin_100"
+                        android:layout_height="@dimen/common_margin_100"
+                        android:id="@+id/avatar"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/common_margin_20"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="85dp"
+                        />
+
+
                 <com.brins.lightmusic.ui.customview.FontTextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
@@ -71,6 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?android:attr/actionBarSize"
                     app:layout_collapseMode="pin"
+                    android:layout_marginTop="@dimen/common_margin_10"
                     app:title="">
 
                 <com.brins.lightmusic.ui.customview.CommonHeaderView

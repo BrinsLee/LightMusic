@@ -23,6 +23,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
+import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -39,12 +40,15 @@ import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
+import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
+import com.brins.lightmusic.ui.customview.CommentPopup
 import com.brins.lightmusic.ui.customview.DimView
 import com.brins.lightmusic.ui.customview.ProgressLoading
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
+import com.lxj.xpopup.XPopup
 import io.reactivex.Maybe
 import io.reactivex.MaybeObserver
 import io.reactivex.Single
@@ -772,4 +776,84 @@ fun isMobileExact(input: CharSequence): Boolean {
  */
 fun isMatch(regex: String, input: CharSequence?): Boolean {
     return input != null && input.length > 0 && Pattern.matches(regex, input)
+}
+
+
+//创建线性渐变背景色
+fun createLinearGradientBitmap(darkColor: Int, color: Int, width: Int, height: Int): Bitmap? {
+    val bgColors = IntArray(3)
+    bgColors[0] = Color.parseColor("#00000000")
+    bgColors[1] = Color.parseColor("#4d000000")
+    bgColors[2] = color
+
+    val bgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444)
+    val canvas = Canvas()
+    val paint = Paint()
+    canvas.setBitmap(bgBitmap)
+    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+    val gradient =
+        LinearGradient(0f, 0f, 0f, bgBitmap.height.toFloat(), bgColors, null, Shader.TileMode.CLAMP)
+    paint.shader = gradient
+    paint.isAntiAlias = true
+    val rectF = RectF(0f, 0f, bgBitmap.width.toFloat(), bgBitmap.height.toFloat())
+    canvas.drawRoundRect(rectF, 20f, 20f, paint)
+    canvas.drawRect(rectF, paint)
+    return bgBitmap
+}
+
+fun handleBimap(bitmap: Bitmap): Bitmap {
+    //透明渐变
+    val argb = IntArray(bitmap.width * bitmap.height)
+    bitmap.getPixels(argb, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+
+    //循环开始的下标，设置从什么时候开始改变
+    val start = argb.size / 2
+    val end = argb.size
+
+    //        int mid = argb.length;
+    //        int row = ((mid - start) / bitmap.getHeight()) + 2;
+
+
+    val width = bitmap.width
+    for (i in 0 until bitmap.height / 2 + 1) {
+        for (j in 0 until width) {
+            val index = start - width + i * width + j
+            if (argb[index] != 0) {
+                argb[index] =
+                    ((1 - i / (bitmap.height / 2f)) * 255).toInt() shl 24 or (argb[index] and 0x00FFFFFF)
+            }
+        }
+    }
+    //        for (int i = mid; i < argb.length; i++) {
+    //            argb[i] = (argb[i] & 0x00FFFFFF);
+    //        }
+
+    return Bitmap.createBitmap(argb, bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+
+}
+
+
+fun showRecommentList(context : Context, listBeans: List<MusicCommentResult.Companion.HotComments>): CommentPopup {
+    val mCommentPopup = CommentPopup(context, listBeans)
+    XPopup.Builder (context)
+        .moveUpToKeyboard(false) //如果不加这个，评论弹窗会移动到软键盘上面
+        .hasShadowBg(false)
+        .hasStatusBarShadow(false)
+        .asCustom(mCommentPopup)
+        .show()
+    return mCommentPopup
+}
+
+fun setTextDark(window: Window, isDark: Boolean) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        val decorView = window.decorView
+        val systemUiVisibility = decorView.systemUiVisibility;
+        if (isDark) {
+            decorView.systemUiVisibility =
+                systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            decorView.systemUiVisibility =
+                systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
 }

@@ -68,7 +68,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fm"
+                android:text="@string/recent"
                 android:textColor="@color/colorAccent"
                 android:textSize="15sp"
                 app:font_type="DIN-Bold"

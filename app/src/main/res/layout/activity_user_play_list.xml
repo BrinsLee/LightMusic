@@ -89,8 +89,8 @@
             android:id="@+id/head"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            app:chv_icon="@drawable/ic_back_black"
-            app:chv_text_color="@color/translucent"
+            app:chv_icon="@drawable/ic_back"
+            app:chv_text_color="@color/white"
             app:chv_title=""
             app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

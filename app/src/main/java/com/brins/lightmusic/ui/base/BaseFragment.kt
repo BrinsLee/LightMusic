@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import butterknife.ButterKnife
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.di.component.DaggerFragmentComponent
 import com.brins.lightmusic.di.component.FragmentComponent
@@ -25,7 +26,7 @@ abstract class BaseFragment : Fragment(), BaseView {
     /*实现懒加载*/
     protected open var mIsViewBinding: Boolean = false
     protected open var mIsVisibleToUser: Boolean = false
-    protected open var mHadLoaded: Boolean = false
+    protected open var mHadLoaded = false
     protected var mStarterCommon: StarterCommon? = null
 
     abstract fun getLayoutResID(): Int
@@ -33,7 +34,7 @@ abstract class BaseFragment : Fragment(), BaseView {
     protected abstract fun initInject()
 
 
-    protected open fun onCreateViewAfterBinding(view: View) {
+    protected open fun onCreateViewAfterBinding() {
         mIsViewBinding = true
         mStarterCommon = StarterCommon(activity)
         checkLoad()
@@ -102,7 +103,7 @@ abstract class BaseFragment : Fragment(), BaseView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onCreateViewAfterBinding(view)
+        onCreateViewAfterBinding()
     }
 
     override fun onDestroyView() {

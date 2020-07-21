@@ -3,6 +3,7 @@ package com.brins.lightmusic.ui.fragment.quickcontrol
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.brins.lightmusic.model.Music
+import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.base.BasePresenter
@@ -52,5 +53,7 @@ interface MusicPlayerContract {
 
 
         suspend fun loadMusicDetail(onlineMusic: Music) : Music
+
+        suspend fun fetchMusicComment(id : String) : MusicCommentResult
     }
 }

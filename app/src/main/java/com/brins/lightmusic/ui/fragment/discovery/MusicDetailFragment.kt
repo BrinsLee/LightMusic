@@ -43,7 +43,8 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter = MusicDetailAdapter(context!!, playList.getSongs())
+        mAdapter = MusicDetailAdapter(playList.getSongs())
+        mAdapter.animationEnable = true
         mAdapter.setOnItemClickListener(this)
         toolbar.setOnBackClickListener(this)
         nestScrollView.fadingView = toolbar
@@ -79,8 +80,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View,
                     .into(coverMusicList)
                 toolbar.title = detailBean.name
                 playList.addSong(detailBean.tracks!!)
-                mAdapter.setData(playList.getSongs())
-                mAdapter.notifyDataSetChanged()
+                mAdapter.setNewData(playList.getSongs())
                 hideLoading()
             }
 
@@ -96,8 +96,7 @@ class MusicDetailFragment : BaseFragment(), DiscoveryContract.View,
                 .into(coverMusicList)
             toolbar.title = musics.album!!.name
             playList.addSong(musics.songs!!)
-            mAdapter.setData(playList.getSongs())
-            mAdapter.notifyDataSetChanged()
+            mAdapter.setNewData(playList.getSongs())
             hideLoading()
         }, {
             val i = it

@@ -51,8 +51,7 @@ class DailyRecommendFragment : BaseFragment(),
         return R.layout.fragment_daily_recommend
     }
 
-    override fun onCreateViewAfterBinding(view: View) {
-        super.onCreateViewAfterBinding(view)
+    override fun onCreateViewAfterBinding() {
         DailyRecommendPresenter.instance.subscribe(this)
         toolbar.setPadding(0, getStatusBarHeight(context!!), 0, 0)
         deltaDistance = dp2px(context!!, 250f)
