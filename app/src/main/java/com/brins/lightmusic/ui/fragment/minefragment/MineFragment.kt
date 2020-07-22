@@ -15,14 +15,11 @@ import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.userfm.UserFmResult
 import com.brins.lightmusic.model.userplaylist.UserPlayListBean
 import com.brins.lightmusic.model.userplaylist.UserPlayListResult
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CustomStaggeredGridLayoutManager
-import com.brins.lightmusic.ui.fragment.mainfragment.MyContract
-import com.brins.lightmusic.ui.fragment.mainfragment.MyPresenter
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
@@ -33,12 +30,12 @@ import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import javax.inject.Inject
 
-class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, MyContract.View {
+class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, MineContract.View {
 
     private var mAvatar: Bitmap? = null
 
     @Inject
-    lateinit var mPresenter: MyPresenter
+    lateinit var mPresenter: MinePresenter
     private lateinit var mAdapter: CommonViewAdapter<UserPlayListBean>
     private lateinit var customStaggeredGridLayoutManager: CustomStaggeredGridLayoutManager
 

@@ -12,18 +12,18 @@ interface LoginService {
     /*
 * 登录网络接口
 * */
-    @GET(LOGIN_EMAIL)
+    @GET(LOGIN.LOGIN_EMAIL)
     fun loginEmail(@Query("email") email: String, @Query("password") password: String): Observable<UserLoginResult>
 
-    @GET(LOGOUT)
+    @GET(LOGIN.LOGOUT)
     fun logout(): Observable<LogoutResult>
 
-    @GET(CHECK_CODE)
+    @GET(LOGIN.CHECK_CODE)
     fun getCheckCode(@Query("phone") phone: String): Observable<String>
 
-    @GET(VERIFY_CODE)
+    @GET(LOGIN.VERIFY_CODE)
     fun verifyCode(@Query("phone") phone: String, @Query("captcha") code: String): Observable<UserLoginResult>
 
-    @GET(LOGIN_CELLPHONE)
+    @GET(LOGIN.LOGIN_CELLPHONE)
     fun loginCellphone(@Query("phone") phone: String, @Query("password") password: String): Observable<UserLoginResult>
 }

@@ -73,8 +73,7 @@
                         android:layout_height="0dp"
                         android:scaleType="fitXY"
                         app:layout_constraintTop_toTopOf="@id/cover"
-                        app:layout_constraintBottom_toBottomOf="@id/cover"
-                        android:src="@drawable/bg_mask" />
+                        app:layout_constraintBottom_toBottomOf="@id/cover" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.Toolbar

@@ -11,7 +11,7 @@ import retrofit2.http.Query
 
 interface UserPlayListService {
 
-    @GET(AppConfig.USER_PLAYLIST)
+    @GET(AppConfig.USER.USER_PLAYLIST)
     fun getUserPlayList(@Query("uid")id : String): Observable<UserPlayListResult>
 
     @GET(AppConfig.USER_FM)

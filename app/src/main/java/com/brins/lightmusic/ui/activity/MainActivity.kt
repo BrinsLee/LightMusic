@@ -22,8 +22,7 @@ import com.brins.lightmusic.player.PlayMode
 import com.brins.lightmusic.ui.adapter.MainPagerAdapter
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
-import com.brins.lightmusic.ui.fragment.artists.ArtistFragment
-import com.brins.lightmusic.ui.fragment.mainfragment.MyFragment
+import com.brins.lightmusic.ui.fragment.mainfragment.MainFragment
 import com.brins.lightmusic.ui.fragment.minefragment.MineFragment
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
@@ -122,7 +121,7 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-        list.add(MyFragment())
+        list.add(MainFragment())
         list.add(DiscoveryFragment())
         list.add(VideoFragment())
         list.add(MineFragment())

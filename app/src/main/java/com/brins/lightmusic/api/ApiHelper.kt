@@ -14,6 +14,7 @@ object ApiHelper {
     val LOG_TAG_NETWORK_LOGIN = "network_login"
     val LOG_TAG_NETWORK_MUSIC = "network_music"
 
+
     val LOG_TAG_NETWORK_USERINFO = "network_userinfo"
     val LOG_TAG_NETWORK_API = "network_api"
 
@@ -25,6 +26,8 @@ object ApiHelper {
     private var mUserPlayListService: UserPlayListService? = null
     private var mDiscoveryService: DiscoveryService? = null
     private var mSearchService: SearchService? = null
+    private var mPersonalizedService: PersonalizedService? = null
+
 
     fun getMusicService(): MusicService {
         if (mMusicService == null) {
@@ -120,5 +123,17 @@ object ApiHelper {
             }
         }
         return mDiscoveryService!!
+    }
+
+    fun getPersonalizedService(): PersonalizedService {
+        if (mPersonalizedService == null) {
+            synchronized(PersonalizedService::class.java) {
+                if (mPersonalizedService == null) {
+                    mPersonalizedService = RetrofitFactory.newRetrofit(BASEURL, LOG_TAG_NETWORK_MUSIC)
+                        .create(PersonalizedService::class.java)
+                }
+            }
+        }
+        return mPersonalizedService!!
     }
 }

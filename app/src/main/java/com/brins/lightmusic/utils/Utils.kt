@@ -857,3 +857,9 @@ fun setTextDark(window: Window, isDark: Boolean) {
         }
     }
 }
+
+fun handleNum(num: Int): String {
+    return if (num > 10000) {
+        "${num / 10000}万"
+    } else num.toString()
+}

@@ -192,11 +192,7 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
         }, {})
     }
 
-    private fun handleNum(num: Int): String {
-        return if (num > 10000) {
-            "${num / 10000}万"
-        } else num.toString()
-    }
+
 
     private fun handleBimap(bitmap: Bitmap): Bitmap {
         //透明渐变

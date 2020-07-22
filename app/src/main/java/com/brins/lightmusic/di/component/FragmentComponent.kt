@@ -11,7 +11,7 @@ import com.brins.lightmusic.ui.fragment.dailyrecommend.DailyRecommendFragment
 import com.brins.lightmusic.ui.fragment.discovery.DiscoveryFragment
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailFragment
 import com.brins.lightmusic.ui.fragment.localmusic.LocalMusicFragment
-import com.brins.lightmusic.ui.fragment.mainfragment.MyFragment
+import com.brins.lightmusic.ui.fragment.mainfragment.MainFragment
 import com.brins.lightmusic.ui.fragment.minefragment.MineFragment
 import com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment
 import com.brins.lightmusic.ui.fragment.search.SearchFragment
@@ -33,7 +33,7 @@ interface FragmentComponent {
     fun inject(discoveryFragment: DiscoveryFragment)
     fun inject(localMusicFragment: LocalMusicFragment)
     fun inject(musicDetailFragment: MusicDetailFragment)
-    fun inject(myFragment: MyFragment)
+    fun inject(mainFragment: MainFragment)
     fun inject(quickControlFragment: QuickControlFragment)
     fun inject(searchFragment: SearchFragment)
     fun inject(videoCategoryFragment: VideoCategoryFragment)
