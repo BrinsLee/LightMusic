@@ -23,9 +23,10 @@ class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs: Att
         private var circleRadius: Float = 0f*/
     private var mRotateAnimator: ObjectAnimator
     private var mLastAnimationValue: Long = 0
-    private lateinit var mImageView: RoundedImageView
-    private lateinit var mProgress : RoundCoverProgress
+    private var mImageView: RoundedImageView
+    private var mProgress: RoundCoverProgress
     private var mMax = 360
+        get() = field
 
 /*    private val mBorderRect = RectF()
     private val mBorderPaint = Paint()
@@ -94,9 +95,7 @@ class RoundCoverImageView @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     fun setImageBitmap(bitmapCover: Bitmap?) {
-        if (::mImageView.isInitialized) {
-            mImageView.setImageBitmap(bitmapCover)
-        }
+        mImageView.setImageBitmap(bitmapCover)
     }
 
     fun getMax(): Int {

@@ -1,13 +1,19 @@
 package com.brins.lightmusic.ui.customview
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.annotation.IntDef
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.brins.lightmusic.R
+import com.brins.lightmusic.utils.ScreenUtils
 import com.brins.lightmusic.utils.dp2px
+import kotlinx.android.synthetic.main.view_float_control.view.*
 
 /**
  * @author lipeilin
@@ -30,6 +36,7 @@ class FloatControlView @JvmOverloads constructor(
         private const val BLANK_RIGHT_DEFAULT = 10
         private const val BLANK_TOP_DEFAULT = 10
         private const val BLANK_BOTTOM_DEFAULT = 10
+
 
         /**
          * 该控件的三种模式,只要触发了ACTION_MOVE就是MOVE模式
@@ -74,6 +81,9 @@ class FloatControlView @JvmOverloads constructor(
     private var mBlankRight = dp2px(context, BLANK_RIGHT_DEFAULT.toFloat())
     private var mBlankTop = dp2px(context, BLANK_TOP_DEFAULT.toFloat())
     private var mBlankBottom = dp2px(context, BLANK_BOTTOM_DEFAULT.toFloat())
+
+    private val mScreenWidthInPixel = ScreenUtils.getScreenWidth(context)
+    private val mScreenHeightInPixel = ScreenUtils.getScreenHeight(context)
 
     @Mode
     private var mMode: Int = MODE_NONE
@@ -122,11 +132,153 @@ class FloatControlView @JvmOverloads constructor(
                 if (mMode == MODE_CLICK) {
                     performClick()
                 } else {
-                    if (x > mBlankLeft && x < mScreenWidthInPixel - mBlankRight && mPosition != POSITION_LEFT && mPosition != POSITION_RIGHT
-                    )
+
+                    if (x > mBlankLeft && x < mScreenWidthInPixel - mBlankRight && mPosition != POSITION_LEFT && mPosition != POSITION_RIGHT) {
+                        if (event.rawX < (mScreenWidthInPixel * 1.0 / 2).toFloat()) {
+
+                            // 回到最左侧
+                            val animator =
+                                ObjectAnimator.ofFloat(
+                                    this,
+                                    "TranslationX",
+                                    translationX,
+                                    translationX + -1 * (x - mDisX - mBlankLeft)
+                                )
+                            animator.duration = GO_TO_BOUNDARY_INTERVAL_DEFAULT.toLong()
+                            animator.addListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    mPosition = POSITION_LEFT
+                                }
+
+                                override fun onAnimationStart(
+                                    animation: Animator?,
+                                    isReverse: Boolean
+                                ) {
+                                    mPosition = POSITION_FLYING
+                                }
+                            })
+
+                            animator.start()
+                        } else {
+                            // 回到最右侧
+
+                            // 回到最右侧
+                            val animator =
+                                ObjectAnimator.ofFloat(
+                                    this,
+                                    "TranslationX",
+                                    translationX,
+                                    translationX + (mScreenWidthInPixel - mBlankRight - (width - mDisX + x))
+                                )
+                            animator.duration = GO_TO_BOUNDARY_INTERVAL_DEFAULT.toLong()
+                            animator.addListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    mPosition = POSITION_RIGHT
+                                }
+
+                                override fun onAnimationStart(
+                                    animation: Animator?,
+                                    isReverse: Boolean
+                                ) {
+                                    mPosition = POSITION_FLYING
+                                }
+                            })
+
+                            animator.start()
+                        }
+                    }
                 }
+                mMode = MODE_NONE
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+
+                mMode = MODE_MOVE
+                var dx = 0
+                var dy = 0
+
+                // 预测量的边距
+                val preXLeft = x - mDisX
+                val preXRight = mScreenWidthInPixel - (x + width - mDisX)
+                val preYUp = y - mDisY
+                val preYDown: Int =
+                    mScreenHeightInPixel - (y + width.coerceAtMost(height) - mDisY)
+
+                when {
+                    preXLeft <= mBlankLeft -> {
+                        // 超出左边界
+                        mPosition = POSITION_LEFT
+                        dx = x - mLastX + mBlankLeft - preXLeft
+                        x = x + mBlankLeft - preXLeft
+                    }
+                    preXRight <= mBlankRight -> {
+                        // 超出右边界
+                        mPosition = POSITION_RIGHT
+                        dx = x - mLastX - (mBlankRight - preXRight)
+                        x -= (mBlankRight - preXRight)
+                    }
+                    else -> {
+                        // 正常
+                        mPosition = POSITION_FLYING
+                        dx = x - mLastX
+                    }
+                }
+
+                // 处理Y坐标
+                when {
+                    preYUp <= mBlankTop -> {
+                        // 超出上边界
+                        dy = y - mLastY + mBlankTop - preYUp
+                        y = y + mBlankTop - preYUp
+                    }
+                    preYDown <= mBlankBottom -> {
+                        // 超出下边界
+                        dy = y - mLastY - (mBlankBottom - preYDown)
+                        y -= (mBlankBottom - preYDown)
+                    }
+                    else -> {
+                        // 正常
+                        dy = y - mLastY
+                    }
+                }
+
+                translationX += dx
+                translationY += dy
             }
 
         }
+        // 更新位置
+        mLastX = x
+        mLastY = y
+
+        return true
+    }
+
+    fun getMax(): Int {
+        return cover.getMax()
+    }
+
+    fun setProgress(initProgress: Int) {
+        cover.setProgress(initProgress)
+    }
+
+    fun pauseRotateAnimation() {
+        cover.pauseRotateAnimation()
+    }
+
+    fun resumeRotateAnimation() {
+        cover.resumeRotateAnimation()
+    }
+
+    fun startRotateAnimation() {
+        cover.startRotateAnimation()
+    }
+
+    fun cancelRotateAnimation() {
+        cover.cancelRotateAnimation()
+    }
+
+    fun setImageBitmap(bitmapCover: Bitmap?) {
+        cover.setImageBitmap(bitmapCover)
     }
 }

@@ -45,7 +45,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/common_margin_10"
             app:layout_constraintEnd_toStartOf="@id/tab_video_btn"
-            android:layout_marginEnd="@dimen/common_margin_30"
             />
 
 
@@ -73,7 +72,6 @@
             app:layout_constraintStart_toEndOf="@id/tab_discovery_btn"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tab_singer_btn"
-            android:layout_marginStart="@dimen/common_margin_30"
             />
 
 
