@@ -14,19 +14,20 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.utils.ScreenUtils
 import com.brins.lightmusic.utils.dp2px
 import kotlinx.android.synthetic.main.view_float_control.view.*
+import kotlin.math.absoluteValue
 
 /**
  * @author lipeilin
  * @date 2020/7/22
  */
 class FloatControlView @JvmOverloads constructor(
-    context: Context,
-    attributeSet: AttributeSet? = null,
-    def: Int = 0
+        context: Context,
+        attributeSet: AttributeSet? = null,
+        def: Int = 0
 ) : ConstraintLayout(context, attributeSet, def) {
 
     companion object {
-        val CANCEL_INTERVAL_DEFAULT = 500
+        val CANCEL_INTERVAL_DEFAULT = 3000
         val GO_TO_BOUNDARY_INTERVAL_DEFAULT = 100
         val IN_DISTANCE_DEFAULT = 5
         val IN_LENGTH_DEFAULT = 10
@@ -48,8 +49,9 @@ class FloatControlView @JvmOverloads constructor(
         private const val MODE_CLICK = 101
         private const val MODE_MOVE = 102
         private const val MODE_NONE = 103
+        private const val MODE_MOVE_CLICK = 104
 
-        @IntDef(value = [MODE_CANCEL, MODE_CLICK, MODE_MOVE, MODE_NONE])
+        @IntDef(value = [MODE_CANCEL, MODE_CLICK, MODE_MOVE, MODE_NONE, MODE_MOVE_CLICK])
         @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
         private annotation class Mode
 
@@ -71,6 +73,8 @@ class FloatControlView @JvmOverloads constructor(
     private var mLastY = 0
     private var mDisX = 0
     private var mDisY = 0
+    private var mDX = 0
+    private var mDY = 0
     private var mDownTime: Long = 0
 
     // 一个事件序列结束时的时间，就是这个事件序列ACTION_UP时的时间
@@ -108,11 +112,14 @@ class FloatControlView @JvmOverloads constructor(
         var x = event!!.rawX.toInt()
         var y = event.rawY.toInt()
 
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 mDownTime = System.currentTimeMillis()
                 mDisX = event.x.toInt()
                 mDisY = event.y.toInt()
+                mLastX = x
+                mLastY = y
             }
             MotionEvent.ACTION_UP -> {
 
@@ -120,30 +127,33 @@ class FloatControlView @JvmOverloads constructor(
                 mUpTime = System.currentTimeMillis()
 
                 // 设置当前的模式
-                if (mMode != MODE_MOVE) {
-                    mMode =
-                        if (mUpTime - mDownTime >= CANCEL_INTERVAL_DEFAULT) {
-                            MODE_CANCEL
-                        } else {
-                            MODE_CLICK
-                        }
+                /*if (mMode != MODE_MOVE) {
+                    if (mUpTime - mDownTime >= CANCEL_INTERVAL_DEFAULT) {
+                        mMode = MODE_CANCEL
+                    }
+                }*/
+
+                mMode = if (mDX.absoluteValue < 10 && mDY.absoluteValue < 10) {
+                    MODE_MOVE_CLICK
+                } else {
+                    MODE_MOVE
                 }
 
-                if (mMode == MODE_CLICK) {
+                if (mMode == MODE_CLICK || mMode == MODE_MOVE_CLICK) {
                     performClick()
-                } else {
-
+                }
+                if (mMode != MODE_CLICK) {
                     if (x > mBlankLeft && x < mScreenWidthInPixel - mBlankRight && mPosition != POSITION_LEFT && mPosition != POSITION_RIGHT) {
                         if (event.rawX < (mScreenWidthInPixel * 1.0 / 2).toFloat()) {
 
                             // 回到最左侧
                             val animator =
-                                ObjectAnimator.ofFloat(
-                                    this,
-                                    "TranslationX",
-                                    translationX,
-                                    translationX + -1 * (x - mDisX - mBlankLeft)
-                                )
+                                    ObjectAnimator.ofFloat(
+                                            this,
+                                            "TranslationX",
+                                            translationX,
+                                            translationX + -1 * (x - mDisX - mBlankLeft)
+                                    )
                             animator.duration = GO_TO_BOUNDARY_INTERVAL_DEFAULT.toLong()
                             animator.addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator?) {
@@ -151,8 +161,8 @@ class FloatControlView @JvmOverloads constructor(
                                 }
 
                                 override fun onAnimationStart(
-                                    animation: Animator?,
-                                    isReverse: Boolean
+                                        animation: Animator?,
+                                        isReverse: Boolean
                                 ) {
                                     mPosition = POSITION_FLYING
                                 }
@@ -164,12 +174,12 @@ class FloatControlView @JvmOverloads constructor(
 
                             // 回到最右侧
                             val animator =
-                                ObjectAnimator.ofFloat(
-                                    this,
-                                    "TranslationX",
-                                    translationX,
-                                    translationX + (mScreenWidthInPixel - mBlankRight - (width - mDisX + x))
-                                )
+                                    ObjectAnimator.ofFloat(
+                                            this,
+                                            "TranslationX",
+                                            translationX,
+                                            translationX + (mScreenWidthInPixel - mBlankRight - (width - mDisX + x))
+                                    )
                             animator.duration = GO_TO_BOUNDARY_INTERVAL_DEFAULT.toLong()
                             animator.addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator?) {
@@ -177,8 +187,8 @@ class FloatControlView @JvmOverloads constructor(
                                 }
 
                                 override fun onAnimationStart(
-                                    animation: Animator?,
-                                    isReverse: Boolean
+                                        animation: Animator?,
+                                        isReverse: Boolean
                                 ) {
                                     mPosition = POSITION_FLYING
                                 }
@@ -188,12 +198,15 @@ class FloatControlView @JvmOverloads constructor(
                         }
                     }
                 }
+                mLastX = 0
+                mLastY = 0
                 mMode = MODE_NONE
             }
 
             MotionEvent.ACTION_MOVE -> {
 
                 mMode = MODE_MOVE
+
                 var dx = 0
                 var dy = 0
 
@@ -202,7 +215,7 @@ class FloatControlView @JvmOverloads constructor(
                 val preXRight = mScreenWidthInPixel - (x + width - mDisX)
                 val preYUp = y - mDisY
                 val preYDown: Int =
-                    mScreenHeightInPixel - (y + width.coerceAtMost(height) - mDisY)
+                        mScreenHeightInPixel - (y + width.coerceAtMost(height) - mDisY)
 
                 when {
                     preXLeft <= mBlankLeft -> {
@@ -244,12 +257,14 @@ class FloatControlView @JvmOverloads constructor(
 
                 translationX += dx
                 translationY += dy
+                mDX = x - mLastX
+                mDY = y - mLastY
+                mLastX = x
+                mLastY = y
             }
 
         }
         // 更新位置
-        mLastX = x
-        mLastY = y
 
         return true
     }
