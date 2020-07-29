@@ -2,30 +2,36 @@ package com.brins.lightmusic.ui.fragment.discovery
 
 import android.content.Intent
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
 import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.common.AppConfig.KEY_ID
+import com.brins.lightmusic.common.AppConfig.TRANSITION_NAME
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.utils.*
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.activity_music_detail.*
-import kotlinx.android.synthetic.main.fragment_music_detail.*
-import kotlinx.android.synthetic.main.fragment_music_detail.coverMusicList
-import kotlinx.android.synthetic.main.fragment_music_detail.musicRecycler
-import kotlinx.android.synthetic.main.fragment_music_detail.nestScrollView
-import kotlinx.android.synthetic.main.fragment_music_detail.toolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -42,10 +48,22 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
     private var currentTime: Long = 0
 
     companion object {
-        fun startThis(activity: AppCompatActivity, TAG: String, id: String) {
+        fun startThis(activity: AppCompatActivity, id: String) {
             val bundle = Intent(activity, MusicDetailActivity::class.java)
-            bundle.putExtra(TAG, id)
+            bundle.putExtra(KEY_ID, id)
             activity.startActivity(bundle)
+        }
+
+        fun startThis(
+            activity: AppCompatActivity,
+            options: ActivityOptionsCompat,
+            transitionName: String, id: String
+        ) {
+            val intent = Intent(activity, MusicDetailActivity::class.java)
+            intent.putExtra(KEY_ID, id)
+            intent.putExtra(TRANSITION_NAME, transitionName)
+            activity.startActivity(intent, options.toBundle())
+
         }
     }
 
@@ -72,13 +90,14 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
         nestScrollView.fadingHeightView = coverMusicList
         DiscoverPresenter.instance.subscribe(this)
         if (intent != null) {
-            id = intent.getStringExtra("DiscoveryFragment")
-            if (id === "") {
-                id = intent.getStringExtra("ArtistTabFragment")
-                loadAlbumDetail()
-            } else {
-                loadMusicListDetail()
+            id = intent.getStringExtra(KEY_ID)
+            loadMusicListDetail()
+            val name = intent.getStringExtra(TRANSITION_NAME)
+            name?.let {
+                postponeEnterTransition()
+                ViewCompat.setTransitionName(coverMusicList, it)
             }
+
             musicRecycler.adapter = mAdapter
             musicRecycler.layoutManager = LinearLayoutManager(this)
             musicRecycler.addItemDecoration(
@@ -94,20 +113,31 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
             val musicData = getMusicListData()
             val detailBean = musicData.playlist
             if (detailBean != null) {
-                ImageLoadreUtils.getInstance().loadImage(
-                    this,
-                    ImageLoader.Builder().url(detailBean.coverImgUrl).assignWidth(640)
-                        .assignHeight(480)
-                        .bulid(), object : SimpleTarget<Bitmap>() {
+                GlideHelper.setImageResource(
+                    coverMusicList,
+                    detailBean.coverImgUrl,
+                    object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            startPostponedEnterTransition()
+                            return false
+                        }
+
                         override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap>?
-                        ) {
-                            /*val result = rsBlur(this@MusicDetailActivity, resource, 25f)
-                            coverBg.setImageBitmap(result)*/
-                            coverMusicList.setImageBitmap(resource)
-                            cover.setImageBitmap(resource)
-                            Palette.from(resource).generate {
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            coverMusicList.setImageDrawable(resource)
+                            startPostponedEnterTransition()
+                            cover.setImageDrawable(resource)
+                            Palette.from((resource as BitmapDrawable).bitmap).generate {
                                 it?.let {
                                     when {
                                         it.getDarkVibrantColor(Color.TRANSPARENT) != Color.TRANSPARENT -> {
@@ -175,10 +205,9 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
                                 }
 
                             }
+                            return true
                         }
-
-                    }
-                )
+                    })
                 toolbar.title = detailBean.name
                 description.text = detailBean.description
                 playCount.text = handleNum(detailBean.playCount)
@@ -191,7 +220,6 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
 
         }, {})
     }
-
 
 
     private fun handleBimap(bitmap: Bitmap): Bitmap {

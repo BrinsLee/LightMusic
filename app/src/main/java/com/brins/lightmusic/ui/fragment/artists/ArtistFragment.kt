@@ -17,8 +17,7 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.customview.CornersTransform
 import com.brins.lightmusic.ui.customview.PileLayout
-import com.brins.lightmusic.utils.ImageLoader
-import com.brins.lightmusic.utils.ImageLoadreUtils
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
@@ -134,7 +133,12 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View,
                     view.tag = viewHolder
                 }
                 viewHolder.textView!!.text = artistCategory[index].name
-                ImageLoadreUtils.getInstance().loadImage(
+                GlideHelper.setRoundImageResource(
+                    viewHolder.imageView!!,
+                    artistCategory[index].url,
+                    20
+                )
+                /*ImageLoadreUtils.getInstance().loadImage(
                     context, ImageLoader.Builder()
                         .assignHeight(500).assignWidth(500).bitmapTransformation(
                             CornersTransform(20f)
@@ -143,7 +147,7 @@ class ArtistFragment : BaseFragment(), ArtistConstract.View,
                         ).scaleModeType(
                             ImageLoadreUtils.SCALE_MODE_CENTER_CROP
                         ).bulid()
-                )
+                )*/
             }
         }
         pileLayout.setAdapter(adapter)

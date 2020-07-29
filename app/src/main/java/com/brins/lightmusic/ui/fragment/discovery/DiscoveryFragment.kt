@@ -188,7 +188,7 @@ class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
 
 
     override fun onItemClick(view: View, id: String) {
-        MusicDetailActivity.startThis((activity as AppCompatActivity), TAG, id)
+        MusicDetailActivity.startThis((activity as AppCompatActivity), id)
     }
 
 }

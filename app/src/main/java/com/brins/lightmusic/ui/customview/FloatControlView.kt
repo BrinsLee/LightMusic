@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.annotation.IntDef
@@ -21,12 +22,14 @@ import kotlin.math.absoluteValue
  * @date 2020/7/22
  */
 class FloatControlView @JvmOverloads constructor(
-        context: Context,
-        attributeSet: AttributeSet? = null,
-        def: Int = 0
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    def: Int = 0
 ) : ConstraintLayout(context, attributeSet, def) {
 
     companion object {
+
+        val TAG = "FloatControlView"
         val CANCEL_INTERVAL_DEFAULT = 3000
         val GO_TO_BOUNDARY_INTERVAL_DEFAULT = 100
         val IN_DISTANCE_DEFAULT = 5
@@ -73,8 +76,8 @@ class FloatControlView @JvmOverloads constructor(
     private var mLastY = 0
     private var mDisX = 0
     private var mDisY = 0
-    private var mDX = 0
-    private var mDY = 0
+    private var mStartX = 0
+    private var mStartY = 0
     private var mDownTime: Long = 0
 
     // 一个事件序列结束时的时间，就是这个事件序列ACTION_UP时的时间
@@ -118,8 +121,8 @@ class FloatControlView @JvmOverloads constructor(
                 mDownTime = System.currentTimeMillis()
                 mDisX = event.x.toInt()
                 mDisY = event.y.toInt()
-                mLastX = x
-                mLastY = y
+                mStartX = event.rawX.toInt()
+                mStartY = event.rawY.toInt()
             }
             MotionEvent.ACTION_UP -> {
 
@@ -132,8 +135,13 @@ class FloatControlView @JvmOverloads constructor(
                         mMode = MODE_CANCEL
                     }
                 }*/
+                val dx = (mStartX - mLastX).absoluteValue
+                val dy = (mStartY - mLastY).absoluteValue
 
-                mMode = if (mDX.absoluteValue < 10 && mDY.absoluteValue < 10) {
+                Log.d(TAG, "mDX: $dx")
+                Log.d(TAG, "mDY: $dy")
+
+                mMode = if (dx < 10 && dy < 10) {
                     MODE_MOVE_CLICK
                 } else {
                     MODE_MOVE
@@ -148,12 +156,12 @@ class FloatControlView @JvmOverloads constructor(
 
                             // 回到最左侧
                             val animator =
-                                    ObjectAnimator.ofFloat(
-                                            this,
-                                            "TranslationX",
-                                            translationX,
-                                            translationX + -1 * (x - mDisX - mBlankLeft)
-                                    )
+                                ObjectAnimator.ofFloat(
+                                    this,
+                                    "TranslationX",
+                                    translationX,
+                                    translationX + -1 * (x - mDisX - mBlankLeft)
+                                )
                             animator.duration = GO_TO_BOUNDARY_INTERVAL_DEFAULT.toLong()
                             animator.addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator?) {
@@ -161,8 +169,8 @@ class FloatControlView @JvmOverloads constructor(
                                 }
 
                                 override fun onAnimationStart(
-                                        animation: Animator?,
-                                        isReverse: Boolean
+                                    animation: Animator?,
+                                    isReverse: Boolean
                                 ) {
                                     mPosition = POSITION_FLYING
                                 }
@@ -174,12 +182,12 @@ class FloatControlView @JvmOverloads constructor(
 
                             // 回到最右侧
                             val animator =
-                                    ObjectAnimator.ofFloat(
-                                            this,
-                                            "TranslationX",
-                                            translationX,
-                                            translationX + (mScreenWidthInPixel - mBlankRight - (width - mDisX + x))
-                                    )
+                                ObjectAnimator.ofFloat(
+                                    this,
+                                    "TranslationX",
+                                    translationX,
+                                    translationX + (mScreenWidthInPixel - mBlankRight - (width - mDisX + x))
+                                )
                             animator.duration = GO_TO_BOUNDARY_INTERVAL_DEFAULT.toLong()
                             animator.addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator?) {
@@ -187,8 +195,8 @@ class FloatControlView @JvmOverloads constructor(
                                 }
 
                                 override fun onAnimationStart(
-                                        animation: Animator?,
-                                        isReverse: Boolean
+                                    animation: Animator?,
+                                    isReverse: Boolean
                                 ) {
                                     mPosition = POSITION_FLYING
                                 }
@@ -198,8 +206,6 @@ class FloatControlView @JvmOverloads constructor(
                         }
                     }
                 }
-                mLastX = 0
-                mLastY = 0
                 mMode = MODE_NONE
             }
 
@@ -215,7 +221,7 @@ class FloatControlView @JvmOverloads constructor(
                 val preXRight = mScreenWidthInPixel - (x + width - mDisX)
                 val preYUp = y - mDisY
                 val preYDown: Int =
-                        mScreenHeightInPixel - (y + width.coerceAtMost(height) - mDisY)
+                    mScreenHeightInPixel - (y + width.coerceAtMost(height) - mDisY)
 
                 when {
                     preXLeft <= mBlankLeft -> {
@@ -257,15 +263,17 @@ class FloatControlView @JvmOverloads constructor(
 
                 translationX += dx
                 translationY += dy
-                mDX = x - mLastX
-                mDY = y - mLastY
-                mLastX = x
-                mLastY = y
+                Log.d(TAG, "x: ${x}")
+                Log.d(TAG, "y: ${y}")
+                Log.d(TAG, "mLastX: ${mLastX}")
+                Log.d(TAG, "mLastY: ${mLastY}")
+
             }
 
         }
         // 更新位置
-
+        mLastX = x
+        mLastY = y
         return true
     }
 

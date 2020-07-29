@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.onlinemusic.OnlineMusic
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.lang.StringBuilder
@@ -70,6 +72,9 @@ class MusicDetailAdapter(list: MutableList<Music>) :
         helper.setText(R.id.artist, strBuilder)
         helper.setText(R.id.name, item.name)
         helper.setText(R.id.count, "${helper.layoutPosition}")
+        val image = helper.getView<ImageView>(R.id.item_cover)
+        GlideHelper.setImageResource(image,item.album.picUrl)
+
         if (mItemClickListener != null) {
             helper.getView<ConstraintLayout>(R.id.rootLayout).setOnClickListener {
                 mItemClickListener!!.onItemClick(it, helper.layoutPosition)

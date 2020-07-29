@@ -26,6 +26,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.fragment.usermusiclist.UserPlayListActivity
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import javax.inject.Inject
@@ -102,7 +103,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, 
     }
 
     private fun checkToLoad() {
-        if (mPlayList.isEmpty() && mPresenter.isSubscribe()) {
+        if (mPlayList.isEmpty() && mPresenter.isSubscribe() && AppConfig.userAccount != null) {
             mPresenter.loadUserMusicList(AppConfig.userAccount.id)
         }
     }
@@ -169,17 +170,10 @@ class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, 
                     layoutparams.width = width
                     layoutparams.height = width
                     holder.getView<ImageView>(R.id.imgCover).layoutParams = layoutparams
-                    ImageLoadreUtils.getInstance().loadImage(
-                        context,
-                        ImageLoader.Builder().url(playlist.coverImgUrl).assignWidth(width)
-                            .assignHeight(
-                                width
-                            )
-                            .scaleModeType(ImageLoadreUtils.SCALE_MODE_CENTER_CROP).imgView(
-                                holder.getView(
-                                    R.id.imgCover
-                                )
-                            ).bulid()
+                    GlideHelper.setImageResource(
+                        holder.getView(
+                            R.id.imgCover
+                        ), playlist.coverImgUrl
                     )
                     holder.setText(R.id.textViewName, playlist.name)
                     holder.setText(R.id.textViewArtist, "共${playlist.trackCount}首")

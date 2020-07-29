@@ -12,6 +12,9 @@ public class AppConfig {
     public static final int PHONE_NUMBER_LENGTH = 11;
     public static final String UMAPPKEY = "5e33c33c4ca357e8100000fa";
 
+    public static final String KEY_ID = "KEY_ID";
+    public static final String TRANSITION_NAME = "TRANSITION_NAME";
+
     /**
      * 登录
      */

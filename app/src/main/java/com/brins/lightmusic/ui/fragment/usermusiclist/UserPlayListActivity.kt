@@ -25,6 +25,7 @@ import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CornersTransform
 import com.brins.lightmusic.utils.*
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -102,35 +103,17 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
                 val playlist = (list[position])
                 holder.setText(R.id.name, playlist.name)
                 holder.setText(R.id.artist, playlist.artistBeans!![0].name)
-                ImageLoadreUtils.getInstance().loadImage(
-                    this@UserPlayListActivity,
-                    ImageLoader.Builder().url(t.album.picUrl).assignWidth(100).assignHeight(100)
-                        .imgView(holder.getView(R.id.item_cover)).bitmapTransformation(
-                        CornersTransform(20f)
-                    ).bulid()
+                GlideHelper.setRoundImageResource(
+                    holder.getView(R.id.item_cover),
+                    t.album.picUrl,
+                    20
                 )
             }
 
         }
         head.title = mUserPlayList.name
-        ImageLoadreUtils.getInstance().loadImage(
-            this,
-            ImageLoader.Builder().url(mUserPlayList.coverImgUrl).bitmapTransformation(
-                CornersTransform(10f)
-            ).imgView(cover).bulid()
-        )
-        ImageLoadreUtils.getInstance().loadImage(
-            this,
-            ImageLoader.Builder().url(mUserPlayList.coverImgUrl).assignWidth(500).assignHeight(500)
-                .bitmapTransformation(
-                    CornersTransform(20f)
-                ).bulid(), object : SimpleTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    val result = rsBlur(this@UserPlayListActivity, resource, 25f)
-                    coverBg.setImageBitmap(result)
-                }
-            }
-        )
+        GlideHelper.setRoundImageResource(cover, mUserPlayList.coverImgUrl, 10)
+        GlideHelper.setBlurImageResource(coverBg, mUserPlayList.coverImgUrl)
         nickName.text = mUserPlayList.creator.nickName
         Glide.with(this).load(mUserPlayList.creator.avatarUrl).into(avatar)
 //        mPresenter.loadMusicList(mUserPlayList.id)

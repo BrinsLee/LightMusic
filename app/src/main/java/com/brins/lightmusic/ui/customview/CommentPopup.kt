@@ -7,8 +7,7 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
-import com.brins.lightmusic.utils.ImageLoader
-import com.brins.lightmusic.utils.ImageLoadreUtils
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.brins.lightmusic.utils.TimeUtils
 import com.lxj.xpopup.core.BottomPopupView
 import kotlinx.android.synthetic.main.comment_poup_layout.view.*
@@ -27,7 +26,8 @@ class CommentPopup(context: Context, var lists: List<MusicCommentResult.Companio
         super.onCreate()
         recomment_total_tip.text = "${lists.size}条评论"
 
-        mCommentAdater = CommentAdater(context, R.layout.adapter_comment_item,
+        mCommentAdater = CommentAdater(
+            context, R.layout.adapter_comment_item,
             lists as ArrayList<MusicCommentResult.Companion.HotComments>
         )
         comment_recyclerview.adapter = mCommentAdater
@@ -36,24 +36,21 @@ class CommentPopup(context: Context, var lists: List<MusicCommentResult.Companio
     }
 
 
-    class CommentAdater (context: Context,
-                         layout : Int,
-                         list : ArrayList<MusicCommentResult.Companion.HotComments>)
-        : CommonViewAdapter<MusicCommentResult.Companion.HotComments>(context,layout,list){
+    class CommentAdater(
+        context: Context,
+        layout: Int,
+        list: ArrayList<MusicCommentResult.Companion.HotComments>
+    ) : CommonViewAdapter<MusicCommentResult.Companion.HotComments>(context, layout, list) {
         override fun converted(
             holder: ViewHolder,
             t: MusicCommentResult.Companion.HotComments,
             position: Int
         ) {
             val avatarIV = holder.getView(R.id.user_avatar_iv) as ImageView
-            ImageLoadreUtils.getInstance().loadImage(
-                context,
-                ImageLoader.Builder().url(t.user?.avatarUrl).error(
-                    R.drawable.ic_avatar
-                ).isRound(true).imgView(avatarIV).bulid()
-            )
-            holder.setText(R.id.user_name_tv,t.user!!.nickname)
-            holder.setText(R.id.recommen_content_tv,t.content)
+            GlideHelper.setCircleImageResource(avatarIV, t.user?.avatarUrl)
+
+            holder.setText(R.id.user_name_tv, t.user!!.nickname)
+            holder.setText(R.id.recommen_content_tv, t.content)
             if (TimeUtils.getDaysAgoByMills(t.time) > 1) {
                 holder.setText(
                     R.id.reply_time_tv,

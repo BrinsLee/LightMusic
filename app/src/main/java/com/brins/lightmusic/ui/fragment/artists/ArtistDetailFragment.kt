@@ -18,6 +18,7 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.customview.CommonHeaderView
 import com.brins.lightmusic.ui.customview.CornersTransform
 import com.brins.lightmusic.utils.*
+import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -57,16 +58,14 @@ class ArtistDetailFragment : BaseFragment(),
         setListener()
         mArtist = arguments?.getParcelable("ARTIST")
         if (mArtist != null) {
-            ImageLoadreUtils.getInstance().loadImage(
-                context, ImageLoader.Builder()
-                    .url(mArtist!!.picUrl).bitmapTransformation(
-                        CornersTransform(10f)).imgView(avatar).bulid()
-            )
-            ImageLoadreUtils.getInstance().loadImage(
+            GlideHelper.setRoundImageResource(avatar, mArtist!!.picUrl, 10)
+            GlideHelper.setBlurImageResource(cover,mArtist!!.picUrl)
+            /*ImageLoadreUtils.getInstance().loadImage(
                 context,
-                ImageLoader.Builder().url(mArtist!!.picUrl).assignWidth(500).assignHeight(500).bitmapTransformation(
-                    CornersTransform(20f)
-                ).bulid(), object : SimpleTarget<Bitmap>() {
+                ImageLoader.Builder().url(mArtist!!.picUrl).assignWidth(500).assignHeight(500)
+                    .bitmapTransformation(
+                        CornersTransform(20f)
+                    ).bulid(), object : SimpleTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,
                         transition: Transition<in Bitmap>?
@@ -75,7 +74,7 @@ class ArtistDetailFragment : BaseFragment(),
                         cover.setImageBitmap(result)
                     }
                 }
-            )
+            )*/
             name.text = mArtist!!.name
             initData()
             initView()

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
@@ -52,7 +53,7 @@ class DiscoveryAdapter<T>(var type: Int, var listBean: ArrayList<T>) :
                     .into(holder.cover)
                 holder.itemView.tag = position
             }
-            if (TYPE_MUSIC_LIST == type){
+            if (TYPE_MUSIC_LIST == type) {
                 val musicList = listBean[position] as MusicListBean
                 holder.title.text = musicList.name
                 holder.description.text = musicList.description
