@@ -20,17 +20,15 @@ import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.utils.launch
 import com.brins.lightmusic.utils.show
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_video_category.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class VideoCategoryFragment(var area: String) : BaseFragment(),
     VideoContract.View,
     OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter : VideoPresent

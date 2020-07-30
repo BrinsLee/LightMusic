@@ -32,19 +32,21 @@ import com.brins.lightmusic.utils.setTextDark
 import com.brins.lightmusic.utils.setTranslucent
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottombar.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback {
 
 
     private var currentPage = 0
-    private var list = mutableListOf<Fragment>()
-    private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
+    @Inject
+    lateinit var adapter: MainPagerAdapter
     private var mClickTime: Long = 0
+
     @Inject
     lateinit var mPresenter: MusicPlayerPresenter
     private var index = -1
@@ -79,10 +81,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_main
-    }
-
-    override fun initInject() {
-        getActivityComponent().inject(this)
     }
 
     override fun handleError(error: Throwable) {
@@ -120,10 +118,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-        list.add(MainFragment())
-        list.add(DiscoveryFragment())
-        list.add(VideoFragment())
-        list.add(MineFragment())
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = 3
         changeTab(0)
@@ -190,21 +184,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     fun switchFragment(targetFragment: Fragment, bundle: Bundle): FragmentTransaction {
         targetFragment.arguments = bundle
         return switchFragment(targetFragment)
-    }
-
-
-    fun handleBackPress() {
-        val fragments = supportFragmentManager.fragments
-        if (fragments.size > 0) {
-            if (supportFragmentManager.backStackEntryCount > 0) {
-                supportFragmentManager.popBackStack()
-            }
-
-        }
-    }
-
-    fun getCurrentList(): PlayList {
-        return playList
     }
 
 
@@ -296,7 +275,8 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     }
 
     override fun onPlaybackServiceUnbound() {
-//        mPlayer!!.unregisterCallback(this)
+        mPlayer?.unregisterCallback(this)
+        mPlayer = null
     }
 
     override fun onSongSetAsFavorite(song: Music?) {

@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+    <com.brins.lightmusic.ui.widget.RoundConstraintLayout
             android:layout_width="@dimen/common_margin_120"
             android:layout_height="@dimen/common_margin_120"
             app:round_corner="@dimen/common_margin_5"
@@ -18,7 +18,7 @@
             android:background="@drawable/shape_rect_r8_white_background"
             android:layout_marginEnd="@dimen/common_margin_10">
 
-        <com.brins.lightmusic.ui.customview.FontTextView
+        <com.brins.lightmusic.ui.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -35,7 +35,7 @@
                 android:singleLine="true"
                 android:textSize="15sp"
         />
-        <com.brins.lightmusic.ui.customview.FontTextView
+        <com.brins.lightmusic.ui.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -55,7 +55,7 @@
                 android:singleLine="true"
                 />
 
-    </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+    </com.brins.lightmusic.ui.widget.RoundConstraintLayout>
 <!--    <ImageView
             android:src="@drawable/ic_thumbtack"
             app:layout_constraintEnd_toEndOf="parent"

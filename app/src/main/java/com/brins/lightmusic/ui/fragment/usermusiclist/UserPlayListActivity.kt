@@ -2,17 +2,17 @@ package com.brins.lightmusic.ui.fragment.usermusiclist
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
@@ -22,19 +22,17 @@ import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
-import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.ui.customview.CornersTransform
+import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_play_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class UserPlayListActivity : BaseActivity(), MusicListContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
@@ -77,8 +75,8 @@ class UserPlayListActivity : BaseActivity(), MusicListContract.View,
         return R.layout.activity_user_play_list
     }
 
-    override fun initInject() {
-        getActivityComponent().inject(this)
+    override fun getLifeActivity(): AppCompatActivity {
+        return this
     }
 
     override fun handleError(error: Throwable) {

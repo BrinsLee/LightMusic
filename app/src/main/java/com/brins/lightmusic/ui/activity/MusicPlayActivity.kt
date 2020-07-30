@@ -27,18 +27,18 @@ import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
 import com.brins.lightmusic.player.IPlayback
 import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayMode
-import com.brins.lightmusic.ui.activity.login.LoginPresenter
 import com.brins.lightmusic.ui.base.BaseActivity
-import com.brins.lightmusic.ui.customview.CommentPopup
-import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.ui.customview.CustPagerTransformer
-import com.brins.lightmusic.ui.customview.RoundImageView
+import com.brins.lightmusic.ui.widget.CommentPopup
+import com.brins.lightmusic.ui.widget.CommonHeaderView
+import com.brins.lightmusic.ui.widget.CustPagerTransformer
+import com.brins.lightmusic.ui.widget.RoundImageView
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerContract
 import com.brins.lightmusic.ui.fragment.quickcontrol.MusicPlayerPresenter
 import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.setTranslucent
 import com.brins.lightmusic.utils.showRecommentList
 import com.brins.lightmusic.utils.string2Bitmap
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import kotlinx.coroutines.CoroutineScope
@@ -48,13 +48,11 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
     IPlayback.Callback,
     View.OnClickListener {
-    override fun initInject() {
-        getActivityComponent().inject(this)
-    }
+
 
     private lateinit var commentPop: CommentPopup
     private lateinit var result: MusicCommentResult
@@ -431,11 +429,6 @@ class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
 
     override fun handleError(error: Throwable) {
 
-    }
-
-
-    override fun getLifeActivity(): AppCompatActivity {
-        return this
     }
 
 

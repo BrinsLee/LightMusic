@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+        <com.brins.lightmusic.ui.widget.RoundConstraintLayout
             android:id="@+id/localMusic"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_margin_80"
@@ -29,7 +29,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/tv_local"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,9 +42,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="5dp"
                  />
-        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+        </com.brins.lightmusic.ui.widget.RoundConstraintLayout>
 
-        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+        <com.brins.lightmusic.ui.widget.RoundConstraintLayout
             android:id="@+id/fm"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_margin_80"
@@ -64,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,9 +76,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="5dp"/>
-        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+        </com.brins.lightmusic.ui.widget.RoundConstraintLayout>
 
-        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+        <com.brins.lightmusic.ui.widget.RoundConstraintLayout
             android:id="@+id/recommend"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_margin_80"
@@ -99,7 +99,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                 app:layout_constraintStart_toStartOf="@id/ic_recommend"
                 app:layout_constraintTop_toTopOf="@id/ic_recommend" />
 
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/tv_recommend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,9 +125,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="5dp"/>
-        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+        </com.brins.lightmusic.ui.widget.RoundConstraintLayout>
 
-        <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+        <com.brins.lightmusic.ui.widget.RoundConstraintLayout
             android:id="@+id/collectMusic"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_margin_80"
@@ -148,7 +148,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/tv_collect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="5dp"/>
-        </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+        </com.brins.lightmusic.ui.widget.RoundConstraintLayout>
 
     </LinearLayout>
 </merge>

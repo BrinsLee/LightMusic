@@ -11,17 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.artist.Album
 import com.brins.lightmusic.model.artist.ArtistBean
 import com.brins.lightmusic.model.loaclmusic.PlayList
-import com.brins.lightmusic.model.musicvideo.LastestMvDataBean
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.ui.activity.MainActivity
-import com.brins.lightmusic.ui.activity.SearchActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
@@ -32,17 +30,16 @@ import com.brins.lightmusic.ui.fragment.video.VideoDetailFragment
 import com.brins.lightmusic.utils.SearchType
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_artist_tab.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SearchFragment(val type: Int = 1) : BaseFragment(),
     SearchContract.View, OnItemClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
+
     @Inject
     lateinit var mPresenter: SearchPresenter
     private var currentTime: Long = 0

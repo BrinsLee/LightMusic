@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Message
-import com.brins.lightmusic.LightMusicApplication
 import java.util.*
 import android.content.ComponentName
 import android.content.pm.PackageManager
@@ -14,12 +13,13 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.media.session.MediaButtonReceiver
+import com.brins.lightmusic.BaseApplication
 
 
 class HeadsetButtonReceiver(head: onHeadsetListener) : MediaButtonReceiver() {
 
 
-    private val context: Context by lazy { LightMusicApplication.getLightApplication().applicationContext }
+    private val context: Context by lazy { BaseApplication.getInstance().applicationContext }
     private var timer = Timer()
 
     companion object {

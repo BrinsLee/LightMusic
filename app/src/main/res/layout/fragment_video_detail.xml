@@ -10,13 +10,13 @@
             android:fitsSystemWindows="true"
             android:background="@color/gery">
 
-        <com.brins.lightmusic.ui.customview.JZVideoPalyerView
+        <com.brins.lightmusic.ui.widget.JZVideoPalyerView
                 android:id="@+id/videoPlayer"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="65dp"/>
-        <com.brins.lightmusic.ui.customview.CommonHeaderView
+        <com.brins.lightmusic.ui.widget.CommonHeaderView
                 android:id="@+id/head"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"

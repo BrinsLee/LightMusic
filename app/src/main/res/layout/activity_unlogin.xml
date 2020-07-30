@@ -7,7 +7,7 @@
         android:background="@color/gery"
         tools:context=".ui.activity.login.LoginActivity">
 
-    <com.brins.lightmusic.ui.customview.CommonHeaderView
+    <com.brins.lightmusic.ui.widget.CommonHeaderView
             android:id="@+id/headUnlogin"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -17,7 +17,7 @@
             app:chv_title=""
             app:layout_constraintTop_toTopOf="parent">
 
-    </com.brins.lightmusic.ui.customview.CommonHeaderView>
+    </com.brins.lightmusic.ui.widget.CommonHeaderView>
 
     <LinearLayout
             android:layout_width="match_parent"

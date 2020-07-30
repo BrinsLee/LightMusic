@@ -9,24 +9,21 @@ import cn.jzvd.Jzvd
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.model.musicvideo.MvCommentsBean
-import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
-import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.launch
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_video_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class VideoDetailFragment : BaseFragment(),
     CommonHeaderView.OnBackClickListener, VideoContract.View {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter: VideoPresent

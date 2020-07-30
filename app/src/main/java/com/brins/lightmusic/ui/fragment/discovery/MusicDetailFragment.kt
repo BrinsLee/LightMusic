@@ -10,24 +10,22 @@ import com.brins.lightmusic.R
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_music_detail.*
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.model.loaclmusic.PlayList
-import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MusicDetailFragment : BaseFragment(), DiscoveryContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter: DiscoverPresenter

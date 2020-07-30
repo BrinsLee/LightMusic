@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,30 +23,25 @@ import com.brins.lightmusic.model.userlogin.Item
 import com.brins.lightmusic.model.userlogin.UserLoginRequest
 import com.brins.lightmusic.model.userlogin.UserLoginResult
 import com.brins.lightmusic.ui.base.BaseActivity
-import com.brins.lightmusic.ui.base.BasePresenter
-import com.brins.lightmusic.ui.base.BaseView
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
-import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.ui.customview.TimeCountDown
+import com.brins.lightmusic.ui.widget.CommonHeaderView
+import com.brins.lightmusic.ui.widget.TimeCountDown
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.canking.minipay.Config
 import com.canking.minipay.MiniPayUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     OnItemClickListener, CommonHeaderView.OnBackClickListener {
 
 
-    override fun initInject() {
-        getActivityComponent().inject(this)
-
-    }
 
     private lateinit var timeCountDown: TimeCountDown
     private var phoneNumber: String = ""

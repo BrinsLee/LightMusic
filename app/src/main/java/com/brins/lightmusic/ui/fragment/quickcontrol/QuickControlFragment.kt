@@ -4,7 +4,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
@@ -15,16 +15,14 @@ import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.Exception
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback,
     View.OnClickListener{
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
 
     @Inject

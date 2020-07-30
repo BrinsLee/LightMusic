@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.brins.lightmusic.ui.customview.RoundConstraintLayout
+<com.brins.lightmusic.ui.widget.RoundConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/itemRoot"
@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
-    <com.brins.lightmusic.ui.customview.FontTextView
+    <com.brins.lightmusic.ui.widget.FontTextView
             android:id="@+id/textViewName"
             android:textSize="18sp"
             android:maxLength="25"
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgCover"
             android:layout_marginTop="@dimen/common_margin_10"/>
-    <com.brins.lightmusic.ui.customview.FontTextView
+    <com.brins.lightmusic.ui.widget.FontTextView
             android:id="@+id/textViewArtist"
             android:textSize="12sp"
             android:text=""
@@ -47,4 +47,4 @@
             android:layout_marginTop="@dimen/common_margin_10"
             app:layout_constraintStart_toEndOf="@id/imgCover"
             app:layout_constraintTop_toBottomOf="@id/textViewName"/>
-</com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+</com.brins.lightmusic.ui.widget.RoundConstraintLayout>

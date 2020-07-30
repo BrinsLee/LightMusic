@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.brins.lib_common.utils.SpUtils
 import com.brins.lightmusic.R
@@ -19,7 +20,7 @@ import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
-import com.brins.lightmusic.ui.customview.CustomStaggeredGridLayoutManager
+import com.brins.lightmusic.ui.widget.CustomStaggeredGridLayoutManager
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
@@ -27,10 +28,11 @@ import com.bumptech.glide.request.transition.Transition
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.fragment.usermusiclist.UserPlayListActivity
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.item_grid_view.*
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, MineContract.View {
 
     private var mAvatar: Bitmap? = null
@@ -52,10 +54,6 @@ class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, 
         mPresenter.subscribe(this)
         setListener()
         checkToLoad()
-    }
-
-    override fun initInject() {
-        getFragmentComponent().inject(this)
     }
 
     override fun onCreateViewAfterBinding() {
@@ -143,6 +141,10 @@ class MineFragment : BaseFragment(), View.OnClickListener, OnItemClickListener, 
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun getLifeActivity(): AppCompatActivity {
+        return activity as AppCompatActivity
     }
 
     override fun onUserProfileLoad() {

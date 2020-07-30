@@ -21,7 +21,7 @@
                 app:expandedTitleMarginEnd="10dp"
                 app:expandedTitleMarginStart="10dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-            <com.brins.lightmusic.ui.customview.CommonHeaderView
+            <com.brins.lightmusic.ui.widget.CommonHeaderView
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"

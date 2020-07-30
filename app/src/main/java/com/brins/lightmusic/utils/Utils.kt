@@ -1,7 +1,6 @@
 package com.brins.lightmusic.utils
 
 import android.animation.*
-import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
@@ -34,23 +33,19 @@ import androidx.annotation.FloatRange
 import androidx.collection.SimpleArrayMap
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
-import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
-import com.brins.lightmusic.ui.customview.CommentPopup
-import com.brins.lightmusic.ui.customview.DimView
-import com.brins.lightmusic.ui.customview.ProgressLoading
+import com.brins.lightmusic.ui.widget.CommentPopup
+import com.brins.lightmusic.ui.widget.DimView
+import com.brins.lightmusic.ui.widget.ProgressLoading
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.lxj.xpopup.XPopup
-import io.reactivex.Maybe
-import io.reactivex.MaybeObserver
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -85,7 +80,7 @@ fun loadingOnlineCover(url: String): Bitmap {
     if (url.isEmpty()) {
         return string2Bitmap(null)!!
     }
-    return Glide.with(LightMusicApplication.getLightApplication())
+    return Glide.with(BaseApplication.getInstance())
         .asBitmap()
         .load(url)
         .apply(option)
@@ -214,7 +209,7 @@ fun getTypeface(context: Context, fontType: Int): Typeface? {
 fun show(str: String) {
     if (str.isNotEmpty()) {
         AndroidSchedulers.mainThread().scheduleDirect {
-            Toast.makeText(LightMusicApplication.getLightApplication(), str, Toast.LENGTH_SHORT)
+            Toast.makeText(BaseApplication.getInstance(), str, Toast.LENGTH_SHORT)
                 .show()
         }
     }
@@ -226,7 +221,7 @@ fun show(strId: Int) {
         AndroidSchedulers.mainThread()
             .scheduleDirect {
                 Toast.makeText(
-                    LightMusicApplication.getLightApplication(),
+                    BaseApplication.getInstance(),
                     strId,
                     Toast.LENGTH_SHORT
                 ).show()

@@ -1,4 +1,4 @@
-<com.brins.lightmusic.ui.customview.RoundConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brins.lightmusic.ui.widget.RoundConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/playBarLayout"
@@ -8,7 +8,7 @@
         app:round_corner="@dimen/fragment_quick_control_radius"
         tools:context="com.brins.lightmusic.ui.fragment.quickcontrol.QuickControlFragment">
 
-    <com.brins.lightmusic.ui.customview.RoundCoverImageView
+    <com.brins.lightmusic.ui.widget.RoundCoverImageView
             android:id="@+id/ivPlaybarCover"
             android:layout_width="@dimen/fagment_quick_control_cover"
             android:layout_height="@dimen/fagment_quick_control_cover"
@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:riv_corner_radius="25dp" />
 
-    <com.brins.lightmusic.ui.customview.FontTextView
+    <com.brins.lightmusic.ui.widget.FontTextView
             android:id="@+id/tvPlaybarTitle"
             style="@style/AppTheme.Text"
             android:layout_width="@dimen/common_margin_100"
@@ -98,4 +98,4 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-</com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+</com.brins.lightmusic.ui.widget.RoundConstraintLayout>

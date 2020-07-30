@@ -17,16 +17,14 @@ import com.brins.lightmusic.model.onlinemusic.MusicListBean
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_discovery.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class DiscoveryFragment : BaseFragment(), DiscoveryContract.View,
     SwipeRefreshLayout.OnRefreshListener, DiscoveryAdapter.OnItemClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter: DiscoverPresenter

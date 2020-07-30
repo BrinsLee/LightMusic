@@ -17,7 +17,7 @@
                 android:clipChildren="false"
                 android:orientation="vertical">
 
-            <com.brins.lightmusic.ui.customview.PileLayout
+            <com.brins.lightmusic.ui.widget.PileLayout
                     android:id="@+id/pileLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
                     pile:interval="10dp"
                     pile:scaleStep="0.32"
                     pile:sizeRatio="1.12" />
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                     android:id="@+id/musicTitle2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

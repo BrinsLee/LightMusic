@@ -48,7 +48,7 @@
                     android:layout_height="?android:attr/actionBarSize"
                     app:layout_collapseMode="pin">
 
-                <com.brins.lightmusic.ui.customview.CommonHeaderView
+                <com.brins.lightmusic.ui.widget.CommonHeaderView
                         android:id="@+id/head"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

@@ -7,35 +7,32 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.common.AppConfig.KEY_ID
 import com.brins.lightmusic.common.AppConfig.TRANSITION_NAME
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_music_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
@@ -71,9 +68,6 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
         return R.layout.activity_music_detail
     }
 
-    override fun initInject() {
-        getActivityComponent().inject(this)
-    }
 
     override fun handleError(error: Throwable) {
     }
@@ -222,35 +216,9 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
     }
 
 
-    private fun handleBimap(bitmap: Bitmap): Bitmap {
-        //透明渐变
-        val argb = IntArray(bitmap.width * bitmap.height)
-        bitmap.getPixels(argb, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-
-        //循环开始的下标，设置从什么时候开始改变
-        val start = argb.size / 2
-        val end = argb.size
-
-        //        int mid = argb.length;
-        //        int row = ((mid - start) / bitmap.getHeight()) + 2;
-
-
-        val width = bitmap.width
-        for (i in 0 until bitmap.height / 2 + 1) {
-            for (j in 0 until width) {
-                val index = start - width + i * width + j
-                if (argb[index] != 0) {
-                    argb[index] =
-                        ((1 - i / (bitmap.height / 2f)) * 255).toInt() shl 24 or (argb[index] and 0x00FFFFFF)
-                }
-            }
-        }
-        //        for (int i = mid; i < argb.length; i++) {
-        //            argb[i] = (argb[i] & 0x00FFFFFF);
-        //        }
-
-        return Bitmap.createBitmap(argb, bitmap.width, bitmap.height, Bitmap.Config.RGB_565)
-
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.unsubscribe()
     }
 
     private fun createLinearGradientBitmap(
@@ -302,34 +270,10 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
         return (256 * fraction).toInt() shl 24 or (r shl 16) or (g shl 8) or b
     }
 
-    private fun loadAlbumDetail() {
-        launch({
-            showLoading()
-            val musics = getAlbumData()
-            Glide.with(this)
-                .load(musics.album!!.picUrl)
-                .into(coverMusicList)
-            toolbar.title = musics.album!!.name
-            playList.addSong(musics.songs!!)
-            mAdapter.setNewData(playList.getSongs())
-            hideLoading()
-        }, {
-            val i = it
-            Toast.makeText(this, i.message, Toast.LENGTH_SHORT).show()
-            hideLoading()
-
-        })
-    }
-
 
     private suspend fun getMusicListData() = withContext(Dispatchers.IO) {
         val musicList = mPresenter.loadMusicListDetail(id)
         musicList
-    }
-
-    private suspend fun getAlbumData() = withContext(Dispatchers.IO) {
-        val albumList = mPresenter.loadAlbumDetail(id)
-        albumList
     }
 
 

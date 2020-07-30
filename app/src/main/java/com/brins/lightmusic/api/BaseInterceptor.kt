@@ -36,11 +36,20 @@ class BaseInterceptor(var logTag: String) : Interceptor {
         val requestStr = requestJson.toString()
         Log.i(this.logTag, "=====Request===== $countStr ${request.url()}")
         Log.i(this.logTag, requestStr)
-        val response = chain.proceed(request)
+        var response = chain.proceed(request)
         val t2 = System.nanoTime()
         costTimeStr = "${(t2 - t1).toDouble() / 1000000.0}ms"
         Log.i(this.logTag, "=====Response===== result $countStr $costTimeStr")
         Log.i(this.logTag, response.body()!!.string())
+        // 解析返回Json对象
+        val resultJsonObject =
+            jsonParser.parse(response.body()!!.string()).asJsonObject
+        // 获取业务返回内容
+        val resContentStr = resultJsonObject["result"].asString
+        val resultJson: JsonObject = jsonParser.parse(resContentStr).asJsonObject
+        val responseBody: ResponseBody =
+            ResponseBody.create(response.body()!!.contentType(), resultJson.toString())
+        response = response.newBuilder().body(responseBody).build()
         return response
 
     }

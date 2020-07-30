@@ -6,17 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
-import com.brins.lightmusic.LightMusicApplication
-import com.brins.lightmusic.di.component.DaggerFragmentComponent
-import com.brins.lightmusic.di.component.FragmentComponent
-import com.brins.lightmusic.di.module.FragmentModule
-import com.brins.lightmusic.ui.customview.LoadingFragment
 import com.brins.lightmusic.utils.StarterCommon
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import javax.inject.Inject
 
 abstract class BaseFragment : Fragment(), BaseView {
 
@@ -30,8 +22,6 @@ abstract class BaseFragment : Fragment(), BaseView {
     protected var mStarterCommon: StarterCommon? = null
 
     abstract fun getLayoutResID(): Int
-
-    protected abstract fun initInject()
 
 
     protected open fun onCreateViewAfterBinding() {
@@ -75,16 +65,6 @@ abstract class BaseFragment : Fragment(), BaseView {
         }
     }
 
-    protected fun getFragmentComponent(): FragmentComponent {
-        return DaggerFragmentComponent.builder()
-            .appComponent(LightMusicApplication.getAppComponent())
-            .fragmentModule(getFragmentModule())
-            .build()
-    }
-
-    protected fun getFragmentModule(): FragmentModule {
-        return FragmentModule(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,7 +73,6 @@ abstract class BaseFragment : Fragment(), BaseView {
         if (rootView == null) {
             rootView = inflater.inflate(getLayoutResID(), container, false)
         }
-        initInject()
         return rootView
     }
 
@@ -128,10 +107,6 @@ abstract class BaseFragment : Fragment(), BaseView {
         if (mStarterCommon != null) {
             mStarterCommon!!.dismissUnBackProgressLoading()
         }
-    }
-
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
     }
 
 
