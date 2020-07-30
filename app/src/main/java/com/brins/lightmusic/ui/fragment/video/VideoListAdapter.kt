@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.brins.lightmusic.LightMusicApplication
+import com.brins.lightmusic.BaseApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
@@ -44,9 +44,9 @@ class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
             holder.watchCount.text = if (mv.playCount > 10000) "${mv.playCount / 10000}万播放" else {
                 "${mv.playCount}播放"
             }
-            Glide.with(LightMusicApplication.getLightApplication()).load(mv.cover)
+            Glide.with(BaseApplication.getInstance()).load(mv.cover)
                 .into(holder.videoPlayer)
-            Glide.with(LightMusicApplication.getLightApplication())
+            Glide.with(BaseApplication.getInstance())
                 .load(mv.cover)
                 .apply(requestOptions)
                 .into(holder.avatar)

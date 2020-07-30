@@ -18,7 +18,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * @author lipeilin
  * @date 2020/7/22
  */
-class PersonalizedMusicAdapter(data: ArrayList<PersonalizedMusic>) :
+class PersonalizedMusicAdapter(var activity: Activity, data: ArrayList<PersonalizedMusic>) :
     BaseQuickAdapter<PersonalizedMusic, BaseViewHolder>(
         R.layout.item_personalized_music, data
     ) {
@@ -35,16 +35,20 @@ class PersonalizedMusicAdapter(data: ArrayList<PersonalizedMusic>) :
 
             val options: ActivityOptionsCompat =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    context as Activity,
+                    activity,
                     image,
                     ViewCompat.getTransitionName(image)!!
                 )
             MusicDetailActivity.startThis(
-                context as AppCompatActivity,
+                activity as AppCompatActivity,
                 options,
                 image.transitionName,
                 item.id
             )
+            /*MusicDetailActivity.startThis(
+                activity as AppCompatActivity,
+                item.id
+            )*/
         }
     }
 

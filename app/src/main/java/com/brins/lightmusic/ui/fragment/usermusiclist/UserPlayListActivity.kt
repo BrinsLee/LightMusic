@@ -26,12 +26,13 @@ import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_play_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class UserPlayListActivity : BaseActivity(), MusicListContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {

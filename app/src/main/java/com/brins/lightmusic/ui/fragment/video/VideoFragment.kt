@@ -13,13 +13,11 @@ import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.*
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_video.*
 
-
+@AndroidEntryPoint
 class VideoFragment : BaseFragment() {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
 
     private var list = mutableListOf<Fragment>(

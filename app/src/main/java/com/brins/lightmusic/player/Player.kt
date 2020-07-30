@@ -11,7 +11,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.brins.lightmusic.BaseApplication
-import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.event.NotificationUpadteEvent
 import com.brins.lightmusic.model.Music
@@ -44,7 +43,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     }
 
     private val mAudioManager: AudioManager by lazy {
-        LightMusicApplication.getLightApplication().getSystemService(
+        BaseApplication.getInstance().getSystemService(
             AUDIO_SERVICE
         ) as AudioManager
     }
@@ -70,7 +69,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener,
     init {
         mPlayer.setOnCompletionListener(this)
         mPlayer.setWakeMode(
-            LightMusicApplication.getLightApplication(),
+            BaseApplication.getInstance(),
             PowerManager.PARTIAL_WAKE_LOCK
         )
     }

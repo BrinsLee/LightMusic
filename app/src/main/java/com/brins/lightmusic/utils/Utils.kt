@@ -35,7 +35,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.brins.lightmusic.BaseApplication
-import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.model.onlinemusic.MusicCommentResult
@@ -81,7 +80,7 @@ fun loadingOnlineCover(url: String): Bitmap {
     if (url.isEmpty()) {
         return string2Bitmap(null)!!
     }
-    return Glide.with(LightMusicApplication.getLightApplication())
+    return Glide.with(BaseApplication.getInstance())
         .asBitmap()
         .load(url)
         .apply(option)
@@ -210,7 +209,7 @@ fun getTypeface(context: Context, fontType: Int): Typeface? {
 fun show(str: String) {
     if (str.isNotEmpty()) {
         AndroidSchedulers.mainThread().scheduleDirect {
-            Toast.makeText(LightMusicApplication.getLightApplication(), str, Toast.LENGTH_SHORT)
+            Toast.makeText(BaseApplication.getInstance(), str, Toast.LENGTH_SHORT)
                 .show()
         }
     }
@@ -222,7 +221,7 @@ fun show(strId: Int) {
         AndroidSchedulers.mainThread()
             .scheduleDirect {
                 Toast.makeText(
-                    LightMusicApplication.getLightApplication(),
+                    BaseApplication.getInstance(),
                     strId,
                     Toast.LENGTH_SHORT
                 ).show()

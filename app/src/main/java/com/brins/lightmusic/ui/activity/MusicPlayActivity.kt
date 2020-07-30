@@ -38,6 +38,7 @@ import com.brins.lightmusic.utils.formatDuration
 import com.brins.lightmusic.utils.setTranslucent
 import com.brins.lightmusic.utils.showRecommentList
 import com.brins.lightmusic.utils.string2Bitmap
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_music_play.*
 import kotlinx.android.synthetic.main.include_play_control.*
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +48,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MusicPlayActivity : BaseActivity(), MusicPlayerContract.View,
     IPlayback.Callback,
     View.OnClickListener {

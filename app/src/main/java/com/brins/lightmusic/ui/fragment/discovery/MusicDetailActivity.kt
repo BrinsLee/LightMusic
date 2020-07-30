@@ -27,11 +27,12 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.chad.library.adapter.base.BaseQuickAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_music_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {

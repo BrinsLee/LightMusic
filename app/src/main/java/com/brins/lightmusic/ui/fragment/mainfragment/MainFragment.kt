@@ -7,14 +7,13 @@ import com.brins.lightmusic.model.personal.PersonalizedMusic
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.launch
 import com.chad.library.adapter.base.BaseQuickAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_my.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainFragment : BaseFragment(), MainContract.View {
 
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     private lateinit var mAdapter: PersonalizedMusicAdapter
 
@@ -35,7 +34,7 @@ class MainFragment : BaseFragment(), MainContract.View {
 
     override fun onPersonalizedMusicLoad(data: ArrayList<PersonalizedMusic>?) {
         data?.let {
-            mAdapter = PersonalizedMusicAdapter(it)
+            mAdapter = PersonalizedMusicAdapter(activity!!, it)
             mAdapter.animationEnable = true
             mAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.SlideInLeft)
             mAdapter.isAnimationFirstOnly = false

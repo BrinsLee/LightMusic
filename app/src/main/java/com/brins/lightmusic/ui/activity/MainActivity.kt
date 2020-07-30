@@ -43,9 +43,10 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
 
 
     private var currentPage = 0
-    private var list = mutableListOf<Fragment>()
-    private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
+    @Inject
+    lateinit var adapter: MainPagerAdapter
     private var mClickTime: Long = 0
+
     @Inject
     lateinit var mPresenter: MusicPlayerPresenter
     private var index = -1
@@ -117,10 +118,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     private fun initViewPagerAndTabLay() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-        list.add(MainFragment())
-        list.add(DiscoveryFragment())
-        list.add(VideoFragment())
-        list.add(MineFragment())
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = 3
         changeTab(0)
@@ -188,7 +185,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
         targetFragment.arguments = bundle
         return switchFragment(targetFragment)
     }
-
 
 
     @Subscribe
@@ -279,7 +275,7 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     }
 
     override fun onPlaybackServiceUnbound() {
-        mPlayer!!.unregisterCallback(this)
+        mPlayer?.unregisterCallback(this)
         mPlayer = null
     }
 

@@ -32,11 +32,12 @@ import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.canking.minipay.Config
 import com.canking.minipay.MiniPayUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.avatar
 import kotlinx.android.synthetic.main.activity_unlogin.*
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class LoginActivity : BaseActivity(), LoginContract.View, View.OnClickListener,
     OnItemClickListener, CommonHeaderView.OnBackClickListener {
 

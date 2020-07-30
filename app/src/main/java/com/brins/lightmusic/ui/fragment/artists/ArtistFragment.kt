@@ -19,16 +19,15 @@ import com.brins.lightmusic.ui.widget.PileLayout
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_artist.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class ArtistFragment : BaseFragment(), ArtistConstract.View,
     OnItemClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
+
 
     @Inject
     lateinit var mPresenter: ArtistPresenter

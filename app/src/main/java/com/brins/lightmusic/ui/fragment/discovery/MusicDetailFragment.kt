@@ -17,17 +17,15 @@ import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MusicDetailFragment : BaseFragment(), DiscoveryContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter: DiscoverPresenter

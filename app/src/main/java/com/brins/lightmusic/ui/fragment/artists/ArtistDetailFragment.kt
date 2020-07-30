@@ -17,6 +17,7 @@ import com.brins.lightmusic.utils.*
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_artist_detail.*
 import kotlinx.android.synthetic.main.fragment_artist_detail.appBar
 import kotlinx.android.synthetic.main.fragment_artist_detail.cover
@@ -24,12 +25,9 @@ import kotlinx.android.synthetic.main.fragment_artist_detail.head
 import kotlinx.android.synthetic.main.fragment_artist_detail.mTablayout
 import kotlinx.android.synthetic.main.fragment_artist_detail.mViewpager
 
-
+@AndroidEntryPoint
 class ArtistDetailFragment : BaseFragment(),
     CommonHeaderView.OnBackClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
 
     private var deltaDistance: Int = 0

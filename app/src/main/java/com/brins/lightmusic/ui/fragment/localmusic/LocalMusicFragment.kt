@@ -20,15 +20,12 @@ import com.brins.lightmusic.ui.base.adapter.ListAdapter
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.SpacesItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_localmusic.*
-
-class
-LocalMusicFragment : BaseFragment(),
+@AndroidEntryPoint
+class LocalMusicFragment : BaseFragment(),
     CommonHeaderView.OnBackClickListener, LocalMusicContract.View, OnItemClickListener,
     View.OnClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
 
     lateinit var permissionManager: PermissionManager
@@ -115,10 +112,6 @@ LocalMusicFragment : BaseFragment(),
         isLoad = true
     }
 
-
-    override fun getLifeActivity(): AppCompatActivity {
-        return activity as AppCompatActivity
-    }
 
     override fun onItemClick(view: View?,position: Int) {
         playList.setPlayingIndex(position)

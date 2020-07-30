@@ -30,17 +30,16 @@ import com.brins.lightmusic.ui.fragment.video.VideoDetailFragment
 import com.brins.lightmusic.utils.SearchType
 import com.brins.lightmusic.utils.TYPE_ONLINE_MUSIC
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_artist_tab.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SearchFragment(val type: Int = 1) : BaseFragment(),
     SearchContract.View, OnItemClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
+
     @Inject
     lateinit var mPresenter: SearchPresenter
     private var currentTime: Long = 0

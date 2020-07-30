@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
@@ -24,19 +25,17 @@ import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_daily_recommend.*
 import kotlinx.android.synthetic.main.fragment_daily_recommend.toolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class DailyRecommendFragment : BaseFragment(),
     DailyContract.View,
     OnItemClickListener,
     CommonHeaderView.OnBackClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter: DailyRecommendPresenter
@@ -153,6 +152,10 @@ class DailyRecommendFragment : BaseFragment(),
 
     override fun onBackClick(view: View) {
         (activity as MainActivity).onBackPressed()
+    }
+
+    override fun getLifeActivity(): AppCompatActivity {
+        return activity as AppCompatActivity
     }
 
 }

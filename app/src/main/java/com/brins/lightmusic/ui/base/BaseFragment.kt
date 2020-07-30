@@ -23,8 +23,6 @@ abstract class BaseFragment : Fragment(), BaseView {
 
     abstract fun getLayoutResID(): Int
 
-    protected abstract fun initInject()
-
 
     protected open fun onCreateViewAfterBinding() {
         mIsViewBinding = true
@@ -75,7 +73,6 @@ abstract class BaseFragment : Fragment(), BaseView {
         if (rootView == null) {
             rootView = inflater.inflate(getLayoutResID(), container, false)
         }
-        initInject()
         return rootView
     }
 

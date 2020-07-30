@@ -15,16 +15,14 @@ import com.brins.lightmusic.ui.activity.MusicPlayActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_quick_control.*
 import java.lang.Exception
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class QuickControlFragment : BaseFragment(), MusicPlayerContract.View, IPlayback.Callback,
     View.OnClickListener{
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
 
     @Inject

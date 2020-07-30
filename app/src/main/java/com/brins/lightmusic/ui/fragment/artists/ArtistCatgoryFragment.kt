@@ -12,17 +12,15 @@ import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
 import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.launch
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_artist_category.recyclerView
 import kotlinx.android.synthetic.main.fragment_localmusic.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class ArtistCatgoryFragment : BaseFragment(), ArtistConstract.View,
     OnItemClickListener, CommonHeaderView.OnBackClickListener {
-    override fun initInject() {
-        getFragmentComponent().inject(this)
-    }
 
     @Inject
     lateinit var mPresenter: ArtistPresenter
