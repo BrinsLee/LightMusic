@@ -12,13 +12,7 @@
         <attr name="stroke" format="boolean"/>
     </declare-styleable>
 
-    <declare-styleable name="CardViewPager">
-        <attr name="card_padding" />
-        <attr name="card_margin" />
-        <attr name="card_scale_rate" />
-        <attr name="card_max_offset" />
-        <attr name="card_loop" />
-    </declare-styleable>
+
 
     <declare-styleable name="pile">
         <attr name="interval" format="dimension" />

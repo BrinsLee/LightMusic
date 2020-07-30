@@ -7,16 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.di.component.DaggerFragmentComponent
 import com.brins.lightmusic.di.component.FragmentComponent
 import com.brins.lightmusic.di.module.FragmentModule
-import com.brins.lightmusic.ui.customview.LoadingFragment
 import com.brins.lightmusic.utils.StarterCommon
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import javax.inject.Inject
 
 abstract class BaseFragment : Fragment(), BaseView {
 

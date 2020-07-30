@@ -193,20 +193,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     }
 
 
-    fun handleBackPress() {
-        val fragments = supportFragmentManager.fragments
-        if (fragments.size > 0) {
-            if (supportFragmentManager.backStackEntryCount > 0) {
-                supportFragmentManager.popBackStack()
-            }
-
-        }
-    }
-
-    fun getCurrentList(): PlayList {
-        return playList
-    }
-
 
     @Subscribe
     fun onPlayMusic(playListEvent: PlayListEvent) {
@@ -296,7 +282,8 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
     }
 
     override fun onPlaybackServiceUnbound() {
-//        mPlayer!!.unregisterCallback(this)
+        mPlayer!!.unregisterCallback(this)
+        mPlayer = null
     }
 
     override fun onSongSetAsFavorite(song: Music?) {

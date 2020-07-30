@@ -130,11 +130,6 @@ class FloatControlView @JvmOverloads constructor(
                 mUpTime = System.currentTimeMillis()
 
                 // 设置当前的模式
-                /*if (mMode != MODE_MOVE) {
-                    if (mUpTime - mDownTime >= CANCEL_INTERVAL_DEFAULT) {
-                        mMode = MODE_CANCEL
-                    }
-                }*/
                 val dx = (mStartX - mLastX).absoluteValue
                 val dy = (mStartY - mLastY).absoluteValue
 
@@ -263,11 +258,6 @@ class FloatControlView @JvmOverloads constructor(
 
                 translationX += dx
                 translationY += dy
-                Log.d(TAG, "x: ${x}")
-                Log.d(TAG, "y: ${y}")
-                Log.d(TAG, "mLastX: ${mLastX}")
-                Log.d(TAG, "mLastY: ${mLastY}")
-
             }
 
         }

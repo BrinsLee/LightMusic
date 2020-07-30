@@ -13,6 +13,8 @@ object ApiHelper {
     val LOG_TAG_NETWORK_SEARCH = "network_search"
     val LOG_TAG_NETWORK_LOGIN = "network_login"
     val LOG_TAG_NETWORK_MUSIC = "network_music"
+    val LOG_TAG_NETWORK_PERSONALIZED = "network_personalized"
+
 
 
     val LOG_TAG_NETWORK_USERINFO = "network_userinfo"
@@ -129,7 +131,7 @@ object ApiHelper {
         if (mPersonalizedService == null) {
             synchronized(PersonalizedService::class.java) {
                 if (mPersonalizedService == null) {
-                    mPersonalizedService = RetrofitFactory.newRetrofit(BASEURL, LOG_TAG_NETWORK_MUSIC)
+                    mPersonalizedService = RetrofitFactory.newRetrofit(BASEURL, LOG_TAG_NETWORK_PERSONALIZED)
                         .create(PersonalizedService::class.java)
                 }
             }
