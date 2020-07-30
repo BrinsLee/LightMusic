@@ -77,7 +77,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:riv_corner_radius="50dp" />
 
-            <com.brins.lightmusic.ui.customview.FontTextView
+            <com.brins.lightmusic.ui.widget.FontTextView
                     android:id="@+id/nickName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

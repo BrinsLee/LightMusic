@@ -19,7 +19,7 @@ import com.brins.lightmusic.ui.activity.login.LoginActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.CommonViewAdapter
 import com.brins.lightmusic.ui.base.adapter.ViewHolder
-import com.brins.lightmusic.ui.customview.CustomStaggeredGridLayoutManager
+import com.brins.lightmusic.ui.widget.CustomStaggeredGridLayoutManager
 import com.brins.lightmusic.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget

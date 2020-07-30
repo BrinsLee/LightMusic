@@ -8,27 +8,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Color
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.palette.graphics.Palette
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import java.lang.Exception
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.common.AppConfig.*
 import com.brins.lightmusic.event.NotificationUpadteEvent
 import com.brins.lightmusic.player.broadcast.HeadsetButtonReceiver
 import com.brins.lightmusic.ui.activity.SplashActivity
-import com.brins.lightmusic.utils.ScreenUtils
-import com.brins.lightmusic.utils.createLinearGradientBitmap
-import com.brins.lightmusic.utils.dp2px
-import com.brins.lightmusic.utils.handleBimap
 import com.hwangjr.rxbus.annotation.Subscribe
 
 

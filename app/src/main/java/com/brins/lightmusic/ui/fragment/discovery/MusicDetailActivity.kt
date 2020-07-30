@@ -7,29 +7,25 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.lightmusic.R
-import com.brins.lightmusic.RxBus
+import com.brins.lightmusic.utils.RxBus
 import com.brins.lightmusic.common.AppConfig.KEY_ID
 import com.brins.lightmusic.common.AppConfig.TRANSITION_NAME
 import com.brins.lightmusic.event.PlayListEvent
 import com.brins.lightmusic.model.loaclmusic.PlayList
 import com.brins.lightmusic.ui.base.BaseActivity
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.customview.CommonHeaderView
+import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.activity_music_detail.*
 import kotlinx.coroutines.Dispatchers
@@ -71,9 +67,6 @@ class MusicDetailActivity : BaseActivity(), DiscoveryContract.View,
         return R.layout.activity_music_detail
     }
 
-    override fun initInject() {
-        getActivityComponent().inject(this)
-    }
 
     override fun handleError(error: Throwable) {
     }

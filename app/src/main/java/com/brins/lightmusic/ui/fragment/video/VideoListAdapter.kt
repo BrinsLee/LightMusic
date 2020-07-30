@@ -4,23 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import cn.jzvd.Jzvd
 import com.brins.lightmusic.LightMusicApplication
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.musicvideo.Mv
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.customview.JZVideoPalyerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.makeramen.roundedimageview.RoundedImageView
-import org.w3c.dom.Text
 
 class VideoListAdapter(var MvData: MutableList<Mv>, var context: Context) :
     RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {

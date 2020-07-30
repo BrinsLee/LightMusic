@@ -32,12 +32,13 @@ import com.brins.lightmusic.utils.setTextDark
 import com.brins.lightmusic.utils.setTranslucent
 import com.brins.lightmusic.utils.string2Bitmap
 import com.hwangjr.rxbus.annotation.Subscribe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottombar.*
 import kotlinx.android.synthetic.main.view_common_toolbar.*
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callback {
 
 
@@ -79,10 +80,6 @@ class MainActivity : BaseActivity(), MusicPlayerContract.View, IPlayback.Callbac
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_main
-    }
-
-    override fun initInject() {
-        getActivityComponent().inject(this)
     }
 
     override fun handleError(error: Throwable) {

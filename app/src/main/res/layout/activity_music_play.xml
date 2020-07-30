@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@color/background">
 
-    <com.brins.lightmusic.ui.customview.CommonHeaderView
+    <com.brins.lightmusic.ui.widget.CommonHeaderView
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -36,7 +36,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolBar"
         />-->
-    <com.brins.lightmusic.ui.customview.RoundConstraintLayout
+    <com.brins.lightmusic.ui.widget.RoundConstraintLayout
             android:id="@+id/ablum_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:round_corner="40dp">
 
-        <com.brins.lightmusic.ui.customview.FontTextView
+        <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/musicTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <com.brins.lightmusic.ui.customview.FontTextView
+        <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/musicArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                     tools:text="03:22" />
         </LinearLayout>
 
-    </com.brins.lightmusic.ui.customview.RoundConstraintLayout>
+    </com.brins.lightmusic.ui.widget.RoundConstraintLayout>
     <!--<com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/ivCover"
             android:layout_marginTop="120dp"

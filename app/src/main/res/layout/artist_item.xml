@@ -16,7 +16,7 @@
             tools:layout_editor_absoluteY="8dp" />
 
 
-        <com.brins.lightmusic.ui.customview.FontTextView
+        <com.brins.lightmusic.ui.widget.FontTextView
                 android:id="@+id/introduce"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

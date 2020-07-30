@@ -7,9 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import com.brins.lightmusic.R
-import com.brins.lightmusic.model.Music
 import com.brins.lightmusic.model.personal.PersonalizedMusic
-import com.brins.lightmusic.ui.customview.CornersTransform
 import com.brins.lightmusic.ui.fragment.discovery.MusicDetailActivity
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.brins.lightmusic.utils.handleNum

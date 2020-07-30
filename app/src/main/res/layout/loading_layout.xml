@@ -19,7 +19,7 @@
             app:layout_constraintWidth_percent="0.2777777778"
             app:layout_constraintDimensionRatio="1:1"/>
 
-        <com.brins.lightmusic.ui.customview.BaseLottieAnimationview
+        <com.brins.lightmusic.ui.widget.BaseLottieAnimationview
             android:id="@+id/lottie_loading"
             android:layout_width="40dp"
             android:layout_height="40dp"

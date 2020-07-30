@@ -1,12 +1,9 @@
 package com.brins.lightmusic.ui.fragment.artists
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.brins.lightmusic.R
 import com.brins.lightmusic.model.artist.ArtistBean
@@ -15,13 +12,9 @@ import com.brins.lightmusic.ui.activity.SearchActivity
 import com.brins.lightmusic.ui.adapter.VideoPagerAdapter
 import com.brins.lightmusic.ui.base.AppBarStateChangeListener
 import com.brins.lightmusic.ui.base.BaseFragment
-import com.brins.lightmusic.ui.customview.CommonHeaderView
-import com.brins.lightmusic.ui.customview.CornersTransform
+import com.brins.lightmusic.ui.widget.CommonHeaderView
 import com.brins.lightmusic.utils.*
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_artist_detail.*

@@ -13,8 +13,10 @@ import com.brins.lightmusic.player.PlayBackService
 import com.brins.lightmusic.player.PlayBackService.Companion.mIsServiceBound
 import com.brins.lightmusic.utils.await
 import com.brins.lightmusic.utils.loadingOnlineCover
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
+@ActivityScoped
 class MusicPlayerPresenter @Inject constructor() :
     MusicPlayerContract.Presenter {
 

@@ -18,7 +18,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-    <com.brins.lightmusic.ui.customview.RoundCoverProgress
+    <com.brins.lightmusic.ui.widget.RoundCoverProgress
             android:id="@+id/cover_progress"
             android:layout_width="@dimen/common_margin_60"
             android:layout_height="@dimen/common_margin_60"

@@ -15,12 +15,10 @@ import com.brins.lightmusic.model.artist.CategoryResult
 import com.brins.lightmusic.ui.activity.MainActivity
 import com.brins.lightmusic.ui.base.BaseFragment
 import com.brins.lightmusic.ui.base.adapter.OnItemClickListener
-import com.brins.lightmusic.ui.customview.CornersTransform
-import com.brins.lightmusic.ui.customview.PileLayout
+import com.brins.lightmusic.ui.widget.PileLayout
 import com.brins.lightmusic.utils.GlideHelper.GlideHelper
 import com.brins.lightmusic.utils.SpacesItemDecoration
 import com.brins.lightmusic.utils.launch
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_artist.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

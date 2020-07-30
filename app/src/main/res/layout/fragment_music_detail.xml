@@ -9,7 +9,7 @@
         android:id="@+id/rootContraint"
         tools:context=".ui.fragment.discovery.MusicDetailFragment">
 
-    <com.brins.lightmusic.ui.customview.FadingScrollView
+    <com.brins.lightmusic.ui.widget.FadingScrollView
             android:id="@+id/nestScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -49,9 +49,9 @@
 
             </androidx.recyclerview.widget.RecyclerView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.brins.lightmusic.ui.customview.FadingScrollView>
+    </com.brins.lightmusic.ui.widget.FadingScrollView>
 
-    <com.brins.lightmusic.ui.customview.CommonHeaderView
+    <com.brins.lightmusic.ui.widget.CommonHeaderView
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             app:chv_text_color="@color/translucent"
@@ -61,5 +61,5 @@
             android:background="@color/gery"
             android:alpha="0"
             app:chv_title="">
-    </com.brins.lightmusic.ui.customview.CommonHeaderView>
+    </com.brins.lightmusic.ui.widget.CommonHeaderView>
 </androidx.constraintlayout.widget.ConstraintLayout>

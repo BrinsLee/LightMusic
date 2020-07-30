@@ -2,15 +2,23 @@ package com.brins.lightmusic
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import com.brins.lib_common.utils.SpUtils
+import com.brins.lightmusic.common.AppConfig
 import com.brins.lightmusic.manager.AppManager
+import com.brins.lightmusic.model.database.DatabaseFactory
+import com.brins.lightmusic.utils.*
+import dagger.hilt.android.HiltAndroidApp
 import io.reactivex.plugins.RxJavaPlugins
 
-open class BaseApplication : Application(){
+@HiltAndroidApp
+class BaseApplication : Application() {
 
-    companion object{
+    companion object {
         @JvmStatic
-        protected var sInstance: BaseApplication? = null
+        var sInstance: BaseApplication? = null
 
         fun getInstance(): BaseApplication {
             if (sInstance == null) {
@@ -26,12 +34,16 @@ open class BaseApplication : Application(){
             //异常处理
         }
         setApplication(this)
+        if (isMainProcess(this)) {
+            initRxJava()
+            initUserData()
+        }
     }
 
     @Synchronized
-    private fun setApplication(baseApplication: BaseApplication){
+    private fun setApplication(baseApplication: BaseApplication) {
         sInstance = baseApplication
-        baseApplication.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks{
+        baseApplication.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityPaused(activity: Activity?) {
             }
 
@@ -58,4 +70,31 @@ open class BaseApplication : Application(){
         })
     }
 
+
+    fun isMainProcess(context: Context): Boolean {
+        return AppConfig.Package.MAIN_PROCESS_NAME == getCurrProcessName(context)
+    }
+
+
+    private fun initRxJava() {
+        RxJavaPlugins.setErrorHandler { Log.e("RxJava", "RX error handler") }
+    }
+
+    private fun initUserData() {
+        AppConfig.isLogin = SpUtils.obtain(SP_USER_INFO, this).getBoolean(KEY_IS_LOGIN, false)
+        AppConfig.UserCookie = SpUtils.obtain(SP_USER_INFO, this).getString(KEY_COOKIE, "")
+        if (AppConfig.isLogin) {
+            DatabaseFactory.getUserInfo().subscribeDbResult({
+                AppConfig.userAccount = it
+            }, {
+                it.printStackTrace()
+            })
+
+            DatabaseFactory.getUserProfile().subscribeDbResult({
+                AppConfig.userProfile = it
+            }, {
+                it.printStackTrace()
+            })
+        }
+    }
 }
